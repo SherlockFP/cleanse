@@ -369,7 +369,7 @@ add({
   'iap.buy': 'Satın al', 'iap.owned': 'Alındı', 'iap.restore': 'Satın alımları geri yükle', 'iap.restored': 'Geri yüklendi: {n}', 'iap.restoreNone': 'Geri yüklenecek bir şey yok.',
   'iap.restoreNote': 'Geri yükleme yalnızca satın alımları getirir. İlerlemen bu telefonda kalır; taşımak için kayıt kodunu kullan.',
   'iap.failed': 'Satın alma tamamlanmadı.', 'iap.needsRemoveAds': 'Yükseltme için önce Reklamları kaldır gerekir.', 'iap.useUpgrade': 'Reklamları kaldır sende var, o yüzden yükseltmeyi al.',
-  'iap.fixedNote': 'Satın alınabilenler: reklam kaldırma, görünüm paketleri ve tek bir başlangıç paketi. Hiçbiri çevirmeyi, mandalı ya da olasılığı değiştirmez. Rastgele ürün yok, çevirme satılmaz.',
+  'iap.fixedNote': 'Satın alınabilenler: reklam kaldırma ve tek bir başlangıç paketi. Hiçbiri çevirmeyi, mandalı ya da olasılığı değiştirmez. Rastgele ürün yok, çevirme satılmaz.',
   'store.remove_ads.name': 'Reklamları kaldır', 'store.remove_ads.desc': 'Seferler arasında reklam çıkmaz, kalıcı olarak. Ödüllü reklamlar isteğe bağlı kalır.',
   'store.starter_pack.name': 'Başlangıç paketi', 'store.starter_pack.desc': '60 Tahta, tek seferlik.',
   'store.pier_keeper.name': 'İskele Bekçisi', 'store.pier_keeper.desc': 'Reklamları kaldırır, günlük kılıf ve kartpostal ipucu reklamsız gelir, 3 çark kılıfı ve bir iskele bayrağı.',
