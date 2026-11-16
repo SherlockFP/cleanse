@@ -1,70 +1,70 @@
 {
 "sym/moth": [
 192,
-134
+190
 ],
 "sym/candle": [
-122,
+163,
 192
 ],
 "sym/tooth": [
-169,
+173,
 192
 ],
 "sym/key": [
-113,
+190,
 192
 ],
 "sym/eye": [
-192,
+161,
 192
 ],
 "sym/mask": [
-192,
-120
+173,
+192
 ],
 "sym/crow": [
 192,
-160
+90
 ],
 "sym/lantern": [
-148,
+179,
 192
 ],
 "sym/crown": [
 192,
-150
+131
 ],
 "sym/wisp": [
-143,
+179,
 192
 ],
 "sym/sigil": [
-188,
-192
+192,
+138
 ],
 "sym/ash": [
-192,
-117
+190,
+192
 ],
 "ui/coin": [
-192,
+190,
 192
 ],
 "ui/wick": [
-173,
-192
+192,
+154
 ],
 "ui/wax": [
-192,
-188
+184,
+192
 ],
 "ui/heat": [
-123,
+186,
 192
 ],
 "ui/luck": [
-168,
+171,
 192
 ],
 "ui/lock": [
@@ -72,420 +72,420 @@
 192
 ],
 "charm/moth_jar": [
-145,
+148,
 192
 ],
 "charm/moth_wing": [
 192,
-164
+187
 ],
 "charm/cocoon": [
-174,
+192,
 192
 ],
 "charm/moth_net": [
-152,
-192
+192,
+174
 ],
 "charm/matchbox": [
-192,
-149
+98,
+192
 ],
 "charm/coal": [
 192,
-159
+158
 ],
 "charm/bellows": [
+161,
+192
+],
+"charm/torch": [
+192,
+188
+],
+"charm/brazier": [
 192,
 186
 ],
-"charm/torch": [
-91,
-192
-],
-"charm/brazier": [
-158,
-192
-],
 "charm/rag_doll": [
-155,
-192
+192,
+183
 ],
 "charm/black_cat": [
-157,
+152,
 192
 ],
 "charm/cracked_mirror": [
-158,
+149,
 192
 ],
 "charm/rib_cage": [
-192,
-186
+172,
+192
 ],
 "charm/crow_feather": [
-184,
+182,
 192
 ],
 "charm/abacus": [
 192,
-162
+160
 ],
 "charm/coin_purse": [
-178,
-192
+192,
+165
 ],
 "charm/ledger_book": [
-192,
-188
-],
-"charm/clay_jar": [
-184,
+162,
 192
 ],
+"charm/clay_jar": [
+192,
+176
+],
 "charm/stamp": [
-159,
+153,
 192
 ],
 "charm/quill": [
-182,
+155,
 192
 ],
 "charm/scroll": [
-192,
-178
+181,
+192
 ],
 "charm/ink_bottle": [
-179,
+169,
 192
 ],
 "charm/claw_shake": [
 192,
-142
+132
 ],
 "charm/red_ribbon": [
 192,
-168
+167
 ],
 "charm/tea_cup": [
-192,
-153
+122,
+192
 ],
 "charm/crystal_ball": [
-167,
+163,
 192
 ],
 "charm/star_card": [
-165,
-192
+192,
+152
 ],
 "charm/comet": [
 192,
-162
+127
 ],
 "charm/horseshoe_nail": [
-141,
-192
+192,
+172
 ],
 "charm/spider_web": [
 192,
 192
 ],
 "charm/needle": [
+192,
+183
+],
+"charm/shuttle": [
 174,
 192
 ],
-"charm/shuttle": [
-192,
-188
-],
 "charm/knot": [
 192,
-144
+179
 ],
 "charm/wisp_bottle": [
-136,
+117,
 192
 ],
 "charm/glow_jar": [
-157,
+150,
 192
 ],
 "charm/prism": [
-192,
-146
+139,
+192
 ],
 "charm/firefly": [
 192,
-192
+186
 ],
 "charm/wrench": [
-159,
+182,
 192
 ],
 "charm/oil_can": [
-192,
-172
+129,
+192
 ],
 "charm/gear": [
 192,
-192
+190
 ],
 "charm/hammer": [
-165,
+171,
 192
 ],
 "charm/pliers": [
-172,
+180,
 192
 ],
 "charm/scepter": [
-136,
-192
+192,
+182
 ],
 "charm/throne": [
-164,
-192
+192,
+182
 ],
 "charm/cushion": [
 192,
-152
+136
 ],
 "trick/pin": [
-151,
+172,
 192
 ],
 "trick/row_arrow": [
 192,
-131
+152
 ],
 "trick/nudge": [
 192,
-140
+141
 ],
 "trick/double_stamp": [
-190,
-192
+192,
+151
 ],
 "trick/swap": [
 192,
-182
+183
 ],
 "trick/brush": [
-169,
+184,
 192
 ],
 "trick/broom": [
-147,
+173,
 192
 ],
 "trick/hourglass": [
-129,
-192
+192,
+188
 ],
 "trick/ice": [
-192,
-154
+182,
+192
 ],
 "trick/chili": [
-161,
+165,
 192
 ],
 "trick/pocket": [
-192,
-187
+175,
+192
 ],
 "trick/stencil": [
 192,
-181
+190
 ],
 "trick/wish_coin": [
-187,
+184,
 192
 ],
 "trick/kit": [
 192,
-161
+148
 ],
 "trick/token": [
 192,
-190
+138
 ],
 "trick/horn": [
 192,
-166
+165
 ],
 "trick/hand_mirror": [
-121,
+161,
 192
 ],
 "trick/loan_note": [
 192,
-179
+188
 ],
 "deal/coins": [
-173,
+177,
 192
 ],
 "deal/power": [
-154,
+165,
 192
 ],
 "deal/luck": [
-155,
+173,
 192
 ],
 "deal/slot": [
-161,
-192
-],
-"deal/wild": [
-141,
-192
-],
-"deal/time": [
-158,
-192
-],
-"deal/shop": [
 167,
 192
 ],
-"deal/symbol": [
-173,
+"deal/wild": [
+192,
+154
+],
+"deal/time": [
+153,
 192
+],
+"deal/shop": [
+155,
+192
+],
+"deal/symbol": [
+192,
+178
 ],
 "deal/mystery": [
 192,
 192
 ],
 "curse/weight": [
-170,
+180,
 192
 ],
 "curse/candle": [
-168,
+154,
 192
 ],
 "curse/ash": [
 192,
-182
+184
 ],
 "curse/tax": [
-192,
+185,
 192
 ],
 "curse/price": [
-178,
+150,
 192
 ],
 "curse/blind": [
-192,
-141
+139,
+192
 ],
 "curse/chain": [
-162,
+180,
 192
 ],
 "curse/crack": [
 192,
-186
+184
 ],
 "curse/fever": [
-135,
+119,
 192
 ],
 "ui/btn_spin": [
 256,
-231
+237
 ],
 "ui/btn_bank": [
 256,
-256
+223
 ],
 "ui/btn_shop": [
-235,
+230,
 256
 ],
 "ui/btn_reroll": [
-244,
+237,
 256
 ],
 "ui/btn_sell": [
-243,
+241,
 256
 ],
 "ui/btn_settings": [
 256,
-253
+245
 ],
 "ui/btn_ad": [
 256,
-193
+206
 ],
 "ui/btn_close": [
 250,
 256
 ],
 "ui/btn_stoke": [
-248,
-256
+256,
+248
 ],
 "stake/steady": [
-192,
-175
+190,
+192
 ],
 "stake/short": [
-159,
+166,
 192
 ],
 "stake/wick": [
 192,
-192
+169
 ],
 "stake/long": [
 192,
-184
+176
 ],
 "stake/luck": [
 192,
-186
+183
 ],
 "stake/double": [
 192,
-173
+156
 ],
 "stake/shop": [
 192,
 190
 ],
 "stake/cold": [
-176,
+122,
 192
 ],
 "stake/wild": [
 192,
-157
+190
 ],
 "hide/cot": [
 256,
-186
+195
 ],
 "hide/stove": [
-181,
+199,
 256
 ],
 "hide/shelf": [
-256,
-199
+192,
+256
 ],
 "hide/lights": [
 256,
-197
+231
 ],
 "hide/workbench": [
 256,
-191
+233
 ],
 "hide/desk": [
 256,
@@ -493,22 +493,22 @@
 ],
 "hide/keepsake": [
 256,
-208
+233
 ],
 "hide/moth_house": [
-222,
+238,
 256
 ],
 "hide/mirror": [
-186,
+224,
 256
 ],
 "ui/rarity_common": [
-143,
+141,
 192
 ],
 "ui/rarity_uncommon": [
-145,
+141,
 192
 ],
 "ui/rarity_rare": [
@@ -516,116 +516,772 @@
 192
 ],
 "ui/rarity_legendary": [
-137,
+140,
 192
 ],
 "hide/chair": [
-173,
+180,
 192
 ],
 "ui/medal": [
-125,
+129,
 192
 ],
 "ui/daily": [
-182,
+172,
 192
 ],
 "trick/salt": [
-178,
-192
+192,
+177
 ],
 "trick/spare_candle": [
-108,
-192
+192,
+174
 ],
 "ui/contract": [
-175,
+178,
 192
 ],
 "ui/seal": [
 192,
-192
+190
 ],
 "ui/slot_empty": [
 192,
 190
 ],
 "ui/favour": [
-146,
+160,
 192
 ],
 "ui/curse_badge": [
-175,
+188,
 192
 ],
 "ui/trick_bag": [
-192,
-190
-],
-"ui/interest": [
 176,
 192
 ],
+"ui/interest": [
+188,
+192
+],
 "ui/collect": [
-159,
+183,
 192
 ],
 "ui/star": [
 192,
-186
+183
 ],
 "char/nim": [
-488,
-512
+512,
+485
 ],
 "char/tao": [
-472,
+467,
 512
 ],
 "char/bua": [
-512,
-509
+502,
+512
 ],
 "char/rattle": [
-445,
+505,
 512
 ],
 "char/sok": [
-461,
-512
+512,
+473
 ],
 "char/pip": [
-457,
+512,
 512
 ],
 "devil/idle": [
-343,
+186,
 512
 ],
 "devil/grin": [
-375,
+280,
 512
 ],
 "devil/angry": [
-445,
+417,
 512
 ],
 "devil/deal": [
-479,
+368,
 512
 ],
 "devil/collect": [
-420,
+271,
 512
 ],
 "devil/shock": [
-387,
+345,
 512
 ],
+"spirit/beckon_calm": [
+254,
+320
+],
+"spirit/beckon_glad": [
+320,
+314
+],
+"spirit/beckon_cross": [
+313,
+320
+],
+"spirit/gold_calm": [
+273,
+320
+],
+"spirit/gold_glad": [
+317,
+320
+],
+"spirit/gold_cross": [
+320,
+307
+],
+"spirit/moonbiter_calm": [
+320,
+320
+],
+"spirit/moonbiter_glad": [
+316,
+320
+],
+"spirit/moonbiter_cross": [
+320,
+307
+],
+"spirit/waiting_calm": [
+300,
+320
+],
+"spirit/waiting_glad": [
+320,
+314
+],
+"spirit/waiting_cross": [
+289,
+320
+],
+"spirit/lamplit_calm": [
+253,
+320
+],
+"spirit/lamplit_glad": [
+291,
+320
+],
+"spirit/lamplit_cross": [
+287,
+320
+],
+"spirit/tide_calm": [
+307,
+320
+],
+"spirit/tide_glad": [
+320,
+305
+],
+"spirit/tide_cross": [
+294,
+320
+],
+"spirit/wire_calm": [
+293,
+320
+],
+"spirit/wire_glad": [
+287,
+320
+],
+"spirit/wire_cross": [
+294,
+320
+],
+"devil/phone": [
+307,
+320
+],
+"char/yai": [
+320,
+313
+],
+"char/beng": [
+291,
+320
+],
+"char/pla": [
+288,
+320
+],
+"char/mali": [
+298,
+320
+],
+"char/nim_boss": [
+278,
+320
+],
+"machine/lever": [
+281,
+384
+],
+"machine/kiosk": [
+289,
+384
+],
+"machine/phone": [
+384,
+380
+],
+"ui/tin": [
+384,
+311
+],
+"machine/blender": [
+384,
+376
+],
+"machine/awning_1": [
+384,
+206
+],
+"machine/awning_2": [
+384,
+331
+],
+"machine/awning_3": [
+384,
+331
+],
+"sym/redeye": [
+384,
+355
+],
+"ui/phone": [
+192,
+149
+],
+"ui/call_green": [
+192,
+192
+],
+"ui/white_call": [
+192,
+189
+],
+"ui/kiosk": [
+148,
+192
+],
+"ui/blender": [
+131,
+192
+],
+"ui/honk": [
+192,
+154
+],
+"ui/hand": [
+192,
+128
+],
+"ui/charge_on": [
+113,
+192
+],
+"ui/charge_off": [
+115,
+192
+],
+"ui/bead_off": [
+192,
+192
+],
+"ui/bead_on": [
+167,
+192
+],
+"ui/key_brass": [
+183,
+192
+],
+"ui/key_silver": [
+170,
+192
+],
+"ui/key_red": [
+170,
+192
+],
+"ui/locker_shut": [
+146,
+192
+],
+"ui/locker_open": [
+181,
+192
+],
+"ui/luggage": [
+192,
+182
+],
+"ui/postcard_back": [
+192,
+147
+],
+"ui/map_pin": [
+140,
+192
+],
+"ui/pin_done": [
+161,
+192
+],
+"ui/pin_locked": [
+137,
+192
+],
+"ui/favour_pip": [
+173,
+192
+],
+"ui/stamp_bronze": [
+192,
+189
+],
+"ui/stamp_silver": [
+192,
+192
+],
+"ui/stamp_gold": [
+189,
+192
+],
+"ui/notebook": [
+176,
+192
+],
+"ui/codex": [
+192,
+187
+],
+"ui/wrath": [
+192,
+189
+],
+"ui/fused_rim": [
+192,
+192
+],
+"ui/storm": [
+184,
+192
+],
+"ui/lesson": [
+173,
+192
+],
+"ui/taste_loved": [
+192,
+189
+],
+"ui/taste_fine": [
+189,
+192
+],
+"ui/taste_meh": [
+189,
+192
+],
+"ui/taste_hated": [
+189,
+192
+],
+"charm/bike_horn": [
+192,
+189
+],
+"charm/fish_sauce": [
+95,
+192
+],
+"charm/ice_bucket": [
+176,
+192
+],
+"charm/megaphone": [
+192,
+187
+],
+"charm/spare_tyre": [
+181,
+192
+],
+"charm/sweeper": [
+174,
+192
+],
+"charm/price_gun": [
+192,
+160
+],
+"charm/neon_open": [
+176,
+192
+],
+"charm/double_shift": [
+158,
+192
+],
+"charm/wok_toss": [
+192,
+179
+],
+"charm/calculator": [
+181,
+192
+],
+"charm/rubber_band": [
+192,
+189
+],
+"charm/coin_flip": [
+173,
+192
+],
+"charm/gold_spray": [
+102,
+192
+],
+"charm/taxi_meter": [
+192,
+187
+],
+"charm/bike_jump": [
+187,
+192
+],
+"charm/eye_drops": [
+92,
+192
+],
+"charm/staring": [
+192,
+149
+],
+"charm/omen_jar": [
+165,
+192
+],
+"charm/ruby_shades": [
+192,
+95
+],
+"charm/night_owl": [
+163,
+192
+],
+"charm/red_eye_flight": [
+192,
+163
+],
+"charm/counter_stare": [
+174,
+192
+],
+"charm/taillight": [
+159,
+192
+],
+"curse/haggler": [
+192,
+189
+],
+"curse/hollow_centre": [
+192,
+181
+],
+"curse/dark_wick": [
+132,
+192
+],
+"curse/slow_water": [
+192,
+122
+],
+"curse/short_circuit": [
+180,
+192
+],
+"curse/heavy_hands": [
+181,
+192
+],
+"charm/f_skewer_cart": [
+189,
+192
+],
+"charm/f_firefly_snack": [
+156,
+192
+],
+"charm/f_street_gold": [
+192,
+189
+],
+"charm/f_market_scale": [
+153,
+192
+],
+"charm/f_smog_wok": [
+182,
+192
+],
+"charm/f_neon_grill": [
+176,
+192
+],
+"charm/f_lucky_chili": [
+192,
+176
+],
+"charm/f_ruby_umbrella": [
+184,
+192
+],
+"charm/f_rainy_day_fund": [
+166,
+192
+],
+"charm/f_monsoon_gold": [
+192,
+187
+],
+"charm/f_small_print_lawyer": [
+192,
+184
+],
+"charm/f_meter_taxi": [
+192,
+172
+],
+"charm/f_gold_shop": [
+192,
+179
+],
+"charm/f_calling_luck": [
+192,
+138
+],
+"charm/f_rooftop_lease": [
+192,
+172
+],
+"charm/f_lucky_combo": [
+192,
+181
+],
+"charm/f_glowing_special": [
+192,
+174
+],
+"charm/f_lucky_tuktuk": [
+192,
+192
+],
+"charm/f_spinning_elbow": [
+173,
+192
+],
+"charm/f_clinch_tool": [
+184,
+192
+],
+"charm/f_golden_belt": [
+192,
+139
+],
+"charm/f_firefly_lamp": [
+166,
+192
+],
+"charm/f_gold_dust": [
+192,
+171
+],
+"charm/f_gold_rims": [
+189,
+192
+],
+"place/c1": [
+192,
+182
+],
+"place/c2": [
+192,
+192
+],
+"place/c3": [
+192,
+177
+],
+"place/c4": [
+189,
+192
+],
+"place/c5": [
+192,
+192
+],
+"place/c6": [
+192,
+174
+],
+"place/c7": [
+192,
+189
+],
+"place/c8": [
+192,
+184
+],
+"place/c9": [
+171,
+192
+],
+"place/c10": [
+192,
+187
+],
+"cart/up_row": [
+192,
+161
+],
+"cart/up_column": [
+157,
+192
+],
+"cart/up_diag": [
+168,
+192
+],
+"cart/up_corners": [
+192,
+186
+],
+"cart/up_plus": [
+192,
+187
+],
+"cart/up_frame": [
+192,
+189
+],
+"cart/up_stock": [
+184,
+192
+],
+"cart/up_firefly": [
+176,
+192
+],
+"cart/up_sweep": [
+192,
+170
+],
+"post/rainy_day": [
+192,
+172
+],
+"post/hot_pan": [
+192,
+175
+],
+"post/fresh_fish": [
+192,
+175
+],
+"post/night_bus": [
+192,
+174
+],
+"post/borrowed_coat": [
+192,
+184
+],
+"post/short_cut": [
+192,
+184
+],
+"post/crooked_scale": [
+192,
+187
+],
+"post/old_photo": [
+192,
+187
+],
+"post/thumb_scale": [
+192,
+187
+],
+"post/empty_wallet": [
+192,
+187
+],
+"post/all_pocket": [
+192,
+187
+],
+"post/mothers_voice": [
+192,
+189
+],
+"post/staring_contest": [
+192,
+187
+],
+"post/spare_blender": [
+192,
+184
+],
+"post/party_line": [
+192,
+187
+],
+"post/quiet_phone": [
+192,
+187
+],
+"post/full_charge": [
+192,
+187
+],
+"post/late_kiosk": [
+192,
+185
+],
 "machine/case": [
-677,
+614,
 1024
+],
+"ui/panel": [
+356,
+512
+],
+"ui/card": [
+349,
+512
 ],
 "bg/fair": [
 1024,

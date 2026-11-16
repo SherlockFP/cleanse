@@ -1,0 +1,302 @@
+{
+ "milestones": [
+  {
+   "id": "ms_1",
+   "name": {
+    "en": "First run done",
+    "tr": "İlk oyun bitti",
+    "th": "จบรอบแรก"
+   },
+   "home": {
+    "en": "A price tag appears on the first Notebook page and the Lessons list gets a pencil.",
+    "tr": "Defterin ilk sayfasında bir fiyat etiketi belirir, Dersler listesi bir kalem alır.",
+    "th": "ป้ายราคาโผล่ที่หน้าแรกของสมุดโน้ต และรายการบทเรียนมีดินสอ"
+   },
+   "requires": {
+    "stat": "runs",
+    "gte": 1
+   },
+   "reqText": {
+    "en": "Runs finished: 1",
+    "tr": "Biten oyun: 1",
+    "th": "รอบที่เล่นจบ: 1"
+   }
+  },
+  {
+   "id": "ms_2",
+   "name": {
+    "en": "First place cleared",
+    "tr": "İlk yer bitti",
+    "th": "ผ่านด่านแรก"
+   },
+   "home": {
+    "en": "The mat becomes a plastic stool and a radio sits on a crate.",
+    "tr": "Hasır plastik bir tabure olur, bir sandığın üstünde radyo durur.",
+    "th": "เสื่อกลายเป็นเก้าอี้พลาสติก และมีวิทยุวางบนลัง"
+   },
+   "requires": {
+    "clear": "c1"
+   },
+   "reqText": {
+    "en": "Clear The Soi Cart",
+    "tr": "Sokak Arabası yerini bitir",
+    "th": "ผ่านรถเข็นในซอย"
+   }
+  },
+  {
+   "id": "ms_3",
+   "name": {
+    "en": "Ten debts paid",
+    "tr": "On borç ödendi",
+    "th": "ปลดหนี้สิบก้อน"
+   },
+   "home": {
+    "en": "A string of bulbs above the cart.",
+    "tr": "Arabanın üstünde bir ampul zinciri.",
+    "th": "ไฟประดับเส้นหนึ่งเหนือรถเข็น"
+   },
+   "requires": {
+    "stat": "debtsPaid",
+    "gte": 10
+   },
+   "reqText": {
+    "en": "Debts paid: 10",
+    "tr": "Ödenen borç: 10",
+    "th": "หนี้ที่ปลด: 10"
+   }
+  },
+  {
+   "id": "ms_4",
+   "name": {
+    "en": "First Regular",
+    "tr": "İlk Müdavim",
+    "th": "ขาประจำคนแรก"
+   },
+   "home": {
+    "en": "That neighbour's tin token stands on the shelf and glows.",
+    "tr": "O komşunun teneke jetonu rafta durur ve parlar.",
+    "th": "เหรียญกระป๋องของเพื่อนบ้านคนนั้นตั้งบนชั้นและเรืองแสง"
+   },
+   "requires": {
+    "stat": "stage:8",
+    "gte": 1
+   },
+   "reqText": {
+    "en": "Times a neighbour became a Regular: 1",
+    "tr": "Bir komşunun Müdavim olma sayısı: 1",
+    "th": "จำนวนครั้งที่เพื่อนบ้านกลายเป็นขาประจำ: 1"
+   }
+  },
+  {
+   "id": "ms_5",
+   "name": {
+    "en": "Yaowarat cleared",
+    "tr": "Yaowarat bitti",
+    "th": "ผ่านเยาวราช"
+   },
+   "home": {
+    "en": "The cart wheel is painted gold.",
+    "tr": "Arabanın tekerleği altın boyanır.",
+    "th": "ล้อรถเข็นถูกทาสีทอง"
+   },
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "ms_6",
+   "name": {
+    "en": "All 20 lockers open",
+    "tr": "20 dolabın hepsi açık",
+    "th": "เปิดตู้ครบ 20 ตู้"
+   },
+   "home": {
+    "en": "The Locker Wall gets a gold coat.",
+    "tr": "Dolap Duvarı altın kaplanır.",
+    "th": "ผนังตู้ล็อกเกอร์ถูกเคลือบสีทอง"
+   },
+   "requires": {
+    "lockers": 20
+   },
+   "reqText": {
+    "en": "Lockers opened: 20",
+    "tr": "Açılan dolap: 20",
+    "th": "ตู้ที่เปิดแล้ว: 20"
+   }
+  },
+  {
+   "id": "ms_7",
+   "name": {
+    "en": "Pattaya cleared",
+    "tr": "Pattaya bitti",
+    "th": "ผ่านพัทยา"
+   },
+   "home": {
+    "en": "The cart sits in a rented shop front. Day and night begin.",
+    "tr": "Araba kiralık bir dükkân önünde durur. Gece ve gündüz başlar.",
+    "th": "รถเข็นอยู่ในหน้าร้านเช่า และมีกลางวันกลางคืนสลับกัน"
+   },
+   "requires": {
+    "clear": "c5"
+   },
+   "reqText": {
+    "en": "Clear Hua Hin Low Season",
+    "tr": "Hua Hin Ölü Sezon yerini bitir",
+    "th": "ผ่านหัวหินหน้าโลว์"
+   }
+  },
+  {
+   "id": "ms_8",
+   "name": {
+    "en": "30 stamps",
+    "tr": "30 mühür",
+    "th": "ตราประทับ 30 ดวง"
+   },
+   "home": {
+    "en": "A framed map hangs on the wall.",
+    "tr": "Duvara çerçeveli bir harita asılır.",
+    "th": "แผนที่ใส่กรอบแขวนบนผนัง"
+   },
+   "requires": {
+    "stamps": 30
+   },
+   "reqText": {
+    "en": "Stamps earned: 30",
+    "tr": "Kazanılan mühür: 30",
+    "th": "ตราประทับที่ได้: 30"
+   }
+  },
+  {
+   "id": "ms_9",
+   "name": {
+    "en": "First Storm cleared",
+    "tr": "İlk Fırtına bitti",
+    "th": "ผ่านพายุแรก"
+   },
+   "home": {
+    "en": "Rain on the window and an umbrella stand.",
+    "tr": "Pencerede yağmur, bir şemsiyelik.",
+    "th": "ฝนบนหน้าต่างและที่เสียบร่ม"
+   },
+   "requires": {
+    "storm": 1
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 1",
+    "tr": "Fırtına 1'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 1"
+   }
+  },
+  {
+   "id": "ms_10",
+   "name": {
+    "en": "Phuket cleared",
+    "tr": "Phuket bitti",
+    "th": "ผ่านภูเก็ต"
+   },
+   "home": {
+    "en": "A two-storey shophouse. Mr. Ruby's hat hangs on a hook.",
+    "tr": "İki katlı bir dükkân evi. Bay Ruby'nin şapkası bir askıda.",
+    "th": "ตึกแถวสองชั้น หมวกของมิสเตอร์รูบี้แขวนอยู่บนตะขอ"
+   },
+   "requires": {
+    "clear": "c7"
+   },
+   "reqText": {
+    "en": "Clear Phuket Beach Club",
+    "tr": "Phuket Plaj Kulübü yerini bitir",
+    "th": "ผ่านบีชคลับภูเก็ต"
+   }
+  },
+  {
+   "id": "ms_11",
+   "name": {
+    "en": "Sukhumvit cleared",
+    "tr": "Sukhumvit bitti",
+    "th": "ผ่านสุขุมวิท"
+   },
+   "home": {
+    "en": "A glass wall with the city behind it.",
+    "tr": "Arkasında şehir olan bir cam duvar.",
+    "th": "ผนังกระจกที่มีเมืองอยู่ด้านหลัง"
+   },
+   "requires": {
+    "clear": "c9"
+   },
+   "reqText": {
+    "en": "Clear Sukhumvit Condo Launch",
+    "tr": "Sukhumvit Rezidans Açılışı yerini bitir",
+    "th": "ผ่านเปิดตัวคอนโดสุขุมวิท"
+   }
+  },
+  {
+   "id": "ms_12",
+   "name": {
+    "en": "Sky Bar cleared",
+    "tr": "Gökyüzü Barı bitti",
+    "th": "ผ่านสกายบาร์"
+   },
+   "home": {
+    "en": "A penthouse with the skyline. The cart is a trophy on a shelf.",
+    "tr": "Şehir silüetli bir çatı katı. Araba rafta bir kupa.",
+    "th": "เพนต์เฮาส์วิวเมือง รถเข็นเป็นถ้วยรางวัลบนชั้น"
+   },
+   "requires": {
+    "clear": "c10"
+   },
+   "reqText": {
+    "en": "Clear The Sky Bar",
+    "tr": "Gökyüzü Barı yerini bitir",
+    "th": "ผ่านสกายบาร์"
+   }
+  },
+  {
+   "id": "ms_13",
+   "name": {
+    "en": "All 8 neighbours Regular",
+    "tr": "Sekiz komşu da Müdavim",
+    "th": "เพื่อนบ้านครบ 8 คนเป็นขาประจำ"
+   },
+   "home": {
+    "en": "The tin tokens sit in a glass display case.",
+    "tr": "Teneke jetonlar bir cam vitrinde durur.",
+    "th": "เหรียญกระป๋องวางในตู้กระจกโชว์"
+   },
+   "requires": {
+    "stat": "stage:8",
+    "gte": 8
+   },
+   "reqText": {
+    "en": "Times a neighbour became a Regular: 8",
+    "tr": "Bir komşunun Müdavim olma sayısı: 8",
+    "th": "จำนวนครั้งที่เพื่อนบ้านกลายเป็นขาประจำ: 8"
+   }
+  },
+  {
+   "id": "ms_14",
+   "name": {
+    "en": "Storm 10 cleared",
+    "tr": "Fırtına 10 bitti",
+    "th": "ผ่านพายุ 10"
+   },
+   "home": {
+    "en": "The Night Market Deed hangs framed. The last change.",
+    "tr": "Gece Pazarı Tapusu çerçevelenip asılır. Son değişiklik.",
+    "th": "โฉนดตลาดกลางคืนแขวนใส่กรอบ การเปลี่ยนแปลงครั้งสุดท้าย"
+   },
+   "requires": {
+    "storm": 10
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 10",
+    "tr": "Fırtına 10'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 10"
+   }
+  }
+ ]
+}

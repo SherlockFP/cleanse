@@ -10,8 +10,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW, OUT = os.path.join(ROOT, 'art', 'raw'), os.path.join(ROOT, 'public', 'img')
 CREAM = (244, 234, 210)
 
-# art/sheets.json lists what to cut: {"sheets":[{file, cols, rows, size, ids}], "singles":[{file, id, size, magenta}]}
+# art/sheets.json (plus art/sheets_v3.json) lists what to cut: {"sheets":[{file, cols, rows, size, ids}], "singles":[{file, id, size, magenta}]}
 SPEC = json.load(open(os.path.join(ROOT, 'art', 'sheets.json'), encoding='utf-8'))
+V3 = os.path.join(ROOT, 'art', 'sheets_v3.json')  # v3 sheets, same format; merged after the v2 list
+if os.path.exists(V3):
+    _v3 = json.load(open(V3, encoding='utf-8'))
+    SPEC = dict(SPEC, sheets=SPEC.get('sheets', []) + _v3.get('sheets', []), singles=SPEC.get('singles', []) + _v3.get('singles', []))
 base = lambda f: os.path.basename(f)
 SHEETS = {base(x['file']): (x['cols'], x['rows'], x.get('size', 192), x['ids']) for x in SPEC.get('sheets', [])}
 SINGLES = {base(x['file']): (x['id'], x.get('size', 1024)) for x in SPEC.get('singles', []) if x.get('magenta', True)}

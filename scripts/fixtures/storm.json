@@ -1,0 +1,94 @@
+{
+ "storms": [
+  {
+   "n": 1,
+   "name": {
+    "en": "Storm 1",
+    "tr": "Storm 1",
+    "th": "Storm 1"
+   },
+   "rules": []
+  },
+  {
+   "n": 2,
+   "name": {
+    "en": "Storm 2",
+    "tr": "Storm 2",
+    "th": "Storm 2"
+   },
+   "rules": []
+  },
+  {
+   "n": 3,
+   "name": {
+    "en": "Storm 3",
+    "tr": "Storm 3",
+    "th": "Storm 3"
+   },
+   "rules": []
+  },
+  {
+   "n": 4,
+   "name": {
+    "en": "Storm 4",
+    "tr": "Storm 4",
+    "th": "Storm 4"
+   },
+   "rules": []
+  },
+  {
+   "n": 5,
+   "name": {
+    "en": "Storm 5",
+    "tr": "Storm 5",
+    "th": "Storm 5"
+   },
+   "rules": []
+  },
+  {
+   "n": 6,
+   "name": {
+    "en": "Storm 6",
+    "tr": "Storm 6",
+    "th": "Storm 6"
+   },
+   "rules": []
+  },
+  {
+   "n": 7,
+   "name": {
+    "en": "Storm 7",
+    "tr": "Storm 7",
+    "th": "Storm 7"
+   },
+   "rules": []
+  },
+  {
+   "n": 8,
+   "name": {
+    "en": "Storm 8",
+    "tr": "Storm 8",
+    "th": "Storm 8"
+   },
+   "rules": []
+  },
+  {
+   "n": 9,
+   "name": {
+    "en": "Storm 9",
+    "tr": "Storm 9",
+    "th": "Storm 9"
+   },
+   "rules": []
+  },
+  {
+   "n": 10,
+   "name": {
+    "en": "Storm 10",
+    "tr": "Storm 10",
+    "th": "Storm 10"
+   },
+   "rules": []
+  }
+ ]
+}

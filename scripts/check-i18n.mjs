@@ -45,8 +45,19 @@ const banned = (label, text, lang) => {
 };
 for (const [lang, tab] of [['en', en], ['tr', tr], ['th', th]]) for (const [k, v] of Object.entries(tab)) banned(k, v, lang);
 
+// 4b. v3 word rules (THEME-TH, SPEC section 0), UI strings only: no worship, royal or sacred words (street words: tip, favour, deal, regular, fan), no lottery words.
+const BAN3 = {
+  en: ['offering', 'offerings', 'blessing', 'blessings', 'blessed', 'devotion', 'worship', 'pray', 'prayer', 'shrine', 'temple', 'amulet', 'monk', 'buddha', 'sacred', 'holy', 'divine', 'god', 'gods', 'goddess', 'king', 'queen', 'throne', 'royal', 'palace', 'lottery', 'odds', 'chips', 'naga', 'garuda'],
+  tr: ['adak', 'kurban', 'tapınak', 'ibadet', 'dua', 'kral', 'kraliçe', 'tanrı', 'tanrıça', 'kutsal', 'piyango', 'rahip', 'budist', 'buda'],
+  th: ['บูชา', 'ศาลพระภูมิ', 'ศาลเจ้า', 'เครื่องราง', 'พระพุทธ', 'กษัตริย์', 'บวงสรวง', 'ถวาย', 'สักการะ', 'สวดมนต์', 'หวย', 'พระภิกษุ', 'วิหาร'],
+};
+for (const [lang, tab] of [['en', en], ['tr', tr], ['th', th]]) for (const [k, v] of Object.entries(tab)) {
+  if (lang === 'th') { for (const b of BAN3.th) if (v.includes(b)) fail(`worship or royal th word "${b}": ${k}`); continue; }
+  for (const w of words(v, lang)) if (BAN3[lang].includes(lang === 'tr' ? stemTr(w) : w)) fail(`worship or royal ${lang} word "${w}": ${k}`);
+}
+
 // 5. speech lines: line.<who>.<trigger>.<n>, numbered from 1 without gaps, known speakers and triggers
-const TRIGGERS = { brimble: ['home', 'start', 'stoke', 'heatHigh', 'scorch', 'dud', 'big', 'paid', 'deal', 'signed', 'refuse', 'pawn', 'lose', 'win', 'tutDeal'], pip: ['shop', 'tutShop'], nim: ['start', 'paid', 'scorch', 'lose'] };
+const TRIGGERS = { brimble: ['home', 'start', 'stoke', 'heatHigh', 'scorch', 'dud', 'big', 'paid', 'deal', 'signed', 'refuse', 'pawn', 'lose', 'win', 'tutDeal', 'call', 'hangup'], pip: ['shop', 'tutShop'], nim: ['start', 'paid', 'scorch', 'lose'] };
 const groups = {};
 for (const k of Object.keys(en).filter((x) => x.startsWith('line.'))) {
   const m = k.match(/^line\.(\w+)\.(\w+)\.(\d+)$/);

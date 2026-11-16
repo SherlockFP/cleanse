@@ -1,0 +1,249 @@
+{
+ "nodes": [
+  {
+   "id": "cart_01",
+   "tab": "cart",
+   "cost": 20,
+   "requires": null,
+   "effect": {
+    "type": "startTrick",
+    "n": 1
+   },
+   "name": {
+    "en": "cart_01",
+    "tr": "cart_01",
+    "th": "cart_01"
+   },
+   "text": {
+    "en": "cart_01",
+    "tr": "cart_01",
+    "th": "cart_01"
+   }
+  },
+  {
+   "id": "cart_02",
+   "tab": "cart",
+   "cost": 30,
+   "requires": {
+    "lesson": 3
+   },
+   "effect": {
+    "type": "flag",
+    "flag": "freeReroll",
+    "v": 1
+   },
+   "name": {
+    "en": "cart_02",
+    "tr": "cart_02",
+    "th": "cart_02"
+   },
+   "text": {
+    "en": "cart_02",
+    "tr": "cart_02",
+    "th": "cart_02"
+   }
+  },
+  {
+   "id": "cart_05",
+   "tab": "cart",
+   "cost": 70,
+   "requires": {
+    "stat": "dealsSigned",
+    "gte": 3
+   },
+   "effect": {
+    "type": "startWick",
+    "n": 3
+   },
+   "name": {
+    "en": "cart_05",
+    "tr": "cart_05",
+    "th": "cart_05"
+   },
+   "text": {
+    "en": "cart_05",
+    "tr": "cart_05",
+    "th": "cart_05"
+   }
+  },
+  {
+   "id": "cart_07",
+   "tab": "cart",
+   "cost": 100,
+   "requires": {
+    "clear": "c3"
+   },
+   "effect": {
+    "type": "postcardSlots",
+    "n": 1
+   },
+   "name": {
+    "en": "cart_07",
+    "tr": "cart_07",
+    "th": "cart_07"
+   },
+   "text": {
+    "en": "cart_07",
+    "tr": "cart_07",
+    "th": "cart_07"
+   }
+  },
+  {
+   "id": "cart_09",
+   "tab": "cart",
+   "cost": 160,
+   "requires": {
+    "clear": "c5"
+   },
+   "effect": {
+    "type": "postcardSlots",
+    "n": 1
+   },
+   "name": {
+    "en": "cart_09",
+    "tr": "cart_09",
+    "th": "cart_09"
+   },
+   "text": {
+    "en": "cart_09",
+    "tr": "cart_09",
+    "th": "cart_09"
+   }
+  },
+  {
+   "id": "tin_01",
+   "tab": "tin",
+   "cost": 40,
+   "requires": {
+    "lesson": 6
+   },
+   "effect": {
+    "type": "flag",
+    "flag": "tinOfferings",
+    "v": 1
+   },
+   "name": {
+    "en": "tin_01",
+    "tr": "tin_01",
+    "th": "tin_01"
+   },
+   "text": {
+    "en": "tin_01",
+    "tr": "tin_01",
+    "th": "tin_01"
+   }
+  },
+  {
+   "id": "tin_04",
+   "tab": "tin",
+   "cost": 120,
+   "requires": {
+    "clear": "c4"
+   },
+   "effect": {
+    "type": "flag",
+    "flag": "callCards",
+    "v": 1
+   },
+   "name": {
+    "en": "tin_04",
+    "tr": "tin_04",
+    "th": "tin_04"
+   },
+   "text": {
+    "en": "tin_04",
+    "tr": "tin_04",
+    "th": "tin_04"
+   }
+  },
+  {
+   "id": "tin_06",
+   "tab": "tin",
+   "cost": 200,
+   "requires": {
+    "stat": "redCalls",
+    "gte": 5
+   },
+   "effect": {
+    "type": "flag",
+    "flag": "callRerollFree",
+    "v": true
+   },
+   "name": {
+    "en": "tin_06",
+    "tr": "tin_06",
+    "th": "tin_06"
+   },
+   "text": {
+    "en": "tin_06",
+    "tr": "tin_06",
+    "th": "tin_06"
+   }
+  },
+  {
+   "id": "pool_01",
+   "tab": "pool",
+   "cost": 25,
+   "requires": null,
+   "effect": {
+    "type": "poolAdd",
+    "n": 4,
+    "rarity": "common"
+   },
+   "name": {
+    "en": "pool_01",
+    "tr": "pool_01",
+    "th": "pool_01"
+   },
+   "text": {
+    "en": "pool_01",
+    "tr": "pool_01",
+    "th": "pool_01"
+   }
+  },
+  {
+   "id": "pool_02",
+   "tab": "pool",
+   "cost": 50,
+   "requires": {
+    "clear": "c2"
+   },
+   "effect": {
+    "type": "poolAdd",
+    "n": 4,
+    "rarity": "uncommon"
+   },
+   "name": {
+    "en": "pool_02",
+    "tr": "pool_02",
+    "th": "pool_02"
+   },
+   "text": {
+    "en": "pool_02",
+    "tr": "pool_02",
+    "th": "pool_02"
+   }
+  },
+  {
+   "id": "home_02",
+   "tab": "home",
+   "cost": 25,
+   "requires": {
+    "lesson": 1
+   },
+   "effect": {
+    "type": "none"
+   },
+   "name": {
+    "en": "home_02",
+    "tr": "home_02",
+    "th": "home_02"
+   },
+   "text": {
+    "en": "home_02",
+    "tr": "home_02",
+    "th": "home_02"
+   }
+  }
+ ]
+}

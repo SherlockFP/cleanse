@@ -1,6 +1,8 @@
-// Nim, Brimble and Pip speech bubbles. Lines live in i18n as line.<who>.<trigger>.<n>; the picker never repeats the last pick.
-import { t, lineCount } from '../i18n.js';
+// Nim, Brimble and Pip speech bubbles, and the spirits' own lines (spirits.json lines.<kind>, one { en, tr, th } per kind: meet gift red loved insult noticed friend patron wrath himOrMe omenTpl demand epilogue).
+// Lines live in i18n as line.<who>.<trigger>.<n> (numbered from 1); the picker never repeats the last pick.
+import { t, L, lineCount } from '../i18n.js';
 import { h, art } from './dom.js';
+import { SPIRIT } from './content.js';
 
 const last = new Map(); // 'who.trigger' -> last index
 let box = null, timer = 0;
@@ -25,7 +27,7 @@ export function pickIndex(count, prev, rnd = Math.random) {
 // One line for who/trigger, never the same twice in a row; null when there is none. Shows nothing (the home screen prints its lines itself).
 export function pickLine(who, trigger, vars = {}) {
   const n = lineCount(who, trigger);
-  if (!n) return null;
+  if (!n) { const own = SPIRIT[who]?.lines?.[trigger]; return own ? L(own).replace(/{(w+)}/g, (_, k) => vars[k] ?? '') : null; }
   const key = `${who}.${trigger}`, i = pickIndex(n, last.get(key));
   last.set(key, i);
   return t(`line.${who}.${trigger}.${i}`, vars);
@@ -36,7 +38,7 @@ export function say(who, trigger, vars = {}) {
   const text = pickLine(who, trigger, vars);
   if (text == null) return null;
   if (box) {
-    const name = t(`ui.${who}`), face = who === 'brimble' ? 'devil/grin' : who === 'nim' ? 'char/nim' : 'char/pip';
+    const sp = SPIRIT[who], name = sp ? L(sp.name) : t(`ui.${who}`), face = sp?.portrait?.calm ?? (who === 'brimble' ? 'devil/grin' : who === 'nim' ? 'char/nim' : 'char/pip');
     const b = h('p', { class: `bubble ${who}` }, art(face, 'face'), h('span', {}, h('b', {}, name), text));
     box.replaceChildren(b); // one bubble at a time
     clearTimeout(timer);

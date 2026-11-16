@@ -1,0 +1,367 @@
+{
+ "omens": [
+  {
+   "id": "nextDebts",
+   "spirit": "brimble",
+   "name": {
+    "en": "The Ledger",
+    "tr": "Defter",
+    "th": "สมุดบัญชี"
+   },
+   "text": {
+    "en": "Shows the next 2 debts and the next boss rule.",
+    "tr": "Sıradaki 2 borcu ve sıradaki patron kuralını gösterir.",
+    "th": "แสดงหนี้ถัดไป 2 ก้อนและกฎบอสถัดไป"
+   }
+  },
+  {
+   "id": "nextOffers",
+   "spirit": "beckon",
+   "name": {
+    "en": "Shelf Talk",
+    "tr": "Raf Sohbeti",
+    "th": "คุยเรื่องชั้นวาง"
+   },
+   "text": {
+    "en": "Shows the top 2 charms of the next stall.",
+    "tr": "Sıradaki tezgâhın en iyi 2 tılsımını gösterir.",
+    "th": "แสดงไอเท็มเด่น 2 ชิ้นของแผงถัดไป"
+   }
+  },
+  {
+   "id": "favBoard",
+   "spirit": "gold",
+   "name": {
+    "en": "Menu Board",
+    "tr": "Menü Tahtası",
+    "th": "กระดานเมนู"
+   },
+   "text": {
+    "en": "Shows which symbols are most likely to be the Special, with your Luck.",
+    "tr": "Luck'ınla hangi sembollerin Gözde olmaya en yakın olduğunu gösterir.",
+    "th": "แสดงว่าสัญลักษณ์ไหนมีโอกาสเป็นเมนูเด็ดมากสุดเมื่อรวมโชคของคุณ"
+   }
+  },
+  {
+   "id": "benchPrices",
+   "spirit": "wire",
+   "name": {
+    "en": "Bench Prices",
+    "tr": "Tezgâh Fiyatları",
+    "th": "ราคาโต๊ะช่าง"
+   },
+   "text": {
+    "en": "Shows the next bench jobs and their prices.",
+    "tr": "Sıradaki tezgâh işlerini ve fiyatlarını gösterir.",
+    "th": "แสดงงานโต๊ะช่างถัดไปและราคา"
+   }
+  },
+  {
+   "id": "shortfall",
+   "spirit": "waiting",
+   "name": {
+    "en": "The Shortfall",
+    "tr": "Eksik Tutar",
+    "th": "ยอดที่ขาด"
+   },
+   "text": {
+    "en": "Shows how many coins are still missing at the end of this round if you bank everything.",
+    "tr": "Hepsini yatırırsan bu elin sonunda kaç para eksik kalacağını gösterir.",
+    "th": "แสดงว่าถ้าจ่ายหมดตอนจบรอบนี้จะยังขาดอีกกี่เหรียญ"
+   }
+  },
+  {
+   "id": "nextTerms",
+   "spirit": "tide",
+   "name": {
+    "en": "Tomorrow's Terms",
+    "tr": "Yarının Şartları",
+    "th": "เงื่อนไขพรุ่งนี้"
+   },
+   "text": {
+    "en": "Shows the 3 terms cards of the next round.",
+    "tr": "Sıradaki elin 3 şart kartını gösterir.",
+    "th": "แสดงการ์ดเงื่อนไข 3 ใบของรอบถัดไป"
+   }
+  },
+  {
+   "id": "ashNext",
+   "spirit": "moonbiter",
+   "name": {
+    "en": "Soot Count",
+    "tr": "İs Sayısı",
+    "th": "จำนวนเขม่า"
+   },
+   "text": {
+    "en": "Shows how much Soot to expect on the next spin at your current Spice. A rate, not a promise.",
+    "tr": "Mevcut Acı'nda sonraki çevirişte ne kadar İs beklenebileceğini gösterir. Bir oran, söz değil.",
+    "th": "แสดงว่าตาถัดไปที่ระดับเผ็ดตอนนี้ควรคาดว่าจะมีเขม่าเท่าไร เป็นอัตรา ไม่ใช่คำมั่น"
+   }
+  },
+  {
+   "id": "scorchOdds",
+   "spirit": "lamplit",
+   "name": {
+    "en": "Flare-up Chance",
+    "tr": "Parlama İhtimali",
+    "th": "โอกาสไฟลุก"
+   },
+   "text": {
+    "en": "Shows the chance of a Flare-up on each of the next 3 spins at your current Spice.",
+    "tr": "Mevcut Acı'nda sonraki 3 çevirişin her birinde Parlama ihtimalini gösterir.",
+    "th": "แสดงโอกาสไฟลุกของแต่ละตาใน 3 ตาถัดไปที่ระดับเผ็ดตอนนี้"
+   }
+  }
+ ],
+ "demands": [
+  {
+   "id": "signDeal",
+   "spirit": "brimble",
+   "name": {
+    "en": "Sign something",
+    "tr": "Bir şey imzala",
+    "th": "เซ็นสักอย่าง"
+   },
+   "text": {
+    "en": "Sign any deal before this debt is paid.",
+    "tr": "Bu borç ödenmeden herhangi bir anlaşma imzala.",
+    "th": "เซ็นข้อตกลงสักข้อก่อนปลดหนี้ก้อนนี้"
+   },
+   "check": "debtEnd",
+   "reward": {
+    "favour": 3,
+    "effects": [
+     {
+      "type": "wick",
+      "n": 2
+     }
+    ]
+   },
+   "fail": {
+    "favour": -2
+   }
+  },
+  {
+   "id": "buy2",
+   "spirit": "beckon",
+   "name": {
+    "en": "Buy two",
+    "tr": "İki tane al",
+    "th": "ซื้อสองชิ้น"
+   },
+   "text": {
+    "en": "Buy 2 things at the next stall.",
+    "tr": "Sıradaki tezgâhtan 2 şey al.",
+    "th": "ซื้อของ 2 ชิ้นที่แผงถัดไป"
+   },
+   "check": "nextStall",
+   "reward": {
+    "favour": 3,
+    "effects": [
+     {
+      "type": "flag",
+      "flag": "freeReroll",
+      "v": 1,
+      "scope": "debt"
+     }
+    ]
+   },
+   "fail": {
+    "favour": -1
+   }
+  },
+  {
+   "id": "letMePick",
+   "spirit": "gold",
+   "name": {
+    "en": "Chef's choice",
+    "tr": "Şefin seçimi",
+    "th": "ให้เชฟเลือก"
+   },
+   "text": {
+    "en": "Give up your Special pick for one spin. He chooses.",
+    "tr": "Bir çeviriş için Gözde seçimini bırak. O seçer.",
+    "th": "ยกการเลือกเมนูเด็ดให้เชฟหนึ่งตา"
+   },
+   "check": "nextSpin",
+   "reward": {
+    "favour": 3,
+    "effects": [
+     {
+      "type": "luck",
+      "n": 1,
+      "scope": "round"
+     }
+    ]
+   },
+   "fail": {
+    "favour": -1
+   }
+  },
+  {
+   "id": "handTrick",
+   "spirit": "wire",
+   "name": {
+    "en": "Hand me one",
+    "tr": "Birini ver",
+    "th": "ส่งมาหนึ่งอัน"
+   },
+   "text": {
+    "en": "Give him a trick now. You get 2 random tricks back.",
+    "tr": "Ona şimdi bir numara ver. Karşılığında 2 rastgele numara alırsın.",
+    "th": "ให้กลเม็ดเขาหนึ่งอันตอนนี้ แล้วได้กลเม็ดสุ่มคืน 2 อัน"
+   },
+   "check": "now",
+   "reward": {
+    "favour": 3,
+    "effects": [
+     {
+      "type": "trick",
+      "n": 2
+     }
+    ]
+   },
+   "fail": {
+    "favour": -1
+   }
+  },
+  {
+   "id": "waitWithMe",
+   "spirit": "waiting",
+   "name": {
+    "en": "Sit with me",
+    "tr": "Benimle otur",
+    "th": "นั่งเป็นเพื่อนหน่อย"
+   },
+   "text": {
+    "en": "Skip the next night. Interest and the stall still come.",
+    "tr": "Sıradaki geceyi atla. Faiz ve tezgâh yine gelir.",
+    "th": "ข้ามคืนหน้า ดอกเบี้ยกับแผงยังมาตามปกติ"
+   },
+   "check": "nextNight",
+   "reward": {
+    "favour": 3,
+    "effects": [
+     {
+      "type": "trick",
+      "n": 1
+     }
+    ]
+   },
+   "fail": {
+    "favour": -1
+   }
+  },
+  {
+   "id": "keepCool",
+   "spirit": "tide",
+   "name": {
+    "en": "Keep it cool",
+    "tr": "Soğukkanlı ol",
+    "th": "ใจเย็นๆ"
+   },
+   "text": {
+    "en": "End the next round at Spice 2 or less.",
+    "tr": "Sıradaki eli Acı 2 veya altında bitir.",
+    "th": "จบรอบหน้าที่เผ็ดไม่เกิน 2"
+   },
+   "check": "nextRound",
+   "reward": {
+    "favour": 3,
+    "effects": [
+     {
+      "type": "flag",
+      "flag": "freeReroll",
+      "v": 1,
+      "scope": "debt"
+     }
+    ]
+   },
+   "fail": {
+    "favour": -1
+   }
+  },
+  {
+   "id": "feed",
+   "spirit": "moonbiter",
+   "name": {
+    "en": "Feed me",
+    "tr": "Beni doyur",
+    "th": "ป้อนหน่อย"
+   },
+   "text": {
+    "en": "Give a charm or a curse at the next Tin.",
+    "tr": "Sıradaki Teneke'de bir tılsım ya da lanet ver.",
+    "th": "ให้ไอเท็มหรือคำสาปที่กระป๋องขนมครั้งหน้า"
+   },
+   "check": "nextTin",
+   "reward": {
+    "favour": 3,
+    "effects": [
+     {
+      "type": "wick",
+      "n": 2
+     }
+    ]
+   },
+   "fail": {
+    "favour": -1
+   }
+  },
+  {
+   "id": "dare",
+   "spirit": "lamplit",
+   "name": {
+    "en": "Dare me",
+    "tr": "Cesaretin var mı?",
+    "th": "ท้าหน่อย"
+   },
+   "text": {
+    "en": "Reach Spice 8 next round with no Flare-up. Fail: lose 10% of your purse.",
+    "tr": "Sıradaki elde Parlamasız Acı 8'e çık. Olmazsa kesenin %10'unu kaybedersin.",
+    "th": "ขึ้นเผ็ด 8 ในรอบหน้าโดยไม่ไฟลุก ถ้าพลาดเสียถุงเงิน 10%"
+   },
+   "check": "nextRound",
+   "reward": {
+    "favour": 3,
+    "effects": [
+     {
+      "type": "wick",
+      "n": 3
+     }
+    ]
+   },
+   "fail": {
+    "favour": -1,
+    "purseLossPct": 10
+   }
+  }
+ ],
+ "labels": {
+  "omen": {
+   "en": "Gossip",
+   "tr": "Dedikodu",
+   "th": "ข่าวแผง"
+  },
+  "demand": {
+   "en": "Errand",
+   "tr": "Küçük İş",
+   "th": "ฝากงาน"
+  },
+  "accept": {
+   "en": "Do it",
+   "tr": "Yaparım",
+   "th": "รับงาน"
+  },
+  "met": {
+   "en": "Done",
+   "tr": "Tamam",
+   "th": "เสร็จแล้ว"
+  },
+  "failed": {
+   "en": "Not done",
+   "tr": "Olmadı",
+   "th": "ไม่สำเร็จ"
+  }
+ }
+}

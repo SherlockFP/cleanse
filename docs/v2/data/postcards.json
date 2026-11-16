@@ -1,0 +1,1157 @@
+{
+ "postcards": [
+  {
+   "id": "rainy_day",
+   "pack": 1,
+   "icon": "post/rainy_day",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Rainy Day",
+    "tr": "Yağmurlu Gün",
+    "th": "วันฝนตก"
+   },
+   "gainRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "spinsRound",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "debtMul",
+       "v": 8
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "spinsRound",
+       "v": 1
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "debtMul",
+       "v": 8
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Always: +1 spin every round.",
+    "tr": "Her zaman: her el +1 çeviriş.",
+    "th": "ตลอดเวลา: ทุกรอบได้ +1 ตา"
+   },
+   "cost": {
+    "en": "Always: debts are 8% larger.",
+    "tr": "Her zaman: borçlar %8 büyür.",
+    "th": "ตลอดเวลา: หนี้เพิ่มขึ้น 8%"
+   }
+  },
+  {
+   "id": "hot_pan",
+   "pack": 1,
+   "icon": "post/hot_pan",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Hot Pan",
+    "tr": "Kızgın Tava",
+    "th": "กระทะร้อน"
+   },
+   "gainRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "startHeat",
+       "v": 3
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "ashBase",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "startHeat",
+       "v": 3
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "ashBase",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Always: each round starts at Spice 3.",
+    "tr": "Her zaman: her el Acı 3 ile başlar.",
+    "th": "ตลอดเวลา: ทุกรอบเริ่มที่เผ็ด 3"
+   },
+   "cost": {
+    "en": "Always: Soot always has +1 weight.",
+    "tr": "Her zaman: İs her zaman +1 ağırlıkla gelir.",
+    "th": "ตลอดเวลา: เขม่ามีน้ำหนัก +1 เสมอ"
+   }
+  },
+  {
+   "id": "fresh_fish",
+   "pack": 1,
+   "icon": "post/fresh_fish",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Fresh Fish",
+    "tr": "Taze Balık",
+    "th": "ปลาสด"
+   },
+   "gainRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "onDebtStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": -1
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 4
+      }
+     ]
+    },
+    {
+     "trigger": "onDebtStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": -1
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Run start: +4 Luck.",
+    "tr": "Oyun başında: +4 Şans.",
+    "th": "เริ่มเกม: โชค +4"
+   },
+   "cost": {
+    "en": "New debt: −1 Luck.",
+    "tr": "Yeni borçta: −1 Şans.",
+    "th": "เริ่มหนี้ใหม่: โชค −1"
+   }
+  },
+  {
+   "id": "night_bus",
+   "pack": 1,
+   "icon": "post/night_bus",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Night Bus",
+    "tr": "Gece Otobüsü",
+    "th": "รถเมล์ดึก"
+   },
+   "gainRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "noShopN",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "noShopN",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Run start: +3 Caps.",
+    "tr": "Oyun başında: +3 Kapak.",
+    "th": "เริ่มเกม: +3 ฝาขวด"
+   },
+   "cost": {
+    "en": "Always: the next stall is closed.",
+    "tr": "Her zaman: sıradaki tezgâh kapalı.",
+    "th": "ตลอดเวลา: แผงถัดไปปิด 1 ครั้ง"
+   }
+  },
+  {
+   "id": "borrowed_coat",
+   "pack": 1,
+   "icon": "post/borrowed_coat",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Borrowed Coat",
+    "tr": "Ödünç Palto",
+    "th": "เสื้อโค้ทยืม"
+   },
+   "gainRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "slot",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": -2,
+       "spirit": "brimble"
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "slot",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": -2,
+       "spirit": "brimble"
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Always: +1 charm slot.",
+    "tr": "Her zaman: +1 tılsım yuvası.",
+    "th": "ตลอดเวลา: +1 ช่องไอเท็ม"
+   },
+   "cost": {
+    "en": "Run start: Favour −2 with Mr. Ruby.",
+    "tr": "Oyun başında: Bay Ruby ile Hatır −2.",
+    "th": "เริ่มเกม: น้ำใจกับมิสเตอร์รูบี้ −2"
+   }
+  },
+  {
+   "id": "short_cut",
+   "pack": 1,
+   "icon": "post/short_cut",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Short Cut",
+    "tr": "Kestirme",
+    "th": "ทางลัด"
+   },
+   "gainRules": [
+    {
+     "trigger": "onDebtPaid",
+     "cond": {
+      "roundsLeftMin": 1
+     },
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      },
+      {
+       "type": "trick",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "spinsLess",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "onDebtPaid",
+     "cond": {
+      "roundsLeftMin": 1
+     },
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      },
+      {
+       "type": "trick",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "spinsLess",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Debt paid, with a round to spare: +3 Caps, gain 1 random trick.",
+    "tr": "Borç ödenince, el artarsa: +3 Kapak, 1 rastgele numara kazan.",
+    "th": "เมื่อปลดหนี้ ถ้าเหลือรอบ: +3 ฝาขวด, ได้กลเม็ดสุ่ม 1 ชิ้น"
+   },
+   "cost": {
+    "en": "Always: −1 spin on every terms card.",
+    "tr": "Her zaman: her şart kartında −1 çeviriş.",
+    "th": "ตลอดเวลา: การ์ดเงื่อนไขทุกใบ −1 ตา"
+   }
+  },
+  {
+   "id": "crooked_scale",
+   "pack": 2,
+   "icon": "post/crooked_scale",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Crooked Scale",
+    "tr": "Eğri Terazi",
+    "th": "ตาชั่งเบี้ยว"
+   },
+   "gainRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 2,
+       "spirit": "wire"
+      },
+      {
+       "type": "favour",
+       "n": 2,
+       "spirit": "beckon"
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": -2,
+       "spirit": "tide"
+      },
+      {
+       "type": "favour",
+       "n": -2,
+       "spirit": "waiting"
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 2,
+       "spirit": "wire"
+      },
+      {
+       "type": "favour",
+       "n": 2,
+       "spirit": "beckon"
+      }
+     ]
+    },
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": -2,
+       "spirit": "tide"
+      },
+      {
+       "type": "favour",
+       "n": -2,
+       "spirit": "waiting"
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Run start: Favour +2 with Uncle Wire, Favour +2 with Madam Receipt.",
+    "tr": "Oyun başında: Tel Amca ile Hatır +2, Bayan Fiş ile Hatır +2.",
+    "th": "เริ่มเกม: น้ำใจกับลุงสายไฟ +2, น้ำใจกับคุณนายใบเสร็จ +2"
+   },
+   "cost": {
+    "en": "Run start: Favour −2 with Grandmother Tide, Favour −2 with Mr. Lost-and-Found.",
+    "tr": "Oyun başında: Gelgit Nine ile Hatır −2, Kayıp Eşya Bey ile Hatır −2.",
+    "th": "เริ่มเกม: น้ำใจกับยายน้ำขึ้น −2, น้ำใจกับพี่ของหาย −2"
+   }
+  },
+  {
+   "id": "old_photo",
+   "pack": 2,
+   "icon": "post/old_photo",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Old Photograph",
+    "tr": "Eski Fotoğraf",
+    "th": "ภาพถ่ายเก่า"
+   },
+   "gainRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 3,
+       "spirit": "waiting"
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": -3,
+       "spirit": "brimble"
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 3,
+       "spirit": "waiting"
+      }
+     ]
+    },
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": -3,
+       "spirit": "brimble"
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Run start: Favour +3 with Mr. Lost-and-Found.",
+    "tr": "Oyun başında: Kayıp Eşya Bey ile Hatır +3.",
+    "th": "เริ่มเกม: น้ำใจกับพี่ของหาย +3"
+   },
+   "cost": {
+    "en": "Run start: Favour −3 with Mr. Ruby.",
+    "tr": "Oyun başında: Bay Ruby ile Hatır −3.",
+    "th": "เริ่มเกม: น้ำใจกับมิสเตอร์รูบี้ −3"
+   }
+  },
+  {
+   "id": "thumb_scale",
+   "pack": 2,
+   "icon": "post/thumb_scale",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Thumb on the Scale",
+    "tr": "Terazide Başparmak",
+    "th": "นิ้วโป้งบนตาชั่ง"
+   },
+   "gainRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "freeRedraw",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "onSpinStart",
+     "cond": {
+      "spinIs": "first"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "hideFav",
+       "v": true,
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "freeRedraw",
+       "v": 1
+      }
+     ]
+    },
+    {
+     "trigger": "onSpinStart",
+     "cond": {
+      "spinIs": "first"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "hideFav",
+       "v": true,
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Always: +1 free Special redraw each round.",
+    "tr": "Her zaman: her el +1 bedava Gözde değiştirme.",
+    "th": "ตลอดเวลา: สุ่มเมนูเด็ดใหม่ฟรี +1 ครั้งทุกรอบ"
+   },
+   "cost": {
+    "en": "Before each spin, on the first spin of a round: you cannot see the Special this spin.",
+    "tr": "Her çevirişten önce, elin ilk çevirişinde: Gözdeyi göremezsin (bu çeviriş).",
+    "th": "ก่อนหมุนทุกตา ในตาแรกของรอบ: มองไม่เห็นเมนูเด็ด ในตานี้"
+   }
+  },
+  {
+   "id": "empty_wallet",
+   "pack": 2,
+   "icon": "post/empty_wallet",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Empty Wallet",
+    "tr": "Boş Cüzdan",
+    "th": "กระเป๋าตังค์ว่าง"
+   },
+   "gainRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "debtCut",
+       "v": 30
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": -3
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "debtCut",
+       "v": 30
+      }
+     ]
+    },
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": -3
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Run start: the next debt is 30% smaller.",
+    "tr": "Oyun başında: sıradaki borç %30 küçülür.",
+    "th": "เริ่มเกม: หนี้ถัดไปลดลง 30%"
+   },
+   "cost": {
+    "en": "Run start: −3 Caps.",
+    "tr": "Oyun başında: −3 Kapak.",
+    "th": "เริ่มเกม: −3 ฝาขวด"
+   }
+  },
+  {
+   "id": "all_pocket",
+   "pack": 2,
+   "icon": "post/all_pocket",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "All Pockets",
+    "tr": "Bütün Cepler",
+    "th": "กระเป๋าเต็มตัว"
+   },
+   "gainRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "trickPockets",
+       "v": 2
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "shopOffers",
+       "v": 2
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "trickPockets",
+       "v": 2
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "shopOffers",
+       "v": 2
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Always: +2 trick pocket.",
+    "tr": "Her zaman: +2 numara cebi.",
+    "th": "ตลอดเวลา: +2 ช่องกลเม็ด"
+   },
+   "cost": {
+    "en": "Always: the shop shows 2 charms.",
+    "tr": "Her zaman: dükkân 2 tılsım gösterir.",
+    "th": "ตลอดเวลา: ร้านแสดงไอเท็ม 2 ชิ้น"
+   }
+  },
+  {
+   "id": "mothers_voice",
+   "pack": 2,
+   "icon": "post/mothers_voice",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Mother's Voice",
+    "tr": "Annenin Sesi",
+    "th": "เสียงแม่"
+   },
+   "gainRules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 1,
+       "spirit": "all"
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": -2
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 1,
+       "spirit": "all"
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": -2
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Run start: Favour +1 with every neighbour.",
+    "tr": "Oyun başında: her komşu ile Hatır +1.",
+    "th": "เริ่มเกม: น้ำใจกับเพื่อนบ้านทุกคน +1"
+   },
+   "cost": {
+    "en": "Always: interest −2%.",
+    "tr": "Her zaman: faiz −2 puan.",
+    "th": "ตลอดเวลา: ดอกเบี้ย −2%"
+   }
+  },
+  {
+   "id": "staring_contest",
+   "pack": 3,
+   "icon": "post/staring_contest",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Staring Contest",
+    "tr": "Bakışma Yarışı",
+    "th": "แข่งจ้องตา"
+   },
+   "gainRules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ]
+    }
+   ],
+   "costRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeRate",
+       "v": 3
+      }
+     ]
+    }
+   ],
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeRate",
+       "v": 3
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "On a Red Eye: +3 Caps.",
+    "tr": "Kırmızı Göz'de: +3 Kapak.",
+    "th": "เมื่อดวงตาแดงโผล่: +3 ฝาขวด"
+   },
+   "cost": {
+    "en": "Always: Red Eye chance 3 points higher. Red Eye from debt 1, and its chance is doubled.",
+    "tr": "Her zaman: Kırmızı Göz ihtimali 3 puan artar. Kırmızı Göz 1. borçtan başlar ve ihtimali iki katına çıkar.",
+    "th": "ตลอดเวลา: โอกาสดวงตาแดงเพิ่ม 3 จุด ดวงตาแดงมาตั้งแต่หนี้ที่ 1 และโอกาสเพิ่มเป็นสองเท่า"
+   },
+   "engine": "omenEarly"
+  },
+  {
+   "id": "spare_blender",
+   "pack": 3,
+   "icon": "post/spare_blender",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Spare Blender",
+    "tr": "Yedek Karıştırıcı",
+    "th": "เครื่องปั่นสำรอง"
+   },
+   "gainRules": [],
+   "costRules": [],
+   "rules": [],
+   "gain": {
+    "en": "The Blender opens from debt 1.",
+    "tr": "Karıştırıcı 1. borçtan itibaren açık.",
+    "th": "เครื่องปั่นเปิดใช้ตั้งแต่หนี้ที่ 1"
+   },
+   "cost": {
+    "en": "Blending costs 2 Caps more.",
+    "tr": "Karıştırma 2 Kapak daha pahalı.",
+    "th": "ปั่นไอเท็มแพงขึ้น 2 ฝาขวด"
+   },
+   "engine": "blenderFromDebt1"
+  },
+  {
+   "id": "party_line",
+   "pack": 3,
+   "icon": "post/party_line",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Party Line",
+    "tr": "Ortak Hat",
+    "th": "สายรวม"
+   },
+   "gainRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "callCards",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "costRules": [],
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "callCards",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Always: 1 more card on every call.",
+    "tr": "Her zaman: her aramada 1 kart daha.",
+    "th": "ตลอดเวลา: ทุกสายมีการ์ดเพิ่ม 1 ใบ"
+   },
+   "cost": {
+    "en": "Call rerolls cost double.",
+    "tr": "Arama yenilemeleri iki kat tutar.",
+    "th": "สุ่มการ์ดโทรศัพท์ใหม่แพงสองเท่า"
+   },
+   "engine": "callRerollDouble"
+  },
+  {
+   "id": "quiet_phone",
+   "pack": 3,
+   "icon": "post/quiet_phone",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Quiet Phone",
+    "tr": "Sessiz Telefon",
+    "th": "โทรศัพท์เงียบ"
+   },
+   "gainRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "costRules": [],
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Always: interest +4%.",
+    "tr": "Her zaman: faiz +4 puan.",
+    "th": "ตลอดเวลา: ดอกเบี้ย +4%"
+   },
+   "cost": {
+    "en": "No calls this run: no beads and no white call.",
+    "tr": "Bu oyunda arama yok: boncuk da beyaz arama da yok.",
+    "th": "รอบนี้ไม่มีสายโทรศัพท์ ไม่มีลูกปัดและไม่มีสายขาว"
+   },
+   "engine": "noCalls"
+  },
+  {
+   "id": "full_charge",
+   "pack": 3,
+   "icon": "post/full_charge",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Full Charge",
+    "tr": "Tam Şarj",
+    "th": "ชาร์จเต็ม"
+   },
+   "gainRules": [],
+   "costRules": [],
+   "rules": [],
+   "gain": {
+    "en": "Active charms can hold one extra charge and start full.",
+    "tr": "Etkin tılsımlar bir fazla şarj tutar ve dolu başlar.",
+    "th": "ไอเท็มกดใช้เก็บชาร์จได้เพิ่มหนึ่งและเริ่มด้วยชาร์จเต็ม"
+   },
+   "cost": {
+    "en": "No recharge in the first round of each debt.",
+    "tr": "Her borcun ilk elinde şarj yok.",
+    "th": "รอบแรกของทุกหนี้ไม่ได้ชาร์จเพิ่ม"
+   },
+   "engine": "fullCharge"
+  },
+  {
+   "id": "late_kiosk",
+   "pack": 3,
+   "icon": "post/late_kiosk",
+   "back": "ui/postcard_back",
+   "name": {
+    "en": "Late Kiosk",
+    "tr": "Geç Kiosk",
+    "th": "ตู้ฝากเงินมาช้า"
+   },
+   "gainRules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "costRules": [],
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "gain": {
+    "en": "Always: interest +4%.",
+    "tr": "Her zaman: faiz +4 puan.",
+    "th": "ตลอดเวลา: ดอกเบี้ย +4%"
+   },
+   "cost": {
+    "en": "PAY NOW is off. No early pay.",
+    "tr": "ŞİMDİ ÖDE kapalı. Erken ödeme yok.",
+    "th": "ปุ่มจ่ายเลยปิด ไม่มีจ่ายก่อนกำหนด"
+   },
+   "engine": "noPayNow"
+  }
+ ],
+ "packs": [
+  {
+   "id": 1,
+   "source": "cart_07"
+  },
+  {
+   "id": 2,
+   "source": "locker_16"
+  },
+  {
+   "id": 3,
+   "source": "locker_17"
+  }
+ ]
+}

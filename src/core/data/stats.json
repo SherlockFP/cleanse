@@ -1,0 +1,343 @@
+{
+ "stats": [
+  {
+   "id": "debtsPaid",
+   "label": {
+    "en": "Debts paid",
+    "tr": "Ödenen borç",
+    "th": "หนี้ที่ปลด"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "runs",
+   "label": {
+    "en": "Runs finished",
+    "tr": "Biten oyun",
+    "th": "รอบที่เล่นจบ"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "dealsSigned",
+   "label": {
+    "en": "Deals signed in total",
+    "tr": "Toplam imzalanan anlaşma",
+    "th": "ข้อตกลงที่เซ็นรวม"
+   },
+   "screen": "phone"
+  },
+  {
+   "id": "redCalls",
+   "label": {
+    "en": "Red calls taken",
+    "tr": "Alınan kırmızı arama",
+    "th": "สายแดงที่รับ"
+   },
+   "screen": "phone"
+  },
+  {
+   "id": "hangUps",
+   "label": {
+    "en": "Calls hung up",
+    "tr": "Kapatılan arama",
+    "th": "สายที่วางไป"
+   },
+   "screen": "phone"
+  },
+  {
+   "id": "calls",
+   "label": {
+    "en": "Calls answered",
+    "tr": "Cevaplanan arama",
+    "th": "สายที่รับ"
+   },
+   "screen": "phone"
+  },
+  {
+   "id": "tricksUsed",
+   "label": {
+    "en": "Tricks used in total",
+    "tr": "Toplam kullanılan numara",
+    "th": "กลเม็ดที่ใช้รวม"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "offerings",
+   "label": {
+    "en": "Tips given at the Tin",
+    "tr": "Teneke'de verilen bahşiş",
+    "th": "ทิปที่ให้ที่กระป๋องขนม"
+   },
+   "screen": "tin"
+  },
+  {
+   "id": "stagesFriend",
+   "label": {
+    "en": "Times a neighbour became a Friend",
+    "tr": "Bir komşunun Dost olma sayısı",
+    "th": "จำนวนครั้งที่เพื่อนบ้านกลายเป็นเพื่อน"
+   },
+   "screen": "tin"
+  },
+  {
+   "id": "stage:8",
+   "label": {
+    "en": "Times a neighbour became a Regular",
+    "tr": "Bir komşunun Müdavim olma sayısı",
+    "th": "จำนวนครั้งที่เพื่อนบ้านกลายเป็นขาประจำ"
+   },
+   "screen": "tin"
+  },
+  {
+   "id": "visits",
+   "label": {
+    "en": "Neighbours who dropped by the Tin",
+    "tr": "Teneke'ye uğrayan komşu",
+    "th": "เพื่อนบ้านที่แวะมากระป๋องขนม"
+   },
+   "screen": "tin"
+  },
+  {
+   "id": "himOrMe",
+   "label": {
+    "en": "Him or Me moments seen",
+    "tr": "Görülen O mu Ben mi anı",
+    "th": "ครั้งที่เจอเลือกฉันหรือเขา"
+   },
+   "screen": "tin"
+  },
+  {
+   "id": "cursesHeld",
+   "label": {
+    "en": "Most curses carried while paying a debt",
+    "tr": "Borç öderken taşınan en çok lanet",
+    "th": "คำสาปมากสุดที่แบกตอนปลดหนี้"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "charmsBought",
+   "label": {
+    "en": "Charms bought in total",
+    "tr": "Toplam alınan tılsım",
+    "th": "ไอเท็มที่ซื้อรวม"
+   },
+   "screen": "stall"
+  },
+  {
+   "id": "upgrades",
+   "label": {
+    "en": "Cart upgrades bought",
+    "tr": "Alınan araba yükseltmesi",
+    "th": "อัปเกรดรถเข็นที่ซื้อ"
+   },
+   "screen": "stall"
+  },
+  {
+   "id": "benchJobs",
+   "label": {
+    "en": "Bench jobs done",
+    "tr": "Yaptırılan tezgâh işi",
+    "th": "งานโต๊ะช่างที่ใช้"
+   },
+   "screen": "stall"
+  },
+  {
+   "id": "interestTotal",
+   "label": {
+    "en": "Interest earned in total",
+    "tr": "Toplam kazanılan faiz",
+    "th": "ดอกเบี้ยที่ได้รวม"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "coinsEarned",
+   "label": {
+    "en": "Coins earned in total",
+    "tr": "Toplam kazanılan para",
+    "th": "เหรียญที่หาได้รวม"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "scorches",
+   "label": {
+    "en": "Flare-ups survived",
+    "tr": "Atlatılan Parlama",
+    "th": "ไฟลุกที่รอดมา"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "reachDebt",
+   "label": {
+    "en": "Furthest debt reached",
+    "tr": "Ulaşılan en ileri borç",
+    "th": "หนี้ที่ไปไกลสุด"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "fallRise",
+   "label": {
+    "en": "Times you lost a run, then cleared a debt in the next",
+    "tr": "Bir oyunu kaybedip sonrakinde borç ödeme sayısı",
+    "th": "จำนวนครั้งที่แพ้แล้วปลดหนี้ได้ในรอบถัดไป"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "redEyes",
+   "label": {
+    "en": "Red Eyes survived",
+    "tr": "Atlatılan Kırmızı Göz",
+    "th": "ดวงตาแดงที่รอดมา"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "staredDown",
+   "label": {
+    "en": "Red Eyes stared down with the Kiosk above half",
+    "tr": "Kiosk yarının üstündeyken atlatılan Kırmızı Göz",
+    "th": "ดวงตาแดงที่รอดตอนตู้ฝากเงินเกินครึ่ง"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "honks",
+   "label": {
+    "en": "HONKs",
+    "tr": "KORNA sayısı",
+    "th": "ครั้งที่บีบแตร"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "blends",
+   "label": {
+    "en": "Charms blended",
+    "tr": "Karıştırılan tılsım",
+    "th": "ไอเท็มที่ปั่นรวม"
+   },
+   "screen": "stall"
+  },
+  {
+   "id": "cleanContract",
+   "label": {
+    "en": "Places cleared signing no deals",
+    "tr": "Anlaşma imzalamadan bitirilen yer",
+    "th": "ด่านที่ผ่านโดยไม่เซ็นข้อตกลง"
+   },
+   "screen": "map"
+  },
+  {
+   "id": "demands",
+   "label": {
+    "en": "Errands done",
+    "tr": "Yapılan küçük iş",
+    "th": "งานฝากที่ทำสำเร็จ"
+   },
+   "screen": "tin"
+  },
+  {
+   "id": "heat3Spins",
+   "label": {
+    "en": "Spins at Spice 3 or more",
+    "tr": "Acı 3 ve üstünde çevirişler",
+    "th": "ตาที่หมุนตอนเผ็ด 3 ขึ้นไป"
+   },
+   "screen": "run"
+  },
+  {
+   "id": "signRefuse",
+   "label": {
+    "en": "Runs where you signed one deal and refused another",
+    "tr": "Bir anlaşma imzalayıp birini reddettiğin oyunlar",
+    "th": "รอบที่เซ็นข้อตกลงหนึ่งข้อและปฏิเสธอีกข้อ"
+   },
+   "screen": "phone"
+  },
+  {
+   "id": "dailyRuns",
+   "label": {
+    "en": "Daily runs played",
+    "tr": "Oynanan günlük oyun",
+    "th": "รอบรายวันที่เล่น"
+   },
+   "screen": "home"
+  }
+ ],
+ "screens": {
+  "run": {
+   "en": "in a run",
+   "tr": "bir oyunda",
+   "th": "ในรอบเล่น"
+  },
+  "map": {
+   "en": "on the map",
+   "tr": "haritada",
+   "th": "บนแผนที่"
+  },
+  "home": {
+   "en": "at Home",
+   "tr": "evde",
+   "th": "ที่บ้าน"
+  },
+  "stall": {
+   "en": "at the stall",
+   "tr": "tezgâhta",
+   "th": "ที่แผง"
+  },
+  "tin": {
+   "en": "at the Tin",
+   "tr": "Teneke'de",
+   "th": "ที่กระป๋องขนม"
+  },
+  "phone": {
+   "en": "on the phone",
+   "tr": "telefonda",
+   "th": "ทางโทรศัพท์"
+  },
+  "lockers": {
+   "en": "at the Lockers",
+   "tr": "dolaplarda",
+   "th": "ที่ตู้ล็อกเกอร์"
+  },
+  "codex": {
+   "en": "in the Codex",
+   "tr": "Kodeks'te",
+   "th": "ในสมุดบันทึก"
+  },
+  "notebook": {
+   "en": "in the Notebook",
+   "tr": "Defter'de",
+   "th": "ในสมุดโน้ต"
+  }
+ },
+ "special": {
+  "clear": {
+   "en": "Clear a place",
+   "tr": "Bir yeri bitir",
+   "th": "ผ่านด่านหนึ่ง"
+  },
+  "storm": {
+   "en": "Clear a place on a Storm level",
+   "tr": "Bir Fırtına seviyesinde bir yeri bitir",
+   "th": "ผ่านด่านที่ระดับพายุหนึ่ง"
+  },
+  "lesson": {
+   "en": "Finish a lesson",
+   "tr": "Bir dersi bitir",
+   "th": "เรียนบทหนึ่งให้จบ"
+  },
+  "reached": {
+   "en": "Get a neighbour to a step",
+   "tr": "Bir komşuyu bir basamağa çıkar",
+   "th": "ทำให้เพื่อนบ้านสนิทถึงขั้นหนึ่ง"
+  }
+ }
+}

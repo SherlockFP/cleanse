@@ -1,0 +1,1320 @@
+{
+ "tabs": [
+  {
+   "id": "cart",
+   "name": {
+    "en": "Cart",
+    "tr": "Araba",
+    "th": "รถเข็น"
+   }
+  },
+  {
+   "id": "tin",
+   "name": {
+    "en": "Tin",
+    "tr": "Teneke",
+    "th": "กระป๋องขนม"
+   }
+  },
+  {
+   "id": "pool",
+   "name": {
+    "en": "Pool",
+    "tr": "Havuz",
+    "th": "คลัง"
+   }
+  },
+  {
+   "id": "crew",
+   "name": {
+    "en": "Crew",
+    "tr": "Ekip",
+    "th": "ลูกทีม"
+   }
+  },
+  {
+   "id": "home",
+   "name": {
+    "en": "Home",
+    "tr": "Ev",
+    "th": "บ้าน"
+   }
+  }
+ ],
+ "nodes": [
+  {
+   "id": "cart_01",
+   "tab": "cart",
+   "name": {
+    "en": "Second Stool",
+    "tr": "İkinci Tabure",
+    "th": "เก้าอี้ตัวที่สอง"
+   },
+   "cost": 20,
+   "effect": {
+    "type": "startTrick",
+    "n": 1
+   },
+   "text": {
+    "en": "Start every run with one extra trick.",
+    "tr": "Her oyuna fazladan bir numarayla başla.",
+    "th": "เริ่มทุกรอบด้วยกลเม็ดเพิ่มหนึ่งอัน"
+   },
+   "requires": null,
+   "reqText": {
+    "en": "Open from the start",
+    "tr": "Baştan açık",
+    "th": "ใช้ได้ตั้งแต่เริ่ม"
+   }
+  },
+  {
+   "id": "cart_02",
+   "tab": "cart",
+   "name": {
+    "en": "Tip Jar",
+    "tr": "Bahşiş Kavanozu",
+    "th": "โหลทิป"
+   },
+   "cost": 30,
+   "effect": {
+    "type": "flag",
+    "flag": "freeReroll",
+    "v": 1
+   },
+   "text": {
+    "en": "The first reroll in every stall is free.",
+    "tr": "Her tezgâhta ilk yenileme bedava.",
+    "th": "สุ่มร้านใหม่ครั้งแรกของทุกแผงฟรี"
+   },
+   "requires": {
+    "lesson": 3
+   },
+   "reqText": {
+    "en": "Finish the lesson \"Bank and interest\"",
+    "tr": "\"Yatır ve faiz\" dersini bitir",
+    "th": "เรียนบท \"ฝากและดอกเบี้ย\" ให้จบ"
+   }
+  },
+  {
+   "id": "cart_03",
+   "tab": "cart",
+   "name": {
+    "en": "Spare Bag",
+    "tr": "Yedek Çanta",
+    "th": "กระเป๋าสำรอง"
+   },
+   "cost": 45,
+   "effect": {
+    "type": "benchOffers",
+    "n": 3
+   },
+   "text": {
+    "en": "The bench shows 3 jobs, not 2.",
+    "tr": "Tezgâh 2 yerine 3 iş gösterir.",
+    "th": "โต๊ะช่างแสดงงาน 3 อย่าง แทนที่จะเป็น 2"
+   },
+   "requires": {
+    "clear": "c1"
+   },
+   "reqText": {
+    "en": "Clear The Soi Cart",
+    "tr": "Sokak Arabası yerini bitir",
+    "th": "ผ่านรถเข็นในซอย"
+   }
+  },
+  {
+   "id": "cart_04",
+   "tab": "cart",
+   "name": {
+    "en": "Starter Shelf",
+    "tr": "Başlangıç Rafı",
+    "th": "ชั้นเริ่มต้น"
+   },
+   "cost": 60,
+   "effect": {
+    "type": "startCharmPick",
+    "n": 3
+   },
+   "text": {
+    "en": "Choose 1 of 3 charms at the start of a run.",
+    "tr": "Oyun başında 3 tılsımdan 1'ini seç.",
+    "th": "เลือกไอเท็ม 1 จาก 3 ตอนเริ่มรอบ"
+   },
+   "requires": {
+    "clear": "c2"
+   },
+   "reqText": {
+    "en": "Clear Train Market",
+    "tr": "Tren Pazarı yerini bitir",
+    "th": "ผ่านตลาดรถไฟ"
+   }
+  },
+  {
+   "id": "cart_05",
+   "tab": "cart",
+   "name": {
+    "en": "Loan Slip",
+    "tr": "Borç Pusulası",
+    "th": "ใบยืมเงิน"
+   },
+   "cost": 70,
+   "effect": {
+    "type": "startWick",
+    "n": 3
+   },
+   "text": {
+    "en": "Start every run with 3 more Caps.",
+    "tr": "Her oyuna 3 Kapak fazlayla başla.",
+    "th": "เริ่มทุกรอบด้วยฝาขวดเพิ่ม 3"
+   },
+   "requires": {
+    "stat": "dealsSigned",
+    "gte": 3
+   },
+   "reqText": {
+    "en": "Deals signed in total: 3",
+    "tr": "Toplam imzalanan anlaşma: 3",
+    "th": "ข้อตกลงที่เซ็นรวม: 3"
+   }
+  },
+  {
+   "id": "cart_06",
+   "tab": "cart",
+   "name": {
+    "en": "Night Pass",
+    "tr": "Gece Geçişi",
+    "th": "บัตรข้ามคืน"
+   },
+   "cost": 90,
+   "effect": {
+    "type": "flag",
+    "flag": "extraLife",
+    "v": true
+   },
+   "text": {
+    "en": "Once per run, a missed deadline gives you 1 extra round.",
+    "tr": "Oyun başına bir kez, kaçırılan vade sana 1 ek el verir.",
+    "th": "หนึ่งครั้งต่อรอบ ถ้าจ่ายไม่ทันจะได้เพิ่ม 1 รอบ"
+   },
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "cart_07",
+   "tab": "cart",
+   "name": {
+    "en": "Postcard Stand",
+    "tr": "Kartpostal Standı",
+    "th": "แผงโปสการ์ด"
+   },
+   "cost": 100,
+   "effect": {
+    "type": "postcardSlots",
+    "n": 1,
+    "packs": [
+     "rainy_day",
+     "hot_pan",
+     "fresh_fish",
+     "night_bus",
+     "borrowed_coat",
+     "short_cut"
+    ]
+   },
+   "text": {
+    "en": "Take one Postcard on a run. Pack I opens.",
+    "tr": "Bir oyunda bir Kartpostal al. Paket I açılır.",
+    "th": "พกโปสการ์ดได้หนึ่งใบต่อรอบ ปลดล็อกชุดที่ 1"
+   },
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "cart_08",
+   "tab": "cart",
+   "name": {
+    "en": "Back Pocket",
+    "tr": "Arka Cep",
+    "th": "กระเป๋าหลัง"
+   },
+   "cost": 130,
+   "effect": {
+    "type": "flag",
+    "flag": "trickPockets",
+    "v": 1
+   },
+   "text": {
+    "en": "A fourth trick pocket.",
+    "tr": "Dördüncü bir numara cebi.",
+    "th": "กระเป๋ากลเม็ดที่สี่"
+   },
+   "requires": {
+    "stat": "tricksUsed",
+    "gte": 25
+   },
+   "reqText": {
+    "en": "Tricks used in total: 25",
+    "tr": "Toplam kullanılan numara: 25",
+    "th": "กลเม็ดที่ใช้รวม: 25"
+   }
+  },
+  {
+   "id": "cart_09",
+   "tab": "cart",
+   "name": {
+    "en": "Fresh Start",
+    "tr": "Yeni Başlangıç",
+    "th": "เริ่มใหม่"
+   },
+   "cost": 160,
+   "effect": {
+    "type": "postcardSlots",
+    "n": 1
+   },
+   "text": {
+    "en": "A second Postcard slot.",
+    "tr": "İkinci bir Kartpostal yuvası.",
+    "th": "ช่องโปสการ์ดช่องที่สอง"
+   },
+   "requires": {
+    "clear": "c5"
+   },
+   "reqText": {
+    "en": "Clear Hua Hin Low Season",
+    "tr": "Hua Hin Ölü Sezon yerini bitir",
+    "th": "ผ่านหัวหินหน้าโลว์"
+   }
+  },
+  {
+   "id": "cart_10",
+   "tab": "cart",
+   "name": {
+    "en": "Lucky Coin",
+    "tr": "Şans Parası",
+    "th": "เหรียญนำโชค"
+   },
+   "cost": 220,
+   "effect": {
+    "type": "flag",
+    "flag": "pickFirstFav",
+    "v": true
+   },
+   "text": {
+    "en": "You choose the Special on the first spin of each round.",
+    "tr": "Her elin ilk çevirişinde Gözdeyi sen seçersin.",
+    "th": "เลือกเมนูเด็ดเองในตาแรกของทุกรอบ"
+   },
+   "requires": {
+    "stamps": 5,
+    "kind": "gold"
+   },
+   "reqText": {
+    "en": "Gold stamps: 5",
+    "tr": "Altın mühür: 5",
+    "th": "ตราทอง: 5"
+   }
+  },
+  {
+   "id": "cart_11",
+   "tab": "cart",
+   "name": {
+    "en": "Cash Tray",
+    "tr": "Para Tepsisi",
+    "th": "ถาดเงินทอน"
+   },
+   "cost": 80,
+   "effect": {
+    "type": "flag",
+    "flag": "shopDiscount",
+    "v": 5
+   },
+   "text": {
+    "en": "Stall prices are 5% lower.",
+    "tr": "Tezgâh fiyatları %5 daha düşük.",
+    "th": "ราคาแผงถูกลง 5%"
+   },
+   "requires": {
+    "clear": "c2"
+   },
+   "reqText": {
+    "en": "Clear Train Market",
+    "tr": "Tren Pazarı yerini bitir",
+    "th": "ผ่านตลาดรถไฟ"
+   }
+  },
+  {
+   "id": "cart_12",
+   "tab": "cart",
+   "name": {
+    "en": "Sharp Knife",
+    "tr": "Keskin Bıçak",
+    "th": "มีดคม"
+   },
+   "cost": 50,
+   "effect": {
+    "type": "flag",
+    "flag": "benchDiscount",
+    "v": 10
+   },
+   "text": {
+    "en": "Bench jobs cost 10% less.",
+    "tr": "Tezgâh işleri %10 ucuz.",
+    "th": "งานโต๊ะช่างถูกลง 10%"
+   },
+   "requires": {
+    "stat": "benchJobs",
+    "gte": 3
+   },
+   "reqText": {
+    "en": "Bench jobs done: 3",
+    "tr": "Yaptırılan tezgâh işi: 3",
+    "th": "งานโต๊ะช่างที่ใช้: 3"
+   }
+  },
+  {
+   "id": "cart_13",
+   "tab": "cart",
+   "name": {
+    "en": "Pocket Warmer",
+    "tr": "Cep Isıtıcı",
+    "th": "ที่อุ่นกระเป๋า"
+   },
+   "cost": 120,
+   "effect": {
+    "type": "flag",
+    "flag": "firstTrickFree",
+    "v": true
+   },
+   "text": {
+    "en": "The first trick each round is not used up.",
+    "tr": "Her elin ilk numarası harcanmaz.",
+    "th": "กลเม็ดแรกของแต่ละรอบไม่หมดไป"
+   },
+   "requires": {
+    "stat": "tricksUsed",
+    "gte": 40
+   },
+   "reqText": {
+    "en": "Tricks used in total: 40",
+    "tr": "Toplam kullanılan numara: 40",
+    "th": "กลเม็ดที่ใช้รวม: 40"
+   }
+  },
+  {
+   "id": "cart_14",
+   "tab": "cart",
+   "name": {
+    "en": "Rainy Reserve",
+    "tr": "Yağmur Yedeği",
+    "th": "ของสำรองหน้าฝน"
+   },
+   "cost": 100,
+   "effect": {
+    "type": "flag",
+    "flag": "carrySpins",
+    "v": 1
+   },
+   "text": {
+    "en": "One unused spin carries over to the next round.",
+    "tr": "Kullanılmayan bir çeviriş sonraki ele devreder.",
+    "th": "ตาที่เหลือหนึ่งตายกไปรอบหน้าได้"
+   },
+   "requires": {
+    "clear": "c4"
+   },
+   "reqText": {
+    "en": "Clear Chatuchak Weekend",
+    "tr": "Chatuchak Hafta Sonu yerini bitir",
+    "th": "ผ่านจตุจักรวันหยุด"
+   }
+  },
+  {
+   "id": "tin_01",
+   "tab": "tin",
+   "name": {
+    "en": "Tin Shelf",
+    "tr": "Teneke Rafı",
+    "th": "ชั้นกระป๋องขนม"
+   },
+   "cost": 40,
+   "effect": {
+    "type": "flag",
+    "flag": "tinOfferings",
+    "v": 1
+   },
+   "text": {
+    "en": "Give 2 tips on each stall visit.",
+    "tr": "Her tezgâh uğrayışında 2 bahşiş ver.",
+    "th": "ให้ทิปได้ 2 ครั้งทุกครั้งที่แวะแผง"
+   },
+   "requires": {
+    "lesson": 6
+   },
+   "reqText": {
+    "en": "Finish the lesson \"Meet a neighbour\"",
+    "tr": "\"Komşuyla tanış\" dersini bitir",
+    "th": "เรียนบท \"ทำความรู้จักเพื่อนบ้าน\" ให้จบ"
+   }
+  },
+  {
+   "id": "tin_03",
+   "tab": "tin",
+   "name": {
+    "en": "Rival Chalk",
+    "tr": "Rakip Tebeşiri",
+    "th": "ชอล์กคู่แข่ง"
+   },
+   "cost": 50,
+   "effect": {
+    "type": "none",
+    "ui": "rivalLines"
+   },
+   "text": {
+    "en": "Rivals are joined by a chalk line on the Tin screen.",
+    "tr": "Rakipler Teneke ekranında tebeşir çizgisiyle bağlanır.",
+    "th": "คู่แข่งถูกโยงด้วยเส้นชอล์กบนหน้ากระป๋องขนม"
+   },
+   "requires": {
+    "stat": "himOrMe",
+    "gte": 1
+   },
+   "reqText": {
+    "en": "Him or Me moments seen: 1",
+    "tr": "Görülen O mu Ben mi anı: 1",
+    "th": "ครั้งที่เจอเลือกฉันหรือเขา: 1"
+   }
+  },
+  {
+   "id": "tin_04",
+   "tab": "tin",
+   "name": {
+    "en": "Fourth Line",
+    "tr": "Dördüncü Hat",
+    "th": "สายที่สี่"
+   },
+   "cost": 120,
+   "effect": {
+    "type": "flag",
+    "flag": "callCards",
+    "v": 1
+   },
+   "text": {
+    "en": "Calls show 4 cards, not 3.",
+    "tr": "Aramalar 3 yerine 4 kart gösterir.",
+    "th": "สายโทรศัพท์แสดงการ์ด 4 ใบ แทนที่จะเป็น 3"
+   },
+   "requires": {
+    "clear": "c4"
+   },
+   "reqText": {
+    "en": "Clear Chatuchak Weekend",
+    "tr": "Chatuchak Hafta Sonu yerini bitir",
+    "th": "ผ่านจตุจักรวันหยุด"
+   }
+  },
+  {
+   "id": "tin_05",
+   "tab": "tin",
+   "name": {
+    "en": "Quick Friends",
+    "tr": "Çabuk Dostlar",
+    "th": "เพื่อนไว"
+   },
+   "cost": 150,
+   "effect": {
+    "type": "flag",
+    "flag": "patronAt",
+    "v": 7
+   },
+   "text": {
+    "en": "Neighbours become Regulars at Favour 7, not 8.",
+    "tr": "Komşular Hatır 8 yerine 7'de Müdavim olur.",
+    "th": "เพื่อนบ้านเป็นขาประจำที่น้ำใจ 7 แทนที่จะเป็น 8"
+   },
+   "requires": {
+    "stat": "stage:8",
+    "gte": 3
+   },
+   "reqText": {
+    "en": "Times a neighbour became a Regular: 3",
+    "tr": "Bir komşunun Müdavim olma sayısı: 3",
+    "th": "จำนวนครั้งที่เพื่อนบ้านกลายเป็นขาประจำ: 3"
+   }
+  },
+  {
+   "id": "tin_06",
+   "tab": "tin",
+   "name": {
+    "en": "Red Phone",
+    "tr": "Kırmızı Telefon",
+    "th": "โทรศัพท์แดง"
+   },
+   "cost": 200,
+   "effect": {
+    "type": "flag",
+    "flag": "callRerollFree",
+    "v": true
+   },
+   "text": {
+    "en": "The first reroll on every call is free.",
+    "tr": "Her aramada ilk yenileme bedava.",
+    "th": "สุ่มการ์ดใหม่ครั้งแรกของทุกสายฟรี"
+   },
+   "requires": {
+    "stat": "redCalls",
+    "gte": 5
+   },
+   "reqText": {
+    "en": "Red calls taken: 5",
+    "tr": "Alınan kırmızı arama: 5",
+    "th": "สายแดงที่รับ: 5"
+   }
+  },
+  {
+   "id": "tin_07",
+   "tab": "tin",
+   "name": {
+    "en": "Gossip Board",
+    "tr": "Dedikodu Panosu",
+    "th": "กระดานข่าวแผง"
+   },
+   "cost": 60,
+   "effect": {
+    "type": "none",
+    "ui": "gossipOnCall"
+   },
+   "text": {
+    "en": "Each call card shows that neighbour's gossip first.",
+    "tr": "Her arama kartı önce o komşunun dedikodusunu gösterir.",
+    "th": "การ์ดโทรศัพท์แต่ละใบโชว์ข่าวแผงของเพื่อนบ้านคนนั้นก่อน"
+   },
+   "requires": {
+    "stat": "offerings",
+    "gte": 15
+   },
+   "reqText": {
+    "en": "Tips given at the Tin: 15",
+    "tr": "Teneke'de verilen bahşiş: 15",
+    "th": "ทิปที่ให้ที่กระป๋องขนม: 15"
+   }
+  },
+  {
+   "id": "pool_01",
+   "tab": "pool",
+   "name": {
+    "en": "Street Cabinet",
+    "tr": "Sokak Dolabı",
+    "th": "ตู้ของริมถนน"
+   },
+   "cost": 25,
+   "effect": {
+    "type": "poolAdd",
+    "rarity": "common",
+    "n": 4
+   },
+   "text": {
+    "en": "4 more common charms enter the stall pool.",
+    "tr": "Tezgâh havuzuna 4 sıradan tılsım daha girer.",
+    "th": "ไอเท็มธรรมดา 4 ชิ้นเข้าสู่ร้านสุ่ม"
+   },
+   "requires": null,
+   "reqText": {
+    "en": "Open from the start",
+    "tr": "Baştan açık",
+    "th": "ใช้ได้ตั้งแต่เริ่ม"
+   }
+  },
+  {
+   "id": "pool_02",
+   "tab": "pool",
+   "name": {
+    "en": "Night Cabinet",
+    "tr": "Gece Dolabı",
+    "th": "ตู้ยามค่ำ"
+   },
+   "cost": 50,
+   "effect": {
+    "type": "poolAdd",
+    "rarity": "uncommon",
+    "n": 4
+   },
+   "text": {
+    "en": "4 more uncommon charms enter the stall pool.",
+    "tr": "Tezgâh havuzuna 4 nadir tılsım daha girer.",
+    "th": "ไอเท็มหายาก 4 ชิ้นเข้าสู่ร้านสุ่ม"
+   },
+   "requires": {
+    "clear": "c2"
+   },
+   "reqText": {
+    "en": "Clear Train Market",
+    "tr": "Tren Pazarı yerini bitir",
+    "th": "ผ่านตลาดรถไฟ"
+   }
+  },
+  {
+   "id": "pool_03",
+   "tab": "pool",
+   "name": {
+    "en": "Rare Cabinet",
+    "tr": "Ender Dolap",
+    "th": "ตู้ของหายาก"
+   },
+   "cost": 90,
+   "effect": {
+    "type": "poolAdd",
+    "rarity": "rare",
+    "n": 3
+   },
+   "text": {
+    "en": "3 more rare charms enter the stall pool.",
+    "tr": "Tezgâh havuzuna 3 ender tılsım daha girer.",
+    "th": "ไอเท็มหายากมาก 3 ชิ้นเข้าสู่ร้านสุ่ม"
+   },
+   "requires": {
+    "clear": "c4"
+   },
+   "reqText": {
+    "en": "Clear Chatuchak Weekend",
+    "tr": "Chatuchak Hafta Sonu yerini bitir",
+    "th": "ผ่านจตุจักรวันหยุด"
+   }
+  },
+  {
+   "id": "pool_04",
+   "tab": "pool",
+   "name": {
+    "en": "Gold Cabinet",
+    "tr": "Altın Dolap",
+    "th": "ตู้ทอง"
+   },
+   "cost": 140,
+   "effect": {
+    "type": "poolAdd",
+    "rarity": "legendary",
+    "n": 2
+   },
+   "text": {
+    "en": "2 legendary charms enter the stall pool.",
+    "tr": "Tezgâh havuzuna 2 efsane tılsım girer.",
+    "th": "ไอเท็มตำนาน 2 ชิ้นเข้าสู่ร้านสุ่ม"
+   },
+   "requires": {
+    "clear": "c6"
+   },
+   "reqText": {
+    "en": "Clear Chiang Mai Haze",
+    "tr": "Chiang Mai Dumanı yerini bitir",
+    "th": "ผ่านหมอกควันเชียงใหม่"
+   }
+  },
+  {
+   "id": "crew_01",
+   "tab": "crew",
+   "name": {
+    "en": "Nim",
+    "tr": "Nim",
+    "th": "นิ่ม"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "nim",
+    "tie": {
+     "spirit": "gold",
+     "favour": 1
+    }
+   },
+   "text": {
+    "en": "Starts with +1 Favour with Chef Quack.",
+    "tr": "Şef Vak ile +1 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับเชฟกาบ +1"
+   },
+   "requires": null,
+   "reqText": {
+    "en": "Open from the start",
+    "tr": "Baştan açık",
+    "th": "ใช้ได้ตั้งแต่เริ่ม"
+   }
+  },
+  {
+   "id": "crew_02",
+   "tab": "crew",
+   "name": {
+    "en": "Tao",
+    "tr": "Tao",
+    "th": "เต๋า"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "tao",
+    "tie": {
+     "spirit": "lamplit",
+     "favour": 1
+    }
+   },
+   "text": {
+    "en": "Starts with +1 Favour with Lady Lamplit.",
+    "tr": "Lamba Hanım ile +1 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับเจ๊หลอดไฟ +1"
+   },
+   "requires": {
+    "clear": "c1"
+   },
+   "reqText": {
+    "en": "Clear The Soi Cart",
+    "tr": "Sokak Arabası yerini bitir",
+    "th": "ผ่านรถเข็นในซอย"
+   }
+  },
+  {
+   "id": "crew_03",
+   "tab": "crew",
+   "name": {
+    "en": "Auntie Bua",
+    "tr": "Bua Teyze",
+    "th": "ป้าบัว"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "bua",
+    "tie": {
+     "spirit": "beckon",
+     "favour": 2
+    }
+   },
+   "text": {
+    "en": "Starts with +2 Favour with Madam Receipt.",
+    "tr": "Bayan Fiş ile +2 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับคุณนายใบเสร็จ +2"
+   },
+   "requires": {
+    "stat": "reachDebt",
+    "gte": 6
+   },
+   "reqText": {
+    "en": "Furthest debt reached: 6",
+    "tr": "Ulaşılan en ileri borç: 6",
+    "th": "หนี้ที่ไปไกลสุด: 6"
+   }
+  },
+  {
+   "id": "crew_04",
+   "tab": "crew",
+   "name": {
+    "en": "Coach Daeng",
+    "tr": "Koç Daeng",
+    "th": "ครูแดง"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "rattle",
+    "tie": {
+     "spirit": "moonbiter",
+     "favour": 2
+    }
+   },
+   "text": {
+    "en": "Starts with +2 Favour with Scrubby.",
+    "tr": "Kazıcı ile +2 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับแปรงขัด +2"
+   },
+   "requires": {
+    "stat": "cursesHeld",
+    "gte": 4
+   },
+   "reqText": {
+    "en": "Most curses carried while paying a debt: 4",
+    "tr": "Borç öderken taşınan en çok lanet: 4",
+    "th": "คำสาปมากสุดที่แบกตอนปลดหนี้: 4"
+   }
+  },
+  {
+   "id": "crew_05",
+   "tab": "crew",
+   "name": {
+    "en": "Uncle Heng",
+    "tr": "Heng Amca",
+    "th": "เฮียเฮง"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "sok",
+    "tie": {
+     "spirit": "tide",
+     "favour": 2
+    }
+   },
+   "text": {
+    "en": "Starts with +2 Favour with Grandmother Tide.",
+    "tr": "Gelgit Nine ile +2 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับยายน้ำขึ้น +2"
+   },
+   "requires": {
+    "stat": "interestTotal",
+    "gte": 5000
+   },
+   "reqText": {
+    "en": "Interest earned in total: 5,000",
+    "tr": "Toplam kazanılan faiz: 5,000",
+    "th": "ดอกเบี้ยที่ได้รวม: 5,000"
+   }
+  },
+  {
+   "id": "crew_06",
+   "tab": "crew",
+   "name": {
+    "en": "Pip",
+    "tr": "Pip",
+    "th": "ปิ๊บ"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "pip",
+    "tie": {
+     "spirit": "brimble",
+     "favour": 2
+    }
+   },
+   "text": {
+    "en": "Starts with +2 Favour with Mr. Ruby.",
+    "tr": "Bay Ruby ile +2 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับมิสเตอร์รูบี้ +2"
+   },
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "crew_07",
+   "tab": "crew",
+   "name": {
+    "en": "Grandma Yai",
+    "tr": "Yai Nine",
+    "th": "ยายใย"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "yai",
+    "tie": {
+     "spirit": "tide",
+     "favour": 3
+    }
+   },
+   "text": {
+    "en": "Starts with +3 Favour with Grandmother Tide.",
+    "tr": "Gelgit Nine ile +3 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับยายน้ำขึ้น +3"
+   },
+   "requires": {
+    "stat": "coinsEarned",
+    "gte": 10000
+   },
+   "reqText": {
+    "en": "Coins earned in total: 10,000",
+    "tr": "Toplam kazanılan para: 10,000",
+    "th": "เหรียญที่หาได้รวม: 10,000"
+   }
+  },
+  {
+   "id": "crew_08",
+   "tab": "crew",
+   "name": {
+    "en": "Beng",
+    "tr": "Beng",
+    "th": "เบ็ง"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "beng",
+    "tie": {
+     "spirit": "wire",
+     "favour": 3
+    }
+   },
+   "text": {
+    "en": "Starts with +3 Favour with Uncle Wire.",
+    "tr": "Tel Amca ile +3 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับลุงสายไฟ +3"
+   },
+   "requires": {
+    "stat": "tricksUsed",
+    "gte": 100
+   },
+   "reqText": {
+    "en": "Tricks used in total: 100",
+    "tr": "Toplam kullanılan numara: 100",
+    "th": "กลเม็ดที่ใช้รวม: 100"
+   }
+  },
+  {
+   "id": "crew_09",
+   "tab": "crew",
+   "name": {
+    "en": "Pla",
+    "tr": "Pla",
+    "th": "ปลา"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "pla",
+    "tie": {
+     "spirit": "lamplit",
+     "favour": 3
+    }
+   },
+   "text": {
+    "en": "Starts with +3 Favour with Lady Lamplit.",
+    "tr": "Lamba Hanım ile +3 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับเจ๊หลอดไฟ +3"
+   },
+   "requires": {
+    "stat": "scorches",
+    "gte": 20
+   },
+   "reqText": {
+    "en": "Flare-ups survived: 20",
+    "tr": "Atlatılan Parlama: 20",
+    "th": "ไฟลุกที่รอดมา: 20"
+   }
+  },
+  {
+   "id": "crew_10",
+   "tab": "crew",
+   "name": {
+    "en": "Mali",
+    "tr": "Mali",
+    "th": "มะลิ"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "char": "mali",
+    "tie": {
+     "spirit": "waiting",
+     "favour": 3
+    }
+   },
+   "text": {
+    "en": "Starts with +3 Favour with Mr. Lost-and-Found.",
+    "tr": "Kayıp Eşya Bey ile +3 Hatırla başlar.",
+    "th": "เริ่มด้วยน้ำใจกับพี่ของหาย +3"
+   },
+   "requires": {
+    "stat": "fallRise",
+    "gte": 3
+   },
+   "reqText": {
+    "en": "Times you lost a run, then cleared a debt in the next: 3",
+    "tr": "Bir oyunu kaybedip sonrakinde borç ödeme sayısı: 3",
+    "th": "จำนวนครั้งที่แพ้แล้วปลดหนี้ได้ในรอบถัดไป: 3"
+   }
+  },
+  {
+   "id": "home_01",
+   "tab": "home",
+   "name": {
+    "en": "Cot",
+    "tr": "Yatak",
+    "th": "เตียงพับ"
+   },
+   "cost": 0,
+   "effect": {
+    "type": "none",
+    "cosmetic": "cot",
+    "hideout": "cot"
+   },
+   "text": {
+    "en": "A mat and a crate on the corner.",
+    "tr": "Köşede bir hasır ve bir sandık.",
+    "th": "เสื่อกับลังไม้ที่หัวมุม"
+   },
+   "requires": null,
+   "reqText": {
+    "en": "Open from the start",
+    "tr": "Baştan açık",
+    "th": "ใช้ได้ตั้งแต่เริ่ม"
+   }
+  },
+  {
+   "id": "home_02",
+   "tab": "home",
+   "name": {
+    "en": "Radio",
+    "tr": "Radyo",
+    "th": "วิทยุ"
+   },
+   "cost": 25,
+   "effect": {
+    "type": "none",
+    "cosmetic": "radio",
+    "hideout": "stove"
+   },
+   "text": {
+    "en": "Three songs for the Home screen.",
+    "tr": "Ev ekranı için üç şarkı.",
+    "th": "เพลงสามเพลงสำหรับหน้าบ้าน"
+   },
+   "requires": {
+    "lesson": 1
+   },
+   "reqText": {
+    "en": "Finish the lesson \"Spin and shapes\"",
+    "tr": "\"Çevir ve şekiller\" dersini bitir",
+    "th": "เรียนบท \"หมุนและรูปทรง\" ให้จบ"
+   }
+  },
+  {
+   "id": "home_03",
+   "tab": "home",
+   "name": {
+    "en": "String Lights",
+    "tr": "Ampul Zinciri",
+    "th": "ไฟประดับ"
+   },
+   "cost": 60,
+   "effect": {
+    "type": "none",
+    "cosmetic": "lights",
+    "hideout": "shelf"
+   },
+   "text": {
+    "en": "The corner glows at night.",
+    "tr": "Köşe geceleri parlar.",
+    "th": "หัวมุมสว่างไสวตอนกลางคืน"
+   },
+   "requires": {
+    "clear": "c2"
+   },
+   "reqText": {
+    "en": "Clear Train Market",
+    "tr": "Tren Pazarı yerini bitir",
+    "th": "ผ่านตลาดรถไฟ"
+   }
+  },
+  {
+   "id": "home_04",
+   "tab": "home",
+   "name": {
+    "en": "Notice Board",
+    "tr": "İlan Panosu",
+    "th": "บอร์ดประกาศ"
+   },
+   "cost": 80,
+   "effect": {
+    "type": "none",
+    "cosmetic": "board",
+    "hideout": "lights"
+   },
+   "text": {
+    "en": "The Lessons list becomes a wall board.",
+    "tr": "Dersler listesi duvar panosu olur.",
+    "th": "รายการบทเรียนกลายเป็นบอร์ดติดผนัง"
+   },
+   "requires": {
+    "lessons": 3
+   },
+   "reqText": {
+    "en": "Lessons finished: 3",
+    "tr": "Biten ders: 3",
+    "th": "บทเรียนที่จบ: 3"
+   }
+  },
+  {
+   "id": "home_05",
+   "tab": "home",
+   "name": {
+    "en": "Token Shelf",
+    "tr": "Jeton Rafı",
+    "th": "ชั้นเหรียญเพื่อนบ้าน"
+   },
+   "cost": 100,
+   "effect": {
+    "type": "none",
+    "cosmetic": "tokens",
+    "hideout": "workbench"
+   },
+   "text": {
+    "en": "Each neighbour's tin token stands on a shelf. A pip glows when one was a Regular in your best run.",
+    "tr": "Her komşunun teneke jetonu bir rafta durur. En iyi oyununda biri Müdavim olduysa bir nokta parlar.",
+    "th": "เหรียญกระป๋องของเพื่อนบ้านแต่ละคนตั้งบนชั้น จุดจะสว่างถ้าเคยเป็นขาประจำในรอบที่ดีที่สุด"
+   },
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "home_06",
+   "tab": "home",
+   "name": {
+    "en": "Machine Skin: Brass",
+    "tr": "Makine Kaplaması: Pirinç",
+    "th": "สกินเครื่อง ทองเหลือง"
+   },
+   "cost": 120,
+   "effect": {
+    "type": "none",
+    "cosmetic": "skin_brass",
+    "hideout": "desk"
+   },
+   "text": {
+    "en": "A brass look for the machine.",
+    "tr": "Makineye pirinç görünüm.",
+    "th": "เครื่องลุคทองเหลือง"
+   },
+   "requires": {
+    "stamps": 5,
+    "kind": "gold"
+   },
+   "reqText": {
+    "en": "Gold stamps: 5",
+    "tr": "Altın mühür: 5",
+    "th": "ตราทอง: 5"
+   }
+  },
+  {
+   "id": "home_07",
+   "tab": "home",
+   "name": {
+    "en": "Machine Skin: Neon",
+    "tr": "Makine Kaplaması: Neon",
+    "th": "สกินเครื่อง นีออน"
+   },
+   "cost": 150,
+   "effect": {
+    "type": "none",
+    "cosmetic": "skin_neon",
+    "hideout": "keepsake"
+   },
+   "text": {
+    "en": "A neon look for the machine.",
+    "tr": "Makineye neon görünüm.",
+    "th": "เครื่องลุคนีออน"
+   },
+   "requires": {
+    "clear": "c7"
+   },
+   "reqText": {
+    "en": "Clear Phuket Beach Club",
+    "tr": "Phuket Plaj Kulübü yerini bitir",
+    "th": "ผ่านบีชคลับภูเก็ต"
+   }
+  },
+  {
+   "id": "home_08",
+   "tab": "home",
+   "name": {
+    "en": "Ruby's Hat Stand",
+    "tr": "Ruby'nin Şapkalığı",
+    "th": "ที่แขวนหมวกของรูบี้"
+   },
+   "cost": 200,
+   "effect": {
+    "type": "none",
+    "cosmetic": "hats",
+    "hideout": "moth_house"
+   },
+   "text": {
+    "en": "A hat set for Mr. Ruby.",
+    "tr": "Bay Ruby için bir şapka seti.",
+    "th": "ชุดหมวกสำหรับมิสเตอร์รูบี้"
+   },
+   "requires": {
+    "stat": "dealsSigned",
+    "gte": 20
+   },
+   "reqText": {
+    "en": "Deals signed in total: 20",
+    "tr": "Toplam imzalanan anlaşma: 20",
+    "th": "ข้อตกลงที่เซ็นรวม: 20"
+   }
+  },
+  {
+   "id": "home_09",
+   "tab": "home",
+   "name": {
+    "en": "Map Frame",
+    "tr": "Harita Çerçevesi",
+    "th": "กรอบแผนที่"
+   },
+   "cost": 250,
+   "effect": {
+    "type": "none",
+    "cosmetic": "mapframe",
+    "hideout": "mirror"
+   },
+   "text": {
+    "en": "The map hangs on the wall.",
+    "tr": "Harita duvara asılır.",
+    "th": "แผนที่แขวนบนผนัง"
+   },
+   "requires": {
+    "stamps": 10,
+    "kind": "bronze"
+   },
+   "reqText": {
+    "en": "Stamps (places cleared): 10",
+    "tr": "Mühür (bitirilen yer): 10",
+    "th": "ตราประทับ (ด่านที่ผ่าน): 10"
+   }
+  },
+  {
+   "id": "home_10",
+   "tab": "home",
+   "name": {
+    "en": "Tower View",
+    "tr": "Kule Manzarası",
+    "th": "วิวตึกสูง"
+   },
+   "cost": 400,
+   "effect": {
+    "type": "none",
+    "cosmetic": "tower",
+    "hideout": "chair"
+   },
+   "text": {
+    "en": "The window shows the skyline.",
+    "tr": "Pencere şehir silüetini gösterir.",
+    "th": "หน้าต่างเห็นเส้นขอบฟ้า"
+   },
+   "requires": {
+    "clear": "c10"
+   },
+   "reqText": {
+    "en": "Clear The Sky Bar",
+    "tr": "Gökyüzü Barı yerini bitir",
+    "th": "ผ่านสกายบาร์"
+   }
+  }
+ ],
+ "note": "Friendship tiers (Devotion) are bought through meta.buyDevotion, not as nodes: their texts are in spirits.json devotion."
+}

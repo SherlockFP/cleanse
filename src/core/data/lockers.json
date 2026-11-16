@@ -1,0 +1,754 @@
+{
+ "keys": [
+  {
+   "id": "brass",
+   "icon": "ui/key_brass",
+   "name": {
+    "en": "Brass Key",
+    "tr": "Pirinç Anahtar",
+    "th": "กุญแจทองเหลือง"
+   },
+   "sources": {
+    "en": "First clear of each place, every 3 debts paid in a run (up to 2 a run), lessons 3 and 6, daily goals, the weekly bonus.",
+    "tr": "Her yerin ilk bitirişi, bir oyunda her 3 borç (oyun başına en çok 2), 3. ve 6. dersler, günlük hedefler, haftalık bonus.",
+    "th": "ผ่านแต่ละด่านครั้งแรก ปลดหนี้ทุก 3 ก้อนในรอบเดียว (สูงสุด 2 ต่อรอบ) บทเรียนที่ 3 และ 6 เป้าหมายรายวัน โบนัสรายสัปดาห์"
+   }
+  },
+  {
+   "id": "silver",
+   "icon": "ui/key_silver",
+   "name": {
+    "en": "Silver Key",
+    "tr": "Gümüş Anahtar",
+    "th": "กุญแจเงิน"
+   },
+   "sources": {
+    "en": "Milestones, first clear of places 2, 5 and 7, the weekly contract, Storm clears, lesson 8, a 7-day streak.",
+    "tr": "Kilometre taşları, 2., 5. ve 7. yerlerin ilk bitirişi, haftalık sözleşme, Fırtına bitirişleri, 8. ders, 7 günlük seri.",
+    "th": "เหตุการณ์สำคัญ ผ่านด่าน 2, 5 และ 7 ครั้งแรก สัญญารายสัปดาห์ ผ่านพายุ บทเรียนที่ 8 เล่นต่อเนื่อง 7 วัน"
+   }
+  },
+  {
+   "id": "red",
+   "icon": "ui/key_red",
+   "name": {
+    "en": "Red Key",
+    "tr": "Kırmızı Anahtar",
+    "th": "กุญแจแดง"
+   },
+   "sources": {
+    "en": "Win a run with red cards from 3 different neighbours, the 5th red call in total, a gold stamp at place 9.",
+    "tr": "3 farklı komşunun kırmızı kartlarıyla bir oyun kazan, toplam 5. kırmızı arama, 9. yerde altın mühür.",
+    "th": "ชนะหนึ่งรอบโดยรับการ์ดแดงจากเพื่อนบ้าน 3 คนต่างกัน สายแดงครั้งที่ 5 รวม ตราทองที่ด่าน 9"
+   }
+  }
+ ],
+ "lockers": [
+  {
+   "id": "locker_1",
+   "n": 1,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "small_fry_union"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Street Food",
+    "tr": "Ender tılsım: Sokak Lezzeti",
+    "th": "ไอเท็มหายากมาก: สตรีทฟู้ด"
+   },
+   "name": {
+    "en": "Locker 1",
+    "tr": "Dolap 1",
+    "th": "ตู้ที่ 1"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_2",
+   "n": 2,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "fire_eater"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Wok",
+    "tr": "Ender tılsım: Wok",
+    "th": "ไอเท็มหายากมาก: กระทะ"
+   },
+   "name": {
+    "en": "Locker 2",
+    "tr": "Dolap 2",
+    "th": "ตู้ที่ 2"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_3",
+   "n": 3,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "cracked_mirror"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Monsoon",
+    "tr": "Ender tılsım: Muson",
+    "th": "ไอเท็มหายากมาก: มรสุม"
+   },
+   "name": {
+    "en": "Locker 3",
+    "tr": "Dolap 3",
+    "th": "ตู้ที่ 3"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_4",
+   "n": 4,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "compound_tooth"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Haggle",
+    "tr": "Ender tılsım: Pazarlık",
+    "th": "ไอเท็มหายากมาก: ต่อราคา"
+   },
+   "name": {
+    "en": "Locker 4",
+    "tr": "Dolap 4",
+    "th": "ตู้ที่ 4"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_5",
+   "n": 5,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "firm_handshake"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Neon",
+    "tr": "Ender tılsım: Neon",
+    "th": "ไอเท็มหายากมาก: นีออน"
+   },
+   "name": {
+    "en": "Locker 5",
+    "tr": "Dolap 5",
+    "th": "ตู้ที่ 5"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_6",
+   "n": 6,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "second_sight"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Lucky",
+    "tr": "Ender tılsım: Uğur",
+    "th": "ไอเท็มหายากมาก: นำโชค"
+   },
+   "name": {
+    "en": "Locker 6",
+    "tr": "Dolap 6",
+    "th": "ตู้ที่ 6"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_7",
+   "n": 7,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "crooked_loom"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Muay Thai",
+    "tr": "Ender tılsım: Muay Thai",
+    "th": "ไอเท็มหายากมาก: มวยไทย"
+   },
+   "name": {
+    "en": "Locker 7",
+    "tr": "Dolap 7",
+    "th": "ตู้ที่ 7"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_8",
+   "n": 8,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "changeling"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Firefly",
+    "tr": "Ender tılsım: Ateşböceği",
+    "th": "ไอเท็มหายากมาก: หิ่งห้อย"
+   },
+   "name": {
+    "en": "Locker 8",
+    "tr": "Dolap 8",
+    "th": "ตู้ที่ 8"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_9",
+   "n": 9,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "tuned_gears"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Tuk-tuk",
+    "tr": "Ender tılsım: Tuk-tuk",
+    "th": "ไอเท็มหายากมาก: ตุ๊กตุ๊ก"
+   },
+   "name": {
+    "en": "Locker 9",
+    "tr": "Dolap 9",
+    "th": "ตู้ที่ 9"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_10",
+   "n": 10,
+   "key": "brass",
+   "contents": {
+    "charms": [
+     "throne"
+    ]
+   },
+   "hint": {
+    "en": "Rare charm: Gold",
+    "tr": "Ender tılsım: Altın",
+    "th": "ไอเท็มหายากมาก: ทอง"
+   },
+   "name": {
+    "en": "Locker 10",
+    "tr": "Dolap 10",
+    "th": "ตู้ที่ 10"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": null,
+   "reqText": {
+    "en": "Just the key",
+    "tr": "Yalnızca anahtar",
+    "th": "ใช้แค่กุญแจ"
+   }
+  },
+  {
+   "id": "locker_11",
+   "n": 11,
+   "key": "silver",
+   "contents": {
+    "charms": [
+     "paupers_parade",
+     "powder_trail"
+    ]
+   },
+   "hint": {
+    "en": "Rare charms: Street Food and Wok",
+    "tr": "Ender tılsım: Sokak Lezzeti ve Wok",
+    "th": "ไอเท็มหายากมาก: สตรีทฟู้ด และ กระทะ"
+   },
+   "name": {
+    "en": "Locker 11",
+    "tr": "Dolap 11",
+    "th": "ตู้ที่ 11"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "locker_12",
+   "n": 12,
+   "key": "silver",
+   "contents": {
+    "charms": [
+     "martyr_splinter",
+     "dividend_slip"
+    ]
+   },
+   "hint": {
+    "en": "Rare charms: Monsoon and Haggle",
+    "tr": "Ender tılsım: Muson ve Pazarlık",
+    "th": "ไอเท็มหายากมาก: มรสุม และ ต่อราคา"
+   },
+   "name": {
+    "en": "Locker 12",
+    "tr": "Dolap 12",
+    "th": "ตู้ที่ 12"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "locker_13",
+   "n": 13,
+   "key": "silver",
+   "contents": {
+    "charms": [
+     "cosigner",
+     "twin_stars"
+    ]
+   },
+   "hint": {
+    "en": "Rare charms: Neon and Lucky",
+    "tr": "Ender tılsım: Neon ve Uğur",
+    "th": "ไอเท็มหายากมาก: นีออน และ นำโชค"
+   },
+   "name": {
+    "en": "Locker 13",
+    "tr": "Dolap 13",
+    "th": "ตู้ที่ 13"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "locker_14",
+   "n": 14,
+   "key": "silver",
+   "contents": {
+    "charms": [
+     "master_stitch",
+     "ghost_parade"
+    ]
+   },
+   "hint": {
+    "en": "Rare charms: Muay Thai and Firefly",
+    "tr": "Ender tılsım: Muay Thai ve Ateşböceği",
+    "th": "ไอเท็มหายากมาก: มวยไทย และ หิ่งห้อย"
+   },
+   "name": {
+    "en": "Locker 14",
+    "tr": "Dolap 14",
+    "th": "ตู้ที่ 14"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "locker_15",
+   "n": 15,
+   "key": "silver",
+   "contents": {
+    "charms": [
+     "scrap_heap",
+     "coronation"
+    ]
+   },
+   "hint": {
+    "en": "Rare charms: Tuk-tuk and Gold",
+    "tr": "Ender tılsım: Tuk-tuk ve Altın",
+    "th": "ไอเท็มหายากมาก: ตุ๊กตุ๊ก และ ทอง"
+   },
+   "name": {
+    "en": "Locker 15",
+    "tr": "Dolap 15",
+    "th": "ตู้ที่ 15"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "clear": "c3"
+   },
+   "reqText": {
+    "en": "Clear Yaowarat",
+    "tr": "Yaowarat yerini bitir",
+    "th": "ผ่านเยาวราช"
+   }
+  },
+  {
+   "id": "locker_16",
+   "n": 16,
+   "key": "silver",
+   "contents": {
+    "postcards": [
+     "crooked_scale",
+     "old_photo",
+     "thumb_scale",
+     "empty_wallet",
+     "all_pocket",
+     "mothers_voice"
+    ]
+   },
+   "hint": {
+    "en": "Postcard pack II (6)",
+    "tr": "Kartpostal paketi II (6)",
+    "th": "โปสการ์ดชุดที่ 2 (6 ใบ)"
+   },
+   "name": {
+    "en": "Locker 16",
+    "tr": "Dolap 16",
+    "th": "ตู้ที่ 16"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "lessons": 10
+   },
+   "reqText": {
+    "en": "Lessons finished: 10",
+    "tr": "Biten ders: 10",
+    "th": "บทเรียนที่จบ: 10"
+   }
+  },
+  {
+   "id": "locker_17",
+   "n": 17,
+   "key": "silver",
+   "contents": {
+    "postcards": [
+     "staring_contest",
+     "spare_blender",
+     "party_line",
+     "quiet_phone",
+     "full_charge",
+     "late_kiosk"
+    ]
+   },
+   "hint": {
+    "en": "Postcard pack III (6)",
+    "tr": "Kartpostal paketi III (6)",
+    "th": "โปสการ์ดชุดที่ 3 (6 ใบ)"
+   },
+   "name": {
+    "en": "Locker 17",
+    "tr": "Dolap 17",
+    "th": "ตู้ที่ 17"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "clear": "c6"
+   },
+   "reqText": {
+    "en": "Clear Chiang Mai Haze",
+    "tr": "Chiang Mai Dumanı yerini bitir",
+    "th": "ผ่านหมอกควันเชียงใหม่"
+   }
+  },
+  {
+   "id": "locker_18",
+   "n": 18,
+   "key": "red",
+   "contents": {
+    "charms": [
+     "dust_queen",
+     "furnace_heart",
+     "scapegoat_bell",
+     "brass_goose",
+     "blood_ink"
+    ]
+   },
+   "hint": {
+    "en": "Legendary charms: Street Food, Wok, Monsoon, Haggle and Neon",
+    "tr": "Efsane tılsım: Sokak Lezzeti, Wok, Muson, Pazarlık ve Neon",
+    "th": "ไอเท็มตำนาน: สตรีทฟู้ด, กระทะ, มรสุม, ต่อราคา และ นีออน"
+   },
+   "name": {
+    "en": "Locker 18",
+    "tr": "Dolap 18",
+    "th": "ตู้ที่ 18"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "clear": "c7"
+   },
+   "reqText": {
+    "en": "Clear Phuket Beach Club",
+    "tr": "Phuket Plaj Kulübü yerini bitir",
+    "th": "ผ่านบีชคลับภูเก็ต"
+   }
+  },
+  {
+   "id": "locker_19",
+   "n": 19,
+   "key": "red",
+   "contents": {
+    "charms": [
+     "fixed_star",
+     "fair_tapestry",
+     "green_dawn",
+     "clockwork_thumb",
+     "paper_king"
+    ]
+   },
+   "hint": {
+    "en": "Legendary charms: Lucky, Muay Thai, Firefly, Tuk-tuk and Gold",
+    "tr": "Efsane tılsım: Uğur, Muay Thai, Ateşböceği, Tuk-tuk ve Altın",
+    "th": "ไอเท็มตำนาน: นำโชค, มวยไทย, หิ่งห้อย, ตุ๊กตุ๊ก และ ทอง"
+   },
+   "name": {
+    "en": "Locker 19",
+    "tr": "Dolap 19",
+    "th": "ตู้ที่ 19"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "storm": 3
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 3",
+    "tr": "Fırtına 3'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 3"
+   }
+  },
+  {
+   "id": "locker_20",
+   "n": 20,
+   "key": "red",
+   "contents": {
+    "deed": true
+   },
+   "hint": {
+    "en": "The Night Market Deed: a title, Home decor, a Codex page and a last letter",
+    "tr": "Gece Pazarı Tapusu: bir unvan, Ev dekoru, bir Kodeks sayfası ve son bir mektup",
+    "th": "โฉนดตลาดกลางคืน: ชื่อตำแหน่ง ของตกแต่งบ้าน หน้าสมุดบันทึกและจดหมายฉบับสุดท้าย"
+   },
+   "name": {
+    "en": "Locker 20",
+    "tr": "Dolap 20",
+    "th": "ตู้ที่ 20"
+   },
+   "icon": "ui/locker_shut",
+   "openIcon": "ui/locker_open",
+   "requires": {
+    "lockers": 19
+   },
+   "reqText": {
+    "en": "Lockers opened: 19",
+    "tr": "Açılan dolap: 19",
+    "th": "ตู้ที่เปิดแล้ว: 19"
+   }
+  }
+ ],
+ "luggage": [
+  {
+   "id": "luggage_1",
+   "n": 1,
+   "name": {
+    "en": "Left Luggage 1",
+    "tr": "Emanet Dolabı 1",
+    "th": "ตู้ฝากของ 1"
+   },
+   "icon": "ui/luggage",
+   "requires": {
+    "stat": "reachDebt",
+    "gte": 4
+   },
+   "reqText": {
+    "en": "Furthest debt reached: 4",
+    "tr": "Ulaşılan en ileri borç: 4",
+    "th": "หนี้ที่ไปไกลสุด: 4"
+   },
+   "tag": {
+    "en": "Reach debt 4",
+    "tr": "4. borca ulaş",
+    "th": "ไปให้ถึงหนี้ที่ 4"
+   }
+  },
+  {
+   "id": "luggage_2",
+   "n": 2,
+   "name": {
+    "en": "Left Luggage 2",
+    "tr": "Emanet Dolabı 2",
+    "th": "ตู้ฝากของ 2"
+   },
+   "icon": "ui/luggage",
+   "requires": {
+    "stat": "reachDebt",
+    "gte": 4
+   },
+   "reqText": {
+    "en": "Furthest debt reached: 4",
+    "tr": "Ulaşılan en ileri borç: 4",
+    "th": "หนี้ที่ไปไกลสุด: 4"
+   },
+   "tag": {
+    "en": "Reach debt 4",
+    "tr": "4. borca ulaş",
+    "th": "ไปให้ถึงหนี้ที่ 4"
+   }
+  },
+  {
+   "id": "luggage_3",
+   "n": 3,
+   "name": {
+    "en": "Left Luggage 3",
+    "tr": "Emanet Dolabı 3",
+    "th": "ตู้ฝากของ 3"
+   },
+   "icon": "ui/luggage",
+   "requires": {
+    "stat": "reachDebt",
+    "gte": 4
+   },
+   "reqText": {
+    "en": "Furthest debt reached: 4",
+    "tr": "Ulaşılan en ileri borç: 4",
+    "th": "หนี้ที่ไปไกลสุด: 4"
+   },
+   "tag": {
+    "en": "Reach debt 4",
+    "tr": "4. borca ulaş",
+    "th": "ไปให้ถึงหนี้ที่ 4"
+   }
+  },
+  {
+   "id": "luggage_4",
+   "n": 4,
+   "name": {
+    "en": "Left Luggage 4",
+    "tr": "Emanet Dolabı 4",
+    "th": "ตู้ฝากของ 4"
+   },
+   "icon": "ui/luggage",
+   "requires": {
+    "stat": "reachDebt",
+    "gte": 4
+   },
+   "reqText": {
+    "en": "Furthest debt reached: 4",
+    "tr": "Ulaşılan en ileri borç: 4",
+    "th": "หนี้ที่ไปไกลสุด: 4"
+   },
+   "tag": {
+    "en": "Reach debt 4",
+    "tr": "4. borca ulaş",
+    "th": "ไปให้ถึงหนี้ที่ 4"
+   }
+  }
+ ],
+ "leftLuggage": {
+  "rule": {
+   "en": "At run end, if you reached debt 4, leave one held charm in an empty Left Luggage locker. It comes back next run as a relic: it takes a slot and cannot be sold, blended or lost.",
+   "tr": "4. borca ulaştıysan oyun sonunda elindeki bir tılsımı boş bir Emanet Dolabı'na bırak. Sonraki oyunda emanet olarak döner: yuva tutar, satılamaz, karıştırılamaz, kaybedilemez.",
+   "th": "ถ้าถึงหนี้ที่ 4 ตอนจบรอบ ฝากไอเท็มที่ถือไว้หนึ่งชิ้นในตู้ฝากของที่ว่าง รอบหน้ามันกลับมาเป็นของฝาก กินหนึ่งช่อง ขายปั่นหรือทำหายไม่ได้"
+  }
+ }
+}

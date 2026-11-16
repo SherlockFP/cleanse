@@ -1,0 +1,404 @@
+{
+ "achievements": [
+  {
+   "id": "friend_first",
+   "name": {
+    "en": "Hello, Neighbour",
+    "tr": "Merhaba Komşu",
+    "th": "สวัสดีเพื่อนบ้าน"
+   },
+   "cond": {
+    "stat": "stagesFriend",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 10
+   },
+   "text": {
+    "en": "Times a neighbour became a Friend: 1",
+    "tr": "Bir komşunun Dost olma sayısı: 1",
+    "th": "จำนวนครั้งที่เพื่อนบ้านกลายเป็นเพื่อน: 1"
+   }
+  },
+  {
+   "id": "regular_first",
+   "name": {
+    "en": "A Regular",
+    "tr": "Müdavim Oldu",
+    "th": "ขาประจำคนแรก"
+   },
+   "cond": {
+    "stat": "stage:8",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 20
+   },
+   "text": {
+    "en": "Times a neighbour became a Regular: 1",
+    "tr": "Bir komşunun Müdavim olma sayısı: 1",
+    "th": "จำนวนครั้งที่เพื่อนบ้านกลายเป็นขาประจำ: 1"
+   }
+  },
+  {
+   "id": "busy_corner",
+   "name": {
+    "en": "Busy Corner",
+    "tr": "Işlek Köşe",
+    "th": "หัวมุมคึกคัก"
+   },
+   "cond": {
+    "stat": "visits",
+    "gte": 40
+   },
+   "reward": {
+    "stash": 20
+   },
+   "text": {
+    "en": "Neighbours who dropped by the Tin: 40",
+    "tr": "Teneke'ye uğrayan komşu: 40",
+    "th": "เพื่อนบ้านที่แวะมากระป๋องขนม: 40"
+   }
+  },
+  {
+   "id": "pick_a_side",
+   "name": {
+    "en": "Pick a Side",
+    "tr": "Taraf Seç",
+    "th": "เลือกข้าง"
+   },
+   "cond": {
+    "stat": "himOrMe",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 10
+   },
+   "text": {
+    "en": "Him or Me moments seen: 1",
+    "tr": "Görülen O mu Ben mi anı: 1",
+    "th": "ครั้งที่เจอเลือกฉันหรือเขา: 1"
+   }
+  },
+  {
+   "id": "small_print",
+   "name": {
+    "en": "Reads the Small Print",
+    "tr": "Küçük Yazıyı Okur",
+    "th": "อ่านตัวหนังสือเล็ก"
+   },
+   "cond": {
+    "stat": "redCalls",
+    "gte": 5
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "Red calls taken: 5",
+    "tr": "Alınan kırmızı arama: 5",
+    "th": "สายแดงที่รับ: 5"
+   }
+  },
+  {
+   "id": "phone_pal",
+   "name": {
+    "en": "Phone Pal",
+    "tr": "Telefon Dostu",
+    "th": "เพื่อนปลายสาย"
+   },
+   "cond": {
+    "stat": "calls",
+    "gte": 30
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "Calls answered: 30",
+    "tr": "Cevaplanan arama: 30",
+    "th": "สายที่รับ: 30"
+   }
+  },
+  {
+   "id": "dial_tone",
+   "name": {
+    "en": "Dial Tone",
+    "tr": "Çevir Sesi",
+    "th": "เสียงสัญญาณ"
+   },
+   "cond": {
+    "stat": "hangUps",
+    "gte": 10
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "Calls hung up: 10",
+    "tr": "Kapatılan arama: 10",
+    "th": "สายที่วางไป: 10"
+   }
+  },
+  {
+   "id": "red_eye_1",
+   "name": {
+    "en": "Red Eye, Meet Nim",
+    "tr": "Kırmızı Göz, Nim ile Tanış",
+    "th": "ดวงตาแดง พบนิ่ม"
+   },
+   "cond": {
+    "stat": "redEyes",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 10
+   },
+   "text": {
+    "en": "Red Eyes survived: 1",
+    "tr": "Atlatılan Kırmızı Göz: 1",
+    "th": "ดวงตาแดงที่รอดมา: 1"
+   }
+  },
+  {
+   "id": "red_eye_10",
+   "name": {
+    "en": "Eyes Everywhere",
+    "tr": "Her Yerde Gözler",
+    "th": "ตาแดงเต็มไปหมด"
+   },
+   "cond": {
+    "stat": "redEyes",
+    "gte": 10
+   },
+   "reward": {
+    "stash": 25
+   },
+   "text": {
+    "en": "Red Eyes survived: 10",
+    "tr": "Atlatılan Kırmızı Göz: 10",
+    "th": "ดวงตาแดงที่รอดมา: 10"
+   }
+  },
+  {
+   "id": "good_tipper",
+   "name": {
+    "en": "Good Tipper",
+    "tr": "Cömert Bahşişçi",
+    "th": "คนให้ทิปใจดี"
+   },
+   "cond": {
+    "stat": "offerings",
+    "gte": 50
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "Tips given at the Tin: 50",
+    "tr": "Teneke'de verilen bahşiş: 50",
+    "th": "ทิปที่ให้ที่กระป๋องขนม: 50"
+   }
+  },
+  {
+   "id": "beep_beep",
+   "name": {
+    "en": "Beep Beep",
+    "tr": "Bip Bip",
+    "th": "ปี๊นปี๊น"
+   },
+   "cond": {
+    "stat": "honks",
+    "gte": 10
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "HONKs: 10",
+    "tr": "KORNA sayısı: 10",
+    "th": "ครั้งที่บีบแตร: 10"
+   }
+  },
+  {
+   "id": "horn_chorus",
+   "name": {
+    "en": "Horn Chorus",
+    "tr": "Korna Korosu",
+    "th": "ประสานเสียงแตร"
+   },
+   "cond": {
+    "stat": "honks",
+    "gte": 40
+   },
+   "reward": {
+    "stash": 25
+   },
+   "text": {
+    "en": "HONKs: 40",
+    "tr": "KORNA sayısı: 40",
+    "th": "ครั้งที่บีบแตร: 40"
+   }
+  },
+  {
+   "id": "first_blend",
+   "name": {
+    "en": "First Blend",
+    "tr": "İlk Karışım",
+    "th": "ปั่นครั้งแรก"
+   },
+   "cond": {
+    "stat": "blends",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 10
+   },
+   "text": {
+    "en": "Charms blended: 1",
+    "tr": "Karıştırılan tılsım: 1",
+    "th": "ไอเท็มที่ปั่นรวม: 1"
+   }
+  },
+  {
+   "id": "recipe_book",
+   "name": {
+    "en": "Recipe Book",
+    "tr": "Tarif Defteri",
+    "th": "สมุดสูตร"
+   },
+   "cond": {
+    "stat": "blends",
+    "gte": 12
+   },
+   "reward": {
+    "stash": 30
+   },
+   "text": {
+    "en": "Charms blended: 12",
+    "tr": "Karıştırılan tılsım: 12",
+    "th": "ไอเท็มที่ปั่นรวม: 12"
+   }
+  },
+  {
+   "id": "master_blender",
+   "name": {
+    "en": "Master Blender",
+    "tr": "Karıştırma Ustası",
+    "th": "เจ้าแห่งเครื่องปั่น"
+   },
+   "cond": {
+    "stat": "blends",
+    "gte": 30
+   },
+   "reward": {
+    "stash": 60
+   },
+   "text": {
+    "en": "Charms blended: 30",
+    "tr": "Karıştırılan tılsım: 30",
+    "th": "ไอเท็มที่ปั่นรวม: 30"
+   }
+  },
+  {
+   "id": "eyes_open",
+   "name": {
+    "en": "Eyes Open",
+    "tr": "Gözler Açık",
+    "th": "ตาสว่าง"
+   },
+   "cond": {
+    "stat": "staredDown",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 20
+   },
+   "text": {
+    "en": "Red Eyes stared down with the Kiosk above half: 1",
+    "tr": "Kiosk yarının üstündeyken atlatılan Kırmızı Göz: 1",
+    "th": "ดวงตาแดงที่รอดตอนตู้ฝากเงินเกินครึ่ง: 1"
+   }
+  },
+  {
+   "id": "cart_mechanic",
+   "name": {
+    "en": "Cart Mechanic",
+    "tr": "Araba Tamircisi",
+    "th": "ช่างรถเข็น"
+   },
+   "cond": {
+    "stat": "upgrades",
+    "gte": 10
+   },
+   "reward": {
+    "stash": 20
+   },
+   "text": {
+    "en": "Cart upgrades bought: 10",
+    "tr": "Alınan araba yükseltmesi: 10",
+    "th": "อัปเกรดรถเข็นที่ซื้อ: 10"
+   }
+  },
+  {
+   "id": "clean_hands",
+   "name": {
+    "en": "Clean Hands",
+    "tr": "Temiz Eller",
+    "th": "มือสะอาด"
+   },
+   "cond": {
+    "stat": "cleanContract",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 30
+   },
+   "text": {
+    "en": "Places cleared signing no deals: 1",
+    "tr": "Anlaşma imzalamadan bitirilen yer: 1",
+    "th": "ด่านที่ผ่านโดยไม่เซ็นข้อตกลง: 1"
+   }
+  },
+  {
+   "id": "errand_runner",
+   "name": {
+    "en": "Errand Runner",
+    "tr": "Ayak İşleri",
+    "th": "คนรับฝากงาน"
+   },
+   "cond": {
+    "stat": "demands",
+    "gte": 5
+   },
+   "reward": {
+    "stash": 20
+   },
+   "text": {
+    "en": "Errands done: 5",
+    "tr": "Yapılan küçük iş: 5",
+    "th": "งานฝากที่ทำสำเร็จ: 5"
+   }
+  },
+  {
+   "id": "back_again",
+   "name": {
+    "en": "Back Up Again",
+    "tr": "Yine Ayakta",
+    "th": "ลุกขึ้นอีกครั้ง"
+   },
+   "cond": {
+    "stat": "fallRise",
+    "gte": 3
+   },
+   "reward": {
+    "stash": 30
+   },
+   "text": {
+    "en": "Times you lost a run, then cleared a debt in the next: 3",
+    "tr": "Bir oyunu kaybedip sonrakinde borç ödeme sayısı: 3",
+    "th": "จำนวนครั้งที่แพ้แล้วปลดหนี้ได้ในรอบถัดไป: 3"
+   }
+  }
+ ]
+}

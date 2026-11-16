@@ -1,15 +1,21 @@
 // Quick balance sim: a random, a greedy and a smart bot, 300 runs each (under 2 minutes).
 // node scripts/sim-quick.mjs [--n 300] [--contract c1] [--char nim] [--bots random,greedy,smart] [--endless]
 // SMART_BAD=<decision> makes the smart bot take the bad side of one decision, to measure what that decision is worth:
-//   shop heat heat0 bankasap bankrich deal terms bench tricks order redraw skip skip0
+//   shop heat heat0 bankasap bankrich deal terms bench tricks order redraw skip skip0 kiosk calls tin honk upgrades
+// v3: bots play the Kiosk (bank to earn, keep to spend), PAY NOW, the phone (calls, hang up), the Tin (offerings, demands), HONK, cart upgrades and the Blender.
+// --place cN plays a place with every spirit it has opened; the final table (SPEC 13) is printed by `node scripts/sim-quick.mjs --targets`.
 import { makeRng } from '../src/core/rng.js';
-import { CHARMS, CHARM, CONFIG, SYM, SCORING, TRICK, CONTRACT } from '../src/core/data.js';
+import { CHARMS, CHARM, CONFIG, SYM, SCORING, TRICK, CONTRACT, SPIRIT, SPIRITS } from '../src/core/data.js';
 import {
-  newRun, pickTerms, termsOffer, stoke, spin, collect, endRound, bank, leaveShop, declinePawn, pawn, useTrick, redrawFavourite, redrawCost,
+  newRun, pickTerms, termsOffer, stoke, spin, collect, endRound, bank, payNow, canPayNow, honk, leaveShop, declinePawn, pawn, useTrick, redrawFavourite, redrawCost,
   canSkip, skipRound, skipReward, canContinue, continueEndless,
 } from '../src/core/run.js';
-import { buyCharm, buyTrick, price, canPay, sellCharm, reroll, takeWaiting, doBench, buySlot } from '../src/core/shop.js';
+import { buyCharm, buyTrick, price, canPay, sellCharm, reroll, takeWaiting, doBench, buySlot, buyUpgrade, upgradePrice } from '../src/core/shop.js';
 import { signDeal, refuseDeals } from '../src/core/deals.js';
+import { callPick, callLook, callReroll, hangUp, dealBack, rerollCost } from '../src/core/calls.js';
+import { tinVisit, offer, offerCost, acceptDemand, himOrMe, OFFER_FAVOUR } from '../src/core/spirits.js';
+import { blendPreview, blend, blenderOpen } from '../src/core/fusion.js';
+import { spiritsUpTo } from '../src/core/meta.js';
 import { setExplain, slotsOf, scaleOf, snapshot, symValueOf, symMultOf, weightOf, pocketsOf } from '../src/core/effects.js';
 import { buildWeights } from '../src/core/machine.js';
 import { findPatterns, PATTERN } from '../src/core/patterns.js';
@@ -28,7 +34,20 @@ export const BOTS = {
       for (let k = 0; k < 4; k++) if (rng.next() < 0.5) buyCharm(run, rng.int(Math.max(1, run.shop.charms.length)));
       if (rng.next() < 0.3) reroll(run);
     },
-    deal: (run, rng) => (rng.next() < 0.5 ? signDeal(run, run.dealOffer[0]) : refuseDeals(run)),
+    deal: (run, rng) => (rng.next() < 0.5 ? signDeal(run, run.dealOffer[0]) : dealBack(run)),
+    call(run, rng) {
+      const o = run.callOffer;
+      if (rng.next() < 0.3) return hangUp(run) || callPick(run, 0);
+      const i = rng.int(o.cards.length);
+      if (o.cards[i].color === 'red' && !o.cards[i].ruby) callLook(run, i);
+      callPick(run, i);
+    },
+    tin(run, rng) {
+      const v = tinVisit(run);
+      if (v && rng.next() < 0.5) { const k = ['coins', 'caps', 'trick', 'skip'][rng.int(4)]; offer(run, k, k === 'trick' ? 'medium' : 'small', 0); }
+    },
+    bankRound: (run, rng) => bank(run, Math.floor(run.purse * rng.next())),
+    himOrMe: (run, rng) => (rng.next() < 0.5 ? 'drop' : 'keep'),
     pawn: (run, rng) => (rng.next() < 0.5 ? pawn(run, 0) : declinePawn(run)),
   },
   greedy: {
@@ -49,6 +68,11 @@ export const BOTS = {
       }
     },
     deal: (run) => signDeal(run, run.dealOffer[0]),
+    call(run) { // the first card that is not Ruby's deal, else his first deal
+      const i = run.callOffer.cards.findIndex((c) => !c.ruby && c.color !== 'red');
+      if (i >= 0) callPick(run, i); else callPick(run, 0);
+    },
+    himOrMe: () => 'keep',
     pawn: (run) => declinePawn(run),
   },
 };
@@ -61,6 +85,7 @@ export const BOTS = {
 // deals that cost more than they give.
 // SIM_DEBTS=a,b,c overrides the debts of the contract under test (tuning probe; the real numbers live in gen-v2-data.py)
 if (process.env.SIM_DEBTS) for (const c of Object.values(CONTRACT)) if (c.id === (process.env.SIM_C || 'c1')) c.debts = process.env.SIM_DEBTS.split(',').map(Number);
+if (process.env.SIM_ROUNDS) CONTRACT[process.env.SIM_C || 'c1'].rounds = Number(process.env.SIM_ROUNDS); // nights a debt gives (the tutorial says 3)
 const BAD = process.env.SMART_BAD || '';
 const EVK = Number(process.env.SMART_EVK || 4); // practice nights per estimate
 const clone = (r) => JSON.parse(JSON.stringify(r));
@@ -162,6 +187,17 @@ function symbolRank(run) { // what the build makes from each symbol, best first
     .sort((a, b) => b.v - a.v).map((x) => x.s);
 }
 
+// Coins the debt still needs that the coming nights will not earn: they go to the Kiosk (safe, earning), the rest is the stall's money.
+function reserveOf(run) {
+  const owed = Math.max(0, run.debt - run.banked), nightsLeft = run.rounds - run.round;
+  return Math.max(0, owed - spinPay(run) * 4.5 * nightsLeft * 0.8);
+}
+function smartBank(run) {
+  if (BAD === 'kiosk') return;
+  const n = Math.min(run.purse, Math.ceil(reserveOf(run)), run.debt - run.banked);
+  if (n >= 1) bank(run, n);
+}
+
 function smartShop(run) {
   const n0 = (run.stats.charmsBought || 0) + Object.values(run.bench).length + run.removed.length;
   shopOnce(run);
@@ -176,7 +212,7 @@ function shopOnce(run) {
   const reserve = () => Math.max(0, owed - nightInc * nightsLeft * 0.8); // keep what the debt still needs
   const mods = snapshot(run);
   const rate = (CONFIG.interest.basePct + mods.interest) / 100;
-  const interestRoom = () => run.purse * rate < (run.debt * CONFIG.interest.capPctOfDebt) / 100; // more coins still earn interest
+  const interestRoom = () => run.banked < run.debt && run.banked * rate < (run.debt * CONFIG.interest.capPctOfDebt) / 100; // coins banked earn interest
   const cost = (p) => (p.coins || 0) + (p.wick || 0) * w;
   const affordable = (p) => canPay(run, p) && (p.coins || 0) <= run.purse - reserve();
   // buy when the extra pay over the nights left beats the price, and beats what the coins would earn sitting in the purse
@@ -206,12 +242,97 @@ function shopOnce(run) {
   // one reroll when nothing was worth it and the price is small next to the purse
   const rp = price(run, { kind: 'reroll' });
   if (BAD !== 'shop' && run.shop.rerolls === 0 && (rp.coins || 0) < 0.1 * (run.purse - reserve()) && reroll(run)) return shopOnce(run);
+  smartUpgrades(run, H, w, reserve);
+  smartBlend(run, H, w);
   smartBench(run, H, w, reserve);
   for (const id of ['hourglass', 'double_stamp', 'horn', 'token', 'brush', 'wish_coin', 'swap', 'nudge', 'hand_mirror', 'stencil']) {
     const i = run.shop.tricks.indexOf(id);
     if (i >= 0 && run.tricks.length < pocketsOf(run) && cost(price(run, { kind: 'trick', id })) < 0.6 * spinPay(run) * 3 && (price(run, { kind: 'trick', id }).coins || 0) <= run.purse - reserve()) buyTrick(run, i);
   }
   orderCharms(run);
+}
+
+// Cart upgrades: bought like charms, by what a practice night pays with the upgrade on.
+function smartUpgrades(run, H, w, reserve) {
+  if (BAD === 'upgrades' || !run.shop.upgrades) return;
+  for (let guard = 0; guard < 2 && run.shop.upgrades.length; guard++) {
+    const base = nightValue(run);
+    let best = -1, bv = -Infinity;
+    run.shop.upgrades.forEach((u, i) => {
+      const p = upgradePrice(run, u);
+      if (p.coins > run.purse - reserve()) return;
+      const g = nightValue(run, (c) => buyUpgrade(c, i) || false) - base;
+      if (g * H > p.coins * 1.2 && g > bv) { bv = g; best = i; }
+    });
+    if (best < 0 || !buyUpgrade(run, best)) return;
+  }
+}
+
+// The Blender: a recipe (or a same-family step up) when the practice night pays more with it and the Caps are there.
+function smartBlend(run, H, w) {
+  if (BAD === 'blender' || !blenderOpen(run) || run.charms.length < 2) return;
+  let best = null;
+  const base = nightValue(run);
+  for (let a = 0; a < run.charms.length; a++) for (let b = a + 1; b < run.charms.length; b++) {
+    const pv = blendPreview(run, a, b);
+    if (!pv.ok || pv.cost > run.wick) continue;
+    for (let k = 0; k < pv.outs.length; k++) {
+      const g = nightValue(run, (c) => blend(c, a, b, k).ok || false) - base;
+      if (g * H > pv.cost * w * 1.2 && (!best || g > best.g)) best = { a, b, k, g };
+    }
+  }
+  if (best) blend(run, best.a, best.b, best.k);
+}
+
+// The Tin: accept the easy demands, then the offering with the most Favour for its price (never a Hated one).
+function smartTin(run) {
+  if (BAD === 'tin') return;
+  const v = tinVisit(run);
+  if (!v) return;
+  if (v.demand && ['letMePick', 'handTrick', 'signDeal'].includes(v.demand)) acceptDemand(run);
+  if (v.left < 1 || run.round > 0) return; // a person gives gifts once a debt, at the first stall
+  const d = SPIRIT[v.spirit], w = wickValue(run), spare = run.purse - reserveOf(run);
+  let best = null;
+  for (const kind of ['coins', 'caps', 'trick']) for (const size of ['small', 'medium', 'large']) {
+    const q = offerCost(run, kind, size), taste = d.taste[kind];
+    if (!q || !(taste > 0) || kind === 'trick' && (run.tricks.length < 2)) continue;
+    const cost = kind === 'coins' ? q : kind === 'caps' ? q * w : spinPay(run) * 2;
+    if (kind === 'coins' && q > spare || kind === 'caps' && q > run.wick - 2) continue;
+    const gain = Math.ceil(OFFER_FAVOUR[size] * taste - 1e-9);
+    if (cost > 0.2 * Math.max(spare, spinPay(run) * 3)) continue;
+    const score = gain / Math.max(cost, 1);
+    if (!best || score > best.score) best = { kind, size, score };
+  }
+  if (best) offer(run, best.kind, best.size, 0);
+}
+
+// The phone: every card is tried on a copy (a night's pay over what is left of the run, minus the debt it leaves), against hanging up.
+// A spirit's gift also buys Favour, which a practice night cannot see; each card gets a small bonus for it.
+function dealOptions(run) { // run in phase 'deal'
+  const H = roundsLeftInRun(run);
+  return run.dealOffer.map((id) => {
+    const c = clone(run);
+    if (!signDeal(c, id)) return { id, v: -Infinity };
+    const slot = (slotsOf(c) - slotsOf(run)) * 0.5 * nightValue(run) / Math.max(1, run.charms.length); // a free slot is worth half an average charm
+    return { id, v: (nightValue(c) + slot) * H - c.debt * 1.5 };
+  }).sort((a, b) => b.v - a.v);
+}
+function smartCall(run) {
+  const o = run.callOffer, H = roundsLeftInRun(run);
+  const hv = (() => { const c = clone(run); return hangUp(c) ? nightValue(c) * H - c.debt * 1.5 : -Infinity; })();
+  const bonus = spinPay(run) * 2;
+  const opts = o.cards.map((card, i) => {
+    const c = clone(run);
+    if (card.ruby) { if (!callPick(c, i)) return { i, v: -Infinity }; const best = dealOptions(c)[0]; return { i, v: best ? best.v : -Infinity, deal: best?.id }; }
+    return callPick(c, i) ? { i, v: nightValue(c) * H - c.debt * 1.5 + bonus } : { i, v: -Infinity };
+  }).sort((a, b) => (BAD === 'calls' ? a.v - b.v : b.v - a.v));
+  const best = opts[0], must = snapshot(run).flags.mustSign;
+  if (BAD !== 'calls' && best.v <= hv && !must) {
+    if (o.cards.some((c) => c.color === 'red')) { const ri = o.cards.findIndex((c) => c.color === 'red'); callLook(run, ri); } // look, then hang up: that lights a bead
+    return hangUp(run);
+  }
+  if (!callPick(run, best.i)) return hangUp(run);
+  if (run.phase === 'deal') signDeal(run, BAD === 'deal' ? run.dealOffer.at(-1) : best.deal ?? dealOptions(run)[0].id);
 }
 
 function smartBench(run, H, w, reserve) {
@@ -232,24 +353,6 @@ function smartBench(run, H, w, reserve) {
     const g = nightValue(run, (x) => { x.shop = { bench: [id], charms: [], tricks: [] }; x.phase = 'shop'; x.freeBench = 1; return doBench(x, 0, target); }) - base;
     if (BAD === 'bench' ? true : g * H > ((p.coins || 0) + (p.wick || 0) * w) * 1.2) doBench(run, i, target);
   }
-}
-
-function smartDeal(run) {
-  const H = roundsLeftInRun(run), w = wickValue(run);
-  const debtNow = (c) => c.debt;
-  const value = (sign, id) => {
-    const c = clone(run);
-    if (sign) signDeal(c, id); else refuseDeals(c);
-    if (c.phase !== 'shop') return -Infinity;
-    // the night's pay over the rest of the run, minus the extra debt; Wick counted at the going rate
-    const slot = (slotsOf(c) - slotsOf(run)) * 0.5 * nightValue(run) / Math.max(1, run.charms.length); // a free slot is worth half an average charm
-    return (nightValue(c) + slot) * H - debtNow(c) * 1.5;
-  };
-  const refuse = value(false);
-  const opts = run.dealOffer.map((id) => ({ id, v: value(true, id) })).sort((a, b) => b.v - a.v);
-  if (BAD === 'deal') return refuse < opts.at(-1).v || snapshot(run).flags.mustSign ? refuseDeals(run) || signDeal(run, opts.at(-1).id) : signDeal(run, opts.at(-1).id);
-  if (opts.length && (opts[0].v > refuse || snapshot(run).flags.mustSign)) return signDeal(run, opts[0].id);
-  return refuseDeals(run);
 }
 
 function smartTerms(run, offer) {
@@ -339,13 +442,16 @@ BOTS.smart = {
   terms: (run, offer) => smartTerms(run, offer),
   stokeTo: (run) => bestHeat(run),
   beforeSpin(run) {
-    if (run.spinInRound === 0 && wantsEarlyPay(run)) { bank(run, run.debt - run.banked); return run.phase === 'spin'; }
+    if (run.spinInRound === 0 && wantsEarlyPay(run)) { bank(run, run.debt - run.banked); payNow(run); return run.phase === 'spin'; }
+    if (BAD !== 'honk') honk(run);
     redraw(run);
     preTricks(run);
     return true;
   },
   post: (run) => postTricks(run),
-  roundEnd(run) { if (wantsEarlyPay(run)) bank(run, run.debt - run.banked); },
+  roundEnd(run) { if (wantsEarlyPay(run)) { bank(run, run.debt - run.banked); payNow(run); } else smartBank(run); },
+  call: (run) => smartCall(run),
+  himOrMe: (run) => (run.himOrMe.rival === 'brimble' ? 'keep' : 'drop'), // Ruby's interest is worth keeping
   seen(run, r) {
     const m = note(run);
     const k = Math.min(m.n + 1, 8);
@@ -354,8 +460,8 @@ BOTS.smart = {
     for (const p of r.patterns) m.sym[p.sym] = (m.sym[p.sym] || 0) * 0.9 + p.pay;
     m.n++;
   },
-  shop: (run) => smartShop(run),
-  deal: (run) => smartDeal(run),
+  shop(run) { smartTin(run); smartShop(run); smartBank(run); },
+  deal: (run) => { const o = dealOptions(run); return o.length && o[0].v > -Infinity ? signDeal(run, o[0].id) : dealBack(run); },
   pawn(run) { // burn the charm it would miss least
     let wi = 0, wv = Infinity;
     const base = nightValue(run);
@@ -364,10 +470,22 @@ BOTS.smart = {
   },
 };
 
+// rec (optional) collects what SPEC 13 asks about: coins at each debt's deadline, who reached and paid each debt, tap seconds.
 export function playRun(run, bot, rng, hooks = {}) {
-  let guard = 0;
+  let guard = 0, same = 0, lastPhase = '';
+  const rec = hooks.rec;
+  let seenDebt = -1, paidSeen = 0;
   while (guard++ < 20000) {
+    if (rec) {
+      if (run.debtIdx !== seenDebt && run.phase !== 'ended') { seenDebt = run.debtIdx; rec.reached[seenDebt] = 1; }
+      const paid = run.stats.debtsPaid || 0;
+      if (paid > paidSeen) { rec.paid[paid - 1] = 1; paidSeen = paid; }
+    }
     if (run.phase === 'ended') { if (hooks.endless && canContinue(run)) continueEndless(run); else break; }
+    const sig = [run.phase, run.spinsLeft, run.purse, run.banked, run.wick, run.round, run.debtIdx, run.stats.spins].join(); // no change in 40 turns: stuck
+    same = sig === lastPhase ? same + 1 : 0;
+    lastPhase = sig;
+    if (same > 40) throw new Error('bot stuck in ' + run.phase + ' at debt ' + (run.debtIdx + 1));
     switch (run.phase) {
       case 'terms': {
         const id = bot.terms(run, termsOffer(run), rng);
@@ -384,13 +502,29 @@ export function playRun(run, bot, rng, hooks = {}) {
         break;
       }
       case 'post': bot.post?.(run, rng); { const s = collect(run); bot.seen?.(run, s); } break;
-      case 'roundend': bot.roundEnd?.(run, rng); if (run.phase === 'roundend') endRound(run); break;
-      case 'shop': bot.shop(run, rng); hooks.onShop?.(run); leaveShop(run); break;
-      case 'deal': bot.deal(run, rng); break;
+      case 'roundend':
+        bot.roundEnd?.(run, rng);
+        if (run.phase === 'roundend' && !run.tut) {
+          if (!bot.roundEnd && bot.bankRound) bot.bankRound(run, rng);
+          if (rec && run.round + 1 === run.rounds) rec.deadline[run.debtIdx] ??= run.purse + run.banked;
+        }
+        if (run.phase === 'roundend') endRound(run);
+        break;
+      case 'shop': bot.shop?.(run, rng); bot.tin?.(run, rng); hooks.onShop?.(run); leaveShop(run); break;
+      case 'call': bot.call(run, rng); if (run.phase === 'call' && same > 3) hangUp(run); break;
+      case 'deal': bot.deal(run, rng); if (run.phase === 'deal') dealBack(run); break;
+      case 'himOrMe': himOrMe(run, bot.himOrMe?.(run, rng) ?? 'keep'); break;
       case 'pawn': bot.pawn(run, rng); break;
     }
   }
   return run;
+}
+
+// Seconds of play a run costs at the sim's tap timing (SPEC 13: a c1 run takes 8 to 11 minutes).
+export function runSeconds(run) {
+  const st = run.stats;
+  return 4 * (st.spins || 0) + 1.5 * (st.stokes || 0) + 3 * (st.tricksUsed || 0) + 5 * run.roundSerial + 8 * run.roundSerial + 3 * (st.itemsBought || 0)
+    + 4 * (st.offerings || 0) + 7 * ((st.calls || 0) + (st.hangUps || 0)) + 2.5 * (st.honks || 0) + 2 * (st.banks || 0) + 5 * (st.visits || 0);
 }
 
 const median = (a) => { const s = [...a].sort((x, y) => x - y); return s.length ? s[Math.floor(s.length / 2)] : 0; };
@@ -398,27 +532,48 @@ const median = (a) => { const s = [...a].sort((x, y) => x - y); return s.length 
 // Plays runs [from, from + n) and returns the raw tallies; summarize() turns merged tallies into the printed numbers.
 function play(name, from, n, contract, char, endless) {
   const bot = BOTS[name];
-  const t = { n, wins: 0, reached: [], coins: [], best: [], paid: [], bought: {}, winBought: {} };
+  const t = { n, wins: 0, reached: [], coins: [], best: [], paid: [], bought: {}, winBought: {}, d1: [], dReached: [], dPaid: [], stages: [], patrons: [], threePatrons: 0, redEyes: [], secs: [], calls: [], offerings: [], honks: [], blends: [], upgrades: [], endings: {}, bySpirit: {} };
   for (let i = from; i < from + n; i++) {
-    const run = newRun({ seed: 'sim-' + i, contractId: contract, charId: char });
+    const run = newRun({ seed: 'sim-' + i, contractId: contract, charId: char, unlocked: spiritsUpTo(contract) });
     const owned = new Set();
-    playRun(run, bot, makeRng('bot-' + name + i), { endless, onShop: (r) => r.charms.forEach((c) => owned.add(c.id)) });
+    const rec = { reached: [], paid: [], deadline: [] };
+    playRun(run, bot, makeRng('bot-' + name + i), { endless, rec, onShop: (r) => r.charms.forEach((c) => owned.add(c.id)) });
     for (const id of owned) t.bought[id] = (t.bought[id] || 0) + 1;
-    if (run.result?.won) { t.wins++; for (const id of [...owned, ...run.deals.map((d) => 'deal:' + d)]) t.winBought[id] = (t.winBought[id] || 0) + 1; }
+    if (run.result?.won) { t.wins++; for (const id of [...owned, ...run.deals.map((d) => 'deal:' + d)]) t.winBought[id] = (t.winBought[id] || 0) + 1; if (run.result.ending) t.endings[run.result.ending] = (t.endings[run.result.ending] || 0) + 1; }
     t.reached.push(run.stats.reachDebt || 1);
     t.coins.push(run.stats.coinsEarned || 0);
     t.best.push(run.stats.spinCoins || 0);
     t.paid.push(run.stats.debtsPaid || 0);
+    if (rec.deadline[0] !== undefined) t.d1.push(rec.deadline[0]);
+    for (let d = 0; d < 12; d++) { t.dReached[d] = (t.dReached[d] || 0) + (rec.reached[d] || 0); t.dPaid[d] = (t.dPaid[d] || 0) + (rec.paid[d] || 0); }
+    const st = run.stats, crossings = (st['stage:2'] || 0) + (st['stage:5'] || 0) + (st['stage:8'] || 0), pat = SPIRITS.filter((d) => run.spirits[d.id].stage >= 8).length;
+    t.stages.push(crossings); t.patrons.push(pat); if (pat >= 3) t.threePatrons++;
+    // the run's closest neighbour (highest Favour): runs and wins per spirit, so a stage's balance can be read (critic 10)
+    const top = SPIRITS.map((d) => d.id).filter((id) => run.spirits[id]).sort((a, b) => (run.spirits[b].fav | 0) - (run.spirits[a].fav | 0))[0];
+    if (top) { const b = (t.bySpirit[top] ??= [0, 0]); b[0]++; if (run.result?.won) b[1]++; }
+    t.redEyes.push(run.redEyes); t.secs.push(runSeconds(run));
+    t.calls.push((st.calls || 0) + (st.hangUps || 0)); t.offerings.push(st.offerings || 0); t.honks.push(st.honks || 0); t.blends.push(st.blends || 0); t.upgrades.push(st.upgrades || 0);
   }
   return t;
 }
+const sum = (a) => a.reduce((x, y) => x + y, 0);
 function summarize(name, parts, ms) {
   const n = parts.reduce((a, p) => a + p.n, 0), all = (k) => parts.flatMap((p) => p[k]);
   const bought = Object.fromEntries(CHARMS.filter((c) => !c.unlock).map((c) => [c.id, parts.reduce((a, p) => a + (p.bought[c.id] || 0), 0)]));
   const sorted = Object.entries(bought).sort((a, b) => b[1] - a[1]); // locked charms can never be picked, so they are left out
   const wins = parts.reduce((a, p) => a + p.wins, 0);
   const winShare = Object.entries(parts.reduce((m, p) => { for (const k in p.winBought) m[k] = (m[k] || 0) + p.winBought[k]; return m; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([k, v]) => [k, wins ? Math.round(100 * v / wins) + '%' : '-']);
-  return { winShare, name, n, wins, rate: wins / n, medianDebt: median(all('reached')), medianCoins: median(all('coins')), medianBest: median(all('best')), meanPaid: all('paid').reduce((a, b) => a + b, 0) / n, never: sorted.filter(([, v]) => !v).map(([k]) => k), top: sorted.slice(0, 10), bottom: sorted.slice(-10).reverse(), ms };
+  const dR = Array.from({ length: 12 }, (_, d) => sum(parts.map((p) => p.dReached[d] || 0))), dP = Array.from({ length: 12 }, (_, d) => sum(parts.map((p) => p.dPaid[d] || 0)));
+  const mean = (k) => sum(all(k)) / n;
+  return {
+    winShare, name, n, wins, rate: wins / n, medianDebt: median(all('reached')), medianCoins: median(all('coins')), medianBest: median(all('best')), meanPaid: all('paid').reduce((a, b) => a + b, 0) / n,
+    never: sorted.filter(([, v]) => !v).map(([k]) => k), top: sorted.slice(0, 10), bottom: sorted.slice(-10).reverse(), ms,
+    debt1Median: median(all('d1')), payRate: dR.map((r, d) => (r ? dP[d] / r : null)), reachedN: dR,
+    stages: mean('stages'), patronRuns: all('patrons').filter((x) => x >= 1).length / n, threePatrons: sum(parts.map((p) => p.threePatrons)), redEyes: mean('redEyes'), redEyeRuns13: all('redEyes').filter((x) => x >= 1 && x <= 3).length / n,
+    minutes: median(all('secs')) / 60, calls: mean('calls'), offerings: mean('offerings'), honks: mean('honks'), blends: mean('blends'), upgrades: mean('upgrades'),
+    endings: parts.reduce((m, p) => { for (const k in p.endings) m[k] = (m[k] || 0) + p.endings[k]; return m; }, {}),
+    bySpirit: parts.reduce((m, p) => { for (const k in p.bySpirit) { const a = (m[k] ??= [0, 0]); a[0] += p.bySpirit[k][0]; a[1] += p.bySpirit[k][1]; } return m; }, {}),
+  };
 }
 export function simulate(name, n, contract, char, opt = {}) {
   const t0 = Date.now();
@@ -445,13 +600,35 @@ if (!isMainThread && workerData?.name) {
   const n = Number(arg('n', 300)), contract = arg('contract', 'c1'), char = arg('char', 'nim'), endless = process.argv.includes('--endless');
   setExplain(false);
   const fmt = (l) => l.map(([id, c]) => `${id}:${c}`).join(' ');
+  const pc = (x) => (x === null || x === undefined ? '-' : (x * 100).toFixed(0) + '%');
+  const line = (r) => console.log(`${r.name}${BAD && r.name === 'smart' ? ' (bad ' + BAD + ')' : ''}: ${r.wins}/${r.n} cleared contract ${contract} (${(r.rate * 100).toFixed(1)}%), median debt reached ${r.medianDebt}, mean debts paid ${r.meanPaid.toFixed(2)}, median coins ${r.medianCoins}, median best spin ${r.medianBest}, ${r.ms} ms`);
+  if (process.argv.includes('--targets')) {
+    // The SPEC 13 table: c1 smart and random, c3 smart (Favour, Red Eye).
+    const nn = Number(arg('n', 120));
+    const c1s = await simulateParallel('smart', nn, 'c1', char), c1r = simulate('random', nn * 3, 'c1', char), c3s = await simulateParallel('smart', Math.max(24, Math.round(nn / 2)), 'c3', char);
+    const row = (what, got, want, ok) => console.log(`${ok ? 'PASS' : 'MISS'}  ${what.padEnd(46)} got ${String(got).padEnd(22)} target ${want}`);
+    row('c1 smart bot clear rate', pc(c1s.rate), '60-75%', c1s.rate >= 0.6 && c1s.rate <= 0.75);
+    row('c1 random bot clear rate', pc(c1r.rate), '10-20%', c1r.rate >= 0.1 && c1r.rate <= 0.2);
+    row('c1 debt 1: median coins at the deadline / target', (c1s.debt1Median / CONTRACT.c1.debts[0]).toFixed(2) + 'x', '<= 2x', c1s.debt1Median <= 2 * CONTRACT.c1.debts[0]);
+    row('c1 debt 5: smart pays when it gets there', pc(c1s.payRate[4]) + ` (of ${c1s.reachedN[4]})`, '70-85%', c1s.payRate[4] >= 0.7 && c1s.payRate[4] <= 0.85);
+    row('Favour: stage crossings per run (c3)', c3s.stages.toFixed(2), '3-5', c3s.stages >= 3 && c3s.stages <= 5);
+    row('Favour: Patron in c3 runs', pc(c3s.patronRuns), '30-60%', c3s.patronRuns >= 0.3 && c3s.patronRuns <= 0.6);
+    row('Favour: never 3 Patrons', c3s.threePatrons + ' runs', '0', c3s.threePatrons === 0);
+    row('Red Eye: events per c3 run (share with 1-3)', c3s.redEyes.toFixed(2) + ` (${pc(c3s.redEyeRuns13)})`, '1-3', c3s.redEyes >= 1 && c3s.redEyes <= 3);
+    row('c1 run length, minutes (smart, tap model)', c1s.minutes.toFixed(1), '8-11', c1s.minutes >= 8 && c1s.minutes <= 11);
+    console.log(`(c1 smart: calls/run ${c1s.calls.toFixed(1)}, offerings ${c1s.offerings.toFixed(1)}, honks ${c1s.honks.toFixed(1)}, blends ${c1s.blends.toFixed(1)}, cart upgrades ${c1s.upgrades.toFixed(1)}; c3 smart clear ${pc(c3s.rate)})`);
+    console.log('pay rate by debt, c1 smart: ' + c1s.payRate.slice(0, 5).map((x, d) => `d${d + 1} ${pc(x)} of ${c1s.reachedN[d]}`).join(', '));
+    process.exit(0);
+  }
   for (const name of arg('bots', 'random,greedy,smart').split(',')) {
     const r = await simulateParallel(name, n, contract, char, { endless });
-    console.log(`${name}${BAD && name === 'smart' ? ' (bad ' + BAD + ')' : ''}: ${r.wins}/${r.n} cleared contract ${contract} (${(r.rate * 100).toFixed(1)}%), median debt reached ${r.medianDebt}, mean debts paid ${r.meanPaid.toFixed(2)}, median coins ${r.medianCoins}, median best spin ${r.medianBest}, ${r.ms} ms`);
+    line(r);
+    console.log(`  debt 1 deadline median ${r.debt1Median}; pay rate by debt ${r.payRate.slice(0, 8).map((x, d) => `${d + 1}:${pc(x)}`).join(' ')}; stage crossings ${r.stages.toFixed(2)}, Patron runs ${pc(r.patronRuns)}, Red Eyes ${r.redEyes.toFixed(2)}, ~${r.minutes.toFixed(1)} min`);
     if (!process.argv.includes('--quiet')) {
       console.log('  most picked : ' + fmt(r.top));
       console.log('  least picked: ' + fmt(r.bottom));
       console.log('  in wins     : ' + fmt(r.winShare));
+      console.log('  top spirit  : ' + Object.entries(r.bySpirit).sort((a, b) => b[1][0] - a[1][0]).map(([k, [runs, w]]) => `${k} ${runs} runs ${pc(w / runs)} won`).join(', '));
       console.log('  never       : ' + r.never.join(' '));
     }
   }

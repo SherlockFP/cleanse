@@ -1,0 +1,659 @@
+{
+ "places": [
+  {
+   "id": "c1",
+   "order": 1,
+   "contract": "c1",
+   "name": {
+    "en": "The Soi Cart",
+    "tr": "Sokak Arabası",
+    "th": "รถเข็นในซอย"
+   },
+   "icon": "place/c1",
+   "bg": "bg/fair",
+   "rank": {
+    "id": "rank1",
+    "name": {
+     "en": "Street Kid",
+     "tr": "Sokak Çocuğu",
+     "th": "เด็กซอย"
+    }
+   },
+   "debts": 5,
+   "nights": 2,
+   "unlockAfter": null,
+   "local": [
+    "brimble"
+   ],
+   "spiritsOnEnter": [],
+   "localFirst": "brimble",
+   "card": [
+    {
+     "en": "Nim meets Mr. Ruby at the burnt cart. He brought a folding table.",
+     "tr": "Nim, Bay Ruby ile yanık arabanın başında tanışır. Katlanır bir masa getirmiş.",
+     "th": "นิ่มเจอมิสเตอร์รูบี้ที่รถเข็นไหม้ เขาแบกโต๊ะพับมาด้วย"
+    },
+    {
+     "en": "Mr. Ruby wants his paper signed and his Caps counted.",
+     "tr": "Bay Ruby kâğıdının imzalanmasını ve Kapaklarının sayılmasını istiyor.",
+     "th": "มิสเตอร์รูบี้อยากให้เซ็นกระดาษและนับฝาขวดของเขา"
+    },
+    {
+     "en": "The cart is gone, but the plastic stool survived. It is now a desk.",
+     "tr": "Araba gitti ama plastik tabure kurtuldu. Şimdi masa.",
+     "th": "รถเข็นหายไป แต่เก้าอี้พลาสติกรอด ตอนนี้เป็นโต๊ะทำงาน"
+    }
+   ],
+   "home": {
+    "en": "a mat, a crate and a cooking pot behind the cart",
+    "tr": "arabanın arkasında bir hasır, bir sandık ve bir tencere",
+    "th": "เสื่อ ลังไม้ และหม้อหุงต้มหลังรถเข็น"
+   },
+   "homeBg": "bg/hideout",
+   "firstClear": {
+    "stash": 20,
+    "keys": {
+     "brass": 1
+    }
+   },
+   "story": null
+  },
+  {
+   "id": "c2",
+   "order": 2,
+   "contract": "c2",
+   "name": {
+    "en": "Train Market",
+    "tr": "Tren Pazarı",
+    "th": "ตลาดรถไฟ"
+   },
+   "icon": "place/c2",
+   "bg": "bg/c2",
+   "rank": {
+    "id": "rank2",
+    "name": {
+     "en": "Tray Hawker",
+     "tr": "Tepsi Satıcısı",
+     "th": "คนหาบเร่"
+    }
+   },
+   "debts": 6,
+   "nights": 3,
+   "unlockAfter": "c1",
+   "local": [
+    "wire"
+   ],
+   "spiritsOnEnter": [
+    "wire"
+   ],
+   "localFirst": "wire",
+   "card": [
+    {
+     "en": "Uncle Wire sells fixes from a stall beside the railway tracks.",
+     "tr": "Tel Amca, demiryolunun yanındaki bir tezgâhta tamir satıyor.",
+     "th": "ลุงสายไฟขายงานซ่อมที่แผงข้างรางรถไฟ"
+    },
+    {
+     "en": "Wire wants tricks and quiet nights.",
+     "tr": "Tel tüm numaraları ve sessiz geceleri istiyor.",
+     "th": "ลุงสายไฟอยากได้กลเม็ดกับคืนเงียบๆ"
+    },
+    {
+     "en": "The trains are late. The market is early.",
+     "tr": "Trenler geç. Pazar erken.",
+     "th": "รถไฟมาช้า แต่ตลาดเปิดเร็ว"
+    }
+   ],
+   "home": {
+    "en": "a push cart, a tray and string lights",
+    "tr": "bir el arabası, bir tepsi ve ampul zinciri",
+    "th": "รถเข็น ถาด และไฟประดับ"
+   },
+   "homeBg": "bg/hideout",
+   "firstClear": {
+    "stash": 30,
+    "keys": {
+     "brass": 1,
+     "silver": 1
+    }
+   },
+   "story": null
+  },
+  {
+   "id": "c3",
+   "order": 3,
+   "contract": "c3",
+   "name": {
+    "en": "Yaowarat",
+    "tr": "Yaowarat",
+    "th": "เยาวราช"
+   },
+   "icon": "place/c3",
+   "bg": "bg/c3",
+   "rank": {
+    "id": "rank3",
+    "name": {
+     "en": "Stall Owner",
+     "tr": "Tezgâh Sahibi",
+     "th": "เจ้าของแผง"
+    }
+   },
+   "debts": 8,
+   "nights": 3,
+   "unlockAfter": "c2",
+   "local": [
+    "gold"
+   ],
+   "spiritsOnEnter": [
+    "waiting"
+   ],
+   "localFirst": "gold",
+   "card": [
+    {
+     "en": "Chef Quack stirs the night's Special in a loud gold-street kitchen.",
+     "tr": "Şef Vak, gürültülü altın sokağı mutfağında gecenin Özel'ini karıştırıyor.",
+     "th": "เชฟกาบผัดเมนูเด็ดของคืนนี้ในครัวถนนทองที่เสียงดัง"
+    },
+    {
+     "en": "Quack wants new gadgets and a better Special than yesterday.",
+     "tr": "Vak yeni aletler ve dünden iyi bir Özel istiyor.",
+     "th": "เชฟกาบอยากได้ของใช้ในครัวใหม่ๆ กับเมนูเด็ดที่ดีกว่าเมื่อวาน"
+    },
+    {
+     "en": "Everything glitters. Most of it is the wok.",
+     "tr": "Her şey parlıyor. Çoğu wok.",
+     "th": "ทุกอย่างวิบวับ ส่วนใหญ่คือกระทะ"
+    }
+   ],
+   "home": {
+    "en": "a gold-painted cart wheel and a shiny wok",
+    "tr": "altın boyalı bir araba tekerleği ve parlak bir wok",
+    "th": "ล้อรถเข็นทาสีทองกับกระทะเงาวับ"
+   },
+   "homeBg": "bg/hideout",
+   "firstClear": {
+    "stash": 50,
+    "keys": {
+     "brass": 1
+    }
+   },
+   "story": "paid_in_full"
+  },
+  {
+   "id": "c4",
+   "order": 4,
+   "contract": "c4",
+   "name": {
+    "en": "Chatuchak Weekend",
+    "tr": "Chatuchak Hafta Sonu",
+    "th": "จตุจักรวันหยุด"
+   },
+   "icon": "place/c4",
+   "bg": "bg/c4",
+   "rank": {
+    "id": "rank4",
+    "name": {
+     "en": "Shop Owner",
+     "tr": "Dükkân Sahibi",
+     "th": "เจ้าของร้าน"
+    }
+   },
+   "debts": 8,
+   "nights": 3,
+   "unlockAfter": "c3",
+   "local": [
+    "beckon"
+   ],
+   "spiritsOnEnter": [],
+   "localFirst": "beckon",
+   "card": [
+    {
+     "en": "Madam Receipt keeps the books for a street of hostels.",
+     "tr": "Bayan Fiş, bir hostel sokağının defterini tutuyor.",
+     "th": "คุณนายใบเสร็จทำบัญชีให้ถนนที่เต็มไปด้วยโฮสเทล"
+    },
+    {
+     "en": "She wants plain coins and fair prices.",
+     "tr": "Düz para ve adil fiyat istiyor.",
+     "th": "เธออยากได้เหรียญธรรมดากับราคาที่แฟร์"
+    },
+    {
+     "en": "Everyone has a rucksack. Nobody has a plan.",
+     "tr": "Herkesin sırt çantası var. Kimsenin planı yok.",
+     "th": "ทุกคนมีเป้ แต่ไม่มีใครมีแผน"
+    }
+   ],
+   "home": {
+    "en": "a canvas stall with a hand-painted sign",
+    "tr": "el boyaması tabelalı bir branda tezgâh",
+    "th": "แผงผ้าใบพร้อมป้ายเขียนมือ"
+   },
+   "homeBg": "bg/home_2",
+   "firstClear": {
+    "stash": 60,
+    "keys": {
+     "brass": 1
+    }
+   },
+   "story": null
+  },
+  {
+   "id": "c5",
+   "order": 5,
+   "contract": "c5",
+   "name": {
+    "en": "Hua Hin Low Season",
+    "tr": "Hua Hin Ölü Sezon",
+    "th": "หัวหินหน้าโลว์"
+   },
+   "icon": "place/c5",
+   "bg": "bg/c5",
+   "rank": {
+    "id": "rank5",
+    "name": {
+     "en": "Wholesaler",
+     "tr": "Toptancı",
+     "th": "พ่อค้าส่ง"
+    }
+   },
+   "debts": 8,
+   "nights": 3,
+   "unlockAfter": "c4",
+   "local": [
+    "tide"
+   ],
+   "spiritsOnEnter": [
+    "tide"
+   ],
+   "localFirst": "tide",
+   "card": [
+    {
+     "en": "Grandmother Tide's barge is the only thing moving on the promenade.",
+     "tr": "Gelgit Nine'nin mavnası gezinti yolunda hareket eden tek şey.",
+     "th": "เรือบรรทุกของยายน้ำขึ้นเป็นสิ่งเดียวที่ขยับบนทางเดินริมหาด"
+    },
+    {
+     "en": "She wants patience and a skipped night.",
+     "tr": "Sabır ve atlanan bir gece istiyor.",
+     "th": "ยายอยากได้ความอดทนกับการข้ามคืนหนึ่งคืน"
+    },
+    {
+     "en": "The deck chairs are empty. The sea is open.",
+     "tr": "Şezlonglar boş. Deniz açık.",
+     "th": "เก้าอี้ชายหาดว่างเปล่า แต่ทะเลเปิดอยู่"
+    }
+   ],
+   "home": {
+    "en": "a rented shop-front room",
+    "tr": "kiralık bir dükkân odası",
+    "th": "ห้องหน้าร้านเช่า"
+   },
+   "homeBg": "bg/home_2",
+   "firstClear": {
+    "stash": 70,
+    "keys": {
+     "brass": 1,
+     "silver": 1
+    }
+   },
+   "story": null
+  },
+  {
+   "id": "c6",
+   "order": 6,
+   "contract": "c6",
+   "name": {
+    "en": "Chiang Mai Haze",
+    "tr": "Chiang Mai Dumanı",
+    "th": "หมอกควันเชียงใหม่"
+   },
+   "icon": "place/c6",
+   "bg": "bg/c6",
+   "rank": {
+    "id": "rank6",
+    "name": {
+     "en": "Shophouse Owner",
+     "tr": "Dükkân Evi Sahibi",
+     "th": "เจ้าของตึกแถว"
+    }
+   },
+   "debts": 8,
+   "nights": 3,
+   "unlockAfter": "c5",
+   "local": [
+    "moonbiter"
+   ],
+   "spiritsOnEnter": [
+    "moonbiter"
+   ],
+   "localFirst": "moonbiter",
+   "card": [
+    {
+     "en": "Scrubby is wiping smoke off the night bazaar, one stall at a time.",
+     "tr": "Kazıcı gece pazarının dumanını tezgâh tezgâh siliyor.",
+     "th": "แปรงขัดเช็ดควันออกจากตลาดกลางคืนทีละแผง"
+    },
+    {
+     "en": "It wants a charm or a curse to chew on.",
+     "tr": "Çiğnemek için bir tılsım ya da lanet istiyor.",
+     "th": "มันอยากได้ไอเท็มหรือคำสาปไว้ขัดเล่น"
+    },
+    {
+     "en": "The haze is so thick even the bulbs look tired.",
+     "tr": "Duman o kadar yoğun ki ampuller bile yorgun.",
+     "th": "หมอกควันหนาจนหลอดไฟยังดูเหนื่อย"
+    }
+   ],
+   "home": {
+    "en": "a small warehouse",
+    "tr": "küçük bir depo",
+    "th": "โกดังเล็กๆ"
+   },
+   "homeBg": "bg/home_2",
+   "firstClear": {
+    "stash": 80,
+    "keys": {
+     "brass": 1
+    }
+   },
+   "story": null
+  },
+  {
+   "id": "c7",
+   "order": 7,
+   "contract": "c7",
+   "name": {
+    "en": "Phuket Beach Club",
+    "tr": "Phuket Plaj Kulübü",
+    "th": "บีชคลับภูเก็ต"
+   },
+   "icon": "place/c7",
+   "bg": "bg/c7",
+   "rank": {
+    "id": "rank7",
+    "name": {
+     "en": "Club Partner",
+     "tr": "Kulüp Ortağı",
+     "th": "หุ้นส่วนบีชคลับ"
+    }
+   },
+   "debts": 8,
+   "nights": 3,
+   "unlockAfter": "c6",
+   "local": [
+    "lamplit"
+   ],
+   "spiritsOnEnter": [
+    "lamplit"
+   ],
+   "localFirst": "lamplit",
+   "card": [
+    {
+     "en": "Lady Lamplit hangs over the beach club bar and hums.",
+     "tr": "Lamba Hanım plaj kulübü barının üstünde asılı, mırıldanıyor.",
+     "th": "เจ๊หลอดไฟห้อยอยู่เหนือบาร์บีชคลับและฮัมเพลง"
+    },
+    {
+     "en": "She wants Spice and a dare.",
+     "tr": "Acı ve bir meydan okuma istiyor.",
+     "th": "เจ๊อยากได้ความเผ็ดกับการท้า"
+    },
+    {
+     "en": "The cocktails are free. The ice is not.",
+     "tr": "Kokteyller bedava. Buz değil.",
+     "th": "ค็อกเทลฟรี แต่น้ำแข็งไม่ฟรี"
+    }
+   ],
+   "home": {
+    "en": "a two-storey shophouse",
+    "tr": "iki katlı bir dükkân evi",
+    "th": "ตึกแถวสองชั้น"
+   },
+   "homeBg": "bg/home_3",
+   "firstClear": {
+    "stash": 100,
+    "keys": {
+     "brass": 1,
+     "silver": 1
+    }
+   },
+   "story": "bought_the_machine"
+  },
+  {
+   "id": "c8",
+   "order": 8,
+   "contract": "c8",
+   "name": {
+    "en": "Riverside Boutique",
+    "tr": "Nehir Kıyısı Butik",
+    "th": "บูติกริมเจ้าพระยา"
+   },
+   "icon": "place/c8",
+   "bg": "bg/c8",
+   "rank": {
+    "id": "rank8",
+    "name": {
+     "en": "Boutique Owner",
+     "tr": "Butik Sahibi",
+     "th": "เจ้าของบูติก"
+    }
+   },
+   "debts": 8,
+   "nights": 3,
+   "unlockAfter": "c7",
+   "local": [
+    "waiting"
+   ],
+   "spiritsOnEnter": [],
+   "localFirst": "waiting",
+   "card": [
+    {
+     "en": "Mr. Lost-and-Found minds the boutique's lost property by the river.",
+     "tr": "Kayıp Eşya Bey, nehir kenarındaki butiğin kayıp eşyalarına bakıyor.",
+     "th": "พี่ของหายดูแลของหายของบูติกริมแม่น้ำ"
+    },
+    {
+     "en": "He wants charms to keep safe and nights to skip.",
+     "tr": "Saklamak için tılsımlar ve atlanacak geceler istiyor.",
+     "th": "เขาอยากได้ไอเท็มไว้เก็บให้ปลอดภัยกับคืนที่ข้ามได้"
+    },
+    {
+     "en": "Rent by the river is high. The shelf is small.",
+     "tr": "Nehir kıyısında kira yüksek. Raf küçük.",
+     "th": "ค่าเช่าริมแม่น้ำแพง ชั้นวางก็เล็ก"
+    }
+   ],
+   "home": {
+    "en": "a river-view office with a deck",
+    "tr": "terası olan nehir manzaralı bir ofis",
+    "th": "ออฟฟิศวิวแม่น้ำพร้อมระเบียงไม้"
+   },
+   "homeBg": "bg/home_3",
+   "firstClear": {
+    "stash": 120,
+    "keys": {
+     "brass": 1
+    }
+   },
+   "story": null
+  },
+  {
+   "id": "c9",
+   "order": 9,
+   "contract": "c9",
+   "name": {
+    "en": "Sukhumvit Condo Launch",
+    "tr": "Sukhumvit Rezidans Açılışı",
+    "th": "เปิดตัวคอนโดสุขุมวิท"
+   },
+   "icon": "place/c9",
+   "bg": "bg/c9",
+   "rank": {
+    "id": "rank9",
+    "name": {
+     "en": "Developer",
+     "tr": "Müteahhit",
+     "th": "นักพัฒนาที่ดิน"
+    }
+   },
+   "debts": 8,
+   "nights": 2,
+   "unlockAfter": "c8",
+   "local": [
+    "beckon",
+    "wire"
+   ],
+   "spiritsOnEnter": [],
+   "localFirst": "beckon",
+   "card": [
+    {
+     "en": "Madam Receipt and Uncle Wire both turn up at the launch, in the same glass lobby.",
+     "tr": "Bayan Fiş ile Tel Amca açılışa geliyor, aynı cam lobide.",
+     "th": "คุณนายใบเสร็จกับลุงสายไฟมางานเปิดตัวทั้งคู่ ในล็อบบี้กระจกเดียวกัน"
+    },
+    {
+     "en": "Both want the first sale.",
+     "tr": "İkisi de ilk satışı istiyor.",
+     "th": "ทั้งคู่อยากได้ยอดขายแรก"
+    },
+    {
+     "en": "The scale model is perfect. The real tower is a month late.",
+     "tr": "Maket kusursuz. Gerçek kule bir ay gecikmiş.",
+     "th": "โมเดลจำลองสมบูรณ์แบบ ตึกจริงช้าไปหนึ่งเดือน"
+    }
+   ],
+   "home": {
+    "en": "a glass-walled condo with a city view",
+    "tr": "şehir manzaralı cam duvarlı bir daire",
+    "th": "คอนโดผนังกระจกวิวเมือง"
+   },
+   "homeBg": "bg/home_3",
+   "firstClear": {
+    "stash": 150,
+    "keys": {
+     "brass": 1,
+     "red": 1
+    }
+   },
+   "story": null
+  },
+  {
+   "id": "c10",
+   "order": 10,
+   "contract": "c10",
+   "name": {
+    "en": "The Sky Bar",
+    "tr": "Gökyüzü Barı",
+    "th": "สกายบาร์"
+   },
+   "icon": "place/c10",
+   "bg": "bg/c10",
+   "rank": {
+    "id": "rank10",
+    "name": {
+     "en": "Tycoon",
+     "tr": "Patron",
+     "th": "เจ้าสัว"
+    }
+   },
+   "debts": 9,
+   "nights": 3,
+   "unlockAfter": "c9",
+   "local": [
+    "brimble"
+   ],
+   "spiritsOnEnter": [],
+   "localFirst": "brimble",
+   "card": [
+    {
+     "en": "Mr. Ruby is behind the bar. The whole roof is his.",
+     "tr": "Bay Ruby barın arkasında. Bütün çatı onun.",
+     "th": "มิสเตอร์รูบี้อยู่หลังบาร์ ดาดฟ้าทั้งหลังเป็นของเขา"
+    },
+    {
+     "en": "He wants one last signature.",
+     "tr": "Son bir imza istiyor.",
+     "th": "เขาอยากได้ลายเซ็นสุดท้าย"
+    },
+    {
+     "en": "Sixty floors up, the paperwork has a view.",
+     "tr": "Altmış kat yukarıda evrakların manzarası var.",
+     "th": "สูงขึ้นไปหกสิบชั้น เอกสารยังมีวิวสวยๆ"
+    }
+   ],
+   "home": {
+    "en": "a penthouse that looks out over the whole map",
+    "tr": "bütün haritaya bakan bir çatı katı",
+    "th": "เพนต์เฮาส์ที่มองเห็นทั้งแผนที่"
+   },
+   "homeBg": "bg/home_4",
+   "firstClear": {
+    "stash": 250,
+    "keys": {
+     "brass": 1
+    }
+   },
+   "story": "new_management"
+  }
+ ],
+ "stamps": [
+  {
+   "id": "bronze",
+   "icon": "ui/stamp_bronze",
+   "name": {
+    "en": "Bronze",
+    "tr": "Bronz",
+    "th": "บรอนซ์"
+   },
+   "rule": {
+    "en": "Clear the place.",
+    "tr": "Yeri bitir.",
+    "th": "ผ่านด่าน"
+   },
+   "stash": 5
+  },
+  {
+   "id": "silver",
+   "icon": "ui/stamp_silver",
+   "name": {
+    "en": "Silver",
+    "tr": "Gümüş",
+    "th": "เงิน"
+   },
+   "rule": {
+    "en": "Clear it with no Flare-up.",
+    "tr": "Parlamasız bitir.",
+    "th": "ผ่านโดยไม่มีไฟลุก"
+   },
+   "stash": 10
+  },
+  {
+   "id": "gold",
+   "icon": "ui/stamp_gold",
+   "name": {
+    "en": "Gold",
+    "tr": "Altın",
+    "th": "ทอง"
+   },
+   "rule": {
+    "en": "Clear it signing no deals.",
+    "tr": "Hiç anlaşma imzalamadan bitir.",
+    "th": "ผ่านโดยไม่เซ็นข้อตกลงเลย"
+   },
+   "stash": 15
+  }
+ ],
+ "map": {
+  "bg": "bg/map",
+  "pin": {
+   "open": "ui/map_pin",
+   "done": "ui/pin_done",
+   "locked": "ui/pin_locked"
+  },
+  "rankUp": {
+   "en": "Level %d",
+   "tr": "Seviye %d",
+   "th": "ระดับ %d"
+  }
+ }
+}

@@ -1,0 +1,300 @@
+{
+ "strip": {
+  "title": {
+   "en": "The Tin",
+   "tr": "Teneke",
+   "th": "กระป๋องขนม"
+  },
+  "sub": {
+   "en": "Someone dropped by. A small tip wins their Favour.",
+   "tr": "Biri uğradı. Küçük bir bahşiş Hatırını kazanır.",
+   "th": "มีคนแวะมา ทิปเล็กๆ ช่วยให้ได้น้ำใจ"
+  },
+  "ignore": {
+   "en": "Not now",
+   "tr": "Şimdi değil",
+   "th": "ไว้ก่อน"
+  },
+  "perVisit": 1,
+  "tinOnlyFirstNight": true
+ },
+ "favour": {
+  "name": {
+   "en": "Favour",
+   "tr": "Hatır",
+   "th": "น้ำใจ"
+  },
+  "min": -5,
+  "max": 10,
+  "surplusPerCaps": 3,
+  "stages": [
+   {
+    "at": 2,
+    "id": "noticed",
+    "name": {
+     "en": "Noticed",
+     "tr": "Tanıdı",
+     "th": "จำหน้าได้"
+    }
+   },
+   {
+    "at": 5,
+    "id": "friend",
+    "name": {
+     "en": "Friend",
+     "tr": "Dost",
+     "th": "เพื่อน"
+    }
+   },
+   {
+    "at": 8,
+    "id": "regular",
+    "name": {
+     "en": "Regular",
+     "tr": "Müdavim",
+     "th": "ขาประจำ"
+    }
+   }
+  ],
+  "wrath": [
+   {
+    "at": -2,
+    "id": "annoyed",
+    "name": {
+     "en": "Annoyed",
+     "tr": "Bozuk",
+     "th": "หงุดหงิด"
+    }
+   },
+   {
+    "at": -5,
+    "id": "fedup",
+    "name": {
+     "en": "Fed up",
+     "tr": "Küs",
+     "th": "หมดความอดทน"
+    }
+   }
+  ]
+ },
+ "kinds": [
+  {
+   "id": "coins",
+   "icon": "ui/coin",
+   "name": {
+    "en": "Coins",
+    "tr": "Para",
+    "th": "เหรียญ"
+   }
+  },
+  {
+   "id": "caps",
+   "icon": "ui/wick",
+   "name": {
+    "en": "Caps",
+    "tr": "Kapak",
+    "th": "ฝาขวด"
+   }
+  },
+  {
+   "id": "spice",
+   "icon": "ui/heat",
+   "name": {
+    "en": "Spice",
+    "tr": "Acı",
+    "th": "เผ็ด"
+   }
+  },
+  {
+   "id": "trick",
+   "icon": "ui/trick_bag",
+   "name": {
+    "en": "Trick",
+    "tr": "Numara",
+    "th": "กลเม็ด"
+   }
+  },
+  {
+   "id": "charm",
+   "icon": "ui/seal",
+   "name": {
+    "en": "Charm",
+    "tr": "Tılsım",
+    "th": "ไอเท็ม"
+   }
+  },
+  {
+   "id": "curse",
+   "icon": "ui/curse_badge",
+   "name": {
+    "en": "Curse",
+    "tr": "Lanet",
+    "th": "คำสาป"
+   }
+  },
+  {
+   "id": "skip",
+   "icon": "trick/hourglass",
+   "name": {
+    "en": "Skipped spins",
+    "tr": "Atlanan çeviriş",
+    "th": "ข้ามตา"
+   }
+  }
+ ],
+ "sizes": [
+  {
+   "id": "small",
+   "favour": 1,
+   "name": {
+    "en": "Small tip",
+    "tr": "Küçük bahşiş",
+    "th": "ทิปเล็ก"
+   }
+  },
+  {
+   "id": "medium",
+   "favour": 3,
+   "name": {
+    "en": "Medium tip",
+    "tr": "Orta bahşiş",
+    "th": "ทิปกลาง"
+   }
+  },
+  {
+   "id": "large",
+   "favour": 6,
+   "name": {
+    "en": "Big tip",
+    "tr": "Büyük bahşiş",
+    "th": "ทิปใหญ่"
+   }
+  }
+ ],
+ "table": {
+  "coins": {
+   "small": 4,
+   "medium": 10,
+   "large": 25
+  },
+  "caps": {
+   "small": 1,
+   "medium": 2,
+   "large": 4
+  },
+  "spice": {
+   "small": 1,
+   "medium": 3,
+   "large": 5
+  },
+  "trick": {
+   "small": null,
+   "medium": 1,
+   "large": null
+  },
+  "charm": {
+   "small": null,
+   "medium": null,
+   "large": 1
+  },
+  "curse": {
+   "small": null,
+   "medium": 1,
+   "large": null
+  },
+  "skip": {
+   "small": 1,
+   "medium": 2,
+   "large": null
+  }
+ },
+ "label": {
+  "coins": {
+   "en": "{n}% of the debt, from your purse",
+   "tr": "Borcun %{n}'i, kesenden",
+   "th": "หนี้ {n}% จากถุงเงิน"
+  },
+  "caps": {
+   "en": "{n} Caps",
+   "tr": "{n} Kapak",
+   "th": "ฝาขวด {n}"
+  },
+  "spice": {
+   "en": "burn {n} Spice now",
+   "tr": "{n} Acı yak",
+   "th": "ลดเผ็ด {n} ระดับ"
+  },
+  "trick": {
+   "en": "any 1 trick",
+   "tr": "herhangi 1 numara",
+   "th": "กลเม็ดหนึ่งอัน"
+  },
+  "charm": {
+   "en": "any 1 charm (you also get its sale price)",
+   "tr": "herhangi 1 tılsım (satış fiyatını da alırsın)",
+   "th": "ไอเท็มหนึ่งชิ้น (ได้เงินขายด้วย)"
+  },
+  "curse": {
+   "en": "take this neighbour's own curse",
+   "tr": "bu komşunun kendi lanetini al",
+   "th": "รับคำสาปของเพื่อนบ้านคนนี้"
+  },
+  "skip": {
+   "en": "{n} fewer spins next round",
+   "tr": "sonraki elde {n} çeviriş eksik",
+   "th": "รอบหน้าตาน้อยลง {n}"
+  }
+ },
+ "taste": [
+  {
+   "id": "loved",
+   "mult": 2,
+   "icon": "ui/taste_loved",
+   "name": {
+    "en": "Loved",
+    "tr": "Bayılır",
+    "th": "ชอบมาก"
+   }
+  },
+  {
+   "id": "fine",
+   "mult": 1,
+   "icon": "ui/taste_fine",
+   "name": {
+    "en": "Fine",
+    "tr": "Olur",
+    "th": "ได้"
+   }
+  },
+  {
+   "id": "meh",
+   "mult": 0.5,
+   "icon": "ui/taste_meh",
+   "name": {
+    "en": "Meh",
+    "tr": "Eh",
+    "th": "เฉยๆ"
+   }
+  },
+  {
+   "id": "hated",
+   "mult": null,
+   "icon": "ui/taste_hated",
+   "name": {
+    "en": "Hates it",
+    "tr": "Nefret eder",
+    "th": "เกลียด"
+   }
+  }
+ ],
+ "insult": {
+  "favour": -1,
+  "tipLost": true,
+  "text": {
+   "en": "A hated tip costs 1 Favour and is lost.",
+   "tr": "Nefret edilen bahşiş 1 Hatır götürür ve kaybolur.",
+   "th": "ทิปที่เกลียดทำให้เสียน้ำใจ 1 และทิปหายไป"
+  }
+ },
+ "tasteShownAtFirstVisit": true
+}

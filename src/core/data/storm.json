@@ -1,0 +1,396 @@
+{
+ "storms": [
+  {
+   "id": "storm_1",
+   "n": 1,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Rain Clouds",
+    "tr": "Yağmur Bulutları",
+    "th": "เมฆฝน"
+   },
+   "text": {
+    "en": "The first terms card of each debt has 1 spin fewer.",
+    "tr": "Her borcun ilk şart kartında 1 çeviriş eksik.",
+    "th": "การ์ดเงื่อนไขใบแรกของทุกหนี้ตาน้อยลง 1"
+   },
+   "rules": [
+    {
+     "trigger": "onRoundStart",
+     "cond": {
+      "firstRound": true
+     },
+     "effects": [
+      {
+       "type": "spins",
+       "n": -1
+      }
+     ]
+    }
+   ],
+   "engine": {},
+   "requires": {
+    "clear": "c10"
+   },
+   "reqText": {
+    "en": "Clear The Sky Bar",
+    "tr": "Gökyüzü Barı yerini bitir",
+    "th": "ผ่านสกายบาร์"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_2",
+   "n": 2,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Wet Roads",
+    "tr": "Islak Yollar",
+    "th": "ถนนเปียก"
+   },
+   "text": {
+    "en": "The stall shows 1 charm fewer.",
+    "tr": "Tezgâh 1 tılsım eksik gösterir.",
+    "th": "แผงแสดงไอเท็มน้อยลง 1 ชิ้น"
+   },
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "shopOffers",
+       "v": 3
+      }
+     ]
+    }
+   ],
+   "engine": {},
+   "requires": {
+    "storm": 1
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 1",
+    "tr": "Fırtına 1'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 1"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_3",
+   "n": 3,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Cheaper Words",
+    "tr": "Ucuz Sözler",
+    "th": "คำพูดถูกลง"
+   },
+   "text": {
+    "en": "Every deal's curse hits one step harder.",
+    "tr": "Her anlaşmanın laneti bir kademe sert vurur.",
+    "th": "คำสาปของทุกข้อตกลงรุนแรงขึ้นหนึ่งขั้น"
+   },
+   "rules": [],
+   "engine": {
+    "dealHarsher": 1
+   },
+   "requires": {
+    "storm": 2
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 2",
+    "tr": "Fırtına 2'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 2"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_4",
+   "n": 4,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Flood Watch",
+    "tr": "Sel Uyarısı",
+    "th": "เฝ้าระวังน้ำท่วม"
+   },
+   "text": {
+    "en": "All debts are 10% larger.",
+    "tr": "Bütün borçlar %10 büyük.",
+    "th": "หนี้ทุกก้อนเพิ่มขึ้น 10%"
+   },
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "debtMul",
+       "v": 10
+      }
+     ]
+    }
+   ],
+   "engine": {},
+   "requires": {
+    "storm": 3
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 3",
+    "tr": "Fırtına 3'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 3"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_5",
+   "n": 5,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Wary Neighbours",
+    "tr": "Tedirgin Komşular",
+    "th": "เพื่อนบ้านระแวง"
+   },
+   "text": {
+    "en": "Every neighbour starts at Favour -1.",
+    "tr": "Her komşu Hatır -1 ile başlar.",
+    "th": "เพื่อนบ้านทุกคนเริ่มที่น้ำใจ -1"
+   },
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": -1,
+       "spirit": "all"
+      }
+     ]
+    }
+   ],
+   "engine": {},
+   "requires": {
+    "storm": 4
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 4",
+    "tr": "Fırtına 4'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 4"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_6",
+   "n": 6,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Heavy Rain",
+    "tr": "Sağanak",
+    "th": "ฝนหนัก"
+   },
+   "text": {
+    "en": "A Flare-up burns 25% of your purse.",
+    "tr": "Parlama kesenin %25'ini yakar.",
+    "th": "ไฟลุกเผาถุงเงิน 25%"
+   },
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "scorchBurn",
+       "v": 25
+      }
+     ]
+    }
+   ],
+   "engine": {},
+   "requires": {
+    "storm": 5
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 5",
+    "tr": "Fırtına 5'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 5"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_7",
+   "n": 7,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Power Cut",
+    "tr": "Elektrik Kesintisi",
+    "th": "ไฟดับ"
+   },
+   "text": {
+    "en": "The Tin is closed on the first night of each debt. Red Eyes start from debt 2.",
+    "tr": "Teneke her borcun ilk gecesinde kapalı. Kırmızı Göz 2. borçtan başlar.",
+    "th": "กระป๋องขนมปิดในคืนแรกของทุกหนี้ ดวงตาแดงมาตั้งแต่หนี้ที่ 2"
+   },
+   "rules": [],
+   "engine": {
+    "tinClosedFirstNight": true,
+    "redEyeFromDebt": 2
+   },
+   "requires": {
+    "storm": 6
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 6",
+    "tr": "Fırtına 6'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 6"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_8",
+   "n": 8,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Rising Water",
+    "tr": "Yükselen Su",
+    "th": "น้ำสูงขึ้น"
+   },
+   "text": {
+    "en": "All debts grow 15% more (25% in all).",
+    "tr": "Bütün borçlar %15 daha büyür (toplam %25).",
+    "th": "หนี้ทุกก้อนเพิ่มอีก 15% (รวมเป็น 25%)"
+   },
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "debtMul",
+       "v": 15
+      }
+     ]
+    }
+   ],
+   "engine": {},
+   "requires": {
+    "storm": 7
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 7",
+    "tr": "Fırtına 7'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 7"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_9",
+   "n": 9,
+   "icon": "ui/storm",
+   "name": {
+    "en": "Storm Front",
+    "tr": "Fırtına Cephesi",
+    "th": "แนวพายุ"
+   },
+   "text": {
+    "en": "The boss rule also applies to every third debt.",
+    "tr": "Patron kuralı her üçüncü borçta da geçerli.",
+    "th": "กฎบอสใช้กับหนี้ทุกก้อนที่สามด้วย"
+   },
+   "rules": [],
+   "engine": {
+    "bossEveryThird": true
+   },
+   "requires": {
+    "storm": 8
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 8",
+    "tr": "Fırtına 8'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 8"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  },
+  {
+   "id": "storm_10",
+   "n": 10,
+   "icon": "ui/storm",
+   "name": {
+    "en": "The Perfect Storm",
+    "tr": "Kusursuz Fırtına",
+    "th": "พายุสมบูรณ์แบบ"
+   },
+   "text": {
+    "en": "Start with 1 curse. Neighbours get fed up at Favour -1 and -4.",
+    "tr": "1 lanetle başla. Komşular Hatır -1 ve -4'te küser.",
+    "th": "เริ่มด้วยคำสาป 1 อย่าง เพื่อนบ้านหงุดหงิดที่น้ำใจ -1 และ -4"
+   },
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "startCurses",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "engine": {
+    "wrathAt": [
+     -1,
+     -4
+    ]
+   },
+   "requires": {
+    "storm": 9
+   },
+   "reqText": {
+    "en": "Clear a place on Storm 9",
+    "tr": "Fırtına 9'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 9"
+   },
+   "reward": {
+    "stash": 30,
+    "key": "silver"
+   }
+  }
+ ],
+ "unlock": {
+  "en": "Storm 1 opens after you clear Sky Bar. Storm N opens after any place is cleared on Storm N-1. Rules stack.",
+  "tr": "Fırtına 1, Gökyüzü Barı'nı bitirince açılır. Fırtına N, herhangi bir yer Fırtına N-1'de bitince açılır. Kurallar üst üste biner.",
+  "th": "พายุ 1 เปิดเมื่อผ่านสกายบาร์ พายุ N เปิดเมื่อผ่านด่านใดก็ได้ที่พายุ N-1 กฎซ้อนทับกัน"
+ }
+}

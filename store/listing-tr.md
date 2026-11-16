@@ -1,61 +1,60 @@
-# Mağaza listesi, Türkçe (Küçük İskele, v1.0-lite)
+# Mağaza listesi, Türkçe (Sıfırdan Zirveye)
 
-Durum: Türkiye mağazası dışarıda bırakıldı ve Türkçe liste, Türk avukatın yazılı cevabına kadar yayımlanmaz (docs/STORE.md bölüm 3). Bu dosya hazır bekler. Başlık "Küçük İskele"dir; "Şans" geçen ad kullanılmaz. Oyundaki çarkın adı "Hasan'ın Çarkı"dır.
+Durum: Türkiye mağazası dışarıda bırakıldı ve Türkçe liste, Türk avukatın yazılı cevabına kadar yayımlanmaz (docs/STORE.md bölüm 3). Bu dosya hazır bekler.
 
-"Notlar" başlığının üstündeki her şey mağaza metnidir ve `node scripts/check-services.mjs` ile yasaklı kelime tablosuna karşı denetlenir.
+"Notlar" başlığının üstündeki her şey mağaza metnidir. Yasaklı kelime kuralları geçerli: kumarhane ve gerçek para sözleri yok.
 
 ## Başlık (en çok 30)
 
-Küçük İskele
+Sıfırdan Zirveye
 
 ## Alt başlık, iOS (en çok 30)
 
-Çevir, mandalla, iskeleyi kur
+Bangkok'ta sokaktan zirveye
 
 ## Kısa açıklama, Play (en çok 80)
 
-Kâğıt çarkı çevir, en iyi sembolleri mandalla, dedenin iskelesini kurtar.
+Bangkok'ta beş parasız. Şeytanın neon makinesiyle sokaktan gökyüzü barına.
 
 ## Uzun açıklama (en çok 4000)
 
-Deni'nin elinde yıkık bir iskele, çatısı uçmuş bir kayıkhane ve dedesinden kalan kollu bir kâğıt çark var. Liman kooperatifi parasını istiyor. Kaptan Orhan sayıyor.
+Nim 19 yaşında ve beş parasız. Ailesinin yemek arabası, yeni bir sokak pazarının ilk gecesinde yandı. Arabayı yeniden kurmak için okumadığı bir kâğıdı imzaladı. Kâğıttaki öbür isim Bay Ruby: güneş gözlüklü, çiçekli gömlekli, şımarık kırmızı bir şeytan. Gece pazarının kenarında neon bir fal makinesi işletiyor.
 
-ÇEVİR, MANDALLA, YİNE ÇEVİR
-Kolu çevir. İki fener hoşuna mı gitti? Mandalı tak, bir sonraki çevirmede yerinde kalsınlar. Üçü bir sıraya gelince fener ipi dolar. Sular çekilmeden ipi doldur.
+ÇEVİR, ACILANDIR, BORCU ÖDE
+5x3 makineyi çevir. Yan yana ya da alt alta üç aynı sembolü yakala. Daha çok kazanmak için Acılandır, ama fazla İs bir Parlamaya yol açar ve keseni yakar. Geceler bitmeden her borcu öde.
 
-ÜÇ DAKİKALIK OYUNLAR
-Beş gelgit, her birinde altı çevirme. Çay demlenirken tek parmakla oyna.
+TAYLAND'I TIRMAN
+On yer, her seferinde bir basamak yukarı: sokak arabası, tren pazarı, Yaowarat, Khao San, ölü sezonda bir sahil kasabası, dumanlı Chiang Mai, Phuket'te bir plaj kulübü, nehir kıyısında bir butik, Sukhumvit'te bir rezidans açılışı ve en tepede gökyüzü barı. Her yer kuralları değiştirir.
+
+ŞEYTANLA ANLAŞMA YAP
+Her borçtan sonra Bay Ruby bir kâğıt uzatır: şimdi bir lütuf, bütün oyun boyu kalan bir lanet. İmzala ya da reddet, ellerin temiz kalsın. Dipnotu kendisi yazdı.
 
 DÜZENİNİ KENDİN KUR
-Kuralları büken 35 biblo topla. Torbaya sembol ekle, çıkar. Bütün yüzdeler ekranda.
+On ailede 124 tılsım, 20 tek kullanımlık numara ve 16 lanet topla. Gözdeni seç, Pip'in tezgâhında tezgâh işlerine bak, tılsımlarını soldan sağa diz. Bütün yüzdeler ekranda.
 
-BÜYÜYEN BİR LİMAN
-Tahta biriktir. Çatıyı onar, sobayı yak, lambayı as. Kayıkhane yavaş yavaş çayevine dönüşür.
+ALTI KİŞİ, BİR EV
+Nim, kardeşi Tao, Bua Teyze, Koç Daeng, Sok Amca ya da Pip ile oyna. Birikimini oyunlar arasında Nim'in evine harca; arabanın arkasındaki yataktan bir çatı katına doğru büyüsün. Üç son var, şeytanın da kendi sırrı var.
 
-HER GÜN YENİ BİR GELGİT
-Bütün liman için tek bir Günün Gelgiti. Altı taksitlik bir hikâye ve Orhan'ın konuşmak istemediği bir çekmece.
+HER GÜN YENİ BİR OYUN
+Herkes için tek bir Günlük Oyun ve korunacak bir seri.
 
-ELDE BASILMIŞ GİBİ
-İki renkli riso baskı, linol oyma çizgiler, dokusu hissedilen kâğıt.
-
-Adil oyun: oyunda yalnızca sanal para vardır. Gerçek parayla oyun ve ödül yoktur. Çevirme, mandal, oyun parası ya da oran satılmaz, reklamla da verilmez. Satın alınabilenler: reklam kaldırma ve belirli sayıda tahta içeren tek bir başlangıç paketi. İsteğe bağlı bir reklam, bir oyunun tahtalarını ikiye katlar. Yetişkinler içindir.
+Adil oyun: oyunda yalnızca sanal para vardır. Gerçek parayla oyun ve ödül yoktur. Çevirme, oyun parası ya da oran satılmaz, reklamla da verilmez. Satın alınabilenler: reklam kaldırma, bir başlangıç paketi ve isteğe bağlı görünümler; isteğe bağlı bir reklam bedava yenileme verir ya da bir oyunun Birikimini ikiye katlar. Yetişkinler içindir.
 
 ## Kategori
 
 Oyunlar > Gündelik (Play: Casual, varsa "Roguelike" etiketi).
 
-## Ekran görüntüsü altyazıları (altı kare, STORE.md bölüm 6)
+## Ekran görüntüsü altyazıları (altı kare)
 
-1. İkisini mandalla. Yine çevir.
-2. Fener ipini doldur
-3. 35 biblo. Bütün yüzdeler ekranda.
-4. Yıkıntıdan çayevine
-5. Aksi bir veznedar. Açmadığı bir çekmece.
-6. Bütün limana günde bir gelgit
+1. Bangkok'ta beş parasız. Bir şeytan.
+2. Acılandır. İse dikkat.
+3. On yer. Tek yol yukarı.
+4. Bay Ruby ile anlaşma
+5. 124 tılsım. Bütün yüzdeler ekranda.
+6. Sokak arabasından gökyüzü barına
 
 ## Notlar (mağaza metni değil)
 
-- STORE.md bölüm 4'ten farklar: "64 biblo" yerine "35", "On iki taksit" yerine "Altı" (ilk sürüm v1.0-lite); Pazar Kurulur satırı çıkarıldı; "ŞANSINI KENDİN KUR" başlığı "DÜZENİNİ KENDİN KUR" oldu, çünkü "şans" yasal terim "şans oyunları"na yakındır ve kelime oyun içi Türkçe yasak listesinde de var; görünüm paketleri lite'ta satılmadığı için Adil oyun paragrafı yalnızca reklam kaldırmayı ve başlangıç paketini sayar.
-- Alt başlık: STORE.md metni "Çevir, mandalla, iskeleyi kurtar" 32 karakter, sınır 30; "kurtar" yerine "kur" yazıldı.
-- Gönderimden önce her iddiayı bitmiş sürümle karşılaştır.
+- Eski liste başka bir oyunu anlatıyordu, bu dosya onun yerine geçer. Göndermeden önce her sayıyı (124 tılsım, 20 numara, 16 lanet, 10 yer, 6 karakter) bitmiş sürümle karşılaştır.
+- Başlıkta "şans" kelimesi geçmez ("Düzenini kendin kur"), çünkü kelime "şans oyunları" terimine yakındır.
 - Kategori: Casino seçilmez.

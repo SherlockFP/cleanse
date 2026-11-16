@@ -1,5 +1,6 @@
 // Deadline paid: the stamp, what was left over, early-pay rewards; or "saved at the last second" when a pact item burned.
-// data: { run, outcome: 'paid' | 'saved', info: { earlyRounds, wick, spins, interest, kept, next, name } } (every info field is optional). Handler: paidContinue().
+// data: { run, outcome: 'paid' | 'saved', info: { earlyRounds, wick, spins, interest, kept, next, name, rung } } (every info field is optional). Handler: paidContinue().
+// info.rung (1 to 3) is set on the 2nd, 4th and 6th debt paid: the stall grows an awning, a sign, a neon crest (the machine draws it).
 import { t, fmt } from '../i18n.js';
 import { h, btn, put, art } from './dom.js';
 
@@ -9,11 +10,12 @@ export function render(el, { run, outcome, info = {} }, ctx) {
   put(el,
     h('div', { class: 'head' }, h('h2', {}, saved ? t('ui.savedTitle') : t('ui.paidTitle')), art(saved ? 'devil/shock' : 'devil/grin', 'devil')),
     !saved && h('div', { class: 'stamp', 'aria-hidden': 'true' }, art('ui/seal', 'ico lg'), h('b', {}, t('ui.paidStamp'))),
-    saved && h('p', { class: 'sub' }, t('ui.savedBy', { name: info.name ?? '' })),
+    info.rung > 0 && h('div', { class: 'rung', 'data-anchor': 'rung' }, art('machine/awning_' + Math.min(3, info.rung), 'devil'), h('b', {}, t('ui.rungUp', { name: t('ui.rung.' + Math.min(3, info.rung)) }))),
+    saved && h('p', { class: 'sub' }, info.mercy ? t('tut.mercy') : t('ui.savedBy', { name: info.name ?? '' })),
     h('ul', { class: 'ticket' },
       info.earlyRounds > 0 && h('li', {}, t('ui.paidEarly', { n: info.earlyRounds, w: info.wick ?? info.earlyRounds * 2, s: info.spins ?? info.earlyRounds * 3 })),
       info.interest > 0 && h('li', {}, t('ui.paidInterest', { n: fmt(info.interest) })),
       info.kept > 0 && h('li', {}, t('ui.paidKept', { n: fmt(info.kept) })),
       info.next > 0 && h('li', {}, t('ui.paidNext', { n: fmt(info.next) }))),
-    ctx.foot(btn(saved ? t('ui.continue') : t('ui.toDeal'), () => ctx.call('paidContinue'), 'primary')));
+    ctx.foot(btn(saved ? t('ui.continue') : t(run?.phase === 'call' ? 'ui.toPhone' : 'ui.toDeal'), () => ctx.call('paidContinue'), 'primary')));
 }

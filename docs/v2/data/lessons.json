@@ -1,0 +1,535 @@
+{
+ "lessons": [
+  {
+   "id": 1,
+   "name": {
+    "en": "Spin and shapes",
+    "tr": "Çevir ve şekiller",
+    "th": "หมุนและรูปทรง"
+   },
+   "goal": {
+    "en": "Land a Line of 4.",
+    "tr": "4'lü bir Sıra yakala.",
+    "th": "ทำแถว 4 ให้ได้"
+   },
+   "reqText": {
+    "en": "Land a Line of 4.",
+    "tr": "4'lü bir Sıra yakala.",
+    "th": "ทำแถว 4 ให้ได้"
+   },
+   "why": {
+    "en": "Longer shapes pay more.",
+    "tr": "Uzun şekiller daha çok öder.",
+    "th": "ยิ่งรูปทรงยาวยิ่งได้เยอะ"
+   },
+   "reward": {
+    "stash": 10
+   },
+   "cond": {
+    "stat": "pattern:h4",
+    "gte": 1
+   },
+   "hand": "pattern:0",
+   "card": 3,
+   "firstTime": "shapes",
+   "firstTimeLine": {
+    "en": "Longer shapes pay more.",
+    "tr": "Uzun şekiller daha çok öder.",
+    "th": "ยิ่งรูปทรงยาวยิ่งได้เยอะ"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 2,
+   "name": {
+    "en": "Spice Up",
+    "tr": "Acılandır",
+    "th": "เพิ่มเผ็ด"
+   },
+   "goal": {
+    "en": "Spin once at Spice 3 or more.",
+    "tr": "Acı 3 veya üstündeyken bir kez çevir.",
+    "th": "หมุนหนึ่งครั้งตอนเผ็ดตั้งแต่ 3 ขึ้นไป"
+   },
+   "reqText": {
+    "en": "Spin once at Spice 3 or more.",
+    "tr": "Acı 3 veya üstündeyken bir kez çevir.",
+    "th": "หมุนหนึ่งครั้งตอนเผ็ดตั้งแต่ 3 ขึ้นไป"
+   },
+   "why": {
+    "en": "Spice adds pay. Soot is the price.",
+    "tr": "Acı ödemeyi artırır. Bedeli İs.",
+    "th": "เผ็ดทำให้ได้เงินเพิ่ม ราคาที่ต้องจ่ายคือเขม่า"
+   },
+   "reward": {
+    "stash": 10
+   },
+   "cond": {
+    "stat": "heat3Spins",
+    "gte": 1
+   },
+   "hand": "spiceUp",
+   "card": 6,
+   "firstTime": "spice",
+   "firstTimeLine": {
+    "en": "Spice adds pay. Soot is the price.",
+    "tr": "Acı ödemeyi artırır. Bedeli İs.",
+    "th": "เผ็ดทำให้ได้เงินเพิ่ม ราคาที่ต้องจ่ายคือเขม่า"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 3,
+   "name": {
+    "en": "Bank and interest",
+    "tr": "Yatır ve faiz",
+    "th": "ฝากและดอกเบี้ย"
+   },
+   "goal": {
+    "en": "Bank coins and earn interest once.",
+    "tr": "Para yatır ve bir kez faiz kazan.",
+    "th": "ฝากเหรียญและรับดอกเบี้ยหนึ่งครั้ง"
+   },
+   "reqText": {
+    "en": "Bank coins and earn interest once.",
+    "tr": "Para yatır ve bir kez faiz kazan.",
+    "th": "ฝากเหรียญและรับดอกเบี้ยหนึ่งครั้ง"
+   },
+   "why": {
+    "en": "Coins in the Kiosk are safe and earn interest.",
+    "tr": "Kiosk'taki para güvende ve faiz kazanır.",
+    "th": "เหรียญในตู้ฝากเงินปลอดภัยและได้ดอกเบี้ย"
+   },
+   "reward": {
+    "stash": 10
+   },
+   "cond": {
+    "stat": "interestTotal",
+    "gte": 1
+   },
+   "hand": "kiosk",
+   "card": 7,
+   "firstTime": "kiosk",
+   "firstTimeLine": {
+    "en": "Coins in the Kiosk are safe and earn interest.",
+    "tr": "Kiosk'taki para güvende ve faiz kazanır.",
+    "th": "เหรียญในตู้ฝากเงินปลอดภัยและได้ดอกเบี้ย"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 4,
+   "name": {
+    "en": "Charms and order",
+    "tr": "Tılsımlar ve sıra",
+    "th": "ไอเท็มและลำดับ"
+   },
+   "goal": {
+    "en": "Buy 3 charms.",
+    "tr": "3 tılsım satın al.",
+    "th": "ซื้อไอเท็ม 3 ชิ้น"
+   },
+   "reqText": {
+    "en": "Buy 3 charms.",
+    "tr": "3 tılsım satın al.",
+    "th": "ซื้อไอเท็ม 3 ชิ้น"
+   },
+   "why": {
+    "en": "Charms work from left to right.",
+    "tr": "Tılsımlar soldan sağa çalışır.",
+    "th": "ไอเท็มทำงานจากซ้ายไปขวา"
+   },
+   "reward": {
+    "stash": 15
+   },
+   "cond": {
+    "stat": "charmsBought",
+    "gte": 3
+   },
+   "hand": "stall.charm:0",
+   "card": 9,
+   "firstTime": "charms",
+   "firstTimeLine": {
+    "en": "Charms work from left to right.",
+    "tr": "Tılsımlar soldan sağa çalışır.",
+    "th": "ไอเท็มทำงานจากซ้ายไปขวา"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 5,
+   "name": {
+    "en": "Trick and pocket",
+    "tr": "Numara ve cep",
+    "th": "กลเม็ดและกระเป๋า"
+   },
+   "goal": {
+    "en": "Use a trick.",
+    "tr": "Bir numara kullan.",
+    "th": "ใช้กลเม็ดหนึ่งอัน"
+   },
+   "reqText": {
+    "en": "Use a trick.",
+    "tr": "Bir numara kullan.",
+    "th": "ใช้กลเม็ดหนึ่งอัน"
+   },
+   "why": {
+    "en": "A trick bends one spin, then it is gone.",
+    "tr": "Bir numara bir çevirişi büker, sonra biter.",
+    "th": "กลเม็ดบิดผลได้หนึ่งตาแล้วก็หมดไป"
+   },
+   "reward": {
+    "stash": 15
+   },
+   "cond": {
+    "stat": "tricksUsed",
+    "gte": 1
+   },
+   "hand": "pocket",
+   "card": 10,
+   "firstTime": "tricks",
+   "firstTimeLine": {
+    "en": "A trick bends one spin, then it is gone.",
+    "tr": "Bir numara bir çevirişi büker, sonra biter.",
+    "th": "กลเม็ดบิดผลได้หนึ่งตาแล้วก็หมดไป"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 6,
+   "name": {
+    "en": "Meet a neighbour",
+    "tr": "Komşuyla tanış",
+    "th": "ทำความรู้จักเพื่อนบ้าน"
+   },
+   "goal": {
+    "en": "Give your first tip at the Tin.",
+    "tr": "Teneke'de ilk bahşişini ver.",
+    "th": "ให้ทิปแรกที่กระป๋องขนม"
+   },
+   "reqText": {
+    "en": "Give your first tip at the Tin.",
+    "tr": "Teneke'de ilk bahşişini ver.",
+    "th": "ให้ทิปแรกที่กระป๋องขนม"
+   },
+   "why": {
+    "en": "A tip they like wins Favour.",
+    "tr": "Sevdikleri bir bahşiş Hatır kazandırır.",
+    "th": "ทิปที่เขาชอบทำให้ได้น้ำใจ"
+   },
+   "reward": {
+    "stash": 15
+   },
+   "cond": {
+    "stat": "offerings",
+    "gte": 1
+   },
+   "hand": "tin.offer.coins.small",
+   "card": 12,
+   "firstTime": "tin",
+   "firstTimeLine": {
+    "en": "A tip they like wins Favour.",
+    "tr": "Sevdikleri bir bahşiş Hatır kazandırır.",
+    "th": "ทิปที่เขาชอบทำให้ได้น้ำใจ"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 7,
+   "name": {
+    "en": "Sign or refuse",
+    "tr": "İmzala ya da reddet",
+    "th": "เซ็นหรือปฏิเสธ"
+   },
+   "goal": {
+    "en": "Sign one deal and refuse another in one run.",
+    "tr": "Bir oyunda bir anlaşma imzala, birini reddet.",
+    "th": "เซ็นข้อตกลงหนึ่งข้อและปฏิเสธอีกข้อในรอบเดียว"
+   },
+   "reqText": {
+    "en": "Sign one deal and refuse another in one run.",
+    "tr": "Bir oyunda bir anlaşma imzala, birini reddet.",
+    "th": "เซ็นข้อตกลงหนึ่งข้อและปฏิเสธอีกข้อในรอบเดียว"
+   },
+   "why": {
+    "en": "A deal pays now and costs later.",
+    "tr": "Anlaşma şimdi öder, sonra tahsil eder.",
+    "th": "ข้อตกลงให้ตอนนี้แต่เก็บทีหลัง"
+   },
+   "reward": {
+    "stash": 20
+   },
+   "cond": {
+    "stat": "signRefuse",
+    "gte": 1
+   },
+   "hand": "deal.sign",
+   "card": 13,
+   "firstTime": "deal",
+   "firstTimeLine": {
+    "en": "A deal pays now and costs later.",
+    "tr": "Anlaşma şimdi öder, sonra tahsil eder.",
+    "th": "ข้อตกลงให้ตอนนี้แต่เก็บทีหลัง"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 8,
+   "name": {
+    "en": "Make a friend",
+    "tr": "Dost edin",
+    "th": "ผูกมิตร"
+   },
+   "goal": {
+    "en": "Get one neighbour to Friend.",
+    "tr": "Bir komşuyu Dost seviyesine getir.",
+    "th": "ทำให้เพื่อนบ้านหนึ่งคนถึงขั้นเพื่อน"
+   },
+   "reqText": {
+    "en": "Get one neighbour to Friend.",
+    "tr": "Bir komşuyu Dost seviyesine getir.",
+    "th": "ทำให้เพื่อนบ้านหนึ่งคนถึงขั้นเพื่อน"
+   },
+   "why": {
+    "en": "Friends help for the rest of the run.",
+    "tr": "Dostlar oyunun geri kalanında yardım eder.",
+    "th": "เพื่อนช่วยเราไปตลอดรอบ"
+   },
+   "reward": {
+    "stash": 25
+   },
+   "cond": {
+    "stat": "stagesFriend",
+    "gte": 1
+   },
+   "hand": "call.card:0",
+   "card": 11,
+   "firstTime": "stage",
+   "firstTimeLine": {
+    "en": "Friends help for the rest of the run.",
+    "tr": "Dostlar oyunun geri kalanında yardım eder.",
+    "th": "เพื่อนช่วยเราไปตลอดรอบ"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 9,
+   "name": {
+    "en": "The bench",
+    "tr": "Tezgâh",
+    "th": "โต๊ะช่าง"
+   },
+   "goal": {
+    "en": "Do one bench job.",
+    "tr": "Bir tezgâh işi yaptır.",
+    "th": "ใช้งานโต๊ะช่างหนึ่งครั้ง"
+   },
+   "reqText": {
+    "en": "Do one bench job.",
+    "tr": "Bir tezgâh işi yaptır.",
+    "th": "ใช้งานโต๊ะช่างหนึ่งครั้ง"
+   },
+   "why": {
+    "en": "The bench changes one symbol for the whole run.",
+    "tr": "Tezgâh bir sembolü bütün oyun için değiştirir.",
+    "th": "โต๊ะช่างเปลี่ยนสัญลักษณ์หนึ่งชนิดไปตลอดรอบ"
+   },
+   "reward": {
+    "stash": 20
+   },
+   "cond": {
+    "stat": "benchJobs",
+    "gte": 1
+   },
+   "hand": "stall.tab:bench",
+   "card": 9,
+   "firstTime": "bench",
+   "firstTimeLine": {
+    "en": "The bench changes one symbol for the whole run.",
+    "tr": "Tezgâh bir sembolü bütün oyun için değiştirir.",
+    "th": "โต๊ะช่างเปลี่ยนสัญลักษณ์หนึ่งชนิดไปตลอดรอบ"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 10,
+   "name": {
+    "en": "Fall and rise",
+    "tr": "Düş ve kalk",
+    "th": "ล้มแล้วลุก"
+   },
+   "goal": {
+    "en": "Lose a run, then clear a debt in the next.",
+    "tr": "Bir oyunu kaybet, sonrakinde bir borç öde.",
+    "th": "แพ้หนึ่งรอบแล้วปลดหนี้หนึ่งก้อนในรอบถัดไป"
+   },
+   "reqText": {
+    "en": "Lose a run, then clear a debt in the next.",
+    "tr": "Bir oyunu kaybet, sonrakinde bir borç öde.",
+    "th": "แพ้หนึ่งรอบแล้วปลดหนี้หนึ่งก้อนในรอบถัดไป"
+   },
+   "why": {
+    "en": "A lost run still pays Stash. Go again.",
+    "tr": "Kaybedilen oyun da Birikim kazandırır. Tekrar dene.",
+    "th": "รอบที่แพ้ก็ยังได้เงินเก็บ ลุยใหม่"
+   },
+   "reward": {
+    "stash": 20
+   },
+   "cond": {
+    "stat": "fallRise",
+    "gte": 1
+   },
+   "hand": "lessons",
+   "card": 16,
+   "firstTime": null,
+   "firstTimeLine": {
+    "en": "A lost run still pays Stash. Go again.",
+    "tr": "Kaybedilen oyun da Birikim kazandırır. Tekrar dene.",
+    "th": "รอบที่แพ้ก็ยังได้เงินเก็บ ลุยใหม่"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 11,
+   "name": {
+    "en": "HONK",
+    "tr": "KORNA",
+    "th": "บีบแตร"
+   },
+   "goal": {
+    "en": "Fire an active charm with HONK.",
+    "tr": "Etkin bir tılsımı KORNA ile ateşle.",
+    "th": "ใช้ไอเท็มกดใช้ด้วยการบีบแตร"
+   },
+   "reqText": {
+    "en": "Fire an active charm with HONK.",
+    "tr": "Etkin bir tılsımı KORNA ile ateşle.",
+    "th": "ใช้ไอเท็มกดใช้ด้วยการบีบแตร"
+   },
+   "why": {
+    "en": "Active charms gain one charge at each round start.",
+    "tr": "Etkin tılsımlar her el başında bir şarj kazanır.",
+    "th": "ไอเท็มกดใช้ได้ชาร์จเพิ่มหนึ่งทุกต้นรอบ"
+   },
+   "reward": {
+    "stash": 20
+   },
+   "cond": {
+    "stat": "honks",
+    "gte": 1
+   },
+   "hand": "honk",
+   "card": 15,
+   "firstTime": "honk",
+   "firstTimeLine": {
+    "en": "Active charms gain one charge at each round start.",
+    "tr": "Etkin tılsımlar her el başında bir şarj kazanır.",
+    "th": "ไอเท็มกดใช้ได้ชาร์จเพิ่มหนึ่งทุกต้นรอบ"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 12,
+   "name": {
+    "en": "Blend",
+    "tr": "Karıştır",
+    "th": "ปั่นรวม"
+   },
+   "goal": {
+    "en": "Make a charm in the Blender.",
+    "tr": "Karıştırıcıda bir tılsım yap.",
+    "th": "ปั่นไอเท็มหนึ่งชิ้นในเครื่องปั่น"
+   },
+   "reqText": {
+    "en": "Make a charm in the Blender.",
+    "tr": "Karıştırıcıda bir tılsım yap.",
+    "th": "ปั่นไอเท็มหนึ่งชิ้นในเครื่องปั่น"
+   },
+   "why": {
+    "en": "Two charms go in. One better charm comes out.",
+    "tr": "İki tılsım girer, daha iyi bir tılsım çıkar.",
+    "th": "ใส่ไอเท็มสองชิ้น ได้ไอเท็มที่ดีกว่าออกมาหนึ่งชิ้น"
+   },
+   "reward": {
+    "stash": 20
+   },
+   "cond": {
+    "stat": "blends",
+    "gte": 1
+   },
+   "hand": "blender",
+   "card": 16,
+   "firstTime": "blender",
+   "firstTimeLine": {
+    "en": "Two charms go in. One better charm comes out.",
+    "tr": "İki tılsım girer, daha iyi bir tılsım çıkar.",
+    "th": "ใส่ไอเท็มสองชิ้น ได้ไอเท็มที่ดีกว่าออกมาหนึ่งชิ้น"
+   },
+   "icon": "ui/lesson"
+  },
+  {
+   "id": 13,
+   "name": {
+    "en": "Stare it down",
+    "tr": "Gözünü kırpma",
+    "th": "จ้องตอบ"
+   },
+   "goal": {
+    "en": "Survive a Red Eye with the Kiosk above half the debt.",
+    "tr": "Kiosk borcun yarısının üstündeyken bir Kırmızı Göz'ü atlat.",
+    "th": "รอดดวงตาแดงตอนที่ตู้ฝากเงินเกินครึ่งหนึ่งของหนี้"
+   },
+   "reqText": {
+    "en": "Survive a Red Eye with the Kiosk above half the debt.",
+    "tr": "Kiosk borcun yarısının üstündeyken bir Kırmızı Göz'ü atlat.",
+    "th": "รอดดวงตาแดงตอนที่ตู้ฝากเงินเกินครึ่งหนึ่งของหนี้"
+   },
+   "why": {
+    "en": "Coins in the Kiosk are safe from a Red Eye.",
+    "tr": "Kiosk'taki para Kırmızı Göz'den güvende.",
+    "th": "เหรียญในตู้ฝากเงินปลอดภัยจากดวงตาแดง"
+   },
+   "reward": {
+    "stash": 25
+   },
+   "cond": {
+    "stat": "staredDown",
+    "gte": 1
+   },
+   "hand": "lessons",
+   "card": 14,
+   "firstTime": "redeye",
+   "firstTimeLine": {
+    "en": "Coins in the Kiosk are safe from a Red Eye.",
+    "tr": "Kiosk'taki para Kırmızı Göz'den güvende.",
+    "th": "เหรียญในตู้ฝากเงินปลอดภัยจากดวงตาแดง"
+   },
+   "icon": "ui/lesson"
+  }
+ ],
+ "coach": {
+  "firstTimeFor": [
+   "redeye",
+   "honk",
+   "blender",
+   "white",
+   "wrath",
+   "himOrMe",
+   "curse",
+   "flareUp"
+  ],
+  "dismiss": "anyTap",
+  "perRun": 1
+ },
+ "keysNote": {
+  "en": "Lessons 3 and 6 also give a Brass Key and lesson 8 a Silver Key (granted by core/meta.js).",
+  "tr": "3. ve 6. dersler Pirinç Anahtar, 8. ders Gümüş Anahtar da verir (core/meta.js verir).",
+  "th": "บทเรียนที่ 3 และ 6 ให้กุญแจทองเหลือง บทเรียนที่ 8 ให้กุญแจเงิน (core/meta.js เป็นผู้ให้)"
+ },
+ "tutorialFixes": {
+  "bankStep": "bank half, not all: the purse must keep the price of the first charm and the first tip",
+  "nights": "c1 has 2 nights a debt: read nights from places.json, never hard-code 3",
+  "seed": "the tutorial seed must fix the Spice Up result and the Tin visitor"
+ }
+}

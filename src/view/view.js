@@ -9,8 +9,16 @@ import { getTex, getCaseRects, spriteSize, tickSprites, setSymbols, artVersion, 
 import { Spring } from './springs.js';
 import { CoinFlight } from './particles.js';
 import * as reel from './reel-view.js';
+import { LeverView } from './lever.js';
+import { OmenView } from './omen-view.js';
+import { SpiritView, DEVIL_POSE, moodOf } from './spirit-view.js';
+import { BlendView } from './blend-view.js';
+import { MapView, placeBg } from './map-view.js';
+import { RungView } from './rung-view.js';
+import { WinView } from './win-view.js';
 
-export { setGrid, playSpin, playPatterns, clearHighlights, setHeld, setTargets, pulseCells, skip, skipSpin, skipPatterns } from './reel-view.js';
+export { setGrid, playSpin, playPatterns, clearHighlights, setHeld, setTargets, pulseCells, skipSpin, skipPatterns } from './reel-view.js';
+export { moodOf };
 export { refreshArt };
 
 // ===== CORE ADAPTER =====================================================================================================================
@@ -20,14 +28,19 @@ const byId = (list = []) => new Map(list.map((x) => [x.id, x]));
 export const adapt = {
   symbols: (d) => d.symbols ?? d,                                          // symbols.json -> [{id, icon}]
   spin: (r) => ({ grid: r.grid, held: r.pinned ?? r.held ?? [] }),         // run.spin(run) result -> playSpin input
-  patterns: (score) => (score?.patterns ?? []).map((p) => ({ id: p.id, cells: p.cells, sym: p.sym })), // scoreSpin result
+  patterns: (score) => (score?.patterns ?? []).map((p) => ({ id: p.id, cells: p.cells, sym: p.sym, pay: p.pay ?? 0 })), // scoreSpin result (pay: that pattern's own payout, before Spice and the all-multipliers)
   pay: (score) => score?.total ?? 0,
+  // Red Eye chance in percent (run.redEyeChance when core sets it, else the SPEC 4.3 curve: none on debts 1 and 2, 1.5% + 0.5% per debt after 3, max 6%).
+  redEye: (run) => run.redEyeChance ?? redEyeBase((run.debtIdx ?? 0) + 1),
+  // run.spirits = {id: {fav, stage, wrath, met, silent}} -> the portraits to show, strongest favour first; Wrath always looks cross.
+  spirits: (run) => Object.entries(run.spirits ?? {}).filter(([, s]) => s && s.met && !s.silent).map(([id, s]) => ({ id, favour: s.fav ?? 0, mood: s.wrath ? 'cross' : moodOf(s.fav ?? 0) })).sort((a, b) => b.favour - a.favour),
   charm: (c, m) => ({ icon: m?.get(c.id)?.icon ?? `charm/${c.id}`, rarity: m?.get(c.id)?.rarity }),
   trick: (id, m) => (id ? { icon: m?.get(id)?.icon ?? `trick/${id}` } : null),
   curse: (id, m) => ({ icon: m?.get(id)?.icon ?? `curse/${id}` }),
   heat: (run, cfg) => ({ level: run.heat ?? 0, max: cfg?.heat?.max ?? 10 }),
   debt: (run) => ({ paid: (run.banked ?? 0), goal: run.debt ?? 0 }),
 };
+export const redEyeBase = (debt) => (debt < 3 ? 0 : Math.min(6, 1.5 + 0.5 * (debt - 3)));
 // One call to refresh every static element from a core `run`.
 export function syncRun(run, data) {
   const charms = byId(data.charms), tricks = byId(data.tricks), curses = byId(data.curses);
@@ -37,16 +50,20 @@ export function syncRun(run, data) {
   const h = adapt.heat(run, data.config); setHeat(h.level, h.max);
   const d = adapt.debt(run); setDebt(d.paid, d.goal);
   reel.setHeld(run.pinned ?? []);
+  omen.setGauge(adapt.redEye(run), { blessed: !!(run.flags?.redEyeBless ?? run.fx?.redEyeBless) });
+  spirits.set(adapt.spirits(run));
 }
 // ========================================================================================================================================
 
 let renderer, scene, camera, root, L, W = 1, H = 1, time = 0, built = -1;
 let bg, edges = [], bgKey = '', handlers = {}, flight, coinInst, devil, devilPose = 'devil/idle', devilTimer = 0;
+let leverV, omen, spirits, blend, mapV, rung, win, mode = 'run', place_ = 1;
 const PLANE = new THREE.PlaneGeometry(1, 1);
 const state = { paid: 0, goal: 0, shown: 0, heat: 0, heatMax: 10, shake: 0, shakeAmp: 0 };
 const bar = {}, meter = { segs: [] };
 
-export function setHandlers(h) { handlers = { ...handlers, ...h }; } // { coinLand(), stop(col) }
+// { coinLand(), stop(col), lever() (the lever or a swipe asked for a spin), leverTick(1..5), leverThud(), leverTease(), mapPin(index 0..9), redEyeEye(k) }
+export function setHandlers(h) { handlers = { ...handlers, ...h }; }
 // The DOM HUD (src/ui/hud.js) draws the goal bar, Heat, charms, pockets and buttons. With its two heights set here the canvas keeps only
 // the background, the devil, the machine and the coins, laid out between the bars; the canvas rows and bars stay hidden.
 let insets = null;
@@ -175,6 +192,52 @@ export function flyCoins(total, cellList = [7]) {
 export function bigWin(level = 1) { state.shakeAmp = 3 + level * 3; state.shake = 1; reel.pulseCells(L ? L.cells.map((_, i) => i) : []); devil && setDevil(level > 1 ? 'angry' : 'grin', 1.2); }
 export const shakeScreen = (amp = 6) => { state.shakeAmp = amp; state.shake = 1; };
 
+// ---------- v3: lever, Red Eye, HONK, spirits, Blender, map, rank-up, win sequence ----------
+// Lever: drag the knob (or swipe down on the reels) past 70% and handlers.lever() fires; release before and it only rattles. Disabled: greyed, still.
+export const setLever = (enabled) => leverV?.lever.setEnabled(enabled);
+export const getLever = () => leverV?.lever;
+// Red Eye gauge on the trim (pct in percent) and the event. level 0..3 is the punishment level, blessed the white-gold variant.
+export const setRedEye = (pct, opts) => omen?.setGauge(pct, opts);
+export const playRedEye = (opts = {}) => (omen ? omen.play({ ...opts, onEye: (k) => { handlers.redEyeEye?.(k); opts.onEye?.(k); } }) : Promise.resolve());
+// HONK pressed: rings leave the horn, the fired active charms (charm row slots) hop, a small shake.
+export function honk(slots = []) { omen?.honk(); slots.forEach(pulseCharm); shakeScreen(3); }
+// Spirit portraits: [{id, favour | mood}]. Ruby is the devil; reactSpirit routes him to setDevil.
+export const setSpirits = (list) => spirits?.set(list);
+export function reactSpirit(id, mood = 'glad', secs = 1.4) { if (id === 'brimble') { setDevil(DEVIL_POSE[mood] ?? 'idle', secs); return true; } return !!spirits?.react(id, mood, secs); }
+// Blender: { rect (px, y down; default the machine), a, b, out (sprite ids of the charm icons), fused }.
+export const playBlend = (o) => blend.play(o);
+export const skipBlend = () => blend?.skip();
+// Two scenes share the canvas. 'run' is the machine; 'map' hides it and shows bg/map with ten pins.
+export function setScene(name) {
+  mode = name === 'map' ? 'map' : 'run';
+  const run = mode === 'run';
+  reel.reelGroup().visible = run; devil.visible = run;
+  leverV.setVisible(run); omen.setVisible(run); spirits.setVisible(run); rung.setVisible(run); mapV.show(!run);
+  if (!run) {
+    win.hidePops();
+    for (const m of [bar.frame, bar.back, bar.fill, meter.icon, ...meter.segs]) m.visible = false;
+    for (const row of [charmRow, pocketRow, curseRow]) for (const s of row.s) s.bg.visible = s.tag.visible = s.icon.visible = false;
+  }
+}
+export const getScene = () => mode;
+// places: [{state: 'locked' | 'open' | 'current', medal?: 'bronze' | 'silver' | 'gold'}] in place order; current: index to highlight.
+export function setMap(places, current = -1) { mapV.set(places, current); }
+export const showMap = (on = true) => setScene(on ? 'map' : 'run');
+export const pinAt = (x, y) => mapV.pinAt(x, y);
+// The run's place (1..10) changes the background (c1 is the fair).
+export function setPlace(n) { if (n !== place_) { place_ = n; if (renderer) layout(); } }
+// Rank-up: `setRung(n)` is the static state (n = debts paid / 2, max 3); `rankUp(n)` is the beat for the rung just reached.
+export const setRung = (n) => rung?.set(n);
+export function rankUp(n) { rung.rankUp(n); shakeScreen(5); if (L) flyCoins(12, [2, 7, 12]); }
+// Win sequence: draws each pattern, pops its payout over the shape, counts the total up. score is a scoreSpin result ({patterns[{cells, pay}], total, flat}).
+// opts: { onStep({n,p,k,cell,last}), onPop({p, pay, cum}), colors }. Resolves when the total has arrived.
+export function playWin(score, opts = {}) {
+  const pats = adapt.patterns(score), total = adapt.pay(score) + (score?.flat ?? 0);
+  const done = win.start(pats, total, { colors: opts.colors, onPop: opts.onPop });
+  return Promise.all([reel.playPatterns(pats, { onStep: opts.onStep, colors: opts.colors }), done]).then(() => {});
+}
+export function skip() { reel.skip(); win?.finish(); omen?.skip(); }
+
 // ---------- scene ----------
 // opts: { symbols } is the symbols.json list. Call `await preloadArt()` from sprites.js first so real art is already in.
 export function initView(canvas, opts = {}) {
@@ -191,12 +254,34 @@ export function initView(canvas, opts = {}) {
   devil = plain('devil/idle', 25); // above the case art, which may run up behind the stage
   charmRow = new Row(8, { order: 12 }); pocketRow = new Row(5, { order: 12 }); curseRow = new Row(8, { frame: false, order: 12, gap: 0.08 });
   buildBars();
+  leverV = new LeverView(root, { spin: () => handlers.lever?.(), tick: (n) => handlers.leverTick?.(n), thud: () => handlers.leverThud?.(), tease: () => handlers.leverTease?.() });
+  omen = new OmenView(root); spirits = new SpiritView(root); blend = new BlendView(root); mapV = new MapView(root); rung = new RungView(root); win = new WinView(root);
+  leverV.setVisible(true); initPointer(canvas);
   coinInst = new THREE.InstancedMesh(PLANE, new THREE.MeshBasicMaterial({ map: getTex('ui/coin'), transparent: true, depthTest: false }), 48);
   coinInst.renderOrder = 60; coinInst.frustumCulled = false; coinInst.count = 0; root.add(coinInst);
   flight = new CoinFlight(48);
   reel.initReel(root);
   resize();
   return { renderer, scene, camera };
+}
+
+// The lever and the map take their own pointers; a press on the lever strip never reaches input.js (capture phase, stopped).
+function initPointer(canvas) {
+  const at = (e) => { const r = canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+  const lv = () => leverV.lever; let ptr = -1;
+  canvas.addEventListener('pointerdown', (e) => {
+    if (mode !== 'run') return;
+    const [x, y] = at(e), z = lv().hit(x, y);
+    if (z === 'strip') { e.stopImmediatePropagation(); canvas.setPointerCapture?.(e.pointerId); }
+    if (z && lv().down(x, y, z)) ptr = e.pointerId;
+  }, { capture: true });
+  canvas.addEventListener('pointermove', (e) => { if (e.pointerId === ptr) lv().move(...at(e)); });
+  const end = (e) => {
+    if (mode === 'map' && e.type === 'pointerup') { const i = mapV.pinAt(...at(e)); if (i >= 0) handlers.mapPin?.(i); return; }
+    if (e.pointerId !== ptr) return; ptr = -1;
+    if (e.type === 'pointerup') lv().up(); else lv().cancel();
+  };
+  canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', end);
 }
 
 export function resize() {
@@ -213,11 +298,13 @@ function layout() {
   built = artVersion();
   const col = L.column, narrow = col.w < W - 1;
   // background: cover the column; outside the column it stays plum
-  const id = 'bg/fair', [bw, bh] = spriteSize(id), tex = getTex(id);
+  const pb = placeBg(place_), id = pb.id, [bw, bh] = spriteSize(id), tex = getTex(id);
+  bg.material.color.set(pb.tint);
   const k = Math.max(col.w / bw, H / bh); tex.repeat?.set(col.w / (bw * k), H / (bh * k)); tex.offset?.set((1 - tex.repeat.x) / 2, (1 - tex.repeat.y) / 2);
   place(bg, col); bg.material.map = tex;
   edges.forEach((e, i) => { e.visible = narrow; place(e, { x: i ? col.x + col.w : col.x - 3, y: 0, w: 3, h: H }); });
   reel.layoutReel(L);
+  for (const v of [leverV, omen, spirits, blend, mapV, rung, win]) v.layout(L);
   charmRow.rect(L.charms); pocketRow.rect(L.pockets); curseRow.rect(L.curses);
   layBars();
 }
@@ -240,12 +327,14 @@ export function tick(dt) {
   tickSprites();
   if (built !== artVersion()) layout(); // real art arrived: sizes and the case windows may have changed
   reel.tickReel(dt);
-  if (!insets) { charmRow.update(dt); pocketRow.update(dt); curseRow.update(dt); }
+  const runScene = mode === 'run';
+  if (!insets && runScene) { charmRow.update(dt); pocketRow.update(dt); curseRow.update(dt); }
+  leverV.update(dt); omen.update(dt, shakeScreen); spirits.update(dt); blend.update(dt); mapV.update(dt); rung.update(dt); win.update(dt);
 
   // debt bar follows the paid amount once no coin is still flying
   if (!flight.n) state.shown += (state.paid - state.shown) * Math.min(1, dt * 7); else if (state.paid < state.shown) state.shown = state.paid;
   if (Math.abs(state.paid - state.shown) < 0.01) state.shown = state.paid;
-  if (!insets) drawBars(dt);
+  if (!insets && runScene) drawBars(dt);
 
   // devil: breathes, hops on a pose change, returns to idle
   if (devilTimer > 0 && (devilTimer -= dt) <= 0 && devilPose !== 'devil/idle') setDevil('idle');

@@ -1,0 +1,145 @@
+{
+ "cards": 3,
+ "cardsMax": 4,
+ "rubyAlwaysRed": true,
+ "waitingAlwaysGreen": true,
+ "redChanceOther": 25,
+ "localWeight": 2,
+ "friendWeight": 1.5,
+ "allRedAfter": [
+  "redEye",
+  "flareUp"
+ ],
+ "reroll": {
+  "baseCaps": 1,
+  "stepCaps": 1
+ },
+ "refuseCaps": 3,
+ "beads": {
+  "max": 3,
+  "lightsWhen": "hangUpAfterOpeningRedSheet",
+  "note": {
+   "en": "A bead lights only when you open a red card, read it and hang up anyway.",
+   "tr": "Boncuk yalnızca kırmızı bir kartı açıp okuyup yine de telefonu kapatınca yanar.",
+   "th": "ลูกปัดจะติดก็ต่อเมื่อเปิดการ์ดแดงอ่านแล้ววางสายอยู่ดี"
+  }
+ },
+ "hangUpFavour": {
+  "brimble": 0
+ },
+ "whiteCall": {
+  "beads": 3,
+  "caller": "waiting",
+  "cards": [
+   "white_symbols",
+   "white_patterns",
+   "white_stare"
+  ],
+  "resetBeads": true
+ },
+ "firstRun": {
+  "spirits": [
+   "brimble",
+   "beckon",
+   "gold"
+  ],
+  "noRedEye": true,
+  "noBlender": true,
+  "noHonk": true
+ },
+ "colours": {
+  "green": {
+   "name": {
+    "en": "Favour",
+    "tr": "İyilik",
+    "th": "น้ำใจ"
+   },
+   "icon": "ui/call_green",
+   "hint": {
+    "en": "A neighbour's favour. Safe.",
+    "tr": "Bir komşunun iyiliği. Güvenli.",
+    "th": "น้ำใจจากเพื่อนบ้าน ปลอดภัย"
+   }
+  },
+  "red": {
+   "name": {
+    "en": "Deal",
+    "tr": "Anlaşma",
+    "th": "ดีล"
+   },
+   "icon": "ui/phone",
+   "hint": {
+    "en": "A strong deal with a price. Read what you carry.",
+    "tr": "Bedeli olan güçlü bir anlaşma. Taşıyacağını oku.",
+    "th": "ดีลแรงที่มีราคา อ่านให้ดีว่าต้องแบกอะไร"
+   }
+  },
+  "white": {
+   "name": {
+    "en": "Clean slate",
+    "tr": "Temiz sayfa",
+    "th": "เริ่มใหม่"
+   },
+   "icon": "ui/white_call",
+   "hint": {
+    "en": "A permanent gain for this run. No price.",
+    "tr": "Bu oyun boyunca kalıcı kazanç. Bedelsiz.",
+    "th": "ของดีถาวรตลอดเกมนี้ ไม่มีราคา"
+   }
+  }
+ },
+ "labels": {
+  "hangUp": {
+   "en": "Hang up",
+   "tr": "Kapat",
+   "th": "วางสาย"
+  },
+  "reroll": {
+   "en": "Reroll",
+   "tr": "Yenile",
+   "th": "สุ่มใหม่"
+  },
+  "pick": {
+   "en": "Pick",
+   "tr": "Seç",
+   "th": "เลือก"
+  },
+  "back": {
+   "en": "Back to the call",
+   "tr": "Aramaya dön",
+   "th": "กลับไปที่สาย"
+  },
+  "title": {
+   "en": "The phone is ringing",
+   "tr": "Telefon çalıyor",
+   "th": "โทรศัพท์ดังแล้ว"
+  },
+  "whiteTitle": {
+   "en": "A white call",
+   "tr": "Beyaz bir arama",
+   "th": "สายสีขาว"
+  },
+  "beads": {
+   "en": "Hang-ups",
+   "tr": "Kapatmalar",
+   "th": "วางสาย"
+  }
+ },
+ "rank_up": {
+  "on": [
+   2,
+   4,
+   6
+  ],
+  "overlay": [
+   "machine/awning_1",
+   "machine/awning_2",
+   "machine/awning_3"
+  ],
+  "label": {
+   "en": "Level {n}",
+   "tr": "Seviye {n}",
+   "th": "ระดับ {n}"
+  }
+ }
+}

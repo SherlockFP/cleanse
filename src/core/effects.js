@@ -1,18 +1,20 @@
 // The effect language (docs/v2/EFFECTS.md). The only interpreter of rules.
-import { SYM, SCORING, RARITIES, CHARM, CHARMS, CURSE, CURSES, CHAR, CONTRACT, STAKE, TRICKS, CONFIG } from './data.js';
+import { SYM, SYMBOLS, SCORING, RARITIES, CHARM, CHARMS, CURSE, CURSES, CHAR, CONTRACT, STAKE, TRICKS, CONFIG, SPIRITS, SPIRIT, POSTCARD, STORMS, familyOf, FAMILIES } from './data.js';
 import { stream } from './streams.js';
 import { findPatterns, PATTERN } from './patterns.js';
+import { addFavour } from './spirits.js';
 
-export const TRIGGERS = ['passive', 'now', 'onRunStart', 'onDebtStart', 'onRoundStart', 'onSpinStart', 'onSymbolLand', 'onPattern', 'onSpinEnd', 'onDud', 'onScorch', 'onStoke', 'onRoundEnd', 'onInterest', 'onBank', 'onDebtPaid', 'onBuy', 'onSell', 'onSellSelf', 'onReroll', 'onTrick', 'onDeal', 'onRefuse', 'onCurse'];
-export const COND_KEYS = ['sym', 'group', 'zone', 'pattern', 'minCells', 'hasWisp', 'favoured', 'minPatterns', 'distinctMin', 'heatMin', 'heatMax', 'cursesMin', 'spinIs', 'countMin', 'roundsLeftMin', 'purseMaxPct', 'slotIs', 'firstRound', 'every', 'chance', 'limit'];
-export const EFFECT_TYPES = ['coins', 'symValue', 'symMult', 'patMult', 'allMult', 'luck', 'spins', 'interest', 'wick', 'heat', 'weight', 'transform', 'place', 'retrigger', 'trick', 'stack', 'slot', 'gainCharm', 'gainCurse', 'removeSymbol', 'flag'];
-export const FLAGS = ['heatStep', 'heatNoCool', 'heatFloor', 'startHeat', 'noStoke', 'scorchNeeds', 'scorchBurn', 'ashBase', 'deadCentre', 'ashIsFav', 'seeNextFav', 'pickFirstFav', 'twoFavs', 'favPerRound', 'pickFav', 'hideFav', 'fiveNeedsFour', 'maskWild', 'smallHalf', 'smallDead', 'bigX', 'firstSpinDead', 'lastTwice', 'noInterest', 'noInterestRound', 'interestHalf', 'interestCapX', 'bankX', 'shopDiscount', 'shopMarkup', 'shopOffers', 'shopExtra', 'rerollDouble', 'benchDiscount', 'sellFull', 'trickPockets', 'firstTrickFree', 'dealOffers', 'mustSign', 'refuseWick', 'cancelCurse', 'saveDeadline', 'extraLife', 'roundsAdd', 'rounds', 'debtCut', 'debtMul', 'spinsRound', 'spinsLess', 'startCurses', 'ghostHire', 'copyRight', 'freeRedraw', 'freeReroll'];
-export const PER_KEYS = ['curses', 'heat', 'emptySlots', 'tricks', 'deals', 'stack', 'removed', 'purse100', 'rightOf', 'leftOf'];
+export const TRIGGERS = ['passive', 'now', 'onRunStart', 'onDebtStart', 'onRoundStart', 'onSpinStart', 'onSymbolLand', 'onPattern', 'onSpinEnd', 'onDud', 'onScorch', 'onStoke', 'onRoundEnd', 'onInterest', 'onBank', 'onDebtPaid', 'onBuy', 'onSell', 'onSellSelf', 'onReroll', 'onTrick', 'onDeal', 'onRefuse', 'onCurse', 'onCall', 'onPick', 'onHangUp', 'onVisit', 'onOffering', 'onStage', 'onWrath', 'onRedEye', 'onActivate', 'onFuse'];
+export const COND_KEYS = ['sym', 'group', 'zone', 'pattern', 'minCells', 'hasWisp', 'favoured', 'favour', 'favourMax', 'beadsMin', 'redEyesMin', 'debtMin', 'minPatterns', 'distinctMin', 'heatMin', 'heatMax', 'cursesMin', 'spinIs', 'countMin', 'roundsLeftMin', 'purseMaxPct', 'slotIs', 'firstRound', 'every', 'chance', 'limit'];
+export const EFFECT_TYPES = ['coins', 'symValue', 'symMult', 'patMult', 'allMult', 'luck', 'spins', 'interest', 'wick', 'heat', 'weight', 'transform', 'place', 'retrigger', 'trick', 'stack', 'slot', 'gainCharm', 'gainCurse', 'removeSymbol', 'flag', 'favour', 'charge', 'liftCurse', 'loseCharm'];
+export const FLAGS = ['heatStep', 'heatNoCool', 'heatFloor', 'startHeat', 'noStoke', 'scorchNeeds', 'scorchBurn', 'ashBase', 'deadCentre', 'ashIsFav', 'seeNextFav', 'pickFirstFav', 'twoFavs', 'favPerRound', 'pickFav', 'hideFav', 'fiveNeedsFour', 'maskWild', 'smallHalf', 'smallDead', 'bigX', 'firstSpinDead', 'lastTwice', 'noInterest', 'noInterestRound', 'interestHalf', 'interestCapX', 'bankX', 'shopDiscount', 'shopMarkup', 'shopOffers', 'shopExtra', 'rerollDouble', 'benchDiscount', 'sellFull', 'trickPockets', 'firstTrickFree', 'dealOffers', 'mustSign', 'refuseWick', 'cancelCurse', 'saveDeadline', 'extraLife', 'roundsAdd', 'rounds', 'debtCut', 'debtMul', 'spinsRound', 'spinsLess', 'startCurses', 'ghostHire', 'copyRight', 'freeRedraw', 'freeReroll', 'noPawn', 'heatMax', 'carrySpins', 'trickFree', 'noShopN', 'noBeads', 'noRelic', 'redEyeRate', 'redEyeBless', 'redEyeSoft', 'tinOfferings', 'callCards', 'callRerollFree', 'patronAt', 'noRedEye'];
+export const PER_KEYS = ['curses', 'heat', 'emptySlots', 'tricks', 'deals', 'stack', 'removed', 'purse100', 'rightOf', 'leftOf', 'redEyes', 'beads', 'fused'];
 export const SYM_TARGETS = ['all', 'low', 'mid', 'high', 'favoured', 'that', 'random'];
 
 const MOD_TYPES = new Set(['luck', 'interest', 'symValue', 'symMult', 'patMult', 'allMult', 'weight', 'flag', 'slot']);
-const SUM_FLAGS = new Set(['shopDiscount', 'shopMarkup', 'trickPockets', 'spinsRound', 'roundsAdd', 'debtMul', 'spinsLess', 'startCurses', 'benchDiscount', 'refuseWick', 'freeRedraw', 'freeReroll']);
-const MAX_FLAGS = new Set(['scorchNeeds', 'heatFloor', 'dealOffers', 'interestCapX']);
+const SUM_FLAGS = new Set(['shopDiscount', 'shopMarkup', 'trickPockets', 'spinsRound', 'roundsAdd', 'debtMul', 'spinsLess', 'startCurses', 'benchDiscount', 'refuseWick', 'freeRedraw', 'freeReroll', 'noShopN', 'redEyeRate', 'redEyeSoft', 'tinOfferings', 'callCards']);
+const MAX_FLAGS = new Set(['scorchNeeds', 'heatFloor', 'dealOffers', 'interestCapX', 'carrySpins']);
+const MIN_FLAGS = new Set(['heatMax', 'patronAt']);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 let EXPLAIN = true;
@@ -46,6 +48,27 @@ export function rulesAt(run, i) {
 const srcRef = (s) => ({ kind: s.kind, id: s.id });
 const muted = (run) => run.temp.some((t) => t.rec.flag === 'muteCurses');
 
+// ---------- extra rule sources (v3): spirits, postcards, storm ----------
+
+// A spirit in Wrath runs its wrath rules (cumulative by level) and none of its blessings; otherwise every stage reached.
+export function extraSources(run) {
+  const out = [];
+  for (const d of SPIRITS) {
+    const sp = run.spirits?.[d.id];
+    if (!sp || sp.silent) continue;
+    const rules = [];
+    if (sp.wrath > 0) d.wrath.forEach((w, i) => { if (i < sp.wrath) rules.push(...w.rules); });
+    else d.stages.forEach((st) => { if (st.at <= sp.stage) rules.push(...st.rules); });
+    out.push({ kind: 'spirit', id: d.id, rules });
+  }
+  for (const id of run.postcards || []) {
+    const p = POSTCARD[id];
+    if (p) out.push({ kind: 'postcard', id, rules: p.rules || [...(p.gain || []), ...(p.cost || [])] });
+  }
+  for (const st of STORMS) if (st.n <= (run.storm || 0)) out.push({ kind: 'storm', id: 'storm' + st.n, rules: st.rules || [] });
+  return out;
+}
+
 // ---------- snapshot ----------
 
 function setFlag(mods, name, v) {
@@ -53,6 +76,7 @@ function setFlag(mods, name, v) {
   const f = mods.flags;
   if (SUM_FLAGS.has(name)) f[name] = (f[name] || 0) + v;
   else if (MAX_FLAGS.has(name)) f[name] = Math.max(f[name] || 0, v);
+  else if (MIN_FLAGS.has(name)) f[name] = f[name] === undefined ? v : Math.min(f[name], v);
   else f[name] = v;
 }
 
@@ -77,6 +101,7 @@ function perCount(run, per, ctx, src) {
     const fam = per.slice(7);
     return run.charms.filter((c) => CHARM[c.id].tags.includes(fam)).length;
   }
+  if (per.startsWith('favour:')) return Math.max(0, run.spirits?.[per.slice(7)]?.fav || 0);
   if (per.startsWith('sym:')) {
     const g = ctx.grid || run.grid;
     return g ? g.filter((s) => s === per.slice(4)).length : 0;
@@ -93,6 +118,9 @@ function perCount(run, per, ctx, src) {
       const i = src?.inst ? run.charms.indexOf(src.inst) : -1;
       return i < 0 ? 0 : per === 'rightOf' ? run.charms.length - 1 - i : i;
     }
+    case 'redEyes': return run.redEyes || 0;
+    case 'beads': return run.beads || 0;
+    case 'fused': return run.charms.filter((c) => CHARM[c.id].rarity === 'fused').length;
     case 'purse100': return Math.min(10, Math.floor(run.purse / (100 * coinScaleOf(run))));
   }
   return 1;
@@ -116,6 +144,7 @@ export function snapshot(run, grid = null, favs = run.favs) {
   const up = CONFIG.symValueUpAtDebt.filter((d) => run.debtIdx >= d).length;
   if (up) addRec(mods, { type: 'symValue', n: up, sym: 'all' }, contract);
   rules(CHAR[run.char].rules, { kind: 'char', id: run.char });
+  for (const x of extraSources(run)) rules(x.rules, x);
   if (!muted(run)) for (const id of run.curses) rules(CURSE[id].rules, { kind: 'curse', id });
   if (run.terms) flat(STAKE[run.terms].effects, { kind: 'terms', id: run.terms });
   for (const sym in run.bench) {
@@ -134,7 +163,7 @@ export function snapshot(run, grid = null, favs = run.favs) {
 export const flag = (mods, name) => mods.flags[name];
 export const luckOf = (run, mods) => clamp(CONFIG.luck.base + mods.luck + (run.pity || 0), 0, CONFIG.luck.cap);
 export const slotsOf = (run, mods = snapshot(run)) => clamp(run.slots + mods.slotMod, 1, CONFIG.start.charmSlotsMax);
-export const pocketsOf = (run, mods = snapshot(run)) => run.pockets + (mods.flags.trickPockets || 0);
+export const pocketsOf = (run, mods = snapshot(run)) => Math.max(1, run.pockets + (mods.flags.trickPockets || 0));
 
 const symMatch = (s, id, favs) =>
   s === id || (s === 'all' && SYM[id].kind === 'score') || ((s === 'low' || s === 'mid' || s === 'high') && SYM[id].group === s) || (s === 'favoured' && favs.includes(id));
@@ -201,6 +230,14 @@ export function checkCond(run, rule, ctx = {}, src = null, ri = 0, commit = fals
         break;
       }
       case 'firstRound': if (run.round !== 0) return false; break;
+      case 'favour': case 'favourMax': {
+        const id = v[0] === 'visitor' ? ctx.spirit ?? run.tin?.spirit : v[0], f = run.spirits?.[id]?.fav ?? 0;
+        if (k === 'favour' ? f < v[1] : f > v[1]) return false;
+        break;
+      }
+      case 'beadsMin': if ((run.beads || 0) < v) return false; break;
+      case 'redEyesMin': if ((run.redEyes || 0) < v) return false; break;
+      case 'debtMin': if (run.debtIdx + 1 < v) return false; break;
     }
   }
   if (!commit) return true;
@@ -224,9 +261,13 @@ function pickScoring(run) {
 }
 
 export function setHeat(run, v, mods = null) {
-  const floor = (mods || snapshot(run)).flags.heatFloor || 0;
-  run.heat = clamp(v, floor, CONFIG.heat.max);
+  const f = (mods || snapshot(run)).flags;
+  run.heat = clamp(v, f.heatFloor || 0, Math.max(f.heatFloor || 0, f.heatMax ?? CONFIG.heat.max));
 }
+
+export const chargeCap = (run, a) => a.need + (run.postcards?.includes('full_charge') ? 1 : 0); // Postcard Full Charge: one spare charge
+export const chargeOf = (inst) => inst.charge ?? CHARM[inst.id].active?.need ?? 0;
+export const isRelic = (inst) => !!inst.relic;
 
 export function addTrick(run, id = null) {
   if (run.tricks.length >= pocketsOf(run)) return false;
@@ -237,7 +278,7 @@ export function addTrick(run, id = null) {
 
 export function addCharm(run, id) {
   if (run.charms.some((c) => c.id === id)) return false;
-  run.charms.push({ id, stack: 0, counters: {} });
+  run.charms.push({ id, stack: 0, counters: {}, ...(CHARM[id].active ? { charge: chargeCap(run, CHARM[id].active) } : {}) });
   if (!run.seen.includes(id)) run.seen.push(id);
   const fam = Math.max(...CHARM[id].tags.map((t) => run.charms.filter((c) => CHARM[c.id].tags.includes(t)).length));
   run.stats.familyFull = Math.max(run.stats.familyFull || 0, fam);
@@ -249,10 +290,11 @@ export function burnCharm(run, i) {
 
 // Gives a random pool charm of the rarity, stepping down a rarity when the pool has none (rare and
 // legendary charms are all locked behind achievements at the start).
-export function gainCharm(run, rarity) {
+export function gainCharm(run, rarity, family = null) {
   const owned = new Set(run.charms.map((c) => c.id).concat(run.waiting));
+  if (family === 'random') family = stream(run, 'fx').pick(FAMILIES);
   for (let r = RARITIES.indexOf(rarity); r >= 0; r--) {
-    const list = CHARMS.filter((c) => c.rarity === RARITIES[r] && run.pool.includes(c.id) && !owned.has(c.id));
+    const list = CHARMS.filter((c) => c.rarity === RARITIES[r] && run.pool.includes(c.id) && !owned.has(c.id) && (!family || familyOf(c.id) === family));
     if (!list.length) continue;
     const id = stream(run, 'fx').pick(list).id;
     if (run.charms.length < slotsOf(run)) addCharm(run, id);
@@ -274,6 +316,12 @@ export function addCurse(run, id = 'random') {
   if (ctx.cancel) return null;
   run.curses.push(id);
   return id;
+}
+// A pending "lift a curse" (liftCurse effect): the player picks which one.
+export function liftCurse(run, id) {
+  if (!(run.pendingLift > 0) || !removeCurse(run, id)) return false;
+  run.pendingLift--;
+  return true;
 }
 export function removeCurse(run, id) {
   const i = run.curses.indexOf(id);
@@ -311,10 +359,31 @@ export function applyEffect(run, src, e, ctx = {}) {
     case 'wick': run.wick += k; break;
     case 'heat': setHeat(run, run.heat + k); break;
     case 'spins': run.spinsLeft = k < 0 ? Math.max(1, run.spinsLeft + k) : run.spinsLeft + k; break;
-    case 'trick': for (let i = 0; i < k; i++) addTrick(run); break;
+    case 'trick': for (let i = 0; i < k; i++) addTrick(run, e.id || null); break;
     case 'stack': if (src.inst) src.inst.stack += k; break;
     case 'slot': run.slots = clamp(run.slots + k, 1, CONFIG.start.charmSlotsMax); break;
-    case 'gainCharm': gainCharm(run, e.rarity); break;
+    case 'gainCharm': {
+      const fam = e.family === 'random' ? stream(run, 'fx').pick(FAMILIES) : e.family;
+      for (let i = 0; i < k; i++) gainCharm(run, e.rarity, fam);
+      break;
+    }
+    case 'favour': {
+      const who = ctx.spirit ?? run.tin?.spirit;
+      const ids = e.spirit === 'all' ? SPIRITS.map((d) => d.id) : [e.spirit === 'visitor' ? who : e.spirit === 'rival' ? SPIRIT[who]?.rival : e.spirit];
+      for (const id of ids) if (id && SPIRIT[id]) addFavour(run, id, k, 'effect');
+      break;
+    }
+    case 'charge': for (const inst of run.charms) { const a = CHARM[inst.id].active; if (a) inst.charge = Math.min(chargeCap(run, a), chargeOf(inst) + k); } break;
+    case 'liftCurse': run.pendingLift = (run.pendingLift || 0) + k; break;
+    case 'loseCharm': {
+      const held = run.charms.filter((c) => !isRelic(c));
+      if (!held.length) return null;
+      const cost = (c) => (CHARM[c.id].price.coins ?? 0) + (CHARM[c.id].price.wick ?? 0) * 10;
+      const gone = e.pick === 'random' ? stream(run, 'fx').pick(held) : held.reduce((a, b) => (cost(b) > cost(a) ? b : a));
+      run.charms.splice(run.charms.indexOf(gone), 1);
+      ev.charm = gone.id;
+      break;
+    }
     case 'gainCurse': for (let i = 0; i < k; i++) addCurse(run, 'random'); break;
     case 'removeSymbol': run.pendingRemove += k; break;
     case 'transform':
@@ -337,7 +406,7 @@ export function applyEffect(run, src, e, ctx = {}) {
 // Runs every rule of every held source for one trigger. Mutates run, returns UI events.
 export function fire(run, trigger, ctx = {}) {
   const events = [];
-  const list = [{ kind: 'char', id: run.char, rules: CHAR[run.char].rules }];
+  const list = [{ kind: 'char', id: run.char, rules: CHAR[run.char].rules }, ...extraSources(run)];
   if (!muted(run)) for (const id of run.curses) list.push({ kind: 'curse', id, rules: CURSE[id].rules });
   run.charms.forEach((inst, i) => list.push({ kind: 'charm', id: inst.id, inst, rules: rulesAt(run, i) }));
   for (const src of list) {
@@ -350,6 +419,24 @@ export function fire(run, trigger, ctx = {}) {
     });
   }
   if (ctx.sc) ctx.sc.steps.push(...events);
+  return events;
+}
+
+// HONK: every full active charm fires its onActivate rules, left to right, and drops to 0 charges.
+// `place` effects wait in run.honkEdits for the next spin.
+export function activate(run) {
+  const events = [];
+  const ctx = { edits: (run.honkEdits ??= []) };
+  for (const inst of [...run.charms]) {
+    const a = CHARM[inst.id].active;
+    if (!a || chargeOf(inst) < a.need) continue;
+    inst.charge = 0;
+    const src = { kind: 'charm', id: inst.id, inst };
+    CHARM[inst.id].rules.forEach((rule, ri) => {
+      if (rule.trigger !== 'onActivate' || !checkCond(run, rule, ctx, src, ri, true)) return;
+      for (const e of rule.effects) { const ev = applyEffect(run, src, e, ctx); if (ev) events.push({ ...ev, trigger: 'onActivate', charm: inst.id }); }
+    });
+  }
   return events;
 }
 
@@ -492,4 +579,21 @@ export function scoreSpin(run, grid, favs, ctx = {}) {
   }
   const top3 = [...sc.contrib.values()].sort((a, b) => b.gain - a.gain).slice(0, 3).map((c) => ({ ...c, gain: Math.round(c.gain) }));
   return out({ patterns: rows, sum, heatMult, allMult, total, found: found.length, top3 });
+}
+
+// ---------- rule validation: the only names the engine knows (EFFECTS.md + SPEC 3.8) ----------
+
+const SYMS = new Set([...SYM_TARGETS, ...SYMBOLS.map((x) => x.id)]);
+const PER_PREFIX = ['family:', 'sym:', 'favour:'];
+export function validateRule(rule) {
+  const bad = [];
+  if (!TRIGGERS.includes(rule.trigger)) bad.push('trigger ' + rule.trigger);
+  for (const k in rule.cond || {}) if (!COND_KEYS.includes(k)) bad.push('cond ' + k);
+  for (const e of rule.effects || []) {
+    if (!EFFECT_TYPES.includes(e.type)) bad.push('effect ' + e.type);
+    if (e.type === 'flag' && !FLAGS.includes(e.flag)) bad.push('flag ' + e.flag);
+    if (e.per && !PER_KEYS.includes(e.per) && !PER_PREFIX.some((p) => e.per.startsWith(p))) bad.push('per ' + e.per);
+    if (e.sym && !SYMS.has(e.sym) && e.type !== 'transform') bad.push('sym ' + e.sym);
+  }
+  return bad;
 }

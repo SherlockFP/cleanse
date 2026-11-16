@@ -1,0 +1,1942 @@
+{
+ "charms": [
+  {
+   "id": "bike_horn",
+   "name": {
+    "en": "bike_horn",
+    "tr": "bike_horn",
+    "th": "bike_horn"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/bike_horn",
+   "price": {
+    "coins": 6
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 3,
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "bike_horn",
+    "tr": "bike_horn",
+    "th": "bike_horn"
+   },
+   "active": {
+    "need": 1
+   }
+  },
+  {
+   "id": "fish_sauce",
+   "name": {
+    "en": "fish_sauce",
+    "tr": "fish_sauce",
+    "th": "fish_sauce"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/fish_sauce",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 2,
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "fish_sauce",
+    "tr": "fish_sauce",
+    "th": "fish_sauce"
+   },
+   "active": {
+    "need": 2
+   }
+  },
+  {
+   "id": "ice_bucket",
+   "name": {
+    "en": "ice_bucket",
+    "tr": "ice_bucket",
+    "th": "ice_bucket"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/ice_bucket",
+   "price": {
+    "coins": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "heat",
+       "n": -3
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "ice_bucket",
+    "tr": "ice_bucket",
+    "th": "ice_bucket"
+   },
+   "active": {
+    "need": 1
+   }
+  },
+  {
+   "id": "megaphone",
+   "name": {
+    "en": "megaphone",
+    "tr": "megaphone",
+    "th": "megaphone"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/megaphone",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "place",
+       "n": 3,
+       "sym": "favoured"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "megaphone",
+    "tr": "megaphone",
+    "th": "megaphone"
+   },
+   "active": {
+    "need": 2
+   }
+  },
+  {
+   "id": "spare_tyre",
+   "name": {
+    "en": "spare_tyre",
+    "tr": "spare_tyre",
+    "th": "spare_tyre"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "active"
+   ],
+   "rarity": "rare",
+   "icon": "charm/spare_tyre",
+   "price": {
+    "coins": 16
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "spins",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "spare_tyre",
+    "tr": "spare_tyre",
+    "th": "spare_tyre"
+   },
+   "active": {
+    "need": 3
+   }
+  },
+  {
+   "id": "sweeper",
+   "name": {
+    "en": "sweeper",
+    "tr": "sweeper",
+    "th": "sweeper"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/sweeper",
+   "price": {
+    "coins": 6
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "weight",
+       "n": 0,
+       "sym": "ash",
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "sweeper",
+    "tr": "sweeper",
+    "th": "sweeper"
+   },
+   "active": {
+    "need": 2
+   }
+  },
+  {
+   "id": "price_gun",
+   "name": {
+    "en": "price_gun",
+    "tr": "price_gun",
+    "th": "price_gun"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/price_gun",
+   "price": {
+    "coins": 6
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "coins",
+       "n": 10
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "price_gun",
+    "tr": "price_gun",
+    "th": "price_gun"
+   },
+   "active": {
+    "need": 1
+   }
+  },
+  {
+   "id": "neon_open",
+   "name": {
+    "en": "neon_open",
+    "tr": "neon_open",
+    "th": "neon_open"
+   },
+   "family": "pact",
+   "tags": [
+    "pact",
+    "active"
+   ],
+   "rarity": "rare",
+   "icon": "charm/neon_open",
+   "price": {
+    "coins": 16
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 2,
+       "pattern": "all",
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "neon_open",
+    "tr": "neon_open",
+    "th": "neon_open"
+   },
+   "active": {
+    "need": 3
+   }
+  },
+  {
+   "id": "double_shift",
+   "name": {
+    "en": "double_shift",
+    "tr": "double_shift",
+    "th": "double_shift"
+   },
+   "family": "stitch",
+   "tags": [
+    "stitch",
+    "active"
+   ],
+   "rarity": "rare",
+   "icon": "charm/double_shift",
+   "price": {
+    "coins": 16
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 3,
+       "scope": "spin"
+      },
+      {
+       "type": "heat",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "double_shift",
+    "tr": "double_shift",
+    "th": "double_shift"
+   },
+   "active": {
+    "need": 3
+   }
+  },
+  {
+   "id": "wok_toss",
+   "name": {
+    "en": "wok_toss",
+    "tr": "wok_toss",
+    "th": "wok_toss"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/wok_toss",
+   "price": {
+    "coins": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "heat",
+       "n": 3
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "wok_toss",
+    "tr": "wok_toss",
+    "th": "wok_toss"
+   },
+   "active": {
+    "need": 1
+   }
+  },
+  {
+   "id": "calculator",
+   "name": {
+    "en": "calculator",
+    "tr": "calculator",
+    "th": "calculator"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/calculator",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 3,
+       "scope": "round"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "calculator",
+    "tr": "calculator",
+    "th": "calculator"
+   },
+   "active": {
+    "need": 2
+   }
+  },
+  {
+   "id": "rubber_band",
+   "name": {
+    "en": "rubber_band",
+    "tr": "rubber_band",
+    "th": "rubber_band"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/rubber_band",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "trick",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "rubber_band",
+    "tr": "rubber_band",
+    "th": "rubber_band"
+   },
+   "active": {
+    "need": 2
+   }
+  },
+  {
+   "id": "coin_flip",
+   "name": {
+    "en": "coin_flip",
+    "tr": "coin_flip",
+    "th": "coin_flip"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/coin_flip",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {
+      "chance": 50
+     },
+     "effects": [
+      {
+       "type": "coins",
+       "n": 20
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "coin_flip",
+    "tr": "coin_flip",
+    "th": "coin_flip"
+   },
+   "active": {
+    "need": 1
+   }
+  },
+  {
+   "id": "gold_spray",
+   "name": {
+    "en": "gold_spray",
+    "tr": "gold_spray",
+    "th": "gold_spray"
+   },
+   "family": "crown",
+   "tags": [
+    "crown",
+    "active"
+   ],
+   "rarity": "rare",
+   "icon": "charm/gold_spray",
+   "price": {
+    "coins": 16
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 4,
+       "sym": "high",
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "gold_spray",
+    "tr": "gold_spray",
+    "th": "gold_spray"
+   },
+   "active": {
+    "need": 3
+   }
+  },
+  {
+   "id": "taxi_meter",
+   "name": {
+    "en": "taxi_meter",
+    "tr": "taxi_meter",
+    "th": "taxi_meter"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/taxi_meter",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "taxi_meter",
+    "tr": "taxi_meter",
+    "th": "taxi_meter"
+   },
+   "active": {
+    "need": 2
+   }
+  },
+  {
+   "id": "bike_jump",
+   "name": {
+    "en": "bike_jump",
+    "tr": "bike_jump",
+    "th": "bike_jump"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "active"
+   ],
+   "rarity": "legendary",
+   "icon": "charm/bike_jump",
+   "price": {
+    "coins": 28
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "spins",
+       "n": 1
+      },
+      {
+       "type": "luck",
+       "n": 2,
+       "scope": "spin"
+      },
+      {
+       "type": "patMult",
+       "n": 2,
+       "pattern": "big",
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "bike_jump",
+    "tr": "bike_jump",
+    "th": "bike_jump"
+   },
+   "active": {
+    "need": 3
+   }
+  },
+  {
+   "id": "eye_drops",
+   "name": {
+    "en": "eye_drops",
+    "tr": "eye_drops",
+    "th": "eye_drops"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "common",
+   "icon": "charm/eye_drops",
+   "price": {
+    "coins": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeSoft",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "eye_drops",
+    "tr": "eye_drops",
+    "th": "eye_drops"
+   }
+  },
+  {
+   "id": "staring",
+   "name": {
+    "en": "staring",
+    "tr": "staring",
+    "th": "staring"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/staring",
+   "price": {
+    "coins": 9
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "stack",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symMult",
+       "n": 0.25,
+       "sym": "all",
+       "per": "stack"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "staring",
+    "tr": "staring",
+    "th": "staring"
+   }
+  },
+  {
+   "id": "omen_jar",
+   "name": {
+    "en": "omen_jar",
+    "tr": "omen_jar",
+    "th": "omen_jar"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/omen_jar",
+   "price": {
+    "coins": 9
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "coins",
+       "n": 20
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "omen_jar",
+    "tr": "omen_jar",
+    "th": "omen_jar"
+   }
+  },
+  {
+   "id": "ruby_shades",
+   "name": {
+    "en": "ruby_shades",
+    "tr": "ruby_shades",
+    "th": "ruby_shades"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "rare",
+   "icon": "charm/ruby_shades",
+   "price": {
+    "coins": 15
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeRate",
+       "v": 2
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 1.25
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "ruby_shades",
+    "tr": "ruby_shades",
+    "th": "ruby_shades"
+   }
+  },
+  {
+   "id": "night_owl",
+   "name": {
+    "en": "night_owl",
+    "tr": "night_owl",
+    "th": "night_owl"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "rare",
+   "icon": "charm/night_owl",
+   "price": {
+    "coins": 15
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "gainCharm",
+       "rarity": "rare"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "night_owl",
+    "tr": "night_owl",
+    "th": "night_owl"
+   }
+  },
+  {
+   "id": "red_eye_flight",
+   "name": {
+    "en": "red_eye_flight",
+    "tr": "red_eye_flight",
+    "th": "red_eye_flight"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/red_eye_flight",
+   "price": {
+    "coins": 9
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "spins",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "red_eye_flight",
+    "tr": "red_eye_flight",
+    "th": "red_eye_flight"
+   }
+  },
+  {
+   "id": "counter_stare",
+   "name": {
+    "en": "counter_stare",
+    "tr": "counter_stare",
+    "th": "counter_stare"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "legendary",
+   "icon": "charm/counter_stare",
+   "price": {
+    "coins": 26
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeBless",
+       "v": true
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "counter_stare",
+    "tr": "counter_stare",
+    "th": "counter_stare"
+   }
+  },
+  {
+   "id": "taillight",
+   "name": {
+    "en": "taillight",
+    "tr": "taillight",
+    "th": "taillight"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "common",
+   "icon": "charm/taillight",
+   "price": {
+    "coins": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1,
+       "per": "redEyes"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "taillight",
+    "tr": "taillight",
+    "th": "taillight"
+   }
+  },
+  {
+   "id": "f_skewer_cart",
+   "name": {
+    "en": "f_skewer_cart",
+    "tr": "f_skewer_cart",
+    "th": "f_skewer_cart"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "ember",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_skewer_cart",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 2,
+       "sym": "low"
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symMult",
+       "n": 0.1,
+       "sym": "low",
+       "per": "heat"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_skewer_cart",
+    "tr": "f_skewer_cart",
+    "th": "f_skewer_cart"
+   }
+  },
+  {
+   "id": "f_firefly_snack",
+   "name": {
+    "en": "f_firefly_snack",
+    "tr": "f_firefly_snack",
+    "th": "f_firefly_snack"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "wisp",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_firefly_snack",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "group": "low",
+      "hasWisp": true
+     },
+     "effects": [
+      {
+       "type": "retrigger",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_firefly_snack",
+    "tr": "f_firefly_snack",
+    "th": "f_firefly_snack"
+   }
+  },
+  {
+   "id": "f_street_gold",
+   "name": {
+    "en": "f_street_gold",
+    "tr": "f_street_gold",
+    "th": "f_street_gold"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_street_gold",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "group": "low",
+      "minCells": 5
+     },
+     "effects": [
+      {
+       "type": "coins",
+       "n": 5
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_street_gold",
+    "tr": "f_street_gold",
+    "th": "f_street_gold"
+   }
+  },
+  {
+   "id": "f_market_scale",
+   "name": {
+    "en": "f_market_scale",
+    "tr": "f_market_scale",
+    "th": "f_market_scale"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "ledger",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_market_scale",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onSymbolLand",
+     "cond": {
+      "group": "low",
+      "every": 10
+     },
+     "effects": [
+      {
+       "type": "interest",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_market_scale",
+    "tr": "f_market_scale",
+    "th": "f_market_scale"
+   }
+  },
+  {
+   "id": "f_smog_wok",
+   "name": {
+    "en": "f_smog_wok",
+    "tr": "f_smog_wok",
+    "th": "f_smog_wok"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "hex",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_smog_wok",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 0.5,
+       "pattern": "all",
+       "per": "curses"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_smog_wok",
+    "tr": "f_smog_wok",
+    "th": "f_smog_wok"
+   }
+  },
+  {
+   "id": "f_neon_grill",
+   "name": {
+    "en": "f_neon_grill",
+    "tr": "f_neon_grill",
+    "th": "f_neon_grill"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "pact",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_neon_grill",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onScorch",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      },
+      {
+       "type": "coins",
+       "n": 10
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_neon_grill",
+    "tr": "f_neon_grill",
+    "th": "f_neon_grill"
+   }
+  },
+  {
+   "id": "f_lucky_chili",
+   "name": {
+    "en": "f_lucky_chili",
+    "tr": "f_lucky_chili",
+    "th": "f_lucky_chili"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "omen",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_lucky_chili",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 0.5,
+       "per": "heat"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_lucky_chili",
+    "tr": "f_lucky_chili",
+    "th": "f_lucky_chili"
+   }
+  },
+  {
+   "id": "f_ruby_umbrella",
+   "name": {
+    "en": "f_ruby_umbrella",
+    "tr": "f_ruby_umbrella",
+    "th": "f_ruby_umbrella"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "pact",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_ruby_umbrella",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onCurse",
+     "cond": {},
+     "effects": [
+      {
+       "type": "coins",
+       "n": 15
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {
+      "cursesMin": 3
+     },
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 1.5
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_ruby_umbrella",
+    "tr": "f_ruby_umbrella",
+    "th": "f_ruby_umbrella"
+   }
+  },
+  {
+   "id": "f_rainy_day_fund",
+   "name": {
+    "en": "f_rainy_day_fund",
+    "tr": "f_rainy_day_fund",
+    "th": "f_rainy_day_fund"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "ledger",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_rainy_day_fund",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 1,
+       "per": "curses"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_rainy_day_fund",
+    "tr": "f_rainy_day_fund",
+    "th": "f_rainy_day_fund"
+   }
+  },
+  {
+   "id": "f_monsoon_gold",
+   "name": {
+    "en": "f_monsoon_gold",
+    "tr": "f_monsoon_gold",
+    "th": "f_monsoon_gold"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_monsoon_gold",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 1,
+       "sym": "crown",
+       "per": "curses"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_monsoon_gold",
+    "tr": "f_monsoon_gold",
+    "th": "f_monsoon_gold"
+   }
+  },
+  {
+   "id": "f_small_print_lawyer",
+   "name": {
+    "en": "f_small_print_lawyer",
+    "tr": "f_small_print_lawyer",
+    "th": "f_small_print_lawyer"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "pact",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_small_print_lawyer",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onDeal",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_small_print_lawyer",
+    "tr": "f_small_print_lawyer",
+    "th": "f_small_print_lawyer"
+   }
+  },
+  {
+   "id": "f_meter_taxi",
+   "name": {
+    "en": "f_meter_taxi",
+    "tr": "f_meter_taxi",
+    "th": "f_meter_taxi"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "tinker",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_meter_taxi",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onTrick",
+     "cond": {},
+     "effects": [
+      {
+       "type": "coins",
+       "n": 3
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_meter_taxi",
+    "tr": "f_meter_taxi",
+    "th": "f_meter_taxi"
+   }
+  },
+  {
+   "id": "f_gold_shop",
+   "name": {
+    "en": "f_gold_shop",
+    "tr": "f_gold_shop",
+    "th": "f_gold_shop"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_gold_shop",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onInterest",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 1,
+       "sym": "crown"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_gold_shop",
+    "tr": "f_gold_shop",
+    "th": "f_gold_shop"
+   }
+  },
+  {
+   "id": "f_calling_luck",
+   "name": {
+    "en": "f_calling_luck",
+    "tr": "f_calling_luck",
+    "th": "f_calling_luck"
+   },
+   "family": "pact",
+   "tags": [
+    "pact",
+    "omen",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_calling_luck",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onSymbolLand",
+     "cond": {
+      "sym": "sigil"
+     },
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1,
+       "scope": "round"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_calling_luck",
+    "tr": "f_calling_luck",
+    "th": "f_calling_luck"
+   }
+  },
+  {
+   "id": "f_rooftop_lease",
+   "name": {
+    "en": "f_rooftop_lease",
+    "tr": "f_rooftop_lease",
+    "th": "f_rooftop_lease"
+   },
+   "family": "pact",
+   "tags": [
+    "pact",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_rooftop_lease",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onDeal",
+     "cond": {},
+     "effects": [
+      {
+       "type": "gainCharm",
+       "rarity": "rare"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_rooftop_lease",
+    "tr": "f_rooftop_lease",
+    "th": "f_rooftop_lease"
+   }
+  },
+  {
+   "id": "f_lucky_combo",
+   "name": {
+    "en": "f_lucky_combo",
+    "tr": "f_lucky_combo",
+    "th": "f_lucky_combo"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "stitch",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_lucky_combo",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "favoured": true
+     },
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 1,
+       "pattern": "this"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_lucky_combo",
+    "tr": "f_lucky_combo",
+    "th": "f_lucky_combo"
+   }
+  },
+  {
+   "id": "f_glowing_special",
+   "name": {
+    "en": "f_glowing_special",
+    "tr": "f_glowing_special",
+    "th": "f_glowing_special"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "wisp",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_glowing_special",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "weight",
+       "n": 2,
+       "sym": "wisp"
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_glowing_special",
+    "tr": "f_glowing_special",
+    "th": "f_glowing_special"
+   }
+  },
+  {
+   "id": "f_lucky_tuktuk",
+   "name": {
+    "en": "f_lucky_tuktuk",
+    "tr": "f_lucky_tuktuk",
+    "th": "f_lucky_tuktuk"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "tinker",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_lucky_tuktuk",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onTrick",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1,
+       "scope": "round"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_lucky_tuktuk",
+    "tr": "f_lucky_tuktuk",
+    "th": "f_lucky_tuktuk"
+   }
+  },
+  {
+   "id": "f_spinning_elbow",
+   "name": {
+    "en": "f_spinning_elbow",
+    "tr": "f_spinning_elbow",
+    "th": "f_spinning_elbow"
+   },
+   "family": "stitch",
+   "tags": [
+    "stitch",
+    "wisp",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_spinning_elbow",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "hasWisp": true
+     },
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 2,
+       "pattern": "this"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_spinning_elbow",
+    "tr": "f_spinning_elbow",
+    "th": "f_spinning_elbow"
+   }
+  },
+  {
+   "id": "f_clinch_tool",
+   "name": {
+    "en": "f_clinch_tool",
+    "tr": "f_clinch_tool",
+    "th": "f_clinch_tool"
+   },
+   "family": "stitch",
+   "tags": [
+    "stitch",
+    "tinker",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_clinch_tool",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onSpinEnd",
+     "cond": {
+      "distinctMin": 3
+     },
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_clinch_tool",
+    "tr": "f_clinch_tool",
+    "th": "f_clinch_tool"
+   }
+  },
+  {
+   "id": "f_golden_belt",
+   "name": {
+    "en": "f_golden_belt",
+    "tr": "f_golden_belt",
+    "th": "f_golden_belt"
+   },
+   "family": "stitch",
+   "tags": [
+    "stitch",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_golden_belt",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 2,
+       "pattern": "big"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_golden_belt",
+    "tr": "f_golden_belt",
+    "th": "f_golden_belt"
+   }
+  },
+  {
+   "id": "f_firefly_lamp",
+   "name": {
+    "en": "f_firefly_lamp",
+    "tr": "f_firefly_lamp",
+    "th": "f_firefly_lamp"
+   },
+   "family": "wisp",
+   "tags": [
+    "wisp",
+    "tinker",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_firefly_lamp",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onSpinStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "place",
+       "n": 1,
+       "sym": "wisp"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_firefly_lamp",
+    "tr": "f_firefly_lamp",
+    "th": "f_firefly_lamp"
+   }
+  },
+  {
+   "id": "f_gold_dust",
+   "name": {
+    "en": "f_gold_dust",
+    "tr": "f_gold_dust",
+    "th": "f_gold_dust"
+   },
+   "family": "wisp",
+   "tags": [
+    "wisp",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_gold_dust",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "group": "high",
+      "hasWisp": true
+     },
+     "effects": [
+      {
+       "type": "retrigger",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_gold_dust",
+    "tr": "f_gold_dust",
+    "th": "f_gold_dust"
+   }
+  },
+  {
+   "id": "f_gold_rims",
+   "name": {
+    "en": "f_gold_rims",
+    "tr": "f_gold_rims",
+    "th": "f_gold_rims"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_gold_rims",
+   "price": {
+    "coins": 30
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "slot",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 1,
+       "sym": "high"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "f_gold_rims",
+    "tr": "f_gold_rims",
+    "th": "f_gold_rims"
+   }
+  }
+ ]
+}

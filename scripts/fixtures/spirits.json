@@ -1,0 +1,1849 @@
+{
+ "spirits": [
+  {
+   "id": "brimble",
+   "name": {
+    "en": "Mr. Ruby",
+    "tr": "Mr. Ruby",
+    "th": "Mr. Ruby"
+   },
+   "domain": "nextDebts",
+   "rival": "waiting",
+   "unlock": {
+    "start": true
+   },
+   "local": [
+    "c1",
+    "c10"
+   ],
+   "portrait": {
+    "calm": "spirit/brimble_calm",
+    "glad": "spirit/brimble_glad",
+    "cross": "spirit/brimble_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 2,
+    "spice": 0.5,
+    "trick": 0.5,
+    "charm": -1,
+    "curse": 1,
+    "skip": -1
+   },
+   "hint": {
+    "en": "hint",
+    "tr": "hint",
+    "th": "hint"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "offers3",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "dealOffers",
+         "v": 3
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "offers3",
+      "tr": "offers3",
+      "th": "offers3"
+     }
+    },
+    {
+     "at": 5,
+     "id": "interest3",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "interest",
+         "n": 3
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "interest3",
+      "tr": "interest3",
+      "th": "interest3"
+     }
+    },
+    {
+     "at": 8,
+     "id": "deal_bonus",
+     "rules": [
+      {
+       "trigger": "onDeal",
+       "cond": {},
+       "effects": [
+        {
+         "type": "wick",
+         "n": 2
+        },
+        {
+         "type": "coins",
+         "n": 20
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "deal_bonus",
+      "tr": "deal_bonus",
+      "th": "deal_bonus"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noInterest"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "at": -5,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noPawn"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "gifts": [],
+   "red": {
+    "deals": true
+   },
+   "white": null,
+   "ownCurse": null,
+   "omen": "nextDebts",
+   "demand": "signDeal",
+   "text": {
+    "red": {
+     "en": "red call",
+     "tr": "red call",
+     "th": "red call"
+    }
+   },
+   "lines": {}
+  },
+  {
+   "id": "beckon",
+   "name": {
+    "en": "Auntie Beckon",
+    "tr": "Auntie Beckon",
+    "th": "Auntie Beckon"
+   },
+   "domain": "nextOffers",
+   "rival": "wire",
+   "unlock": {
+    "start": true
+   },
+   "local": [
+    "c4",
+    "c9"
+   ],
+   "portrait": {
+    "calm": "spirit/beckon_calm",
+    "glad": "spirit/beckon_glad",
+    "cross": "spirit/beckon_cross"
+   },
+   "taste": {
+    "coins": 2,
+    "caps": 1,
+    "spice": 0.5,
+    "trick": 1,
+    "charm": 1,
+    "curse": -1,
+    "skip": 0.5
+   },
+   "hint": {
+    "en": "hint",
+    "tr": "hint",
+    "th": "hint"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "extra",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "shopExtra",
+         "v": 1
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "extra",
+      "tr": "extra",
+      "th": "extra"
+     }
+    },
+    {
+     "at": 5,
+     "id": "disc10",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "shopDiscount",
+         "v": 10
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "disc10",
+      "tr": "disc10",
+      "th": "disc10"
+     }
+    },
+    {
+     "at": 8,
+     "id": "disc20",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "shopDiscount",
+         "v": 20
+        }
+       ]
+      },
+      {
+       "trigger": "onDebtPaid",
+       "cond": {},
+       "effects": [
+        {
+         "type": "gainCharm",
+         "rarity": "common"
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "disc20",
+      "tr": "disc20",
+      "th": "disc20"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "shopMarkup",
+         "v": 20
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "at": -5,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "rerollDouble"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "gifts": [
+    {
+     "id": "beckon_sale",
+     "icon": "deal/coins",
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "shopDiscount",
+       "v": 30,
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "beckon_sale",
+      "tr": "beckon_sale",
+      "th": "beckon_sale"
+     }
+    },
+    {
+     "id": "beckon_more",
+     "icon": "deal/coins",
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "shopExtra",
+       "v": 2,
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "beckon_more",
+      "tr": "beckon_more",
+      "th": "beckon_more"
+     }
+    },
+    {
+     "id": "beckon_full",
+     "icon": "deal/coins",
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "sellFull",
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "beckon_full",
+      "tr": "beckon_full",
+      "th": "beckon_full"
+     }
+    },
+    {
+     "id": "beckon_coins",
+     "icon": "deal/coins",
+     "effects": [
+      {
+       "type": "coins",
+       "n": 15
+      }
+     ],
+     "name": {
+      "en": "beckon_coins",
+      "tr": "beckon_coins",
+      "th": "beckon_coins"
+     }
+    }
+   ],
+   "red": {
+    "id": "closing_sale",
+    "icon": "deal/coins",
+    "boon": [
+     {
+      "type": "flag",
+      "flag": "sellFull",
+      "scope": "debt"
+     },
+     {
+      "type": "flag",
+      "flag": "shopDiscount",
+      "v": 50,
+      "scope": "debt"
+     }
+    ],
+    "carry": [
+     {
+      "type": "flag",
+      "flag": "noShopN",
+      "v": 2
+     }
+    ],
+    "curse": null
+   },
+   "white": null,
+   "ownCurse": "haggler",
+   "omen": "nextOffers",
+   "demand": "buy2",
+   "text": {
+    "red": {
+     "en": "red call",
+     "tr": "red call",
+     "th": "red call"
+    }
+   },
+   "lines": {}
+  },
+  {
+   "id": "gold",
+   "name": {
+    "en": "Little Gold",
+    "tr": "Little Gold",
+    "th": "Little Gold"
+   },
+   "domain": "nextFavs2",
+   "rival": "moonbiter",
+   "unlock": {
+    "start": true
+   },
+   "local": [
+    "c3"
+   ],
+   "portrait": {
+    "calm": "spirit/gold_calm",
+    "glad": "spirit/gold_glad",
+    "cross": "spirit/gold_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 1,
+    "spice": 0.5,
+    "trick": 2,
+    "charm": -1,
+    "curse": 0.5,
+    "skip": -1
+   },
+   "hint": {
+    "en": "hint",
+    "tr": "hint",
+    "th": "hint"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "first_pick",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "luck",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "first_pick",
+      "tr": "first_pick",
+      "th": "first_pick"
+     }
+    },
+    {
+     "at": 5,
+     "id": "twice_pick",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "pickFirstFav",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "twice_pick",
+      "tr": "twice_pick",
+      "th": "twice_pick"
+     }
+    },
+    {
+     "at": 8,
+     "id": "two_faves",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "twoFavs",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "two_faves",
+      "tr": "two_faves",
+      "th": "two_faves"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "hideFav",
+         "v": true
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "at": -5,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "luck",
+         "n": -3
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "gifts": [
+    {
+     "id": "gold_luck",
+     "icon": "deal/luck",
+     "effects": [
+      {
+       "type": "luck",
+       "n": 2,
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "gold_luck",
+      "tr": "gold_luck",
+      "th": "gold_luck"
+     }
+    },
+    {
+     "id": "gold_toys",
+     "icon": "ui/trick_bag",
+     "effects": [
+      {
+       "type": "trick",
+       "n": 2
+      }
+     ],
+     "name": {
+      "en": "gold_toys",
+      "tr": "gold_toys",
+      "th": "gold_toys"
+     }
+    },
+    {
+     "id": "gold_peek",
+     "icon": "ui/favour",
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "seeNextFav",
+       "v": true,
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "gold_peek",
+      "tr": "gold_peek",
+      "th": "gold_peek"
+     }
+    },
+    {
+     "id": "gold_shine",
+     "icon": "ui/star",
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 2,
+       "sym": "favoured",
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "gold_shine",
+      "tr": "gold_shine",
+      "th": "gold_shine"
+     }
+    }
+   ],
+   "red": {
+    "id": "pinky_promise",
+    "icon": "deal/luck",
+    "boon": [
+     {
+      "type": "luck",
+      "n": 5,
+      "scope": "debt"
+     }
+    ],
+    "curse": null,
+    "due": {
+     "rounds": 2,
+     "else": [
+      {
+       "type": "loseCharm",
+       "pick": "best"
+      }
+     ]
+    }
+   },
+   "white": null,
+   "ownCurse": "sticky_fingers",
+   "omen": "nextFavs2",
+   "demand": "letMePick",
+   "text": {
+    "red": {
+     "en": "red call",
+     "tr": "red call",
+     "th": "red call"
+    }
+   },
+   "lines": {}
+  },
+  {
+   "id": "wire",
+   "name": {
+    "en": "Uncle Wire",
+    "tr": "Uncle Wire",
+    "th": "Uncle Wire"
+   },
+   "domain": "benchPrices",
+   "rival": "beckon",
+   "unlock": {
+    "c": "c2"
+   },
+   "local": [
+    "c2",
+    "c9"
+   ],
+   "portrait": {
+    "calm": "spirit/wire_calm",
+    "glad": "spirit/wire_glad",
+    "cross": "spirit/wire_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 0.5,
+    "spice": 1,
+    "trick": 2,
+    "charm": 1,
+    "curse": -1,
+    "skip": -1
+   },
+   "hint": {
+    "en": "hint",
+    "tr": "hint",
+    "th": "hint"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "pockets",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "trickPockets",
+         "v": 1
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "pockets",
+      "tr": "pockets",
+      "th": "pockets"
+     }
+    },
+    {
+     "at": 5,
+     "id": "free_trick",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "firstTrickFree",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "free_trick",
+      "tr": "free_trick",
+      "th": "free_trick"
+     }
+    },
+    {
+     "at": 8,
+     "id": "bench30",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "benchDiscount",
+         "v": 30
+        }
+       ]
+      },
+      {
+       "trigger": "onDebtStart",
+       "cond": {},
+       "effects": [
+        {
+         "type": "trick",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "bench30",
+      "tr": "bench30",
+      "th": "bench30"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "trickPockets",
+         "v": -1
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "at": -5,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "trickPockets",
+         "v": -1
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "gifts": [
+    {
+     "id": "wire_tricks",
+     "icon": "ui/trick_bag",
+     "effects": [
+      {
+       "type": "trick",
+       "n": 2
+      }
+     ],
+     "name": {
+      "en": "wire_tricks",
+      "tr": "wire_tricks",
+      "th": "wire_tricks"
+     }
+    },
+    {
+     "id": "wire_pockets",
+     "icon": "ui/trick_bag",
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "trickPockets",
+       "v": 1,
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "wire_pockets",
+      "tr": "wire_pockets",
+      "th": "wire_pockets"
+     }
+    },
+    {
+     "id": "wire_bench",
+     "icon": "ui/trick_bag",
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "benchDiscount",
+       "v": 100,
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "wire_bench",
+      "tr": "wire_bench",
+      "th": "wire_bench"
+     }
+    },
+    {
+     "id": "wire_charge",
+     "icon": "ui/honk",
+     "effects": [
+      {
+       "type": "charge",
+       "n": 99
+      }
+     ],
+     "name": {
+      "en": "wire_charge",
+      "tr": "wire_charge",
+      "th": "wire_charge"
+     }
+    }
+   ],
+   "red": {
+    "id": "hot_wire",
+    "icon": "ui/trick_bag",
+    "boon": [
+     {
+      "type": "trick",
+      "n": 3
+     },
+     {
+      "type": "flag",
+      "flag": "trickFree",
+      "scope": "debt"
+     }
+    ],
+    "curse": "short_circuit"
+   },
+   "white": null,
+   "ownCurse": "short_circuit",
+   "omen": "benchPrices",
+   "demand": "handTrick",
+   "text": {
+    "red": {
+     "en": "red call",
+     "tr": "red call",
+     "th": "red call"
+    }
+   },
+   "lines": {}
+  },
+  {
+   "id": "waiting",
+   "name": {
+    "en": "The Waiting Lady",
+    "tr": "The Waiting Lady",
+    "th": "The Waiting Lady"
+   },
+   "domain": "shortfall",
+   "rival": "brimble",
+   "unlock": {
+    "c": "c3",
+    "white": true
+   },
+   "local": [
+    "c8"
+   ],
+   "portrait": {
+    "calm": "spirit/waiting_calm",
+    "glad": "spirit/waiting_glad",
+    "cross": "spirit/waiting_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 1,
+    "spice": 0.5,
+    "trick": -1,
+    "charm": 2,
+    "curse": 0.5,
+    "skip": 2
+   },
+   "hint": {
+    "en": "hint",
+    "tr": "hint",
+    "th": "hint"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "spare",
+     "rules": [
+      {
+       "trigger": "onDebtStart",
+       "cond": {
+        "limit": "debt"
+       },
+       "effects": [
+        {
+         "type": "trick",
+         "n": 1,
+         "id": "spare_candle"
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "spare",
+      "tr": "spare",
+      "th": "spare"
+     }
+    },
+    {
+     "at": 5,
+     "id": "extra_life",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "extraLife",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "extra_life",
+      "tr": "extra_life",
+      "th": "extra_life"
+     }
+    },
+    {
+     "at": 8,
+     "id": "hangup_bonus",
+     "rules": [
+      {
+       "trigger": "onHangUp",
+       "cond": {},
+       "effects": [
+        {
+         "type": "luck",
+         "n": 1
+        },
+        {
+         "type": "wick",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "hangup_bonus",
+      "tr": "hangup_bonus",
+      "th": "hangup_bonus"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noBeads",
+         "v": true
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "at": -5,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noBeads",
+         "v": true
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "gifts": [
+    {
+     "id": "wait_spare",
+     "icon": "ui/trick_bag",
+     "effects": [
+      {
+       "type": "trick",
+       "n": 1,
+       "id": "spare_candle"
+      }
+     ],
+     "name": {
+      "en": "wait_spare",
+      "tr": "wait_spare",
+      "th": "wait_spare"
+     }
+    },
+    {
+     "id": "wait_caps",
+     "icon": "deal/wick",
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ],
+     "name": {
+      "en": "wait_caps",
+      "tr": "wait_caps",
+      "th": "wait_caps"
+     }
+    },
+    {
+     "id": "wait_luck",
+     "icon": "deal/luck",
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1
+      }
+     ],
+     "name": {
+      "en": "wait_luck",
+      "tr": "wait_luck",
+      "th": "wait_luck"
+     }
+    },
+    {
+     "id": "wait_lift",
+     "icon": "deal/luck",
+     "effects": [
+      {
+       "type": "liftCurse",
+       "n": 1
+      }
+     ],
+     "name": {
+      "en": "wait_lift",
+      "tr": "wait_lift",
+      "th": "wait_lift"
+     }
+    }
+   ],
+   "red": null,
+   "white": [
+    {
+     "id": "white_value",
+     "icon": "ui/white_call",
+     "effects": [
+      {
+       "type": "symMult",
+       "n": 1,
+       "sym": "all"
+      }
+     ]
+    },
+    {
+     "id": "white_pat",
+     "icon": "ui/white_call",
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 1,
+       "pattern": "all"
+      }
+     ]
+    },
+    {
+     "id": "white_bless",
+     "icon": "ui/white_call",
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeBless",
+       "v": true
+      }
+     ]
+    }
+   ],
+   "ownCurse": "heavy_hands",
+   "omen": "shortfall",
+   "demand": "waitWithMe",
+   "text": {
+    "red": {
+     "en": "red call",
+     "tr": "red call",
+     "th": "red call"
+    }
+   },
+   "lines": {}
+  },
+  {
+   "id": "tide",
+   "name": {
+    "en": "Grandmother Tide",
+    "tr": "Grandmother Tide",
+    "th": "Grandmother Tide"
+   },
+   "domain": "nextTerms",
+   "rival": "lamplit",
+   "unlock": {
+    "c": "c5"
+   },
+   "local": [
+    "c5"
+   ],
+   "portrait": {
+    "calm": "spirit/tide_calm",
+    "glad": "spirit/tide_glad",
+    "cross": "spirit/tide_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 1,
+    "spice": -1,
+    "trick": 0.5,
+    "charm": -1,
+    "curse": 0.5,
+    "skip": 2
+   },
+   "hint": {
+    "en": "hint",
+    "tr": "hint",
+    "th": "hint"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "int2",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "interest",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "int2",
+      "tr": "int2",
+      "th": "int2"
+     }
+    },
+    {
+     "at": 5,
+     "id": "carry3",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "carrySpins",
+         "v": 3
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "carry3",
+      "tr": "carry3",
+      "th": "carry3"
+     }
+    },
+    {
+     "at": 8,
+     "id": "tide_patron",
+     "rules": [
+      {
+       "trigger": "onDebtStart",
+       "cond": {},
+       "effects": [
+        {
+         "type": "spins",
+         "n": 2
+        },
+        {
+         "type": "luck",
+         "n": 4,
+         "scope": "round"
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "tide_patron",
+      "tr": "tide_patron",
+      "th": "tide_patron"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "interestHalf"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "at": -5,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noInterest"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "gifts": [
+    {
+     "id": "tide_int",
+     "icon": "ui/interest",
+     "effects": [
+      {
+       "type": "interest",
+       "n": 3,
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "tide_int",
+      "tr": "tide_int",
+      "th": "tide_int"
+     }
+    },
+    {
+     "id": "tide_spins",
+     "icon": "ui/hourglass",
+     "effects": [
+      {
+       "type": "spins",
+       "n": 2
+      }
+     ],
+     "name": {
+      "en": "tide_spins",
+      "tr": "tide_spins",
+      "th": "tide_spins"
+     }
+    },
+    {
+     "id": "tide_charge",
+     "icon": "ui/honk",
+     "effects": [
+      {
+       "type": "charge",
+       "n": 99
+      }
+     ],
+     "name": {
+      "en": "tide_charge",
+      "tr": "tide_charge",
+      "th": "tide_charge"
+     }
+    },
+    {
+     "id": "tide_coins",
+     "icon": "deal/coins",
+     "effects": [
+      {
+       "type": "coins",
+       "n": 15
+      }
+     ],
+     "name": {
+      "en": "tide_coins",
+      "tr": "tide_coins",
+      "th": "tide_coins"
+     }
+    }
+   ],
+   "red": {
+    "id": "cargo_credit",
+    "icon": "deal/coins",
+    "boon": [
+     {
+      "type": "gainCharm",
+      "rarity": "uncommon",
+      "family": "random",
+      "n": 2
+     }
+    ],
+    "curse": "slow_water"
+   },
+   "white": null,
+   "ownCurse": "slow_water",
+   "omen": "nextTerms",
+   "demand": "keepCool",
+   "text": {
+    "red": {
+     "en": "red call",
+     "tr": "red call",
+     "th": "red call"
+    }
+   },
+   "lines": {}
+  },
+  {
+   "id": "moonbiter",
+   "name": {
+    "en": "The Moonbiter",
+    "tr": "The Moonbiter",
+    "th": "The Moonbiter"
+   },
+   "domain": "ashNext",
+   "rival": "gold",
+   "unlock": {
+    "c": "c6"
+   },
+   "local": [
+    "c6"
+   ],
+   "portrait": {
+    "calm": "spirit/moonbiter_calm",
+    "glad": "spirit/moonbiter_glad",
+    "cross": "spirit/moonbiter_cross"
+   },
+   "taste": {
+    "coins": 0.5,
+    "caps": -1,
+    "spice": 1,
+    "trick": 1,
+    "charm": 2,
+    "curse": 2,
+    "skip": 0.5
+   },
+   "hint": {
+    "en": "hint",
+    "tr": "hint",
+    "th": "hint"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "soot_coin",
+     "rules": [
+      {
+       "trigger": "onSymbolLand",
+       "cond": {
+        "sym": "ash"
+       },
+       "effects": [
+        {
+         "type": "coins",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "soot_coin",
+      "tr": "soot_coin",
+      "th": "soot_coin"
+     }
+    },
+    {
+     "at": 5,
+     "id": "flare_bonus",
+     "rules": [
+      {
+       "trigger": "onScorch",
+       "cond": {},
+       "effects": [
+        {
+         "type": "wick",
+         "n": 2
+        },
+        {
+         "type": "patMult",
+         "n": 0.5,
+         "pattern": "all",
+         "scope": "round"
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "flare_bonus",
+      "tr": "flare_bonus",
+      "th": "flare_bonus"
+     }
+    },
+    {
+     "at": 8,
+     "id": "soot_fav",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "ashIsFav",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "soot_fav",
+      "tr": "soot_fav",
+      "th": "soot_fav"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "weight",
+         "n": 1.5,
+         "sym": "ash"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "at": -5,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "deadCentre",
+         "v": true
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "gifts": [
+    {
+     "id": "moon_remove",
+     "icon": "ui/curse_badge",
+     "effects": [
+      {
+       "type": "removeSymbol",
+       "n": 1
+      }
+     ],
+     "name": {
+      "en": "moon_remove",
+      "tr": "moon_remove",
+      "th": "moon_remove"
+     }
+    },
+    {
+     "id": "moon_lift",
+     "icon": "deal/luck",
+     "effects": [
+      {
+       "type": "liftCurse",
+       "n": 1
+      }
+     ],
+     "name": {
+      "en": "moon_lift",
+      "tr": "moon_lift",
+      "th": "moon_lift"
+     }
+    },
+    {
+     "id": "moon_clean",
+     "icon": "sym/ash",
+     "effects": [
+      {
+       "type": "weight",
+       "n": 0,
+       "sym": "ash",
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "moon_clean",
+      "tr": "moon_clean",
+      "th": "moon_clean"
+     }
+    },
+    {
+     "id": "moon_caps",
+     "icon": "deal/wick",
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ],
+     "name": {
+      "en": "moon_caps",
+      "tr": "moon_caps",
+      "th": "moon_caps"
+     }
+    }
+   ],
+   "red": {
+    "id": "one_bite",
+    "icon": "sym/ash",
+    "boon": [
+     {
+      "type": "removeSymbol",
+      "n": 2
+     },
+     {
+      "type": "allMult",
+      "n": 1.5,
+      "scope": "debt"
+     }
+    ],
+    "curse": "hollow_centre"
+   },
+   "white": null,
+   "ownCurse": "hollow_centre",
+   "omen": "ashNext",
+   "demand": "feed",
+   "text": {
+    "red": {
+     "en": "red call",
+     "tr": "red call",
+     "th": "red call"
+    }
+   },
+   "lines": {}
+  },
+  {
+   "id": "lamplit",
+   "name": {
+    "en": "Lady Lamplit",
+    "tr": "Lady Lamplit",
+    "th": "Lady Lamplit"
+   },
+   "domain": "scorchOdds",
+   "rival": "tide",
+   "unlock": {
+    "c": "c7"
+   },
+   "local": [
+    "c7"
+   ],
+   "portrait": {
+    "calm": "spirit/lamplit_calm",
+    "glad": "spirit/lamplit_glad",
+    "cross": "spirit/lamplit_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 1,
+    "spice": 2,
+    "trick": 0.5,
+    "charm": -1,
+    "curse": 0.5,
+    "skip": 0.5
+   },
+   "hint": {
+    "en": "hint",
+    "tr": "hint",
+    "th": "hint"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "heat_floor",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "heatFloor",
+         "v": 1
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "heat_floor",
+      "tr": "heat_floor",
+      "th": "heat_floor"
+     }
+    },
+    {
+     "at": 5,
+     "id": "heat_step",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "heatStep",
+         "v": 25
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "heat_step",
+      "tr": "heat_step",
+      "th": "heat_step"
+     }
+    },
+    {
+     "at": 8,
+     "id": "burn10",
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "scorchBurn",
+         "v": 10
+        }
+       ]
+      },
+      {
+       "trigger": "onScorch",
+       "cond": {},
+       "effects": [
+        {
+         "type": "wick",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "name": {
+      "en": "burn10",
+      "tr": "burn10",
+      "th": "burn10"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "heatMax",
+         "v": 8
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "at": -5,
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noStoke"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "gifts": [
+    {
+     "id": "lamp_heat",
+     "icon": "ui/heat",
+     "effects": [
+      {
+       "type": "heat",
+       "n": 3
+      },
+      {
+       "type": "flag",
+       "flag": "heatNoCool",
+       "scope": "round"
+      }
+     ],
+     "name": {
+      "en": "lamp_heat",
+      "tr": "lamp_heat",
+      "th": "lamp_heat"
+     }
+    },
+    {
+     "id": "lamp_burn",
+     "icon": "ui/heat",
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "scorchBurn",
+       "v": 10,
+       "scope": "debt"
+      }
+     ],
+     "name": {
+      "en": "lamp_burn",
+      "tr": "lamp_burn",
+      "th": "lamp_burn"
+     }
+    },
+    {
+     "id": "lamp_caps",
+     "icon": "deal/wick",
+     "effects": [
+      {
+       "type": "wick",
+       "n": 4
+      }
+     ],
+     "name": {
+      "en": "lamp_caps",
+      "tr": "lamp_caps",
+      "th": "lamp_caps"
+     }
+    },
+    {
+     "id": "lamp_mult",
+     "icon": "ui/star",
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 1.5,
+       "scope": "round"
+      }
+     ],
+     "name": {
+      "en": "lamp_mult",
+      "tr": "lamp_mult",
+      "th": "lamp_mult"
+     }
+    }
+   ],
+   "red": {
+    "id": "midnight_run",
+    "icon": "ui/heat",
+    "boon": [
+     {
+      "type": "heat",
+      "n": 10
+     },
+     {
+      "type": "flag",
+      "flag": "heatNoCool",
+      "scope": "round"
+     },
+     {
+      "type": "allMult",
+      "n": 2,
+      "scope": "round"
+     }
+    ],
+    "curse": "dark_wick"
+   },
+   "white": null,
+   "ownCurse": "dark_wick",
+   "omen": "scorchOdds",
+   "demand": "dare",
+   "text": {
+    "red": {
+     "en": "red call",
+     "tr": "red call",
+     "th": "red call"
+    }
+   },
+   "lines": {}
+  }
+ ]
+}

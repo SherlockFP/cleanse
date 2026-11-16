@@ -3,7 +3,12 @@
 // closed app comes back in the same phase with the same future (the rng streams are counted inside the run).
 // Sounds: v2 events reuse the v1 sound ids (stoke = lantern_light ladder, scorch = quota_fail, sign = event_stamp, trick = peg_on,
 // curse = orhan_cough); new ids need a licence row in docs/licenses/INDEX.csv first.
+import '@fontsource/sriracha/400.css';
+import '@fontsource/mitr/400.css';
+import '@fontsource/mitr/500.css';
+import '@fontsource/mitr/600.css';
 import './ui/ui.css';
+import './ui/ui-v3.css';
 import { CONFIG, SYMBOLS, SYM, SCORING, CHARM, TRICK, CURSE, CONTRACT, DEAL } from './core/data.js';
 import { newRun, termsOffer, pickTerms, stoke, redrawFavourite, spin, collect, bank, endRound, leaveShop, pawn, declinePawn, useTrick, trickTarget, pickStartCharm, info, summary, scaleOf, canSkip, skipReward, skipRound, canContinue, continueEndless, debtBase } from './core/run.js';
 import { price, buyCharm, sellCharm, moveCharm, buyTrick, doBench, buySlot, reroll, toggleLock, takeWaiting, sellValue } from './core/shop.js';
@@ -17,7 +22,7 @@ import { ensureConsent } from './services/consent.js';
 import * as haptics from './services/haptics.js';
 import { artIds } from './view/sprites.js';
 import { initView, resize, tick, getLayout, cellAt, setHandlers, setInsets, setGrid, playSpin, playPatterns, clearHighlights, setHeld, setTargets, pulseCells, skip, flyCoins, bigWin, shakeScreen, setDevil, refreshArt } from './view/view.js';
-import { initUi, showScreen, hideScreen, updateHud, setBusy, showPrompt, insets, toast, say, setLanguage, openSheet, closeSheet } from './ui/ui.js';
+import { initUi, showScreen, hideScreen, updateHud, setBusy, showPrompt, insets, toast, say, setLanguage, openSheet, closeSheet, tutorial } from './ui/ui.js';
 import { h, btn, art, setArtIds } from './ui/dom.js';
 import { detailSheet } from './ui/cards.js';
 import { initInput } from './input.js';
@@ -25,6 +30,13 @@ import { loadSave, writeSave } from './save.js';
 import { initAudio, play, playStep, setVolumes } from './audio/audio.js';
 import { t, L, fmt, getLang } from './i18n.js';
 import { TUTORIAL_SEED, TUTORIAL_TERMS, TUTORIAL_CHARMS, coachFor } from './tutorial.js';
+import * as TUT from './tutorial.js'; // TUT.TUTORIAL_STEPS: the core lane's step table (the overlay has its own copy until it lands)
+import * as VIEW from './view/view.js'; // v3 view calls (lever, Red Eye, HONK, rung, place) are optional: VIEW.name?.()
+
+// v3 core calls (SPEC 10.2) are looked up by name across src/core/*.js, so this file loads and plays on the v2 core and picks the v3 names up as they land.
+const CORE_MODS = import.meta.glob('./core/*.js', { eager: true });
+const CORE = Object.assign({}, ...Object.values(CORE_MODS));
+const v3 = (name, ...alts) => [name, ...alts].map((n) => CORE[n]).find((f) => typeof f === 'function') ?? null;
 
 const DEBUG = new URLSearchParams(location.search).get('debug') === '1';
 const STARTER_WAX = 100; // the one fixed Wax grant of starter_pack (store text)
@@ -35,10 +47,13 @@ const MACHINE = new Set(['spin', 'post', 'roundend']); // phases played on the m
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const save = loadSave(), meta = save.meta;
-let run = null, busy = false, instant = false, input = null, forcedSeed = null, targeting = null, lastEnd = null, seen = {};
+let lastPatterns = []; // the last scored patterns: the tutorial's pattern:N anchors
+let run = null, busy = false, instant = false, input = null, forcedSeed = null, targeting = null, lastEnd = null, seen = {}, ft = null; // ft: the first-time line on screen (seen after the next action)
 const todayUTC = () => new Date().toISOString().slice(0, 10); // the daily run is the same UTC day for everyone
 const layerOpen = () => !!document.querySelector('.layer:not([hidden])');
-const persist = () => { save.run = run; writeSave(save); };
+const persist = () => { save.run = run; save.tutStep = tutorial.active ? tutorial.index : save.tutStep; writeSave(save); };
+const tutEv = (name) => { if (tutorial.active) tutorial.event(name); }; // the first-run overlay advances on these events (the story taps come before there is a run)
+const pctOf = (v) => (v > 0 && v <= 0.5 ? v * 100 : v || 0); // a chance as a fraction (0.02) or already in percent (2.0)
 const calm = () => !!meta.settings.reduceMotion;
 const no = (reason = 'unknown') => { play('deny'); return { ok: false, reason }; };
 const payWhy = (p) => ((p.coins || 0) > run.purse ? 'coins' : (p.wick || 0) > run.wick ? 'wick' : 'unknown');
@@ -47,16 +62,24 @@ const nameOf = (id) => L((CHARM[id] ?? TRICK[id] ?? CURSE[id] ?? SYM[id])?.name)
 // ---------- machine ----------
 function refreshCoach() {
   if (!input) return;
-  const c = run?.tut && !targeting ? coachFor(run, seen) : null, onMachine = !!run && MACHINE.has(run.phase) && !layerOpen();
+  const c = run && !targeting && !tutorial.active ? coachFor(run, seen) : null, onMachine = !!run && MACHINE.has(run.phase) && !layerOpen();
+  if (c?.sys) ft = c.sys;
   input.coach(c ? t(c.key) : null);
   if (onMachine && !targeting) setTargets(c?.cells ?? []);
 }
 
 function syncMachine() {
   setGrid(run.grid ?? DECOR);
+  if (run.phase === 'spin' && run.spinInRound === 0) clearHighlights(); // a new night never shows last night's win lines (AUDIT2 8)
   setHeld(run.pinned.map((p) => p.cell));
+  const f = info(run), idx = Object.keys(CONTRACT).indexOf(run.contract);
+  VIEW.setPlace?.(idx >= 0 ? idx + 1 : 1);
+  VIEW.setRung?.(Math.min(3, Math.floor((run.debtIdx | 0) / 2)));
+  VIEW.setRedEye?.(pctOf(f.redEyeChance ?? 0), { blessed: !!snapshot(run).flags.redEyeBless });
+  VIEW.setLever?.(!busy && run.phase === 'spin' && run.spinsLeft > 0 && !layerOpen());
   updateHud(run);
   refreshCoach();
+  if (run.phase === 'roundend') tutEv('roundEnd');
 }
 
 function cancelTarget() {
@@ -76,6 +99,7 @@ const chipText = (c) => `${c.kind === 'heat' ? t('ui.heat') : nameOf(c.id)} +${f
 // Plays one scored result: pattern strokes with a rising pitch, the Scorch, coins to the debt bar, the numbers, Brimble.
 async function showScore(sc) {
   const cells = [...new Set(sc.patterns.flatMap((p) => p.cells))], gain = sc.gain ?? sc.total + sc.flat;
+  if (sc.patterns.length) lastPatterns = sc.patterns;
   if (!instant && sc.patterns.length) await playPatterns(sc.patterns, { onStep: (s) => { playStep(s.p + s.k); if (s.last) haptics.tick(); } });
   if (sc.scorch) {
     play('quota_fail'); if (!calm()) shakeScreen(8);
@@ -84,7 +108,7 @@ async function showScore(sc) {
   if (gain > 0) {
     const big = gain * 4 >= run.debt ? 2 : gain * 10 >= run.debt ? 1 : 0;
     flyCoins(gain, cells.length ? cells : [7]); play('coin_fly');
-    input.score(scoreText(sc), sc.top3.filter((c) => c.gain > 0).map(chipText));
+    input.score(scoreText(sc), sc.top3.filter((c) => c.gain > 0).map(chipText), tutorial.active ? 120000 : undefined); // the tutorial points at it: it stays until the next action
     if (big) { if (!calm()) bigWin(big); play('big_win'); haptics.success(); say('brimble', 'big'); } else setDevil('angry', 0.9);
   } else if (!sc.scorch) {
     input.score(t('ui.noPattern'), [], 1200); setDevil('grin', 0.9);
@@ -99,8 +123,10 @@ async function showScore(sc) {
 async function step(fn) {
   if (busy) return;
   busy = true; setBusy(true); cancelTarget(); input.coach(null); input.score(null); setTargets([]);
+  if (ft) { seen[ft] = true; ft = null; }
   try { await fn(); } finally { busy = false; setBusy(false); }
   updateHud(run); refreshCoach();
+  if (run?.phase === 'roundend') tutEv('roundEnd'); // the last spin of a night: tutorial step 16
 }
 
 const doSpin = () => (run?.phase === 'spin' && run.spinsLeft > 0 ? step(async () => {
@@ -113,7 +139,11 @@ const doSpin = () => (run?.phase === 'spin' && run.spinsLeft > 0 ? step(async ()
     await playSpin({ grid: res.grid, held }, { fast: meta.settings.fast, onStop: (c) => play(`reel_stop_${1 + (c % 3)}`) });
   }
   setHeld([]);
+  if (res.redEye && res.redEye.level > 0 && !instant) { play('redeye_sting'); await VIEW.playRedEye?.({ level: res.redEye.level, blessed: !!res.redEye.blessed }); }
+  else if (res.redEye?.blessed && !instant) play('redeye_sting');
   if (res.score) await showScore(res.score);
+  else if (tutorial.active && run.phase === 'post') { const sc = collect(run); persist(); await showScore(sc); } // the guided run teaches no tricks: no SCORE step behind the scrim
+  tutEv('spin');
 }) : undefined);
 
 const doCollect = () => (run?.phase === 'post' ? step(async () => {
@@ -178,8 +208,12 @@ function route() {
       showScreen('terms', { ...data, offers, skip: canSkip(run) ? skipReward(run) : null }); break;
     }
     // offers is read on every repaint, so a buy or a lock shows at once
-    case 'shop': showScreen('shop', { ...data, get offers() { const s = run?.shop ?? {}; return { charms: (s.charms ?? []).map((id) => ({ id, locked: run.lock === id })), tricks: s.tricks, bench: s.bench }; } }); break;
+    case 'shop': v3('tinVisit')?.(run); persist(); showScreen('shop', { ...data, get offers() { const s = run?.shop ?? {}; return { charms: (s.charms ?? []).map((id) => ({ id, locked: run.lock === id })), tricks: s.tricks, bench: s.bench, cart: s.upgrades }; } }); break;
     case 'deal': showScreen('deal', { ...data, offers: run.dealOffer }); break;
+    case 'call': // the phone rings after the PAID stamp; in the tutorial it rings on the machine until the player taps it
+      if (run.tut && tutorial.active && tutorial.step?.target === 'phone') { hideScreen(); syncMachine(); play('phone_ring'); } else { showScreen('phone', data); play('phone_ring'); }
+      break;
+    case 'himOrMe': showScreen('himorme', { ...data, spirit: run.himOrMe?.spirit, rival: run.himOrMe?.rival }); break;
     case 'pawn': showScreen('pawn', data); break;
     case 'ended': // a cleared contract may go on: endless debts, scored by debts paid
       if (canContinue(run)) { showScreen('endless', { ...data, next: debtBase(run.contract, run.debtIdx + 1) }); break; }
@@ -204,12 +238,12 @@ function begin() {
   say('brimble', 'start');
 }
 
-function startRun({ charId = 'nim', contractId = 'c1', tutorial = false } = {}) {
-  const tut = tutorial && !meta.tutorialDone && forcedSeed == null;
+function startRun({ charId = 'nim', contractId = 'c1', tutorial: wantTut = false, replay = false, postcards = [], storm = 0 } = {}) {
+  const tut = wantTut && (replay || !meta.tutorialDone) && forcedSeed == null;
   const seed = String(forcedSeed ?? (tut ? TUTORIAL_SEED : `${Date.now().toString(36)}-${Math.floor(Math.random() * 1e9).toString(36)}`)); // a seed, not a draw
   forcedSeed = null;
-  run = newRun({ seed, contractId: CONTRACT[contractId] ? contractId : 'c1', charId, meta });
-  if (tut) { run.tut = true; run.forcedTerms = TUTORIAL_TERMS; }
+  run = newRun({ seed, contractId: CONTRACT[contractId] ? contractId : 'c1', charId, meta, postcards, storm });
+  if (tut) { run.tut = true; run.forcedTerms = TUTORIAL_TERMS; } else { meta.last = { charId, contractId, postcards, storm }; }
   save.runDate = null;
   begin();
 }
@@ -222,8 +256,12 @@ function paid(outcome, pre, extra = {}) {
     if (run.tut && run.phase === 'deal' && run.debtIdx === 0 && DEAL.lucky_break) run.dealOffer = ['lucky_break']; // the first deal is one plain offer, and a good one: signing can win
   }
   persist();
+  const paidN = run.debtIdx | 0, rung = outcome === 'paid' && paidN > 0 && paidN % 2 === 0 && paidN <= 6 ? paidN / 2 : 0;
   play('stamp_paid'); haptics.success(); setDevil(outcome === 'paid' ? 'grin' : 'shock', 2);
-  showScreen('paid', { run, meta, outcome, info: { earlyRounds: outcome === 'paid' ? pre.unused : 0, wick: pre.unused * CONFIG.earlyPay.wickPerUnusedRound, spins: pre.unused * CONFIG.earlyPay.spinsPerUnusedRound, kept: run.purse, next, ...extra } });
+  if (rung) { VIEW.setRung?.(rung); VIEW.rankUp?.(rung); }
+  tutEv('debtPaid');
+  if (tutorial.active && run.phase === 'call') { route(); return; } // the next step points at the ringing phone on the machine: a stamp screen on top would hide it
+  showScreen('paid', { run, meta, outcome, info: { rung, earlyRounds: outcome === 'paid' ? pre.unused : 0, wick: pre.unused * CONFIG.earlyPay.wickPerUnusedRound, spins: pre.unused * CONFIG.earlyPay.spinsPerUnusedRound, kept: run.purse, next, ...extra } });
   updateHud(run); refreshCoach();
 }
 const preOf = () => ({ unused: Math.max(0, run.rounds - run.round - 1), items: [...run.tricks, ...run.charms.map((c) => c.id)] });
@@ -232,7 +270,7 @@ const preOf = () => ({ unused: Math.max(0, run.rounds - run.round - 1), items: [
 function endRun() {
   const ended = run, s = summary(ended), result = applyRunResult(meta, s);
   if (s.won && !meta.cleared.includes(s.contract)) meta.cleared.push(s.contract);
-  if (ended.daily) result.wax += recordDaily(meta, save.runDate ?? todayUTC(), s).wax;
+  if (ended.daily) { const dw = recordDaily(meta, save.runDate ?? todayUTC(), s).wax; result.wax += dw; result.stash += dw; }
   meta.tutorialDone = true;
   noteRunFinished(Math.max(0, (Date.now() - (save.runAt || Date.now())) / 1000));
   run = null; save.run = null; save.runDate = null;
@@ -241,7 +279,8 @@ function endRun() {
   lastEnd = {
     run: ended, meta, won: s.won, ending: s.ending, again: { charId: ended.char, contractId: ended.contract },
     summary: { ...s, stats: { ...s.stats, bestSpin: s.stats.spinCoins, curses: s.curses } },
-    result: { wax: result.wax, newAchievements: result.newAchievements.map((a) => a.id), unlocks: result.unlocks, doubled: false },
+    result: { ...result, wax: result.wax, newAchievements: result.newAchievements.map((a) => a.id), unlocks: result.unlocks, doubled: false },
+    epilogues: Object.entries(ended.spirits ?? {}).filter(([, sp]) => (sp?.fav | 0) >= 8).map(([id]) => id),
   };
   updateHud(null); input.coach(null); input.score(null);
   showScreen('runend', lastEnd);
@@ -253,21 +292,22 @@ const newCurses = (before) => { for (const id of run.curses) if (!before.include
 
 const ui = {
   startRun,
-  pickTerms(id) { if (!pickTerms(run, id)) return no(); play('ui_page'); persist(); route(); return undefined; },
+  pickTerms(id) { if (!pickTerms(run, id)) return no(); play('ui_page'); tutEv('pickTerms'); persist(); route(); return undefined; },
   stoke() {
     if (busy || !stoke(run)) return no('max');
-    seen.stoke = true;
+    seen.stoke = true; tutEv('stoke');
     playStep(Math.min(4, Math.floor(run.heat / 2)), 'lantern_light'); haptics.tick(); setDevil('grin', 0.8);
     if (run.heat === 1 || run.heat === 7) say('brimble', run.heat >= 7 ? 'heatHigh' : 'stoke');
     persist(); refreshCoach(); return undefined;
   },
-  redrawFav() { if (busy || run?.phase !== 'spin') return no(); if (!redrawFavourite(run)) return no('wick'); play('ui_page'); persist(); return undefined; },
+  redrawFav() { if (busy || run?.phase !== 'spin' || tutorial.active) return no(); if (!redrawFavourite(run)) return no('wick'); play('ui_page'); persist(); return undefined; },
   spin: doSpin,
   collect: doCollect,
   bank(amount) {
     const pre = preOf(), was = run.phase;
     if (busy || !bank(run, amount)) return no('coins');
     play('coin_jar');
+    tutEv('bank');
     if (run.phase !== was) return paid('paid', pre);
     persist(); return undefined;
   },
@@ -276,7 +316,7 @@ const ui = {
     const pre = preOf(), r = endRound(run);
     if (run.tut && run.phase === 'shop' && run.debtIdx === 0 && run.roundSerial === 1) run.shop.charms = TUTORIAL_CHARMS.filter((id) => CHARM[id]);
     if (r.deadline === 'paid') return paid('paid', pre, { interest: r.interest });
-    if (r.deadline === 'saved') return paid('saved', pre, { interest: r.interest, name: nameOf(pre.items.find((id) => ![...run.tricks, ...run.charms.map((c) => c.id)].includes(id)) ?? '') });
+    if (r.deadline === 'saved') { const lost = pre.items.find((id) => ![...run.tricks, ...run.charms.map((c) => c.id)].includes(id)); return paid('saved', pre, { interest: r.interest, name: nameOf(lost ?? ''), mercy: !lost && run.tut }); }
     persist();
     if (r.interest > 0) toast('ui.paidInterest', { n: r.interest });
     if (r.deadline === null) play('shop_open');
@@ -300,17 +340,17 @@ const ui = {
     input.coach(null); setTargets(ALL); showPrompt(PROMPT[kind], cancelTarget);
     return undefined;
   },
-  signDeal(id) { const before = [...run.curses]; if (!signDeal(run, id)) return no(); play('event_stamp'); newCurses(before); persist(); route(); return undefined; },
+  signDeal(id) { const before = [...run.curses]; if (!signDeal(run, id)) return no(); play('event_stamp'); newCurses(before); tutEv('deal'); persist(); route(); return undefined; },
   refuseDeals() { if (!refuseDeals(run)) return no('locked'); play('ui_page'); persist(); route(); return undefined; },
   pawn(i) { const before = [...run.curses]; if (!pawn(run, i)) return no(); newCurses(before); persist(); route(); return undefined; },
   declinePawn() { declinePawn(run); persist(); route(); },
-  leaveShop() { leaveShop(run); persist(); route(); },
+  leaveShop() { leaveShop(run); tutEv('leaveShop'); persist(); route(); },
   paidContinue() { route(); },
   // Run end closed: an interstitial only here, between runs, and only when every rule in services/ads.js allows it.
   async home() { await maybeShowInterstitial({ slot: 'after_run_end' }); showHome(); },
   async again() { await maybeShowInterstitial({ slot: 'after_run_end' }); startRun(lastEnd?.again ?? {}); },
 
-  buyCharm(i) { const id = run.shop?.charms[i]; return shop(buyCharm(run, i), 'buy', run.charms.length >= slotsOf(run) ? 'full' : id ? payWhy(price(run, { kind: 'charm', id })) : 'unknown'); },
+  buyCharm(i) { const id = run.shop?.charms[i]; const r = shop(buyCharm(run, i), 'buy', run.charms.length >= slotsOf(run) ? 'full' : id ? payWhy(price(run, { kind: 'charm', id })) : 'unknown'); if (!r) tutEv('buy'); return r; },
   sellCharm: (slot) => shop(sellCharm(run, slot), 'sell'),
   moveCharm: (from, to) => shop(moveCharm(run, from, to), 'ui_tap'),
   buyTrick(i) { const id = run.shop?.tricks[i]; return shop(buyTrick(run, i), 'buy', run.tricks.length >= pocketsOf(run) ? 'full' : id ? payWhy(price(run, { kind: 'trick', id })) : 'unknown'); },
@@ -322,6 +362,7 @@ const ui = {
     if (kind === 'sell') return sellValue(run, { id: item.id });
     if (kind === 'reroll') return run.shop?.freeRerolls > 0 ? { coins: 0 } : price(run, { kind });
     if (kind === 'bench' && run.freeBench > 0) return { coins: 0 };
+    if (kind === 'cart') return v3('upgradePrice') ? v3('upgradePrice')(run, item) : { coins: Math.round(8 * coinScaleOf(run)) };
     return price(run, { kind, id: item.id });
   },
 
@@ -341,6 +382,8 @@ const ui = {
       target: r.debt, scale: coinScaleOf(r), debt: r.debtIdx + 1, debts: r.endless ? r.debtIdx + 1 : CONTRACT[r.contract].debts.length, round: Math.min(r.round + 1, r.rounds), rounds: r.rounds,
       spins: r.spinsLeft, luck: i.luck, canStoke: i.canStoke, stokeWhy: f.noStoke ? 'ui.stokeNo' : 'ui.stokeMax', favHidden: i.favHidden,
       noLock: !!f.rerollDouble, mustSign: !!f.mustSign, redrawCost: i.redrawCost, boss: bossOf(r), refuseWick: Math.max(CONFIG.deals.refuseWick, r.hide?.refuseWick || 0, f.refuseWick || 0),
+      ...(i.pace && { pace: i.pace }), ...(i.beads != null && { beads: i.beads }), redEye: pctOf(i.redEyeChance ?? 0), ...(i.due && { due: i.due }), ...(i.spirits && { spirits: i.spirits }),
+      ...(r.phase === 'call' && v3('rerollCost') && { callRerollCost: v3('rerollCost')(r) }), ...(i.kiosk && { kiosk: i.kiosk }), payNow: !!i.canPayNow, honkReady: !!i.canHonk, blender: !!v3('blenderOpen')?.(r),
     };
   },
 
@@ -351,7 +394,95 @@ const ui = {
     const r = await showRewarded(placement, { inRun: !!run });
     if (!r.rewarded) { toast(r.reason === 'closed' || r.reason === 'dismissed' ? 'ads.noReward' : 'ads.unavailable'); return; }
     if (placement === 'shop_reroll' && run?.shop) { run.shop.freeRerolls++; persist(); }
-    if (placement === 'double_wax' && lastEnd && !lastEnd.result.doubled) { lastEnd.result.doubled = true; meta.wax += lastEnd.result.wax; writeSave(save); play('plank_gain'); }
+    if (placement === 'double_wax' && lastEnd && !lastEnd.result.doubled) { lastEnd.result.doubled = true; meta.stash += lastEnd.result.stash ?? lastEnd.result.wax; writeSave(save); play('plank_gain'); }
+  },
+  // ---- v3: Kiosk, phone, Tin, HONK, Blender, cart, meta (each calls the core by name when it exists; a missing one says "not yet") ----
+  payNow() {
+    const f = v3('payNow'), pre = preOf(), was = run.phase;
+    if (busy || !f) return no('unknown');
+    f(run); tutEv('payNow'); play('coin_jar');
+    if (run.phase !== was) return paid('paid', pre);
+    persist(); return undefined;
+  },
+  honk() {
+    const f = v3('honk');
+    if (busy || !f) return no('unknown');
+    const slots = run.charms.map((c, i) => (c.charge ?? CHARM[c.id]?.active?.need ?? 0) >= (CHARM[c.id]?.active?.need ?? 99) ? i : -1).filter((i) => i >= 0);
+    if (!f(run)) return no('closed');
+    play('honk'); haptics.tick(); VIEW.honk?.(slots); tutEv('honk');
+    persist(); updateHud(run); return undefined;
+  },
+  buyCart(i) { const f = v3('buyUpgrade'); return shop(f ? f(run, i) : false, 'buy', 'coins'); },
+  callPick(i) {
+    const f = v3('callPick');
+    if (!f) return no('unknown');
+    const card = (run.callOffer?.cards ?? [])[i];
+    if (!f(run, i)) return no(card?.ruby ? 'closed' : 'unknown');
+    play(card?.color === 'red' ? 'call_red' : 'ui_page');
+    if (!card?.ruby) tutEv('callPick'); // Ruby's card opens the deal screen: the tutorial goes on when it is signed or backed out of
+    persist(); route(); return undefined;
+  },
+  callReroll() { const f = v3('callReroll'); if (!f || !f(run)) return no('wick'); play('reroll'); persist(); return undefined; },
+  hangUp() {
+    const f = v3('hangUp');
+    if (!f) return no('unknown');
+    const white = !!run.callOffer?.white;
+    if (!f(run)) return no('closed');
+    play(white ? 'call_white' : 'ui_page'); tutEv('hangUp');
+    persist(); route(); return undefined;
+  },
+  lookRed(i) { v3('callLook')?.(run, i); persist(); },
+  dealBack() { const f = v3('dealBack'); if (!f || !f(run)) return no('locked'); tutEv('dealBack'); persist(); route(); return undefined; },
+  offer(kind, size, target) {
+    const f = v3('offer');
+    if (!f) return no('unknown');
+    const r = f(run, kind, size, target);
+    if (r === false || r?.ok === false) return no(r?.why ?? 'nothing');
+    play('stage_up', { vol: 0.5 }); tutEv('offering'); persist();
+    if (run.phase !== 'shop') return route(); // a Him or Me modal was raised
+    updateHud(run); return undefined;
+  },
+  acceptDemand() { const f = v3('acceptDemand'); if (!f || f(run) === false) return no(); persist(); return undefined; },
+  himOrMe(choice) { const f = v3('himOrMe'); if (!f || !f(run, choice)) return no('unknown'); persist(); route(); return undefined; },
+  blendPreview(a, b) { const f = v3('blendPreview'); return f ? f(run, a, b) : { ok: false, why: 'unknown' }; },
+  blend(a, b, out) {
+    const f = v3('blend');
+    if (!f) return no('unknown');
+    const r = f(run, a, b, out);
+    if (r === false || r?.ok === false) return no(r?.why ?? 'wick');
+    play('blend'); tutEv('blend'); persist(); return undefined;
+  },
+  storyDone() { // the story panels are over: the first run starts (or the replay)
+    const replay = !!meta.tutorialDone;
+    startRun({ tutorial: true, replay, charId: 'nim', contractId: 'c1' });
+    if (run?.tut) tutorial.start(TUT.TUTORIAL_STEPS, 3);
+    return undefined;
+  },
+  replayTutorial() { forcedSeed = null; showScreen('title', { replay: true }); tutorial.start(TUT.TUTORIAL_STEPS, 0); },
+  luggage(slot, charmIndex) { const f = v3('leaveLuggage'), id = lastEnd?.run?.charms?.[charmIndex]?.id; if (!f || !lastEnd || !f(meta, lastEnd.summary, slot, id)) return no(); play('plank_gain'); writeSave(save); return undefined; },
+  postcardSlots: () => v3('postcardSlots')?.(meta) ?? 0,
+  lockerContents: (l) => v3('lockerContents')?.(l) ?? null,
+  buyNode(id) { const f = v3('buyNode', 'buyNotebook'); if (!f || !f(meta, id)) return no('wax'); play('build_done'); writeSave(save); return { ok: true }; },
+  openLocker(id) { const f = v3('openLocker'); const r = f ? f(meta, id) : null; if (!r?.ok) return no(r?.why ?? 'locked'); play('plank_gain'); writeSave(save); return { ok: true }; },
+  progressOf(item) { const f = v3('progressOf'); return f ? f(item, meta) : null; },
+  getMeta: () => meta,
+  anchor(name) {
+    const lay = VIEW.getLayout?.();
+    if (!lay) return null;
+    const m = /^pattern:(\d+)$/.exec(name), p = m && lastPatterns[+m[1]];
+    if (!p) return lay.anchors?.[name] ?? null;
+    const rs = p.cells.map((i) => lay.cells[i]), x = Math.min(...rs.map((r) => r.x)), y = Math.min(...rs.map((r) => r.y));
+    return { x, y, w: Math.max(...rs.map((r) => r.x + r.w)) - x, h: Math.max(...rs.map((r) => r.y + r.h)) - y };
+  },
+  tutEvent: (name) => tutEv(name),
+  tutVars: () => ({ debt: fmt(run?.debt ?? 0), nights: run?.rounds ?? 2 }),
+  tutStep(step) { // a step whose target is on the next screen while the night is still waiting to end: end it for the player
+    if (run?.phase === 'roundend' && /^(tin|stall|terms|call)/.test(step.target)) queueMicrotask(() => ui.endRound());
+  },
+  tutDone() { meta.tutorialDone = true; save.tutStep = null; writeSave(save); },
+  screenShown(name, data) {
+    if (name === 'phone') tutEv('callOpen');
+    else if (name === 'deal' && run?.callOffer) { tutEv('dealSheet'); tutEv('dealOpen'); }
   },
   settingsChanged(s) {
     Object.assign(meta.settings, s);
@@ -364,17 +495,18 @@ const ui = {
 function installDebug() {
   const state = () => ({
     screen: document.querySelector('.layer:not([hidden]) .panel')?.className.replace('panel ', '').trim() ?? (run ? 'game' : 'none'),
-    busy, lang: getLang(), phase: run?.phase ?? null, seed: run?.seed ?? null, tut: !!run?.tut,
+    busy, lang: getLang(), phase: run?.phase ?? null, seed: run?.seed ?? null, tut: !!run?.tut, tutStep: tutorial.active ? tutorial.step?.id ?? null : null,
     debtIdx: run?.debtIdx ?? 0, debt: run?.debt ?? 0, banked: run?.banked ?? 0, round: run?.round ?? 0, rounds: run?.rounds ?? 0, spinsLeft: run?.spinsLeft ?? 0,
     purse: run?.purse ?? 0, wick: run?.wick ?? 0, heat: run?.heat ?? 0, grid: run?.grid ?? null, favs: run?.favs ?? [],
     charms: run?.charms.map((c) => c.id) ?? [], tricks: run?.tricks ?? [], curses: run?.curses ?? [], deals: run?.deals ?? [],
-    shop: run?.shop ?? null, terms: run?.termsOffer ?? null, dealOffer: run?.dealOffer ?? null, rngState: run ? { ...run.rngState } : null, result: run?.result ?? lastEnd?.summary ?? null,
-    wax: meta.wax, tutorialDone: meta.tutorialDone, contracts: meta.contracts, achievements: meta.achievements.length, finishedRuns: adsState().finishedRuns,
+    shop: run?.shop ?? null, terms: run?.termsOffer ?? null, dealOffer: run?.dealOffer ?? null, call: run?.callOffer?.cards ?? null, rngState: run ? { ...run.rngState } : null, result: run?.result ?? lastEnd?.summary ?? null,
+    wax: meta.stash ?? meta.wax, tutorialDone: meta.tutorialDone, contracts: meta.contracts, achievements: meta.achievements.length, finishedRuns: adsState().finishedRuns,
   });
   // QA shortcuts on the live run. grid: a rigged result waiting for COLLECT. lose: the last night ends with nothing.
   const cheat = (o = {}) => {
     if (!run) return;
     for (const k of ['purse', 'wick', 'heat', 'banked', 'spinsLeft']) if (k in o) run[k] = o[k];
+    if (o.set) Object.assign(run, o.set); // QA: v3 state (spirits, callOffer, tin, beads...) on a v2 core
     if (o.charm) addCharm(run, o.charm);
     if (o.trick) addTrick(run, o.trick);
     if (o.curse) addCurse(run, o.curse);
@@ -396,10 +528,12 @@ function installDebug() {
     goto(name, data = {}) {
       if (name === 'home') return showHome();
       if (name === 'game') { hideScreen(); if (run) syncMachine(); return undefined; }
-      if (['terms', 'shop', 'deal', 'pawn'].includes(name)) return route(); // only what the run's phase allows
+      if (['terms', 'shop', 'deal', 'pawn', 'phone', 'himorme'].includes(name)) return route(); // only what the run's phase allows
       return showScreen(name, { run, meta, today: todayUTC(), ...data });
     },
     setLang: (l) => setLanguage(l),
+    skipTutorial: () => tutorial.stop(),
+    redEye: (level = 1, blessed = false) => VIEW.playRedEye?.({ level, blessed }), // QA: the omen animation on the current grid
     seed(n) { forcedSeed = n; },
   };
 }
@@ -411,7 +545,7 @@ async function boot() {
   const canvas = document.getElementById('c');
   initView(canvas, { symbols: SYMBOLS });
   initUi(ui, meta.settings);
-  setHandlers({ coinLand: () => play('coin_jar', { vol: 0.5 }) });
+  setHandlers({ coinLand: () => play('coin_jar', { vol: 0.5 }), lever: () => { if (!layerOpen() && run?.phase === 'spin') doSpin(); }, leverTick: () => haptics.tick(), leverThud: () => play('lever_clack'), leverTease: () => play('lever_tease') });
   input = initInput({
     canvas, host: document.querySelector('.ui-col'), cellAt, onCell, onInspect,
     onPrimary: () => { if (layerOpen() || !run) return; if (run.phase === 'spin') doSpin(); else if (run.phase === 'post') doCollect(); },
@@ -436,7 +570,7 @@ async function boot() {
     await ensureConsent();
     await initIap({ cache: save.iap, onChange: () => {
       meta.iap.noAds = ownsProduct('remove_ads');
-      if (ownsProduct('starter_pack') && !save.starterGranted) { save.starterGranted = true; meta.wax += STARTER_WAX; }
+      if (ownsProduct('starter_pack') && !save.starterGranted) { save.starterGranted = true; meta.stash += STARTER_WAX; }
       writeSave(save);
     } });
     await initAds({ state: save.ads, onChange: () => writeSave(save) });
@@ -444,6 +578,7 @@ async function boot() {
 
   if (DEBUG) installDebug();
   // A saved run comes back where it stopped. The very first run starts at once (no menu before the first spin); home is first from then on.
-  if (save.run) { run = save.run; route(); } else if (!meta.tutorialDone) startRun({ tutorial: true }); else showHome();
+  if (save.run) { run = save.run; if (run.tut && !meta.tutorialDone) tutorial.start(TUT.TUTORIAL_STEPS, save.tutStep ?? 3); route(); }
+  else if (!meta.tutorialDone) { showScreen('title', {}); tutorial.start(TUT.TUTORIAL_STEPS, 0); } else showHome();
 }
 boot();

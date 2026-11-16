@@ -1,26 +1,45 @@
 // A run: contract, debts, rounds, spins, tricks, banking, interest, deadline, endings, save/resume.
 // phase: 'terms' -> 'spin' -> ('post') -> 'spin' ... -> 'roundend' -> 'shop' -> 'terms'
 //        debt paid: 'deal' -> 'shop' -> 'terms'; deadline missed: 'pawn' | 'ended'.
-import { CONFIG, RARITIES, CHARM, CHARMS, CHAR, CONTRACT, STAKE, STAKES, TRICK, SYM, SCORING } from './data.js';
+import { CONFIG, RARITIES, CHARM, CHARMS, CHAR, CONTRACT, CONTRACTS, STAKE, STAKES, TRICK, SYM, SCORING, SPIRITS, rarityRank } from './data.js';
 import { stream } from './streams.js';
 import {
-  snapshot, fire, runEffects, endSpan, scaleOf, debtBase, slotsOf, pocketsOf, scoreSpin, setHeat, addTrick, addCharm, burnCharm, addCurse, luckOf,
+  snapshot, fire, runEffects, endSpan, scaleOf, debtBase, slotsOf, pocketsOf, scoreSpin, setHeat, addTrick, addCharm, burnCharm, addCurse, luckOf, activate, chargeOf, chargeCap,
 } from './effects.js';
 import { pickFavourites, rollGrid, rollRow, rollCells, applySpinEdits, applyGridEdits, COLS } from './machine.js';
-import { openShop } from './shop.js';
-import { offerDeals } from './deals.js';
+import { openShop, rollTermsFor } from './shop.js';
 import { hideoutEffects, availableCharms } from './meta.js';
+import { initSpirits, FIRST_RUN_SPIRITS, demandRoundEnd, demandHeat, demandPickFav, flushModal } from './spirits.js';
+import { startCall, dueRoundEnd } from './calls.js';
+import { rollRedEye, hasEye, eyeInfo, redEyeChance } from './omen.js';
 
 export { scaleOf, debtBase };
+export { honk as activateCharms };
 export const phase = (run) => run.phase;
+// The first run banks everything at step 14 and still buys at step 19: the first stall starts the purse at this much (SPEC review 2.6).
+export const TUT_PURSE_FLOOR = 20;
 export const saveRun = (run) => JSON.stringify(run);
-export const loadRun = (s) => JSON.parse(s);
+export const loadRun = (s) => upgradeRun(JSON.parse(s));
 
-export function newRun({ seed = 'run', contractId = 'c1', charId = 'nim', meta = null, daily = null } = {}) {
+// Fields v3 adds (SPEC 3.8). A v2 run is upgraded in place by filling these in.
+const v3Fields = () => ({
+  beads: 0, whiteCalls: 0, whiteTaken: 0, redEyes: 0, callOffer: null, due: [], relics: [], postcards: [], demand: null, tin: null, storm: 0,
+  honkEdits: [], favQueue: [], peek: null, himQueue: [], himOrMe: null, himBack: null, roundStartPurse: 0, recent: [], sinceCall: {}, fused: [],
+  pendingLift: 0, spinsOff: 0, blend: null,
+});
+export function upgradeRun(run) {
+  if (run.v >= 3) return run;
+  for (const [k, v] of Object.entries(v3Fields())) run[k] ??= v;
+  if (!run.spirits) initSpirits(run);
+  run.v = 3;
+  return run;
+}
+
+export function newRun({ seed = 'run', contractId = 'c1', charId = 'nim', meta = null, daily = null, postcards = [], storm = 0, unlocked = null } = {}) {
   const ch = CHAR[charId];
   const hide = meta ? hideoutEffects(meta) : {};
   const run = {
-    v: 2, seed: String(seed), rngState: {}, contract: contractId, char: charId, daily: !!daily,
+    v: 3, ...v3Fields(), postcards: [...postcards], storm, seed: String(seed), rngState: {}, contract: contractId, char: charId, daily: !!daily,
     debtIdx: 0, debt: 0, banked: 0, round: 0, rounds: 3, roundSerial: 0, spinsLeft: 0, spinInRound: 0,
     phase: 'terms', purse: CONFIG.start.coins, wick: ch.start.wick + (hide.startWick || 0), heat: 0, pity: 0,
     charms: [], slots: ch.start.slots, tricks: [], pockets: CONFIG.start.trickPockets, stash: null, pinned: [],
@@ -32,6 +51,14 @@ export function newRun({ seed = 'run', contractId = 'c1', charId = 'nim', meta =
     freeBench: 0, lock: null, seen: [], forcedTerms: daily?.forcedTerms || null, startPick: null, result: null,
     shopExtra: false, slotBought: false, trickFree: 0, tricksSpin: 0, adReroll: 0, lastDeadline: null,
   };
+  const base = {};
+  for (const d of SPIRITS) base[d.id] = (meta?.devotion?.[d.id] >= 1 ? 1 : 0) - (storm >= 5 ? 1 : 0);
+  initSpirits(run, { unlocked: unlocked || (meta?.spirits?.length ? meta.spirits : FIRST_RUN_SPIRITS), base });
+  for (const f of hide.flags || []) run.perm.push({ type: 'flag', flag: f.flag, v: f.v, src: { kind: 'notebook', id: f.id } });
+  if (meta?.luggage && !meta.skipRelics) {
+    for (const id of meta.luggage) if (id && CHARM[id] && addCharm(run, id)) { run.charms.at(-1).relic = true; run.relics.push(id); }
+  }
+  if (meta) meta.skipRelics = false;
   for (const id of ch.start.charms) addCharm(run, id);
   if (meta && hide.keepCharm && meta.keepsake && !run.charms.some((c) => c.id === meta.keepsake)) addCharm(run, meta.keepsake);
   for (const id of ch.start.tricks) addTrick(run, id);
@@ -58,6 +85,22 @@ export function pickStartCharm(run, id) {
 }
 
 
+const closed = (run) => {
+  const rec = run.perm.find((r) => r.type === 'flag' && r.flag === 'noShopN' && r.v > 0);
+  if (!rec) return false;
+  if (--rec.v <= 0) run.perm.splice(run.perm.indexOf(rec), 1);
+  return true;
+};
+// Opens the stall, or (Closing Down Sale) skips it: straight to the terms of the next night.
+function enterStall(run) {
+  if (!closed(run)) return openShop(run);
+  run.shop = null;
+  run.tin = null;
+  run.phase = 'terms';
+  run.termsOffer = null;
+  termsOffer(run);
+}
+
 function startDebt(run) {
   const mods = snapshot(run);
   const base = debtBase(run.contract, run.debtIdx);
@@ -75,7 +118,7 @@ function startDebt(run) {
 export function nextDebt(run) {
   run.debtIdx++;
   startDebt(run);
-  openShop(run);
+  enterStall(run);
 }
 
 export function leaveShop(run) {
@@ -92,17 +135,8 @@ export function leaveShop(run) {
 export function termsOffer(run) {
   if (!run.termsOffer) {
     if (run.forcedTerms && run.roundSerial === 0) run.termsOffer = [run.forcedTerms];
-    else {
-      const rng = stream(run, 'terms');
-      const pool = STAKES.filter((s) => s.minDebt <= run.debtIdx + 1);
-      const ids = [];
-      while (ids.length < 3 && pool.length) {
-        const s = rng.weighted(pool, pool.map((p) => p.weight));
-        ids.push(s.id);
-        pool.splice(pool.indexOf(s), 1);
-      }
-      run.termsOffer = ids;
-    }
+    else if (run.peek?.terms) { run.termsOffer = run.peek.terms; run.peek.terms = null; } // a neighbour already told you
+    else run.termsOffer = rollTermsFor(run);
   }
   return run.termsOffer.map((id) => STAKE[id]);
 }
@@ -115,9 +149,10 @@ export function needsBurn(run) {
 function autoResolve(run) {
   while (needsBurn(run) > 0) {
     let worst = 0;
-    run.charms.forEach((c, i) => { if (RARITIES.indexOf(CHARM[c.id].rarity) <= RARITIES.indexOf(CHARM[run.charms[worst].id].rarity)) worst = i; });
+    run.charms.forEach((c, i) => { if (!c.relic && (run.charms[worst].relic || rarityRank(CHARM[c.id].rarity) <= rarityRank(CHARM[run.charms[worst].id].rarity))) worst = i; });
     burnCharm(run, worst);
   }
+  if (run.pendingLift > 0) { run.curses.splice(0, run.pendingLift); run.pendingLift = 0; }
   while (run.pendingRemove > 0) {
     const left = SCORING.filter((s) => !run.removed.includes(s)).sort((a, b) => SYM[a].value - SYM[b].value);
     if (run.removed.length >= CONFIG.start.removedSymbolsMax || !left.length) { run.pendingRemove = 0; break; }
@@ -140,6 +175,14 @@ export function pickTerms(run, id) {
   if (mods.flags.noStoke) run.heat = mods.flags.heatFloor || 0;
   run.spinsLeft = Math.max(1, st.spins - (mods.flags.spinsLess || 0) + (mods.flags.spinsRound || 0)) + (run.carrySpins || 0);
   run.carrySpins = 0;
+  run.spinsLeft = Math.max(1, run.spinsLeft - (run.spinsOff || 0)); // an offering of "spins off" (the Tin)
+  run.spinsOff = 0;
+  run.roundStartPurse = run.purse;
+  const noCharge = run.postcards.includes('full_charge') && run.round === 0; // Full Charge: no recharge on the first round of each debt
+  for (const inst of run.charms) {
+    const a = CHARM[inst.id].active;
+    if (a && !noCharge) inst.charge = Math.min(chargeCap(run, a), chargeOf(inst) + 1);
+  }
   const events = runEffects(run, { kind: 'terms', id }, st.effects, {}, true);
   events.push(...fire(run, 'onRoundStart', {}));
   run.spinsLeft = Math.max(1, run.spinsLeft);
@@ -150,7 +193,7 @@ export function pickTerms(run, id) {
 }
 
 // Skip a night (never the last one of a debt): no spins, the terms screen's reward instead, then the night ends as usual.
-export const canSkip = (run) => run.phase === 'terms' && run.round + 1 < run.rounds && !run.tut && !(run.forcedTerms && run.roundSerial === 0);
+export const canSkip = (run) => run.phase === 'terms' && run.round + 1 < run.rounds && !run.tut && !(run.forcedTerms && run.roundSerial === 0) && !run.postcards.includes('short_cut') && !snapshot(run).flags.noPawn;
 export function skipReward(run) {
   const list = CONFIG.skip.rewards;
   return list[(run.roundSerial + hashCode(run.seed)) % list.length];
@@ -171,9 +214,11 @@ export function skipRound(run) {
 
 function prepareSpin(run) {
   const mods = snapshot(run);
-  if (run.nextFavs) { run.favs = run.nextFavs; run.nextFavs = null; }
+  if (run.favQueue?.length) { run.favs = run.favQueue.shift(); run.nextFavs = null; } // a neighbour's gossip fixed it
+  else if (run.nextFavs) { run.favs = run.nextFavs; run.nextFavs = null; }
   else run.favs = pickFavourites(run, mods);
-  if (mods.flags.seeNextFav) run.nextFavs = pickFavourites(run, mods);
+  run.favs = demandPickFav(run, run.favs);
+  if (mods.flags.seeNextFav) run.nextFavs = run.favQueue?.[0] ?? pickFavourites(run, mods);
 }
 
 // Pick the Favourite by hand: first spin of a round with a pickFirstFav rule.
@@ -209,9 +254,10 @@ export function redrawFavourite(run) {
 export function stoke(run) {
   if (run.phase !== 'spin') return null;
   const mods = snapshot(run);
-  if (mods.flags.noStoke || run.heat >= CONFIG.heat.max) return null;
+  if (mods.flags.noStoke || run.heat >= (mods.flags.heatMax ?? CONFIG.heat.max)) return null;
   run.heat++;
   run.stats.stokes = (run.stats.stokes || 0) + 1;
+  demandHeat(run);
   return fire(run, 'onStoke', {});
 }
 
@@ -232,7 +278,7 @@ export function useTrick(run, pocket, target = {}) {
   if (!okPhase) return { ok: false, why: 'timing' };
   const op = T.op;
   const mods = snapshot(run);
-  let consume = true;
+  let consume = !mods.flags.trickFree;
   const grid = run.grid;
   const fail = (why) => ({ ok: false, why });
   switch (op.type) {
@@ -322,19 +368,22 @@ export function useTrick(run, pocket, target = {}) {
 export function spin(run) {
   if (run.phase !== 'spin' || run.spinsLeft < 1) throw new Error('cannot spin in phase ' + run.phase);
   autoResolve(run);
-  const ctx = { edits: [] };
+  const ctx = { edits: [...(run.honkEdits || [])] }; // a HONK before the spin (Megaphone) placed its symbols
+  run.honkEdits = [];
   const events = fire(run, 'onSpinStart', ctx);
   const mods = snapshot(run);
   if (mods.flags.ghostHire && run.spinInRound === 0) ctx.edits.push({ type: 'place', n: 2, sym: 'wisp' });
   let grid = rollGrid(run, mods, run.favs);
   grid = applySpinEdits(run, mods, grid, run.favs, ctx.edits);
+  grid = rollRedEye(run, grid, mods) || grid; // the omen stream: never touched by Luck
   run.pinned = [];
   run.grid = grid;
   run.spinFx = {};
   run.tricksSpin = 0;
   run.stats.spins = (run.stats.spins || 0) + 1;
+  if (!mods.flags.noStoke) run.stats.spiceSpins = (run.stats.spiceSpins || 0) + 1; // spins where Spice Up was allowed (run end "never spiced")
   run.phase = 'post';
-  const res = { grid: run.grid, favs: run.favs, events };
+  const res = { grid: run.grid, favs: run.favs, events, redEye: hasEye(run.grid) ? eyeInfo(run) : null };
   if (run.tricks.some((t) => TRICK[t].when === 'post')) return { ...res, phase: 'post' };
   res.score = collect(run);
   res.phase = run.phase;
@@ -343,9 +392,26 @@ export function spin(run) {
 
 function settle(run) {
   const sc = scoreSpin(run, run.grid, run.favs);
-  const gain = Math.floor(sc.total + sc.flat + 1e-9); // flat coin effects are fractional; the purse holds whole coins
+  let gain = Math.floor(sc.total + sc.flat + 1e-9); // flat coin effects are fractional; the purse holds whole coins
+  const eye = hasEye(run.grid), { level, blessed } = eye ? eyeInfo(run) : { level: 0, blessed: false };
+  if (eye && blessed) gain = Math.floor((sc.total + sc.flat) * 3 + 1e-9); // Counter-stare: the Red Eye pays triple
+  else if (eye && level >= 1) gain = 0;
   run.purse += gain;
+  if (eye && !blessed) {
+    if (level === 2) run.purse = Math.min(run.purse, run.roundStartPurse); // the purse loses what it gained this round
+    if (level >= 3) run.purse = 0; // the Kiosk is always safe
+  }
   const st = run.stats;
+  run.recent.push(gain);
+  if (run.recent.length > 5) run.recent.shift();
+  if (sc.scorch) (run.sinceCall ??= {}).scorch = true;
+  if (eye) {
+    run.redEyes++;
+    st.redEyes = (st.redEyes || 0) + 1;
+    (run.sinceCall ??= {}).redEye = true;
+    if (run.banked * 2 > run.debt) st.staredDown = 1;
+    fire(run, 'onRedEye', { level });
+  }
   st.coinsEarned = (st.coinsEarned || 0) + gain;
   st.spinCoins = Math.max(st.spinCoins || 0, gain);
   for (const r of sc.patterns) {
@@ -357,13 +423,14 @@ function settle(run) {
   st.wispsOneSpin = Math.max(st.wispsOneSpin || 0, sc.wisps);
   st.tricksOneSpin = Math.max(st.tricksOneSpin || 0, run.tricksSpin);
   if (run.heat === CONFIG.heat.max) st.heat10Spins = (st.heat10Spins || 0) + 1;
+  if (run.heat >= 3) st.heat3Spins = (st.heat3Spins || 0) + 1;
   st.luckReached = Math.max(st.luckReached || 0, luckOf(run, snapshot(run, run.grid, run.favs)));
   if (sc.sigils >= 3) addTrick(run);
   if (sc.found > 0) run.pity = 0;
   else if (!sc.scorch) run.pity += CONFIG.luck.dudPity;
   run.noScorch = false;
   endSpan(run, 'spin');
-  return { ...sc, gain };
+  return { ...sc, gain, redEye: eye ? { level, blessed } : null };
 }
 
 export function collect(run) {
@@ -381,12 +448,20 @@ export function collect(run) {
 
 // ---------- banking, interest, deadline ----------
 
-function interestOf(run, mods = snapshot(run)) {
+// The Kiosk pays interest on what is BANKED (SPEC 1.1): bank to earn, keep to spend.
+function rateOf(mods) {
   let rate = CONFIG.interest.basePct + mods.interest;
   if (mods.flags.interestHalf) rate /= 2;
-  if (mods.flags.noInterest || mods.flags.noInterestRound) return 0;
-  const cap = CONFIG.interest.capPctOfDebt * (typeof mods.flags.interestCapX === 'number' ? mods.flags.interestCapX : 1);
-  return Math.max(0, Math.min(Math.floor((run.purse * rate) / 100 + 1e-9), Math.floor((run.debt * cap) / 100)));
+  return mods.flags.noInterest || mods.flags.noInterestRound ? 0 : Math.max(0, rate);
+}
+const capOf = (run, mods) => Math.floor((run.debt * CONFIG.interest.capPctOfDebt * (typeof mods.flags.interestCapX === 'number' ? mods.flags.interestCapX : 1)) / 100);
+function interestOf(run, mods = snapshot(run)) {
+  return Math.max(0, Math.min(Math.floor((run.banked * rateOf(mods)) / 100 + 1e-9), capOf(run, mods)));
+}
+// What the Kiosk screen shows.
+export function kioskForecast(run) {
+  const mods = snapshot(run);
+  return { balance: run.banked, tonight: interestOf(run, mods), rate: rateOf(mods), cap: capOf(run, mods) };
 }
 
 function doBank(run, amount) {
@@ -396,41 +471,66 @@ function doBank(run, amount) {
   if (spend < 1) return 0;
   run.purse -= spend;
   run.banked += Math.floor(spend * x + 1e-9);
+  run.stats.banks = (run.stats.banks || 0) + 1;
   fire(run, 'onBank', { amount: spend });
   return spend;
 }
 
+const BANK_PHASES = ['spin', 'roundend', 'shop', 'terms'];
 export function bank(run, amount = Infinity) {
-  if (run.phase !== 'spin' && run.phase !== 'roundend') return 0;
-  const spent = doBank(run, amount);
-  if (spent && run.banked >= run.debt) payDebt(run);
-  return spent;
+  if (!BANK_PHASES.includes(run.phase)) return 0;
+  return doBank(run, amount);
+}
+
+// PAY NOW: the Kiosk holds the whole debt; pay it early (v2's early-pay rewards).
+export const canPayNow = (run) => BANK_PHASES.includes(run.phase) && run.banked >= run.debt && !run.postcards.includes('late_kiosk');
+export function payNow(run) {
+  if (!canPayNow(run)) return false;
+  payDebt(run);
+  return true;
+}
+
+// Tide Friend (carrySpins): close the night early, up to n unused spins carry to the next one.
+export function endNight(run) {
+  const n = snapshot(run).flags.carrySpins || 0;
+  if (run.phase !== 'spin' || run.tut || !n || run.spinsLeft < 1) return false;
+  run.carrySpins = (run.carrySpins || 0) + Math.min(n, run.spinsLeft);
+  run.spinsLeft = 0;
+  run.phase = 'roundend';
+  return true;
 }
 
 export function endRound(run) {
   if (run.phase !== 'roundend') throw new Error('round is not over');
   fire(run, 'onRoundEnd', {});
   const interest = interestOf(run);
-  run.purse += interest;
+  run.banked += interest; // the Kiosk pays into the Kiosk
   run.stats.interestTotal = (run.stats.interestTotal || 0) + interest;
   if (interest >= 1) fire(run, 'onInterest', { amount: interest });
   run.shopExtra = !!snapshot(run).flags.shopExtra;
+  demandRoundEnd(run);
   endSpan(run, 'round');
+  endSpan(run, 'spin');
   run.terms = null;
   run.favs = [];
   run.nextFavs = null;
   if (run.round + 1 < run.rounds) {
+    dueRoundEnd(run);
     run.round++;
-    openShop(run);
+    if (run.tut && run.roundSerial === 1) run.purse = Math.max(run.purse, TUT_PURSE_FLOOR);
+    enterStall(run);
+    flushModal(run);
     return { interest, deadline: null };
   }
-  return { interest, deadline: deadline(run) };
+  const dl = deadline(run);
+  if (dl === 'saved') dueRoundEnd(run, true);
+  return { interest, deadline: dl };
 }
 
 function extraRound(run) {
   run.rounds++;
   run.round++;
-  openShop(run);
+  enterStall(run);
 }
 
 // End of the last round: bank what is needed, then 'paid' | 'saved' | 'pawn' | 'collected'.
@@ -446,15 +546,16 @@ export function deadline(run) {
     if (ci >= 0) { burnCharm(run, ci); saved = true; }
     else if (mods.flags.extraLife && !run.flagsUsed.extraLife) { run.flagsUsed.extraLife = true; saved = true; }
   }
+  if (!saved && run.tut && run.debtIdx === 0) { run.flagsUsed.mercy = true; saved = true; } // the first run cannot be lost before the lesson ends (tut.mercy): every time, not once
   if (saved) { extraRound(run); return (run.lastDeadline = 'saved'); }
-  if (!run.flagsUsed.pawn && run.charms.length) { run.phase = 'pawn'; return (run.lastDeadline = 'pawn'); }
+  if (!run.flagsUsed.pawn && run.charms.some((c) => !c.relic) && !mods.flags.noPawn) { run.phase = 'pawn'; return (run.lastDeadline = 'pawn'); }
   finish(run, false);
   return (run.lastDeadline = 'collected');
 }
 
 // The Pawn: burn one charm, take a random curse, get one more round. Once per run.
 export function pawn(run, charmIndex) {
-  if (run.phase !== 'pawn' || !run.charms[charmIndex]) return false;
+  if (run.phase !== 'pawn' || !run.charms[charmIndex] || run.charms[charmIndex].relic) return false;
   burnCharm(run, charmIndex);
   run.flagsUsed.pawn = true;
   addCurse(run, 'random');
@@ -468,7 +569,8 @@ export function declinePawn(run) {
 }
 
 function payDebt(run) {
-  const unused = Math.max(0, run.rounds - run.round - 1);
+  const spent = run.phase === 'shop' || run.phase === 'terms' ? run.round : run.round + 1; // in the stall the night just played is already counted
+  const unused = Math.max(0, run.rounds - spent);
   const st = run.stats;
   st.debtsPaid = (st.debtsPaid || 0) + 1;
   st.cursesAtPay = Math.max(st.cursesAtPay || 0, run.curses.length);
@@ -490,14 +592,14 @@ function payDebt(run) {
   run.spinsLeft = 0;
   run.favs = [];
   run.nextFavs = null;
+  run.due = [];
+  run.shop = null;
+  run.tin = null;
   if (!run.endless && run.debtIdx >= CONTRACT[run.contract].debts.length - 1) return finish(run, true);
-  toDeal(run);
+  startCall(run); // the phone rings: Ruby's deals are his red card
 }
 
-function toDeal(run) {
-  if (!offerDeals(run).length) return nextDebt(run);
-  run.phase = 'deal';
-}
+const toDeal = startCall;
 
 // After the contract is cleared: keep the same run going. Debts keep growing; the score is debts paid.
 export const canContinue = (run) => run.phase === 'ended' && !!run.result?.won && !run.endless && !run.daily && !run.tut;
@@ -510,6 +612,10 @@ export function continueEndless(run) {
 }
 
 function endingOf(run) {
+  const cIdx = CONTRACTS.findIndex((c) => c.id === run.contract);
+  // Left Luggage: c10 with all four luggage lockers holding fused charms. The Refuser: c5 or later and one white call taken (Review 4.3: two do not fit in the debts).
+  if (run.contract === 'c10' && run.relics.length === 4 && run.relics.every((id) => CHARM[id].rarity === 'fused')) return 'left_luggage';
+  if (cIdx >= 4 && run.whiteTaken >= 1) return 'the_refuser';
   const id = CONTRACT[run.contract].ending;
   const e = CONFIG.endings.find((x) => x.id === id);
   if (!e) return null;
@@ -526,11 +632,33 @@ function finish(run, won) {
 
 // ---------- read-only helpers for the UI and the meta layer ----------
 
+// Needed per remaining spin vs the average of the last 5 spins (a night is counted as 5 spins).
+export function paceOf(run) {
+  const left = run.spinsLeft + Math.max(0, run.rounds - run.round - 1) * 5;
+  const owed = Math.max(0, run.debt - run.banked - run.purse);
+  const need = left > 0 ? owed / left : owed;
+  const avg = run.recent.length ? run.recent.reduce((a, b) => a + b, 0) / run.recent.length : 0;
+  return { need, avg, behind: run.recent.length >= 2 && avg < need };
+}
+
+// HONK: press the horn; every full active charm fires. null when nothing is charged.
+export function honk(run) {
+  if (run.phase !== 'spin') return null;
+  if (!run.charms.some((c) => CHARM[c.id].active && chargeOf(c) >= CHARM[c.id].active.need)) return null;
+  const events = activate(run);
+  run.stats.honks = (run.stats.honks || 0) + 1;
+  return events;
+}
+
 export function info(run) {
   const mods = snapshot(run);
   return {
+    spirits: Object.fromEntries(SPIRITS.map((d) => [d.id, { ...run.spirits[d.id], unlocked: run.unlocked.includes(d.id) }])), beads: run.beads, redEyeChance: redEyeChance(run, mods),
+    pace: paceOf(run), due: (run.due || []).filter((d) => d.debt === run.debtIdx + 1), kiosk: kioskForecast(run), canPayNow: canPayNow(run),
+    canHonk: run.phase === 'spin' && run.charms.some((c) => CHARM[c.id].active && chargeOf(c) >= CHARM[c.id].active.need),
+    canEndNight: run.phase === 'spin' && !!mods.flags.carrySpins && run.spinsLeft > 0,
     S: scaleOf(run), owed: run.debt - run.banked, luck: luckOf(run, mods), slots: slotsOf(run, mods), pockets: pocketsOf(run, mods),
-    favHidden: !!mods.flags.hideFav, nextFavs: run.nextFavs, canStoke: run.phase === 'spin' && !mods.flags.noStoke && run.heat < CONFIG.heat.max,
+    favHidden: !!mods.flags.hideFav, nextFavs: run.nextFavs, canStoke: run.phase === 'spin' && !mods.flags.noStoke && run.heat < (mods.flags.heatMax ?? CONFIG.heat.max),
     redrawCost: redrawCost(run), canPickFav: !!mods.flags.pickFirstFav && run.phase === 'spin' && run.spinInRound === 0, needsBurn: needsBurn(run), pendingRemove: run.pendingRemove,
   };
 }
@@ -539,6 +667,9 @@ export function summary(run) {
   const won = !!run.result?.won;
   const debtsPaid = run.stats.debtsPaid || 0;
   const stats = { ...run.stats };
+  const stash = debtsPaid * CONFIG.wax.perDebtPaid + (won ? CONTRACT[run.contract].rewardWax : 0);
+  const redSpirits = stats.redSpirits || [];
+  delete stats.redSpirits;
   if (won) stats.contract = CONTRACT[run.contract].tier;
   if (won && !run.deals.length) stats.cleanContract = 1;
   stats.cursesHeld = stats.cursesAtPay || 0;
@@ -546,7 +677,11 @@ export function summary(run) {
   return {
     won, ending: run.result?.ending || null, contract: run.contract, char: run.char, daily: run.daily, debtsPaid,
     endless: run.endless ? Math.max(0, debtsPaid - CONTRACT[run.contract].debts.length) : null,
-    coins: run.stats.coinsEarned || 0, wax: debtsPaid * CONFIG.wax.perDebtPaid + (won ? CONTRACT[run.contract].rewardWax : 0),
+    coins: run.stats.coinsEarned || 0, stash, wax: stash,
     stats, seen: run.seen, deals: run.deals.length, curses: run.curses.length, debtReached: run.debtIdx + 1,
+    // v3: what the meta layer needs (Stash, keys, Left Luggage, codex, endings)
+    heldCharms: run.charms.filter((c) => !c.relic).map((c) => c.id), relics: run.relics, fused: run.fused, redEyes: run.redEyes, whiteTaken: run.whiteTaken, whiteCalls: run.whiteCalls,
+    spirits: Object.fromEntries(SPIRITS.map((d) => [d.id, { fav: run.spirits[d.id].fav, stage: run.spirits[d.id].stage, wrath: run.spirits[d.id].wrath, met: run.spirits[d.id].met }])),
+    redSpirits, storm: run.storm, postcards: run.postcards, noRelic: !!snapshot(run).flags.noRelic, scorches: run.stats.scorches || 0, rung: Math.floor(debtsPaid / 2),
   };
 }

@@ -11,7 +11,8 @@ export function buildWeights(run, mods, favs = []) {
   const weights = IDS.map((id) => {
     if (run.removed.includes(id)) return 0;
     let w;
-    if (id === 'ash') w = CONFIG.heat.ashWeightPerLevel * run.heat + (mods.flags.ashBase || 0);
+    if (id === 'ash') w = (CONFIG.heat.ashWeightPerLevel * run.heat + (mods.flags.ashBase || 0)) * weightOf(mods, id);
+    else if (SYM[id].kind === 'omen') w = 0; // the Red Eye is placed by an event, never rolled
     else w = SYM[id].weight * weightOf(mods, id);
     if (favs.includes(id)) w *= 1 + luck;
     return w;
@@ -92,10 +93,11 @@ export function applySpinEdits(run, mods, grid, favs, edits) {
   }
   for (const e of edits) {
     if (e.type !== 'place') continue;
-    if (e.zone) { for (const c of ZONE[e.zone]) if (!fixed(c)) g[c] = e.sym; continue; }
+    const sym = e.sym === 'favoured' ? favs[0] : e.sym;
+    if (e.zone) { for (const c of ZONE[e.zone]) if (!fixed(c)) g[c] = sym; continue; }
     const open = [];
     for (let c = 0; c < CELLS; c++) if (!fixed(c)) open.push(c);
-    for (let i = 0; i < e.n && open.length; i++) g[open.splice(fx.int(open.length), 1)[0]] = e.sym;
+    for (let i = 0; i < e.n && open.length; i++) g[open.splice(fx.int(open.length), 1)[0]] = sym;
   }
   return g;
 }

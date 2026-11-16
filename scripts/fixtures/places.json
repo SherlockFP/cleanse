@@ -1,0 +1,194 @@
+{
+ "places": [
+  {
+   "id": "c1",
+   "contract": "c1",
+   "n": 1,
+   "name": {
+    "en": "Soi Cart",
+    "tr": "Soi Cart",
+    "th": "Soi Cart"
+   },
+   "rank": {
+    "en": "Street Kid",
+    "tr": "Street Kid",
+    "th": "Street Kid"
+   },
+   "local": "brimble",
+   "bg": "bg/c1",
+   "silverKey": false,
+   "brassKey": true
+  },
+  {
+   "id": "c2",
+   "contract": "c2",
+   "n": 2,
+   "name": {
+    "en": "Train Market",
+    "tr": "Train Market",
+    "th": "Train Market"
+   },
+   "rank": {
+    "en": "Tray Hawker",
+    "tr": "Tray Hawker",
+    "th": "Tray Hawker"
+   },
+   "local": "wire",
+   "bg": "bg/c2",
+   "silverKey": true,
+   "brassKey": true
+  },
+  {
+   "id": "c3",
+   "contract": "c3",
+   "n": 3,
+   "name": {
+    "en": "Yaowarat",
+    "tr": "Yaowarat",
+    "th": "Yaowarat"
+   },
+   "rank": {
+    "en": "Boat Vendor",
+    "tr": "Boat Vendor",
+    "th": "Boat Vendor"
+   },
+   "local": "gold",
+   "bg": "bg/c3",
+   "silverKey": false,
+   "brassKey": true
+  },
+  {
+   "id": "c4",
+   "contract": "c4",
+   "n": 4,
+   "name": {
+    "en": "Khao San Rush",
+    "tr": "Khao San Rush",
+    "th": "Khao San Rush"
+   },
+   "rank": {
+    "en": "Stall Owner",
+    "tr": "Stall Owner",
+    "th": "Stall Owner"
+   },
+   "local": "beckon",
+   "bg": "bg/c4",
+   "silverKey": false,
+   "brassKey": true
+  },
+  {
+   "id": "c5",
+   "contract": "c5",
+   "n": 5,
+   "name": {
+    "en": "Pattaya Low Season",
+    "tr": "Pattaya Low Season",
+    "th": "Pattaya Low Season"
+   },
+   "rank": {
+    "en": "Shop Owner",
+    "tr": "Shop Owner",
+    "th": "Shop Owner"
+   },
+   "local": "tide",
+   "bg": "bg/c5",
+   "silverKey": true,
+   "brassKey": true
+  },
+  {
+   "id": "c6",
+   "contract": "c6",
+   "n": 6,
+   "name": {
+    "en": "Chiang Mai Haze",
+    "tr": "Chiang Mai Haze",
+    "th": "Chiang Mai Haze"
+   },
+   "rank": {
+    "en": "Wholesaler",
+    "tr": "Wholesaler",
+    "th": "Wholesaler"
+   },
+   "local": "moonbiter",
+   "bg": "bg/c6",
+   "silverKey": false,
+   "brassKey": true
+  },
+  {
+   "id": "c7",
+   "contract": "c7",
+   "n": 7,
+   "name": {
+    "en": "Phuket Beach Club",
+    "tr": "Phuket Beach Club",
+    "th": "Phuket Beach Club"
+   },
+   "rank": {
+    "en": "Shophouse Owner",
+    "tr": "Shophouse Owner",
+    "th": "Shophouse Owner"
+   },
+   "local": "lamplit",
+   "bg": "bg/c7",
+   "silverKey": true,
+   "brassKey": true
+  },
+  {
+   "id": "c8",
+   "contract": "c8",
+   "n": 8,
+   "name": {
+    "en": "Riverside Boutique",
+    "tr": "Riverside Boutique",
+    "th": "Riverside Boutique"
+   },
+   "rank": {
+    "en": "Ferry Boss",
+    "tr": "Ferry Boss",
+    "th": "Ferry Boss"
+   },
+   "local": "waiting",
+   "bg": "bg/c8",
+   "silverKey": false,
+   "brassKey": true
+  },
+  {
+   "id": "c9",
+   "contract": "c9",
+   "n": 9,
+   "name": {
+    "en": "Sukhumvit Condo Launch",
+    "tr": "Sukhumvit Condo Launch",
+    "th": "Sukhumvit Condo Launch"
+   },
+   "rank": {
+    "en": "Shipping Magnate",
+    "tr": "Shipping Magnate",
+    "th": "Shipping Magnate"
+   },
+   "local": "beckon",
+   "bg": "bg/c9",
+   "silverKey": false,
+   "brassKey": true
+  },
+  {
+   "id": "c10",
+   "contract": "c10",
+   "n": 10,
+   "name": {
+    "en": "The Sky Bar",
+    "tr": "The Sky Bar",
+    "th": "The Sky Bar"
+   },
+   "rank": {
+    "en": "Tycoon",
+    "tr": "Tycoon",
+    "th": "Tycoon"
+   },
+   "local": "brimble",
+   "bg": "bg/c10",
+   "silverKey": false,
+   "brassKey": true
+  }
+ ]
+}

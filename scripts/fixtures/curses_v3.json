@@ -1,0 +1,163 @@
+{
+ "curses": [
+  {
+   "id": "haggler",
+   "name": {
+    "en": "haggler",
+    "tr": "haggler",
+    "th": "haggler"
+   },
+   "icon": "curse/haggler",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "rerollDouble"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "haggler",
+    "tr": "haggler",
+    "th": "haggler"
+   }
+  },
+  {
+   "id": "short_circuit",
+   "name": {
+    "en": "short_circuit",
+    "tr": "short_circuit",
+    "th": "short_circuit"
+   },
+   "icon": "curse/short_circuit",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "trickPockets",
+       "v": -1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "short_circuit",
+    "tr": "short_circuit",
+    "th": "short_circuit"
+   }
+  },
+  {
+   "id": "heavy_hands",
+   "name": {
+    "en": "heavy_hands",
+    "tr": "heavy_hands",
+    "th": "heavy_hands"
+   },
+   "icon": "curse/heavy_hands",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "noRelic"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "heavy_hands",
+    "tr": "heavy_hands",
+    "th": "heavy_hands"
+   }
+  },
+  {
+   "id": "slow_water",
+   "name": {
+    "en": "slow_water",
+    "tr": "slow_water",
+    "th": "slow_water"
+   },
+   "icon": "curse/slow_water",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "spinsLess",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "slow_water",
+    "tr": "slow_water",
+    "th": "slow_water"
+   }
+  },
+  {
+   "id": "hollow_centre",
+   "name": {
+    "en": "hollow_centre",
+    "tr": "hollow_centre",
+    "th": "hollow_centre"
+   },
+   "icon": "curse/hollow_centre",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "deadCentre"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "hollow_centre",
+    "tr": "hollow_centre",
+    "th": "hollow_centre"
+   }
+  },
+  {
+   "id": "dark_wick",
+   "name": {
+    "en": "dark_wick",
+    "tr": "dark_wick",
+    "th": "dark_wick"
+   },
+   "icon": "curse/dark_wick",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "heatMax",
+       "v": 8
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "dark_wick",
+    "tr": "dark_wick",
+    "th": "dark_wick"
+   }
+  }
+ ]
+}

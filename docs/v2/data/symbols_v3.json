@@ -1,0 +1,23 @@
+{
+ "symbols": [
+  {
+   "id": "redeye",
+   "name": {
+    "en": "Red Eye",
+    "tr": "Kırmızı Göz",
+    "th": "ดวงตาแดง"
+   },
+   "tier": 0,
+   "value": 0,
+   "weight": 0,
+   "kind": "redeye",
+   "group": null,
+   "icon": "sym/redeye",
+   "text": {
+    "en": "Placed by the Red Eye event, never by the reels. Never matches and blocks every pattern through it. From debt 3 it can cost you the spin.",
+    "tr": "Makaralardan değil Kırmızı Göz olayından gelir. Hiçbir şeyle eşleşmez, içinden geçen her deseni keser. 3. borçtan itibaren çevirişi götürebilir.",
+    "th": "มาจากเหตุการณ์ดวงตาแดง ไม่ได้มาจากวงล้อ ไม่จับคู่กับอะไรและขวางทุกลายที่ผ่าน ตั้งแต่หนี้ที่ 3 อาจทำให้เสียทั้งตา"
+   }
+  }
+ ]
+}

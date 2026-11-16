@@ -9,10 +9,10 @@ export function render(el, { run, offers, skip }, ctx) {
   put(el,
     h('h2', {}, t('ui.termsTitle')),
     h('p', { class: 'sub' }, t('ui.termsSub')),
-    h('div', { class: 'cards' }, (offers ?? []).map((o) => {
+    h('div', { class: 'cards' }, (offers ?? []).map((o, i) => {
       const s = STAKE[o.id ?? o];
       if (!s) return null;
-      return h('button', { type: 'button', class: 'card pick terms', onclick: () => ctx.call('pickTerms', s.id) },
+      return h('button', { type: 'button', class: 'card pick terms', 'data-anchor': 'terms:' + i, onclick: () => ctx.call('pickTerms', s.id) },
         h('span', { class: 'pic' }, art(s.icon, 'ico lg')),
         h('div', { class: 'card-text' }, h('strong', {}, L(s.name)), h('span', { class: 'tags' }, h('span', { class: 'tag good' }, t('ui.spinsBadge', { n: s.spins }))), h('span', { class: 'fx' }, coinText(s.text, m.scale))));
     })),

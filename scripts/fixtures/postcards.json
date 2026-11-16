@@ -1,0 +1,489 @@
+{
+ "postcards": [
+  {
+   "id": "rainy_day",
+   "name": {
+    "en": "rainy_day",
+    "tr": "rainy_day",
+    "th": "rainy_day"
+   },
+   "icon": "post/rainy_day",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "spinsRound",
+       "v": 1
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "debtMul",
+       "v": 8
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "rainy_day",
+    "tr": "rainy_day",
+    "th": "rainy_day"
+   }
+  },
+  {
+   "id": "hot_pan",
+   "name": {
+    "en": "hot_pan",
+    "tr": "hot_pan",
+    "th": "hot_pan"
+   },
+   "icon": "post/hot_pan",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "startHeat",
+       "v": 3
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "weight",
+       "n": 1.3,
+       "sym": "ash"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "hot_pan",
+    "tr": "hot_pan",
+    "th": "hot_pan"
+   }
+  },
+  {
+   "id": "fresh_fish",
+   "name": {
+    "en": "fresh_fish",
+    "tr": "fresh_fish",
+    "th": "fresh_fish"
+   },
+   "icon": "post/fresh_fish",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "fresh_fish",
+    "tr": "fresh_fish",
+    "th": "fresh_fish"
+   }
+  },
+  {
+   "id": "night_bus",
+   "name": {
+    "en": "night_bus",
+    "tr": "night_bus",
+    "th": "night_bus"
+   },
+   "icon": "post/night_bus",
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "night_bus",
+    "tr": "night_bus",
+    "th": "night_bus"
+   }
+  },
+  {
+   "id": "borrowed_coat",
+   "name": {
+    "en": "borrowed_coat",
+    "tr": "borrowed_coat",
+    "th": "borrowed_coat"
+   },
+   "icon": "post/borrowed_coat",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "slot",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "dealOffers",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "borrowed_coat",
+    "tr": "borrowed_coat",
+    "th": "borrowed_coat"
+   }
+  },
+  {
+   "id": "short_cut",
+   "name": {
+    "en": "short_cut",
+    "tr": "short_cut",
+    "th": "short_cut"
+   },
+   "icon": "post/short_cut",
+   "rules": [],
+   "text": {
+    "en": "short_cut",
+    "tr": "short_cut",
+    "th": "short_cut"
+   }
+  },
+  {
+   "id": "crooked_scale",
+   "name": {
+    "en": "crooked_scale",
+    "tr": "crooked_scale",
+    "th": "crooked_scale"
+   },
+   "icon": "post/crooked_scale",
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "spirit": "wire",
+       "n": 2
+      },
+      {
+       "type": "favour",
+       "spirit": "beckon",
+       "n": 2
+      },
+      {
+       "type": "favour",
+       "spirit": "tide",
+       "n": -2
+      },
+      {
+       "type": "favour",
+       "spirit": "waiting",
+       "n": -2
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "crooked_scale",
+    "tr": "crooked_scale",
+    "th": "crooked_scale"
+   }
+  },
+  {
+   "id": "old_photo",
+   "name": {
+    "en": "old_photo",
+    "tr": "old_photo",
+    "th": "old_photo"
+   },
+   "icon": "post/old_photo",
+   "rules": [
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "spirit": "waiting",
+       "n": 3
+      },
+      {
+       "type": "favour",
+       "spirit": "brimble",
+       "n": -3
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "old_photo",
+    "tr": "old_photo",
+    "th": "old_photo"
+   }
+  },
+  {
+   "id": "thumb_scale",
+   "name": {
+    "en": "thumb_scale",
+    "tr": "thumb_scale",
+    "th": "thumb_scale"
+   },
+   "icon": "post/thumb_scale",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "freeRedraw",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "thumb_scale",
+    "tr": "thumb_scale",
+    "th": "thumb_scale"
+   }
+  },
+  {
+   "id": "empty_wallet",
+   "name": {
+    "en": "empty_wallet",
+    "tr": "empty_wallet",
+    "th": "empty_wallet"
+   },
+   "icon": "post/empty_wallet",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "debtMul",
+       "v": -30
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "empty_wallet",
+    "tr": "empty_wallet",
+    "th": "empty_wallet"
+   }
+  },
+  {
+   "id": "all_pocket",
+   "name": {
+    "en": "all_pocket",
+    "tr": "all_pocket",
+    "th": "all_pocket"
+   },
+   "icon": "post/all_pocket",
+   "rules": [],
+   "text": {
+    "en": "all_pocket",
+    "tr": "all_pocket",
+    "th": "all_pocket"
+   }
+  },
+  {
+   "id": "mothers_voice",
+   "name": {
+    "en": "mothers_voice",
+    "tr": "mothers_voice",
+    "th": "mothers_voice"
+   },
+   "icon": "post/mothers_voice",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "patronAt",
+       "v": 9
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "mothers_voice",
+    "tr": "mothers_voice",
+    "th": "mothers_voice"
+   }
+  },
+  {
+   "id": "staring_contest",
+   "name": {
+    "en": "staring_contest",
+    "tr": "staring_contest",
+    "th": "staring_contest"
+   },
+   "icon": "post/staring_contest",
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "staring_contest",
+    "tr": "staring_contest",
+    "th": "staring_contest"
+   }
+  },
+  {
+   "id": "spare_blender",
+   "name": {
+    "en": "spare_blender",
+    "tr": "spare_blender",
+    "th": "spare_blender"
+   },
+   "icon": "post/spare_blender",
+   "rules": [],
+   "text": {
+    "en": "spare_blender",
+    "tr": "spare_blender",
+    "th": "spare_blender"
+   }
+  },
+  {
+   "id": "party_line",
+   "name": {
+    "en": "party_line",
+    "tr": "party_line",
+    "th": "party_line"
+   },
+   "icon": "post/party_line",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "callCards",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "party_line",
+    "tr": "party_line",
+    "th": "party_line"
+   }
+  },
+  {
+   "id": "quiet_phone",
+   "name": {
+    "en": "quiet_phone",
+    "tr": "quiet_phone",
+    "th": "quiet_phone"
+   },
+   "icon": "post/quiet_phone",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "quiet_phone",
+    "tr": "quiet_phone",
+    "th": "quiet_phone"
+   }
+  },
+  {
+   "id": "full_charge",
+   "name": {
+    "en": "full_charge",
+    "tr": "full_charge",
+    "th": "full_charge"
+   },
+   "icon": "post/full_charge",
+   "rules": [],
+   "text": {
+    "en": "full_charge",
+    "tr": "full_charge",
+    "th": "full_charge"
+   }
+  },
+  {
+   "id": "late_kiosk",
+   "name": {
+    "en": "late_kiosk",
+    "tr": "late_kiosk",
+    "th": "late_kiosk"
+   },
+   "icon": "post/late_kiosk",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 4
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "late_kiosk",
+    "tr": "late_kiosk",
+    "th": "late_kiosk"
+   }
+  }
+ ]
+}

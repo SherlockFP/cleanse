@@ -41,6 +41,6 @@ export function recordDaily(meta, dateUTC, summary) {
   d.date = dateUTC;
   d.best = score;
   d.done++;
-  meta.wax += CONFIG.wax.dailyRun;
+  meta.stash = (meta.stash || 0) + CONFIG.wax.dailyRun; // v3 renamed wax to stash
   return { first: true, score, wax: CONFIG.wax.dailyRun, best: score, streak: d.streak };
 }

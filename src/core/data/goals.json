@@ -1,0 +1,525 @@
+{
+ "daily": [
+  {
+   "id": "d01",
+   "tpl": "debts",
+   "n": 3,
+   "text": {
+    "en": "Pay 3 debts in one run",
+    "tr": "Bir oyunda 3 borç öde",
+    "th": "ปลดหนี้ 3 ก้อนในรอบเดียว"
+   }
+  },
+  {
+   "id": "d02",
+   "tpl": "debts",
+   "n": 4,
+   "text": {
+    "en": "Pay 4 debts in one run",
+    "tr": "Bir oyunda 4 borç öde",
+    "th": "ปลดหนี้ 4 ก้อนในรอบเดียว"
+   }
+  },
+  {
+   "id": "d03",
+   "tpl": "debts",
+   "n": 5,
+   "text": {
+    "en": "Pay 5 debts in one run",
+    "tr": "Bir oyunda 5 borç öde",
+    "th": "ปลดหนี้ 5 ก้อนในรอบเดียว"
+   }
+  },
+  {
+   "id": "d04",
+   "tpl": "line4",
+   "n": 2,
+   "text": {
+    "en": "Land 2 Lines of 4 or longer in one run",
+    "tr": "Bir oyunda 2 adet 4'lü ya da uzun Sıra yakala",
+    "th": "ทำแถว 4 หรือยาวกว่า 2 ครั้งในรอบเดียว"
+   }
+  },
+  {
+   "id": "d05",
+   "tpl": "line4",
+   "n": 4,
+   "text": {
+    "en": "Land 4 Lines of 4 or longer in one run",
+    "tr": "Bir oyunda 4 adet 4'lü ya da uzun Sıra yakala",
+    "th": "ทำแถว 4 หรือยาวกว่า 4 ครั้งในรอบเดียว"
+   }
+  },
+  {
+   "id": "d06",
+   "tpl": "noflare",
+   "n": 1,
+   "text": {
+    "en": "Clear a debt with no Flare-up",
+    "tr": "Parlamasız bir borç öde",
+    "th": "ปลดหนี้ก้อนหนึ่งโดยไม่มีไฟลุก"
+   }
+  },
+  {
+   "id": "d07",
+   "tpl": "deals",
+   "n": 1,
+   "text": {
+    "en": "Sign 1 deals in one run",
+    "tr": "Bir oyunda 1 anlaşma imzala",
+    "th": "เซ็นข้อตกลง 1 ข้อในรอบเดียว"
+   }
+  },
+  {
+   "id": "d08",
+   "tpl": "deals",
+   "n": 2,
+   "text": {
+    "en": "Sign 2 deals in one run",
+    "tr": "Bir oyunda 2 anlaşma imzala",
+    "th": "เซ็นข้อตกลง 2 ข้อในรอบเดียว"
+   }
+  },
+  {
+   "id": "d09",
+   "tpl": "refuse",
+   "n": 1,
+   "text": {
+    "en": "Refuse 1 deals in one run",
+    "tr": "Bir oyunda 1 anlaşmayı reddet",
+    "th": "ปฏิเสธข้อตกลง 1 ข้อในรอบเดียว"
+   }
+  },
+  {
+   "id": "d10",
+   "tpl": "refuse",
+   "n": 2,
+   "text": {
+    "en": "Refuse 2 deals in one run",
+    "tr": "Bir oyunda 2 anlaşmayı reddet",
+    "th": "ปฏิเสธข้อตกลง 2 ข้อในรอบเดียว"
+   }
+  },
+  {
+   "id": "d11",
+   "tpl": "bench",
+   "n": 1,
+   "text": {
+    "en": "Do 1 bench jobs in one run",
+    "tr": "Bir oyunda 1 tezgâh işi yaptır",
+    "th": "ใช้งานโต๊ะช่าง 1 ครั้งในรอบเดียว"
+   }
+  },
+  {
+   "id": "d12",
+   "tpl": "bench",
+   "n": 2,
+   "text": {
+    "en": "Do 2 bench jobs in one run",
+    "tr": "Bir oyunda 2 tezgâh işi yaptır",
+    "th": "ใช้งานโต๊ะช่าง 2 ครั้งในรอบเดียว"
+   }
+  },
+  {
+   "id": "d13",
+   "tpl": "tricks",
+   "n": 3,
+   "text": {
+    "en": "Use 3 tricks in one run",
+    "tr": "Bir oyunda 3 numara kullan",
+    "th": "ใช้กลเม็ด 3 อันในรอบเดียว"
+   }
+  },
+  {
+   "id": "d14",
+   "tpl": "tricks",
+   "n": 5,
+   "text": {
+    "en": "Use 5 tricks in one run",
+    "tr": "Bir oyunda 5 numara kullan",
+    "th": "ใช้กลเม็ด 5 อันในรอบเดียว"
+   }
+  },
+  {
+   "id": "d15",
+   "tpl": "tips",
+   "n": 2,
+   "text": {
+    "en": "Give 2 tips at the Tin in one run",
+    "tr": "Bir oyunda Teneke'de 2 bahşiş ver",
+    "th": "ให้ทิปที่กระป๋องขนม 2 ครั้งในรอบเดียว"
+   }
+  },
+  {
+   "id": "d16",
+   "tpl": "tips",
+   "n": 4,
+   "text": {
+    "en": "Give 4 tips at the Tin in one run",
+    "tr": "Bir oyunda Teneke'de 4 bahşiş ver",
+    "th": "ให้ทิปที่กระป๋องขนม 4 ครั้งในรอบเดียว"
+   }
+  },
+  {
+   "id": "d17",
+   "tpl": "friend",
+   "n": 1,
+   "text": {
+    "en": "Get a neighbour to Friend",
+    "tr": "Bir komşuyu Dost yap",
+    "th": "ทำให้เพื่อนบ้านถึงขั้นเพื่อน"
+   }
+  },
+  {
+   "id": "d18",
+   "tpl": "honk",
+   "n": 2,
+   "text": {
+    "en": "HONK 2 times in one run",
+    "tr": "Bir oyunda 2 kez KORNA çal",
+    "th": "บีบแตร 2 ครั้งในรอบเดียว"
+   }
+  },
+  {
+   "id": "d19",
+   "tpl": "honk",
+   "n": 4,
+   "text": {
+    "en": "HONK 4 times in one run",
+    "tr": "Bir oyunda 4 kez KORNA çal",
+    "th": "บีบแตร 4 ครั้งในรอบเดียว"
+   }
+  },
+  {
+   "id": "d20",
+   "tpl": "blend",
+   "n": 1,
+   "text": {
+    "en": "Blend 1 charms in one run",
+    "tr": "Bir oyunda 1 tılsım karıştır",
+    "th": "ปั่นไอเท็ม 1 ชิ้นในรอบเดียว"
+   }
+  },
+  {
+   "id": "d21",
+   "tpl": "spice",
+   "n": 5,
+   "text": {
+    "en": "Reach Spice 5 in one run",
+    "tr": "Bir oyunda Acı 5'e ulaş",
+    "th": "ขึ้นเผ็ด 5 ในรอบเดียว"
+   }
+  },
+  {
+   "id": "d22",
+   "tpl": "spice",
+   "n": 7,
+   "text": {
+    "en": "Reach Spice 7 in one run",
+    "tr": "Bir oyunda Acı 7'e ulaş",
+    "th": "ขึ้นเผ็ด 7 ในรอบเดียว"
+   }
+  },
+  {
+   "id": "d23",
+   "tpl": "charms",
+   "n": 5,
+   "text": {
+    "en": "Hold 5 charms at once",
+    "tr": "Aynı anda 5 tılsım tut",
+    "th": "ถือไอเท็ม 5 ชิ้นพร้อมกัน"
+   }
+  },
+  {
+   "id": "d24",
+   "tpl": "charms",
+   "n": 7,
+   "text": {
+    "en": "Hold 7 charms at once",
+    "tr": "Aynı anda 7 tılsım tut",
+    "th": "ถือไอเท็ม 7 ชิ้นพร้อมกัน"
+   }
+  },
+  {
+   "id": "d25",
+   "tpl": "interest",
+   "n": 100,
+   "text": {
+    "en": "Earn 100 interest in one run",
+    "tr": "Bir oyunda 100 faiz kazan",
+    "th": "ได้ดอกเบี้ย 100 ในรอบเดียว"
+   }
+  },
+  {
+   "id": "d26",
+   "tpl": "early",
+   "n": 1,
+   "text": {
+    "en": "Pay a debt with a night to spare",
+    "tr": "Bir geceyi artırarak borç öde",
+    "th": "ปลดหนี้โดยเหลือคืนไว้หนึ่งคืน"
+   }
+  },
+  {
+   "id": "d27",
+   "tpl": "curses",
+   "n": 3,
+   "text": {
+    "en": "Carry 3 curses at once",
+    "tr": "Aynı anda 3 lanet taşı",
+    "th": "แบกคำสาป 3 อย่างพร้อมกัน"
+   }
+  },
+  {
+   "id": "d28",
+   "tpl": "hangup",
+   "n": 2,
+   "text": {
+    "en": "Hang up on 2 calls in one run",
+    "tr": "Bir oyunda 2 aramayı kapat",
+    "th": "วางสาย 2 สายในรอบเดียว"
+   }
+  },
+  {
+   "id": "d29",
+   "tpl": "redeye",
+   "n": 1,
+   "text": {
+    "en": "Survive a Red Eye",
+    "tr": "Bir Kırmızı Göz'ü atlat",
+    "th": "รอดดวงตาแดงหนึ่งครั้ง"
+   }
+  },
+  {
+   "id": "d30",
+   "tpl": "tricks",
+   "n": 8,
+   "text": {
+    "en": "Use 8 tricks in one run",
+    "tr": "Bir oyunda 8 numara kullan",
+    "th": "ใช้กลเม็ด 8 อันในรอบเดียว"
+   }
+  }
+ ],
+ "weekly": [
+  {
+   "id": "w01",
+   "tpl": "w_debts",
+   "n": 15,
+   "text": {
+    "en": "Pay 15 debts this week",
+    "tr": "Bu hafta 15 borç öde",
+    "th": "ปลดหนี้ 15 ก้อนในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w02",
+   "tpl": "w_debts",
+   "n": 25,
+   "text": {
+    "en": "Pay 25 debts this week",
+    "tr": "Bu hafta 25 borç öde",
+    "th": "ปลดหนี้ 25 ก้อนในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w03",
+   "tpl": "w_tips",
+   "n": 25,
+   "text": {
+    "en": "Give 25 tips this week",
+    "tr": "Bu hafta 25 bahşiş ver",
+    "th": "ให้ทิป 25 ครั้งในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w04",
+   "tpl": "w_tips",
+   "n": 40,
+   "text": {
+    "en": "Give 40 tips this week",
+    "tr": "Bu hafta 40 bahşiş ver",
+    "th": "ให้ทิป 40 ครั้งในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w05",
+   "tpl": "w_red",
+   "n": 3,
+   "text": {
+    "en": "Take 3 red calls this week",
+    "tr": "Bu hafta 3 kırmızı arama al",
+    "th": "รับสายแดง 3 สายในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w06",
+   "tpl": "w_red",
+   "n": 5,
+   "text": {
+    "en": "Take 5 red calls this week",
+    "tr": "Bu hafta 5 kırmızı arama al",
+    "th": "รับสายแดง 5 สายในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w07",
+   "tpl": "w_locker",
+   "n": 1,
+   "text": {
+    "en": "Open 1 locker this week",
+    "tr": "Bu hafta 1 dolap aç",
+    "th": "เปิดตู้ 1 ตู้ในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w08",
+   "tpl": "w_storm",
+   "n": 2,
+   "text": {
+    "en": "Clear a place on Storm 2 this week",
+    "tr": "Bu hafta Fırtına 2'de bir yeri bitir",
+    "th": "ผ่านด่านที่พายุ 2 ในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w09",
+   "tpl": "w_blend",
+   "n": 5,
+   "text": {
+    "en": "Blend 5 charms this week",
+    "tr": "Bu hafta 5 tılsım karıştır",
+    "th": "ปั่นไอเท็ม 5 ชิ้นในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w10",
+   "tpl": "w_blend",
+   "n": 10,
+   "text": {
+    "en": "Blend 10 charms this week",
+    "tr": "Bu hafta 10 tılsım karıştır",
+    "th": "ปั่นไอเท็ม 10 ชิ้นในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w11",
+   "tpl": "w_honk",
+   "n": 15,
+   "text": {
+    "en": "HONK 15 times this week",
+    "tr": "Bu hafta 15 kez KORNA çal",
+    "th": "บีบแตร 15 ครั้งในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w12",
+   "tpl": "w_clear",
+   "n": 2,
+   "text": {
+    "en": "Clear 2 places this week",
+    "tr": "Bu hafta 2 yeri bitir",
+    "th": "ผ่านด่าน 2 ด่านในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w13",
+   "tpl": "w_clear",
+   "n": 3,
+   "text": {
+    "en": "Clear 3 places this week",
+    "tr": "Bu hafta 3 yeri bitir",
+    "th": "ผ่านด่าน 3 ด่านในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w14",
+   "tpl": "w_runs",
+   "n": 10,
+   "text": {
+    "en": "Finish 10 runs this week",
+    "tr": "Bu hafta 10 oyun bitir",
+    "th": "เล่นให้จบ 10 รอบในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w15",
+   "tpl": "w_friend",
+   "n": 5,
+   "text": {
+    "en": "Get neighbours to Friend 5 times this week",
+    "tr": "Bu hafta komşuları 5 kez Dost yap",
+    "th": "ทำให้เพื่อนบ้านถึงขั้นเพื่อน 5 ครั้งในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w16",
+   "tpl": "w_regular",
+   "n": 1,
+   "text": {
+    "en": "Get a neighbour to Regular this week",
+    "tr": "Bu hafta bir komşuyu Müdavim yap",
+    "th": "ทำให้เพื่อนบ้านเป็นขาประจำสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w17",
+   "tpl": "w_white",
+   "n": 1,
+   "text": {
+    "en": "Take a white call this week",
+    "tr": "Bu hafta bir beyaz arama al",
+    "th": "รับสายขาวในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w18",
+   "tpl": "w_upgrade",
+   "n": 10,
+   "text": {
+    "en": "Buy 10 cart upgrades this week",
+    "tr": "Bu hafta 10 araba yükseltmesi al",
+    "th": "ซื้ออัปเกรดรถเข็น 10 อย่างในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w19",
+   "tpl": "w_upgrade",
+   "n": 20,
+   "text": {
+    "en": "Buy 20 cart upgrades this week",
+    "tr": "Bu hafta 20 araba yükseltmesi al",
+    "th": "ซื้ออัปเกรดรถเข็น 20 อย่างในสัปดาห์นี้"
+   }
+  },
+  {
+   "id": "w20",
+   "tpl": "w_redeye",
+   "n": 5,
+   "text": {
+    "en": "Survive 5 Red Eyes this week",
+    "tr": "Bu hafta 5 Kırmızı Göz atlat",
+    "th": "รอดดวงตาแดง 5 ครั้งในสัปดาห์นี้"
+   }
+  }
+ ],
+ "rules": {
+  "dailyPick": 3,
+  "dailyStash": 10,
+  "dailyAllKey": "brass",
+  "weeklyPick": 5,
+  "weeklyStash": 20,
+  "weeklyAllKey": "silver",
+  "streakKey": {
+   "days": 7,
+   "key": "silver"
+  },
+  "freezePerWeek": 1,
+  "noRepeatDays": 30
+ },
+ "note": {
+  "en": "No paid resets, no timers. A missed day never costs you anything.",
+  "tr": "Ücretli sıfırlama yok, süre baskısı yok. Kaçırılan gün sana bir şey kaybettirmez.",
+  "th": "ไม่มีเสียเงินรีเซ็ต ไม่มีจับเวลา วันที่พลาดไม่ทำให้เสียอะไร"
+ }
+}

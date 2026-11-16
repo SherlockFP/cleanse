@@ -48,7 +48,35 @@ export function detailSheet(spec, close) {
     h('div', { class: 'sheet-head' }, pic(item.icon, rarity), h('div', {}, h('h2', {}, L(item.name)),
       h('span', { class: 'tags' }, rarity && h('span', { class: 'tag rar r-' + rarity }, t('ui.rarity.' + rarity)), spec.kind === 'charm' && tagsOf(item), spec.kind === 'trick' && whenTag(item)))),
     h('p', { class: 'fx big' }, coinText(item.text, spec.S ?? 1)),
-    sub && h('p', { class: 'note' }, sub), stack, spec.note && h('p', { class: 'note' }, spec.note),
+    sub && h('p', { class: 'note' }, sub), spec.kind === 'charm' && (item.tags ?? []).filter((f) => FAMILY[f]).map((f) => h('p', { class: 'note' }, t('fam.' + f))), stack, // what a family word means, in place (AUDIT2 9) spec.note && h('p', { class: 'note' }, spec.note),
     h('div', { class: 'sheet-acts' }, (spec.actions ?? []).map((a) => btn(a.label, a.onclick, a.cls ?? '')), btn(t('ui.close'), close)));
 }
 
+
+// ---- v3 pieces ----
+// A labelled stat chip: icon, the number, and a word under the icon (AUDIT: no icon-only chips). `tip` is the one-line explainer a tap shows (onTip(text)).
+export function lchip({ icon, label, value, sub, tip, onTip, onclick, cls = '', anchor }) {
+  return h('button', { type: 'button', class: 'lchip ' + cls, 'data-anchor': anchor, 'aria-label': `${label} ${value}`, onclick: onclick ?? (() => tip && onTip?.(tip)) },
+    h('span', { class: 'lc-top' }, icon && art(icon, 'ico xs'), h('b', {}, value), sub && h('em', {}, sub)), h('span', { class: 'lc-label' }, label));
+}
+
+// Spirit mood from Favour: calm 0 to 4, glad 5 and up, cross below 0 (SPEC 3.3).
+export const moodOf = (fav = 0) => (fav < 0 ? 'cross' : fav >= 5 ? 'glad' : 'calm');
+export const portraitId = (sp, fav = 0) => sp?.portrait?.[moodOf(fav)] ?? sp?.portrait?.calm ?? 'spirit/' + (sp?.id ?? 'x') + '_calm';
+export const portrait = (sp, fav = 0, cls = 'face') => art(portraitId(sp, fav), cls, L(sp?.name));
+// stage 0 none, 1 Noticed (2), 2 Friend (5), 3 Patron (8)
+export const stageOf = (fav = 0) => (fav >= 8 ? 3 : fav >= 5 ? 2 : fav >= 2 ? 1 : 0);
+
+// Favour pips. small: 5 pips (2 Favour each). big: 10 pips with the stage lines 2, 5, 8 marked; below 0 the pips go red and count down.
+export function pips(fav = 0, big = false) {
+  if (fav < 0) return h('span', { class: 'pips neg', 'aria-label': String(fav) }, Array.from({ length: big ? 5 : 3 }, (_, i) => h('i', { class: i < Math.min(big ? 5 : 3, -fav) ? 'on' : '' })));
+  const n = big ? 10 : 5, on = big ? Math.min(10, fav) : Math.min(5, Math.ceil(fav / 2));
+  return h('span', { class: 'pips' + (big ? ' big' : ''), 'aria-label': String(fav) }, Array.from({ length: n }, (_, i) => h('i', { class: (i < on ? 'on' : '') + (big && [1, 4, 7].includes(i) ? ' mark' : '') })));
+}
+
+// "Luck +2", "Coins +15": a plain line from an effects array, used only when the data carries no text of its own.
+const FXK = { luck: 'ui.fx.luck', coins: 'ui.fx.coins', wick: 'ui.fx.wick', interest: 'ui.fx.interest', spins: 'ui.fx.spins', heat: 'ui.fx.heat', trick: 'ui.fx.trick', gainCharm: 'ui.fx.charm',
+  symMult: 'ui.fx.symMult', patMult: 'ui.fx.patMult', allMult: 'ui.fx.allMult', removeSymbol: 'ui.fx.remove', liftCurse: 'ui.fx.lift', charge: 'ui.fx.charge', loseCharm: 'ui.fx.lose', flag: 'ui.fx.flag', favour: 'ui.fx.favour', symValue: 'ui.fx.symValue', place: 'ui.fx.place', weight: 'ui.fx.weight' };
+export const fxText = (effects = [], S = 1) => effects.map((e) => t(FXK[e.type] ?? 'ui.fx.flag', { n: Math.round((e.n ?? e.v ?? 1) * (e.type === 'coins' ? S : 1) * 100) / 100 })).join(' · ');
+// Text of a data entry ({ text }) or, failing that, its effects.
+export const textOf = (o, effects, S = 1) => (o?.text ? coinText(o.text, S) : fxText(effects ?? o?.effects ?? o?.boon ?? [], S));

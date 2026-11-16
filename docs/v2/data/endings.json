@@ -1,0 +1,75 @@
+{
+ "endings": [
+  {
+   "id": "paid_in_full",
+   "contract": "c3",
+   "cond": null,
+   "existing": true,
+   "art": null
+  },
+  {
+   "id": "bought_the_machine",
+   "contract": "c7",
+   "cond": "dealsSigned == 0",
+   "existing": true,
+   "art": null
+  },
+  {
+   "id": "new_management",
+   "contract": "c10",
+   "cond": "curses >= 5",
+   "existing": true,
+   "art": null
+  },
+  {
+   "id": "the_refuser",
+   "contract": "c5+",
+   "cond": "whiteTaken >= 1",
+   "existing": false,
+   "art": "ending/the_refuser",
+   "name": {
+    "en": "The Refuser",
+    "tr": "Reddeden",
+    "th": "คนวางสาย"
+   },
+   "text": {
+    "en": "Nim picks up the red phone one last time and hangs up. Mr. Lost-and-Found hands her a box of everything she ever lost, the old cart included. The machine goes quiet. The corner is hers.",
+    "tr": "Nim kırmızı telefonu son kez eline alır ve kapatır. Kayıp Eşya Bey ona kaybettiği her şeyin bulunduğu bir kutu uzatır, eski araba da içinde. Makine susar. Köşe artık onun.",
+    "th": "นิ่มยกโทรศัพท์แดงขึ้นมาเป็นครั้งสุดท้ายแล้ววางสาย พี่ของหายยื่นกล่องใส่ทุกอย่างที่เธอเคยทำหายให้ รวมถึงรถเข็นคันเก่า เครื่องเงียบลง หัวมุมนี้เป็นของเธอแล้ว"
+   }
+  },
+  {
+   "id": "left_luggage",
+   "contract": "c10",
+   "cond": "luggageFused == 4",
+   "existing": false,
+   "art": "ending/left_luggage",
+   "secret": true,
+   "name": {
+    "en": "Left Luggage",
+    "tr": "Emanet Dolabı",
+    "th": "ตู้ฝากของ"
+   },
+   "hidden": {
+    "en": "???",
+    "tr": "???",
+    "th": "???"
+   },
+   "clue": {
+    "en": "Mr. Ruby's fine print mentions \"four boxes, all blended\".",
+    "tr": "Bay Ruby'nin küçük yazılarında \"dört kutu, hepsi karışık\" yazıyor.",
+    "th": "ตัวหนังสือเล็กๆ ของมิสเตอร์รูบี้พูดถึง \"สี่ตู้ ปั่นรวมหมดแล้ว\""
+   },
+   "text": {
+    "en": "Four luggage lockers glow in the alley, each holding a blended charm that hums in tune. The machine unplugs itself. Mr. Ruby sits on a suitcase and, for once, has nothing to say.",
+    "tr": "Sokakta dört emanet dolabı parlıyor, her birinde uyum içinde vızıldayan karışık bir tılsım var. Makine fişini kendi çeker. Bay Ruby bir bavulun üstüne oturur ve ilk kez söyleyecek sözü yoktur.",
+    "th": "ตู้ฝากของสี่ตู้เรืองแสงอยู่ในซอย แต่ละตู้มีไอเท็มปั่นรวมที่ครางเป็นเสียงเดียวกัน เครื่องดึงปลั๊กตัวเอง มิสเตอร์รูบี้นั่งบนกระเป๋าเดินทางและเป็นครั้งแรกที่ไม่มีอะไรจะพูด"
+   }
+  }
+ ],
+ "epilogue": {
+  "per": "lines.epilogue",
+  "when": "spirit was Regular in the run",
+  "count": 8
+ }
+}

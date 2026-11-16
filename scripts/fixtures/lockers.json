@@ -1,0 +1,345 @@
+{
+ "lockers": [
+  {
+   "id": "L1",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "swarm"
+    ]
+   },
+   "name": {
+    "en": "L1",
+    "tr": "L1",
+    "th": "L1"
+   }
+  },
+  {
+   "id": "L2",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "ember"
+    ]
+   },
+   "name": {
+    "en": "L2",
+    "tr": "L2",
+    "th": "L2"
+   }
+  },
+  {
+   "id": "L3",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "hex"
+    ]
+   },
+   "name": {
+    "en": "L3",
+    "tr": "L3",
+    "th": "L3"
+   }
+  },
+  {
+   "id": "L4",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "ledger"
+    ]
+   },
+   "name": {
+    "en": "L4",
+    "tr": "L4",
+    "th": "L4"
+   }
+  },
+  {
+   "id": "L5",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "pact"
+    ]
+   },
+   "name": {
+    "en": "L5",
+    "tr": "L5",
+    "th": "L5"
+   }
+  },
+  {
+   "id": "L6",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "omen"
+    ]
+   },
+   "name": {
+    "en": "L6",
+    "tr": "L6",
+    "th": "L6"
+   }
+  },
+  {
+   "id": "L7",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "stitch"
+    ]
+   },
+   "name": {
+    "en": "L7",
+    "tr": "L7",
+    "th": "L7"
+   }
+  },
+  {
+   "id": "L8",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "wisp"
+    ]
+   },
+   "name": {
+    "en": "L8",
+    "tr": "L8",
+    "th": "L8"
+   }
+  },
+  {
+   "id": "L9",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "tinker"
+    ]
+   },
+   "name": {
+    "en": "L9",
+    "tr": "L9",
+    "th": "L9"
+   }
+  },
+  {
+   "id": "L10",
+   "key": "brass",
+   "requires": null,
+   "contents": {
+    "charmsRareA": [
+     "crown"
+    ]
+   },
+   "name": {
+    "en": "L10",
+    "tr": "L10",
+    "th": "L10"
+   }
+  },
+  {
+   "id": "L11",
+   "key": "silver",
+   "requires": {
+    "clear": "c3"
+   },
+   "contents": {
+    "charmsRareB": [
+     "swarm",
+     "ember"
+    ]
+   },
+   "name": {
+    "en": "L11",
+    "tr": "L11",
+    "th": "L11"
+   }
+  },
+  {
+   "id": "L12",
+   "key": "silver",
+   "requires": {
+    "clear": "c3"
+   },
+   "contents": {
+    "charmsRareB": [
+     "hex",
+     "ledger"
+    ]
+   },
+   "name": {
+    "en": "L12",
+    "tr": "L12",
+    "th": "L12"
+   }
+  },
+  {
+   "id": "L13",
+   "key": "silver",
+   "requires": {
+    "clear": "c3"
+   },
+   "contents": {
+    "charmsRareB": [
+     "pact",
+     "omen"
+    ]
+   },
+   "name": {
+    "en": "L13",
+    "tr": "L13",
+    "th": "L13"
+   }
+  },
+  {
+   "id": "L14",
+   "key": "silver",
+   "requires": {
+    "clear": "c3"
+   },
+   "contents": {
+    "charmsRareB": [
+     "stitch",
+     "wisp"
+    ]
+   },
+   "name": {
+    "en": "L14",
+    "tr": "L14",
+    "th": "L14"
+   }
+  },
+  {
+   "id": "L15",
+   "key": "silver",
+   "requires": {
+    "clear": "c3"
+   },
+   "contents": {
+    "charmsRareB": [
+     "tinker",
+     "crown"
+    ]
+   },
+   "name": {
+    "en": "L15",
+    "tr": "L15",
+    "th": "L15"
+   }
+  },
+  {
+   "id": "L16",
+   "key": "silver",
+   "requires": {
+    "lessons": 10
+   },
+   "contents": {
+    "postcards": [
+     "rainy_day",
+     "hot_pan",
+     "fresh_fish",
+     "night_bus",
+     "borrowed_coat",
+     "short_cut"
+    ]
+   },
+   "name": {
+    "en": "L16",
+    "tr": "L16",
+    "th": "L16"
+   }
+  },
+  {
+   "id": "L17",
+   "key": "silver",
+   "requires": {
+    "clear": "c6"
+   },
+   "contents": {
+    "postcards": [
+     "staring_contest",
+     "spare_blender",
+     "party_line",
+     "quiet_phone",
+     "full_charge",
+     "late_kiosk"
+    ]
+   },
+   "name": {
+    "en": "L17",
+    "tr": "L17",
+    "th": "L17"
+   }
+  },
+  {
+   "id": "L18",
+   "key": "red",
+   "requires": {
+    "clear": "c7"
+   },
+   "contents": {
+    "charmsLegendary": [
+     "swarm",
+     "ember",
+     "hex",
+     "ledger",
+     "pact"
+    ]
+   },
+   "name": {
+    "en": "L18",
+    "tr": "L18",
+    "th": "L18"
+   }
+  },
+  {
+   "id": "L19",
+   "key": "red",
+   "requires": {
+    "storm": 3
+   },
+   "contents": {
+    "charmsLegendary": [
+     "omen",
+     "stitch",
+     "wisp",
+     "tinker",
+     "crown"
+    ]
+   },
+   "name": {
+    "en": "L19",
+    "tr": "L19",
+    "th": "L19"
+   }
+  },
+  {
+   "id": "L20",
+   "key": "red",
+   "requires": {
+    "lockers": 19
+   },
+   "contents": {
+    "deed": true
+   },
+   "name": {
+    "en": "L20",
+    "tr": "L20",
+    "th": "L20"
+   }
+  }
+ ]
+}

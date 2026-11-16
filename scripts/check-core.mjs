@@ -2,6 +2,7 @@
 // every trigger and every effect primitive. No DOM, no browser. node scripts/check-core.mjs
 import { CHARM, CHARMS, CURSE, CONFIG, SCORING } from '../src/core/data.js';
 import { findPatterns } from '../src/core/patterns.js';
+import { payNow, canPayNow } from '../src/core/run.js';
 import { newRun, pickTerms, termsOffer, spin, collect, stoke, bank, endRound, deadline, pawn, declinePawn, saveRun, loadRun, scaleOf, useTrick, leaveShop, summary, setFavourite, canSkip, skipRound, skipReward, canContinue, continueEndless, debtBase } from '../src/core/run.js';
 import { snapshot, scoreSpin, addCharm, applyEffect, fire, addCurse, TRIGGERS, EFFECT_TYPES, setExplain } from '../src/core/effects.js';
 import { rollGrid, applyGridEdits } from '../src/core/machine.js';
@@ -11,8 +12,10 @@ const CONTRACT_DEBT = (r) => debtBase(r.contract, r.debtIdx);
 const STAKE_SPINS = (r) => STAKE[termsOffer(r)[0].id].spins;
 import { signDeal, refuseDeals } from '../src/core/deals.js';
 import { newMeta, applyRunResult, buyHideout, isUnlocked, availableCharms } from '../src/core/meta.js';
+import { hangUp } from '../src/core/calls.js';
 import { dailySeed, dailySetup, recordDaily, dayNum } from '../src/core/daily.js';
 
+const skipCall = (r) => { if (r.phase === 'call') hangUp(r); }; // v3: after a paid debt the phone rings; hanging up goes on
 let pass = 0, fail = 0;
 const t = (name, ok, extra = '') => {
   if (ok) pass++;
@@ -91,7 +94,7 @@ eq('fiveNeedsFour off', ids(G({ moth: [0, 1, 3, 4], candle: [2] })), []);
 }
 {
   const r = mk({ heat: 6 }); const s = score(r, G({ eye: [0, 1, 2, 3, 4] }));
-  eq('ex4 heat', s.total, 35); // 16 x (1 + 0.20 x 6)
+  eq('ex4 heat', s.total, 40); // 16 x (1 + 0.25 x 6) (AUDIT2 critic: Spice pays 25% a level)
 }
 {
   const r = mk({ charms: ['tallow_stub'] }); const s = score(r, G({ candle: [0, 1, 2] }));
@@ -123,7 +126,7 @@ eq('fiveNeedsFour off', ids(G({ moth: [0, 1, 3, 4], candle: [2] })), []);
 }
 {
   const r = mk({ charms: ['fair_tapestry'], heat: 4, terms: 'short_fuse' }); const s = score(r, G({ eye: [1, 2, 3, 6, 7, 10, 11] }));
-  eq('ex10 three multipliers', [s.sum, s.total], [20, 216]);
+  eq('ex10 three multipliers', [s.sum, s.total], [20, 240]);
 }
 {
   const r = mk({ charms: ['ash_cake'], heat: 8, purse: 500, debt: 3 });
@@ -201,15 +204,18 @@ function drive(run, n) {
 
 // ---------- 5. interest, bank, deadline ----------
 {
+  // v3: the Kiosk pays interest on the BANKED coins, into the Kiosk; the purse earns nothing
   const r = mk({ purse: 100, debt: 0 });
-  r.phase = 'roundend'; r.spinsLeft = 0; r.round = 0; r.debt = 60;
+  r.phase = 'roundend'; r.spinsLeft = 0; r.round = 0; r.debt = 150; r.banked = 100;
   const e = endRound(r);
-  eq('interest 8% of purse, cap 25% of debt', [e.interest, r.purse], [Math.min(8, 15), 108]);
-  const r2 = mk({ purse: 1000 }); r2.phase = 'roundend'; r2.debt = 60; r2.spinsLeft = 0;
-  eq('interest cap', endRound(r2).interest, 15);
-  const r3 = mk({ purse: 100, curses: ['dead_weight'] }); r3.phase = 'roundend'; r3.debt = 60; r3.spinsLeft = 0;
+  eq('interest 8% of banked, cap 20% of debt', [e.interest, r.banked, r.purse], [8, 108, 100]);
+  const r0 = mk({ purse: 100 }); r0.phase = 'roundend'; r0.debt = 150; r0.spinsLeft = 0;
+  eq('coins in the purse earn nothing', endRound(r0).interest, 0);
+  const r2 = mk({ purse: 0 }); r2.phase = 'roundend'; r2.debt = 60; r2.spinsLeft = 0; r2.banked = 1000;
+  eq('interest cap', endRound(r2).interest, 12); // 20% of 60
+  const r3 = mk({ purse: 0, curses: ['dead_weight'] }); r3.phase = 'roundend'; r3.debt = 60; r3.spinsLeft = 0; r3.banked = 50;
   eq('no interest curse', endRound(r3).interest, 0);
-  const r4 = mk({ purse: 100, char: 'sok' }); r4.phase = 'roundend'; r4.debt = 400; r4.spinsLeft = 0;
+  const r4 = mk({ purse: 0, char: 'sok' }); r4.phase = 'roundend'; r4.debt = 400; r4.spinsLeft = 0; r4.banked = 100;
   eq('Sok interest 13%', endRound(r4).interest, 13);
 }
 {
@@ -217,8 +223,10 @@ function drive(run, n) {
   const spent = bank(r, 20);
   eq('bank partial', [spent, r.banked, r.purse, r.phase], [20, 20, 50, 'spin']);
   bank(r, 999);
-  eq('bank pays and caps', [r.banked, r.purse, r.phase === 'deal' || r.phase === 'shop'], [60, 10, true]);
-  t('early pay: wick and trick', r.wick > 3 && r.stats.earlyPays === 1 && r.stats.debtsPaid === 1);
+  eq('bank caps at the debt and does not pay by itself', [r.banked, r.purse, r.phase, canPayNow(r)], [60, 10, 'spin', true]);
+  t('PAY NOW pays early and the phone rings', payNow(r) && r.phase === 'call' && r.wick > 3 && r.stats.earlyPays === 1 && r.stats.debtsPaid === 1);
+  const rl = mk({ purse: 70 }); rl.phase = 'spin'; rl.debt = 60; rl.postcards = ['late_kiosk']; bank(rl, 99);
+  t('Late Kiosk: no PAY NOW', !canPayNow(rl) && !payNow(rl));
 }
 {
   // deadline chain: paid, spare candle, cosigner, snooze, pawn, collected
@@ -267,9 +275,9 @@ trig('onDud', probe('onDud', {}, () => {}, (r) => score(r, G({}))));
 trig('onScorch', probe('onScorch', {}, () => {}, (r) => score(r, G({ ash: [0, 1, 2] }))));
 trig('onStoke', probe('onStoke', {}, (r) => { r.phase = 'spin'; }, (r) => stoke(r)));
 trig('onRoundEnd', probe('onRoundEnd', {}, (r) => { r.phase = 'roundend'; r.spinsLeft = 0; r.round = 0; r.rounds = 3; r.debt = 60; }, (r) => endRound(r)));
-trig('onInterest', probe('onInterest', {}, (r) => { r.phase = 'roundend'; r.spinsLeft = 0; r.round = 0; r.rounds = 3; r.debt = 60; r.purse = 100; }, (r) => endRound(r)));
+trig('onInterest', probe('onInterest', {}, (r) => { r.phase = 'roundend'; r.spinsLeft = 0; r.round = 0; r.rounds = 3; r.debt = 60; r.banked = 100; }, (r) => endRound(r)));
 trig('onBank', probe('onBank', {}, (r) => { r.phase = 'spin'; r.debt = 60; r.purse = 10; }, (r) => bank(r, 5)));
-trig('onDebtPaid', probe('onDebtPaid', {}, (r) => { r.phase = 'spin'; r.debt = 60; r.purse = 100; }, (r) => bank(r, 60)));
+trig('onDebtPaid', probe('onDebtPaid', {}, (r) => { r.phase = 'spin'; r.debt = 60; r.purse = 100; }, (r) => { bank(r, 60); payNow(r); }));
 trig('onBuy', probe('onBuy', {}, (r) => { r.phase = 'shop'; r.shop = { charms: ['tea_leaves'], tricks: [], bench: [] }; r.purse = 99; }, (r) => buyCharm(r, 0)));
 trig('onSell', probe('onSell', {}, (r) => { addCharm(r, 'tea_leaves'); }, (r) => sellCharm(r, 1)));
 trig('onSellSelf', probe('onSellSelf', {}, () => {}, (r) => sellCharm(r, 0)));
@@ -278,6 +286,8 @@ trig('onTrick', probe('onTrick', {}, (r) => { r.tricks = ['ice']; r.phase = 'spi
 trig('onDeal', probe('onDeal', {}, (r) => { r.phase = 'deal'; r.dealOffer = ['quick_cash']; }, (r) => signDeal(r, 'quick_cash')));
 trig('onRefuse', probe('onRefuse', {}, (r) => { r.phase = 'deal'; r.dealOffer = ['quick_cash']; }, (r) => refuseDeals(r)), 1);
 trig('onCurse', probe('onCurse', {}, () => {}, (r) => addCurse(r, 'jinx')));
+// v3 triggers (SPEC 3.8): the real emitters are covered in check-v3-core.mjs; here every name must fire its rule
+for (const name of ['onCall', 'onPick', 'onHangUp', 'onVisit', 'onOffering', 'onStage', 'onWrath', 'onRedEye', 'onActivate', 'onFuse']) trig(name, probe(name, {}, () => {}, (r) => fire(r, name, {})));
 {
   const r = mk({ charms: ['jinx_bead'] }); // passive and now are covered by data: charms read, deals run boons
   seenTrig.add('passive'); seenTrig.add('now');
@@ -313,7 +323,14 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   ef('stack', { type: 'stack', n: 2 }, () => src.inst.stack === 2);
   ef('slot', { type: 'slot', n: 1 }, (r) => r.slots === 6);
   ef('gainCharm', { type: 'gainCharm', rarity: 'rare' }, (r) => r.charms.length === 1 && CHARM[r.charms[0].id].rarity === 'rare', (r) => { r.pool = CHARMS.map((c) => c.id); });
-  ef('gainCharm steps down', { type: 'gainCharm', rarity: 'legendary' }, (r) => r.charms.length === 1 && CHARM[r.charms[0].id].rarity === 'rare');
+  ef('gainCharm steps down', { type: 'gainCharm', rarity: 'legendary' }, (r) => r.charms.length === 1 && CHARM[r.charms[0].id].rarity === 'rare', (r) => { r.pool = r.pool.filter((id) => CHARM[id].rarity !== 'legendary'); });
+  ef('favour', { type: 'favour', n: 3, spirit: 'beckon' }, (r) => r.spirits.beckon.fav === 3 && r.spirits.beckon.stage === 2);
+  ef('charge', { type: 'charge', n: 99 }, (r) => r.charms[0].charge === CHARM.fish_sauce.active.need, (r) => { addCharm(r, 'fish_sauce'); r.charms[0].charge = 0; });
+  ef('liftCurse', { type: 'liftCurse', n: 2 }, (r) => r.pendingLift === 2);
+  ef('loseCharm best', { type: 'loseCharm', pick: 'best' }, (r) => r.charms.length === 1 && r.charms[0].id === 'moth_jar', (r) => { addCharm(r, 'moth_jar'); addCharm(r, 'neon_open'); });
+  ef('loseCharm never a relic', { type: 'loseCharm', pick: 'best' }, (r) => r.charms.length === 1, (r) => { addCharm(r, 'neon_open'); r.charms[0].relic = true; });
+  ef('trick with id', { type: 'trick', n: 1, id: 'spare_candle' }, (r) => r.tricks[0] === 'spare_candle');
+  ef('gainCharm family', { type: 'gainCharm', rarity: 'common', family: 'ember' }, (r) => r.charms.length === 1 && CHARM[r.charms[0].id].family === 'ember');
   ef('gainCurse', { type: 'gainCurse', n: 2 }, (r) => r.curses.length === 2);
   ef('removeSymbol', { type: 'removeSymbol', n: 1 }, (r) => r.pendingRemove === 1);
   ef('flag', { type: 'flag', flag: 'smallHalf' }, (r) => snapshot(r).flags.smallHalf === true);
@@ -325,14 +342,14 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   const r2 = mk({ charms: ['thirteenth_stair'] });
   const sc = { found: [], steps: [], flat: 0 };
   for (let i = 0; i < 26; i++) fire(r2, 'onSpinEnd', { sc });
-  eq('every 4', sc.flat, 360);
+  eq('every 4', sc.flat, 6 * Math.round(45 * scaleOf(r2) ** CONFIG.coinPow));
 }
 
 // ---------- 8. shop, deals, meta, daily ----------
 {
   const r = newRun({ seed: 'shop' });
   r.perm.push({ type: 'flag', flag: 'shopDiscount', v: 30, src: { kind: 'deal', id: 'x' } });
-  t('discount prices', price(r, { kind: 'charm', id: 'moth_jar' }).coins === Math.round(CHARM.moth_jar.price.coins * 0.7));
+  t('discount prices', price(r, { kind: 'charm', id: 'moth_jar' }).coins === Math.round(CHARM.moth_jar.price.coins * scaleOf(r) * 0.7));
   r.phase = 'shop'; r.shop = { charms: ['moth_jar'], tricks: [], bench: ['polish', 'purge'], rerolls: 0, freeRerolls: 0 }; r.purse = 100;
   t('buy charm', buyCharm(r, 0) && r.charms.some((c) => c.id === 'moth_jar'));
   t('sell charm gives half', sellCharm(r, 0) && r.purse > 90);
@@ -350,14 +367,14 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
 }
 {
   const meta = newMeta();
-  t('start unlocks', isUnlocked(meta, 'char', 'nim') && !isUnlocked(meta, 'char', 'tao') && availableCharms(meta).length === 94);
+  t('start unlocks', isUnlocked(meta, 'char', 'nim') && !isUnlocked(meta, 'char', 'tao') && availableCharms(meta).length === CHARMS.filter((c) => !c.unlock && c.rarity !== 'fused').length);
   const run = newRun({ seed: 'meta' });
   run.result = { won: true, ending: null }; run.phase = 'ended'; run.stats.debtsPaid = 5; run.stats.reachDebt = 5; run.stats.spinCoins = 1200;
   const out = applyRunResult(meta, summary(run));
   t('wax and achievements', out.wax >= 5 * 3 + 20 && meta.achievements.includes('first_debt') && meta.achievements.includes('spin_1k') && meta.contracts.includes('c2'));
   t('contract 1 unlocks Tao', meta.chars.includes('tao') && isUnlocked(meta, 'char', 'tao'));
   t('unlocked charm enters the pool', availableCharms(meta).includes('furnace_heart'));
-  meta.wax = 30; t('hideout buy', buyHideout(meta, 'stove') && meta.wax === 5 && !buyHideout(meta, 'shelf'));
+  meta.stash = 30; t('hideout buy', buyHideout(meta, 'stove') && meta.stash === 5 && !buyHideout(meta, 'shelf'));
 }
 {
   eq('day numbers', dayNum('2026-03-02') - dayNum('2026-03-01'), 1);
@@ -435,10 +452,10 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   t('skip a night: reward, interest, shop', out && out.deadline === null && r.phase === 'shop' && r.round === 1 && r.stats.skips === 1 && (r.wick > w0 || r.tricks.length > tr0 || r.charms.length + r.waiting.length > 0), rew.id);
   r.round = 2; leaveShop(r); t('no skip on the last night', !canSkip(r) && skipRound(r) === null);
 
-  r = mk({ purse: 500 }); r.phase = 'spin'; r.debt = 60; r.round = 0; r.rounds = 3; const left0 = r.spinsLeft || 0; bank(r, 60);
+  r = mk({ purse: 500 }); r.phase = 'spin'; r.debt = 60; r.round = 0; r.rounds = 3; const left0 = r.spinsLeft || 0; bank(r, 60); payNow(r);
   t('early pay carries spins', r.carrySpins === 2 * CONFIG.earlyPay.spinsPerUnusedRound + left0);
   t('early pay: skipped nights still pay interest', r.stats.interestTotal > 0);
-  if (r.phase === 'deal') refuseDeals(r);
+  skipCall(r);
   t('early pay: skipped shop visits come back', r.shop.tricks.length === CONFIG.shop.trickOffers + 2 && r.shop.freeRerolls >= 2 && !r.earlyShop);
   leaveShop(r); const sp = STAKE_SPINS(r); pickTerms(r, termsOffer(r)[0].id);
   t('carried spins land on the next night', r.spinsLeft === sp + 2 * CONFIG.earlyPay.spinsPerUnusedRound + left0 && r.carrySpins === 0);
@@ -446,14 +463,14 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   r = mk({ purse: 0 }); r.wick = 30; r.phase = 'shop'; openShop(r);
   t('one slot per debt', buySlot(r) && !buySlot(r));
   r.phase = 'roundend'; r.debt = 1; r.round = 2; r.rounds = 3; r.spinsLeft = 0; r.purse = 10; endRound(r);
-  if (r.phase === 'deal') refuseDeals(r);
+  skipCall(r);
   t('a new debt sells a new slot', r.phase === 'shop' && buySlot(r));
 
   r = mk({ contract: 'c1' }); r.debtIdx = 4; r.debt = 1; r.round = 2; r.rounds = 3; r.phase = 'roundend'; r.spinsLeft = 0; r.purse = 99999;
   endRound(r);
   t('cleared contract can go on', r.phase === 'ended' && r.result.won && canContinue(r));
-  t('endless: next debt grows', continueEndless(r) && !canContinue(r) && (r.phase === 'deal' || r.phase === 'shop'));
-  if (r.phase === 'deal') refuseDeals(r);
+  t('endless: next debt grows', continueEndless(r) && !canContinue(r) && (r.phase === 'call' || r.phase === 'shop'));
+  skipCall(r);
   eq('endless debt 6', [r.debtIdx, r.debt], [5, Math.ceil(debtBase('c1', 5))]);
   t('endless debt grows by the endless rate', debtBase('c1', 6) === Math.round(CONTRACT.c1.debts.at(-1) * CONFIG.endless.growth ** 2));
   r.phase = 'roundend'; r.round = 2; r.spinsLeft = 0; r.purse = 0; endRound(r); if (r.phase === 'pawn') declinePawn(r);

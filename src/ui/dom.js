@@ -16,18 +16,22 @@ export function h(tag, props, ...kids) {
 let real = new Set();
 export const setArtIds = (ids) => { real = new Set(ids); };
 const stubs = new Map(), FILL = ['#f08a2a', '#7fd13b', '#b3202a', '#d9a62e', '#6b4a7a'];
-function stub(id) {
-  if (stubs.has(id)) return stubs.get(id);
+function stub(id, label = '') {
+  const key = id + '|' + label;
+  if (stubs.has(key)) return stubs.get(key);
   const c = Object.assign(document.createElement('canvas'), { width: 96, height: 96 }), g = c.getContext('2d');
-  if (/^ui\/(slot_empty|rarity_)/.test(id)) { stubs.set(id, c.toDataURL()); return stubs.get(id); } // frames and tag backs: nothing is better than a labelled blob
+  if (/^ui\/(slot_empty|rarity_)/.test(id)) { stubs.set(key, c.toDataURL()); return stubs.get(key); } // frames and tag backs: nothing is better than a labelled blob
   let n = 7; for (const ch of id) n = (n * 31 + ch.charCodeAt(0)) % 9973;
   g.fillStyle = '#f1e6cf'; g.beginPath(); g.arc(48, 48, 45, 0, 7); g.fill();
   g.fillStyle = FILL[n % FILL.length]; g.beginPath(); g.arc(48, 48, 38, 0, 7); g.fill();
   g.fillStyle = '#1c1220'; g.font = 'bold 17px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
-  g.fillText(id.split('/').pop().replace(/^btn_/, '').slice(0, 8), 48, 49, 70);
-  const url = c.toDataURL(); stubs.set(id, url); return url;
+  // A named stand-in (a neighbour, a Notebook entry) shows the name's initial, so two blobs never look the same nor mean nothing (AUDIT2 9).
+  if (label) { g.fillStyle = '#f1e6cf'; g.font = 'bold 46px sans-serif'; g.fillText([...label.trim()][0]?.toUpperCase() ?? '', 48, 51); }
+  else if (import.meta.env?.DEV) g.fillText(id.split('/').pop().replace(/^btn_/, '').slice(0, 8), 48, 49, 70); // the id only in dev: a build never shows a raw id
+  const url = c.toDataURL(); stubs.set(key, url); return url;
 }
-export const art = (id, cls = 'ico') => h('img', { src: real.has(id) ? `./img/${id}.png` : stub(id), alt: '', class: cls, draggable: 'false', onerror: (e) => { if (e.target.src !== stub(id)) e.target.src = stub(id); } });
+// label: the thing's display name, drawn as an initial on the stand-in when the art is missing.
+export const art = (id, cls = 'ico', label = '') => h('img', { src: real.has(id) ? `./img/${id}.png` : stub(id, label), alt: '', class: cls, draggable: 'false', onerror: (e) => { if (e.target.src !== stub(id, label)) e.target.src = stub(id, label); } });
 
 export const clear = (e) => { while (e.firstChild) e.removeChild(e.firstChild); return e; };
 

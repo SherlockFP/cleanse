@@ -1,0 +1,3024 @@
+{
+ "group": {
+  "en": "Neighbours",
+  "tr": "Komşular",
+  "th": "เพื่อนบ้าน"
+ },
+ "terms": {
+  "favour": {
+   "en": "Favour",
+   "tr": "Hatır",
+   "th": "น้ำใจ"
+  },
+  "tip": {
+   "en": "Tip",
+   "tr": "Bahşiş",
+   "th": "ทิป"
+  },
+  "gossip": {
+   "en": "Gossip",
+   "tr": "Dedikodu",
+   "th": "ข่าวแผง"
+  },
+  "errand": {
+   "en": "Errand",
+   "tr": "Küçük İş",
+   "th": "ฝากงาน"
+  },
+  "regular": {
+   "en": "Regular",
+   "tr": "Müdavim",
+   "th": "ขาประจำ"
+  }
+ },
+ "devotion": [
+  {
+   "tier": 1,
+   "cost": 30,
+   "stat": "noticed",
+   "n": 1,
+   "text": {
+    "en": "Start every run with +1 Favour with this neighbour.",
+    "tr": "Her oyuna bu komşuyla +1 Hatırla başla.",
+    "th": "เริ่มทุกรอบด้วยน้ำใจกับเพื่อนบ้านคนนี้ +1"
+   },
+   "reqText": {
+    "en": "Get this neighbour to Noticed once.",
+    "tr": "Bu komşuyu bir kez Tanıdı seviyesine getir.",
+    "th": "ทำให้เพื่อนบ้านคนนี้ถึงขั้นจำหน้าได้หนึ่งครั้ง"
+   }
+  },
+  {
+   "tier": 2,
+   "cost": 60,
+   "stat": "friend",
+   "n": 3,
+   "text": {
+    "en": "Their taste is always visible, and their gossip shows on their call card.",
+    "tr": "Zevki hep görünür, dedikodusu arama kartında çıkar.",
+    "th": "รสนิยมของเขามองเห็นเสมอ และข่าวแผงของเขาโชว์บนการ์ดโทรศัพท์"
+   },
+   "reqText": {
+    "en": "Get this neighbour to Friend 3 times.",
+    "tr": "Bu komşuyu 3 kez Dost seviyesine getir.",
+    "th": "ทำให้เพื่อนบ้านคนนี้ถึงขั้นเพื่อน 3 ครั้ง"
+   }
+  },
+  {
+   "tier": 3,
+   "cost": 100,
+   "stat": "patron",
+   "n": 2,
+   "text": {
+    "en": "The price of their red card shows before you tap it.",
+    "tr": "Kırmızı kartının bedeli dokunmadan görünür.",
+    "th": "ราคาของการ์ดแดงของเขาโชว์ก่อนแตะ"
+   },
+   "reqText": {
+    "en": "Get this neighbour to Regular 2 times.",
+    "tr": "Bu komşuyu 2 kez Müdavim seviyesine getir.",
+    "th": "ทำให้เพื่อนบ้านคนนี้เป็นขาประจำ 2 ครั้ง"
+   }
+  }
+ ],
+ "spirits": [
+  {
+   "id": "brimble",
+   "name": {
+    "en": "Mr. Ruby",
+    "tr": "Bay Ruby",
+    "th": "มิสเตอร์รูบี้"
+   },
+   "domain": {
+    "en": "debt, deals",
+    "tr": "borç, anlaşmalar",
+    "th": "หนี้ ข้อตกลง"
+   },
+   "rival": "waiting",
+   "unlock": {
+    "start": true
+   },
+   "local": [
+    "c1",
+    "c10"
+   ],
+   "portrait": {
+    "calm": "devil/idle",
+    "glad": "devil/grin",
+    "cross": "devil/angry"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 2,
+    "spice": 0.5,
+    "trick": 0.5,
+    "charm": -1,
+    "curse": 1,
+    "skip": -1
+   },
+   "hint": {
+    "en": "Likes Caps. Hates charms and skipped nights.",
+    "tr": "Kapak sever. Tılsımdan ve atlanan geceden nefret eder.",
+    "th": "ชอบฝาขวด เกลียดไอเท็มกับการข้ามคืน"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "brimble_2",
+     "name": {
+      "en": "No Hard Feelings",
+      "tr": "Kırgınlık Yok",
+      "th": "ไม่ถือสา"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "refuseWick",
+         "v": 3
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: refusing a deal gives +3 Caps.",
+      "tr": "Her zaman: anlaşmayı reddetmek +3 Kapak verir.",
+      "th": "ตลอดเวลา: ปฏิเสธข้อตกลงได้ +3 ฝาขวด"
+     }
+    },
+    {
+     "at": 5,
+     "id": "brimble_5",
+     "name": {
+      "en": "Friend Rate",
+      "tr": "Dost Faizi",
+      "th": "ดอกเบี้ยเพื่อน"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "interest",
+         "n": 3
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: interest +3%.",
+      "tr": "Her zaman: faiz +3 puan.",
+      "th": "ตลอดเวลา: ดอกเบี้ย +3%"
+     }
+    },
+    {
+     "at": 8,
+     "id": "brimble_8",
+     "name": {
+      "en": "Open Account",
+      "tr": "Açık Hesap",
+      "th": "บัญชีเปิด"
+     },
+     "rules": [
+      {
+       "trigger": "onDeal",
+       "cond": {},
+       "effects": [
+        {
+         "type": "wick",
+         "n": 2
+        },
+        {
+         "type": "coins",
+         "n": 20
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "When you sign a deal: +2 Caps, +{c:20} coins.",
+      "tr": "Anlaşma imzalayınca: +2 Kapak, +{c:20} para.",
+      "th": "เมื่อเซ็นข้อตกลง: +2 ฝาขวด, +{c:20} เหรียญ"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "id": "brimble_2",
+     "name": {
+      "en": "Late Notice",
+      "tr": "Gecikme İhtarı",
+      "th": "ใบเตือน"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noInterest",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: you earn no interest.",
+      "tr": "Her zaman: faiz alamazsın.",
+      "th": "ตลอดเวลา: ไม่ได้ดอกเบี้ย"
+     }
+    },
+    {
+     "at": -5,
+     "id": "brimble_5",
+     "name": {
+      "en": "Collections",
+      "tr": "Tahsilat",
+      "th": "ทวงหนี้"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noPawn",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: no Pawn and no Snooze.",
+      "tr": "Her zaman: Rehin ve Erteleme yok.",
+      "th": "ตลอดเวลา: ไม่มีจำนำและไม่มีเลื่อนเวลา"
+     }
+    }
+   ],
+   "gifts": [],
+   "red": {
+    "deals": true
+   },
+   "ownCurse": "small_print",
+   "omen": "nextDebts",
+   "demand": "signDeal",
+   "lines": {
+    "meet": {
+     "en": "Mr. Ruby. Debt, deals, paper. You will like the paper.",
+     "tr": "Bay Ruby. Borç, anlaşma, evrak. Evrakı seveceksin.",
+     "th": "มิสเตอร์รูบี้ครับ หนี้ ข้อตกลง เอกสาร เดี๋ยวคุณจะชอบเอกสาร"
+    },
+    "gift": {
+     "en": "Complimentary. It will be on the invoice.",
+     "tr": "Hediye. Faturaya yazılacak.",
+     "th": "ของแถมครับ แต่จะไปอยู่ในใบแจ้งหนี้"
+    },
+    "red": {
+     "en": "Sign here. The smaller print is on the back.",
+     "tr": "Buraya imza. Küçük yazılar arkada.",
+     "th": "เซ็นตรงนี้ครับ ตัวหนังสือเล็กๆ อยู่ด้านหลัง"
+    },
+    "loved": {
+     "en": "Caps. Honest currency. I accept.",
+     "tr": "Kapak. Dürüst para. Kabul.",
+     "th": "ฝาขวด เงินสุจริต รับครับ"
+    },
+    "insult": {
+     "en": "A tip for the creditor? Cute. Also a bad bribe.",
+     "tr": "Alacaklıya bahşiş mi? Tatlı. Ama kötü bir rüşvet.",
+     "th": "ให้ทิปเจ้าหนี้เหรอ น่ารักดี แต่เป็นสินบนที่แย่มาก"
+    },
+    "noticed": {
+     "en": "You read the clauses. I noticed.",
+     "tr": "Maddeleri okudun. Fark ettim.",
+     "th": "คุณอ่านข้อสัญญา ผมสังเกตเห็นแล้ว"
+    },
+    "friend": {
+     "en": "Friends get a better rate. Do not tell the others.",
+     "tr": "Dostlara daha iyi oran. Diğerlerine söyleme.",
+     "th": "เพื่อนได้เรตดีกว่า อย่าบอกคนอื่นนะ"
+    },
+    "patron": {
+     "en": "Regular customer now. I keep a stool for you.",
+     "tr": "Artık müdavimsin. Sana bir tabure ayırdım.",
+     "th": "ขาประจำแล้ว ผมเก็บเก้าอี้ไว้ให้ตัวหนึ่ง"
+    },
+    "wrath": {
+     "en": "Late notice. I am being polite about it.",
+     "tr": "Gecikme ihtarı. Nazik davranıyorum.",
+     "th": "หนังสือเตือนครับ ผมยังสุภาพอยู่นะ"
+    },
+    "himOrMe": {
+     "en": "He gives things back for free. I charge. Think about that.",
+     "tr": "O her şeyi bedavaya geri verir. Ben ücret alırım. Bir düşün.",
+     "th": "เขาคืนของให้ฟรี ผมคิดเงิน ลองคิดดู"
+    },
+    "omenTpl": {
+     "en": "I saw the ledger. Next debts: {v}.",
+     "tr": "Defteri gördüm. Sıradaki borçlar: {v}.",
+     "th": "ผมเห็นสมุดบัญชีแล้ว หนี้ถัดไป: {v}"
+    },
+    "demand": {
+     "en": "Sign something before this debt is paid. Do not make me ask twice.",
+     "tr": "Bu borç bitmeden bir şey imzala. İki kere söyletme.",
+     "th": "เซ็นอะไรสักอย่างก่อนปลดหนี้ก้อนนี้ อย่าให้ผมต้องพูดสองรอบ"
+    },
+    "epilogue": {
+     "en": "Mr. Ruby keeps a stool on Nim's corner. She pays the bill. He pretends to complain.",
+     "tr": "Bay Ruby, Nim'in köşesinde bir tabure tutuyor. Hesabı Nim ödüyor. O da şikâyet ediyormuş gibi yapıyor.",
+     "th": "มิสเตอร์รูบี้เก็บเก้าอี้ไว้ตัวหนึ่งที่หัวมุมของนิ่ม นิ่มเป็นคนจ่ายค่าเก้าอี้ ส่วนเขาก็แกล้งบ่น"
+    }
+   },
+   "text": {
+    "red": {
+     "en": "Mr. Ruby's deals: a strong boon, a curse you carry.",
+     "tr": "Bay Ruby'nin anlaşmaları: güçlü bir fayda, taşıdığın bir lanet.",
+     "th": "ข้อตกลงของมิสเตอร์รูบี้ ได้ของแรง แต่ต้องแบกคำสาป"
+    }
+   }
+  },
+  {
+   "id": "beckon",
+   "name": {
+    "en": "Madam Receipt",
+    "tr": "Bayan Fiş",
+    "th": "คุณนายใบเสร็จ"
+   },
+   "domain": {
+    "en": "the stall, prices",
+    "tr": "tezgâh, fiyatlar",
+    "th": "แผง ราคา"
+   },
+   "rival": "wire",
+   "unlock": {
+    "start": true
+   },
+   "local": [
+    "c4",
+    "c9"
+   ],
+   "portrait": {
+    "calm": "spirit/beckon_calm",
+    "glad": "spirit/beckon_glad",
+    "cross": "spirit/beckon_cross"
+   },
+   "taste": {
+    "coins": 2,
+    "caps": 1,
+    "spice": 0.5,
+    "trick": 1,
+    "charm": 1,
+    "curse": -1,
+    "skip": 0.5
+   },
+   "hint": {
+    "en": "Likes plain coins. Hates curses.",
+    "tr": "Düz parayı sever. Lanetten nefret eder.",
+    "th": "ชอบเหรียญ เกลียดคำสาป"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "beckon_2",
+     "name": {
+      "en": "First Customer",
+      "tr": "İlk Müşteri",
+      "th": "ลูกค้าคนแรก"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "shopExtra",
+         "v": 1
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: the next shop has +1 charm and a free reroll.",
+      "tr": "Her zaman: sıradaki dükkânda +1 tılsım ve bedava yenileme olur.",
+      "th": "ตลอดเวลา: ร้านถัดไปมีไอเท็ม +1 ชิ้นและสุ่มใหม่ฟรี 1 ครั้ง"
+     }
+    },
+    {
+     "at": 5,
+     "id": "beckon_5",
+     "name": {
+      "en": "Loyalty Card",
+      "tr": "Sadakat Kartı",
+      "th": "บัตรสะสมแต้ม"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "shopDiscount",
+         "v": 10
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: shop prices −10%.",
+      "tr": "Her zaman: dükkân fiyatları −%10.",
+      "th": "ตลอดเวลา: ราคาร้าน −10%"
+     }
+    },
+    {
+     "at": 8,
+     "id": "beckon_8",
+     "name": {
+      "en": "Open Late",
+      "tr": "Geç Saate Kadar Açık",
+      "th": "เปิดดึก"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "shopDiscount",
+         "v": 20
+        }
+       ]
+      },
+      {
+       "trigger": "onDebtPaid",
+       "cond": {},
+       "effects": [
+        {
+         "type": "gainCharm",
+         "rarity": "common"
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: shop prices −20%. Debt paid: gain a random common charm.",
+      "tr": "Her zaman: dükkân fiyatları −%20. Borç ödenince: rastgele bir sıradan tılsım kazan.",
+      "th": "ตลอดเวลา: ราคาร้าน −20% เมื่อปลดหนี้: ได้ไอเท็มธรรมดาสุ่มหนึ่งชิ้น"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "id": "beckon_2",
+     "name": {
+      "en": "Marked Up",
+      "tr": "Zamlı",
+      "th": "ขึ้นราคา"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "shopMarkup",
+         "v": 20
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: shop prices +20%.",
+      "tr": "Her zaman: dükkân fiyatları +%20.",
+      "th": "ตลอดเวลา: ราคาร้าน +20%"
+     }
+    },
+    {
+     "at": -5,
+     "id": "beckon_5",
+     "name": {
+      "en": "No Haggling",
+      "tr": "Pazarlık Yok",
+      "th": "ห้ามต่อราคา"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "rerollDouble",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: rerolls cost double and you cannot lock.",
+      "tr": "Her zaman: yenileme iki kat tutar, kilitleyemezsin.",
+      "th": "ตลอดเวลา: สุ่มร้านใหม่แพงสองเท่าและล็อกไม่ได้"
+     }
+    }
+   ],
+   "gifts": [
+    {
+     "id": "beckon_staff",
+     "icon": "deal/shop",
+     "name": {
+      "en": "Staff Price",
+      "tr": "Personel Fiyatı",
+      "th": "ราคาพนักงาน"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "shopDiscount",
+       "v": 30,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "Shop prices −30% this debt.",
+      "tr": "Dükkân fiyatları −%30 (bu borç).",
+      "th": "ราคาร้าน −30% ในหนี้นี้"
+     }
+    },
+    {
+     "id": "beckon_shelf",
+     "icon": "deal/mystery",
+     "name": {
+      "en": "Back Shelf",
+      "tr": "Arka Raf",
+      "th": "ชั้นหลังร้าน"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "shopExtra",
+       "v": 2,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "The next shop has +2 charms and a free reroll this debt.",
+      "tr": "Sıradaki dükkânda +2 tılsım ve bedava yenileme olur (bu borç).",
+      "th": "ร้านถัดไปมีไอเท็ม +2 ชิ้นและสุ่มใหม่ฟรี 1 ครั้ง ในหนี้นี้"
+     }
+    },
+    {
+     "id": "beckon_refund",
+     "icon": "deal/coins",
+     "name": {
+      "en": "Full Refund",
+      "tr": "Tam İade",
+      "th": "คืนเต็มราคา"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "sellFull",
+       "v": true,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "Charms sell for their full price this debt.",
+      "tr": "Tılsımlar tam fiyatına satılır (bu borç).",
+      "th": "ขายไอเท็มได้เต็มราคา ในหนี้นี้"
+     }
+    },
+    {
+     "id": "beckon_cash",
+     "icon": "ui/coin",
+     "name": {
+      "en": "Petty Cash",
+      "tr": "Küçük Kasa",
+      "th": "เงินสดย่อย"
+     },
+     "effects": [
+      {
+       "type": "coins",
+       "n": 15
+      }
+     ],
+     "text": {
+      "en": "+{c:15} coins.",
+      "tr": "+{c:15} para.",
+      "th": "+{c:15} เหรียญ"
+     }
+    }
+   ],
+   "red": {
+    "id": "clearance",
+    "icon": "deal/shop",
+    "name": {
+     "en": "Clearance Sale",
+     "tr": "Stok Eritme",
+     "th": "เซลล้างสต็อก"
+    },
+    "boon": [
+     {
+      "type": "flag",
+      "flag": "sellFull",
+      "v": true,
+      "scope": "debt"
+     },
+     {
+      "type": "flag",
+      "flag": "shopDiscount",
+      "v": 50,
+      "scope": "debt"
+     }
+    ],
+    "curse": null,
+    "carry": [
+     {
+      "type": "flag",
+      "flag": "noShopN",
+      "v": 2
+     }
+    ],
+    "text": {
+     "en": "Charms sell for their full price this debt, shop prices −50% this debt. You carry: the next 2 stalls are closed.",
+     "tr": "Tılsımlar tam fiyatına satılır (bu borç), dükkân fiyatları −%50 (bu borç). Taşıdığın: sıradaki 2 tezgâh kapalı.",
+     "th": "ขายไอเท็มได้เต็มราคา ในหนี้นี้, ราคาร้าน −50% ในหนี้นี้ ต้องแบก: แผงถัดไป 2 ครั้งปิด"
+    }
+   },
+   "ownCurse": "haggler",
+   "omen": "nextOffers",
+   "demand": "buy2",
+   "lines": {
+    "meet": {
+     "en": "Madam Receipt, stall accounts. Everything is itemised. Everything.",
+     "tr": "Bayan Fiş, tezgâh hesapları. Her şey kalem kalem yazılır. Her şey.",
+     "th": "คุณนายใบเสร็จ ดูแลบัญชีแผงค่ะ ทุกอย่างลงรายการหมด ทุกอย่างเลย"
+    },
+    "gift": {
+     "en": "A line in your favour. Keep the receipt.",
+     "tr": "Senin lehine bir satır. Fişi sakla.",
+     "th": "รายการนี้ลงบัญชีให้คุณค่ะ เก็บใบเสร็จไว้นะคะ"
+    },
+    "red": {
+     "en": "Clearance sale. Final. No refunds after the second night.",
+     "tr": "Stok eritme. Son. İkinci geceden sonra iade yok.",
+     "th": "เซลล้างสต็อกค่ะ ครั้งสุดท้าย เลยคืนที่สองแล้วไม่รับคืน"
+    },
+    "loved": {
+     "en": "Cash. Counted twice. Noted with thanks.",
+     "tr": "Nakit. İki kez sayıldı. Teşekkürle kaydedildi.",
+     "th": "เงินสด นับสองรอบแล้วค่ะ ขอบคุณ ลงบัญชีแล้ว"
+    },
+    "insult": {
+     "en": "That is not legal tender. Struck from the record.",
+     "tr": "Bu geçerli para değil. Kayıttan silindi.",
+     "th": "อันนี้ไม่ใช่เงินที่รับได้ค่ะ ขีดออกจากบัญชี"
+    },
+    "noticed": {
+     "en": "You paid on time. I keep a file on customers like you.",
+     "tr": "Zamanında ödedin. Senin gibi müşterilerin dosyasını tutarım.",
+     "th": "จ่ายตรงเวลานะคะ ฉันมีแฟ้มเก็บลูกค้าแบบนี้ไว้"
+    },
+    "friend": {
+     "en": "Loyalty card, stamped. Ten percent off, no questions.",
+     "tr": "Sadakat kartı mühürlendi. Yüzde on indirim, soru yok.",
+     "th": "ประทับบัตรสะสมแต้มแล้วค่ะ ลดสิบเปอร์เซ็นต์ ไม่ต้องถามอะไร"
+    },
+    "patron": {
+     "en": "Open late, just for you. Prices as low as I can bear.",
+     "tr": "Sırf senin için geç saate kadar açık. Fiyatlar dayanabildiğim kadar düşük.",
+     "th": "เปิดดึกเพื่อคุณคนเดียวค่ะ ราคาต่ำที่สุดที่ฉันทนไหว"
+    },
+    "wrath": {
+     "en": "Your balance is overdue. Prices are up, dear customer.",
+     "tr": "Hesabın gecikti. Fiyatlar çıktı, sevgili müşteri.",
+     "th": "ยอดคุณค้างอยู่ค่ะ ราคาขึ้นแล้วนะคะลูกค้า"
+    },
+    "himOrMe": {
+     "en": "Wire sells off a tray. I keep the books. Choose.",
+     "tr": "Tel tepsiden satar. Ben defteri tutarım. Seç.",
+     "th": "ลุงสายไฟขายของบนถาด ฉันถือสมุดบัญชี เลือกเลยค่ะ"
+    },
+    "omenTpl": {
+     "en": "I peeked at the next shelf. Coming up: {v}.",
+     "tr": "Sıradaki rafa göz attım. Gelenler: {v}.",
+     "th": "ฉันแอบดูชั้นของแผงถัดไปค่ะ มีของ: {v}"
+    },
+    "demand": {
+     "en": "Buy two things at the next stall. Receipts to follow.",
+     "tr": "Sıradaki tezgâhtan iki şey al. Fişler peşinden.",
+     "th": "ซื้อของสองชิ้นที่แผงหน้านะคะ ใบเสร็จตามมา"
+    },
+    "epilogue": {
+     "en": "Madam Receipt printed a receipt for the whole climb. It is eleven metres long and Nim keeps it.",
+     "tr": "Bayan Fiş bütün yükseliş için bir fiş bastı. On bir metre uzunluğunda ve Nim saklıyor.",
+     "th": "คุณนายใบเสร็จพิมพ์ใบเสร็จของการไต่เต้าทั้งหมดออกมา ยาวสิบเอ็ดเมตร และนิ่มเก็บไว้"
+    }
+   },
+   "text": {
+    "red": {
+     "en": "Charms sell for their full price this debt, shop prices −50% this debt. You carry: the next 2 stalls are closed.",
+     "tr": "Tılsımlar tam fiyatına satılır (bu borç), dükkân fiyatları −%50 (bu borç). Taşıdığın: sıradaki 2 tezgâh kapalı.",
+     "th": "ขายไอเท็มได้เต็มราคา ในหนี้นี้, ราคาร้าน −50% ในหนี้นี้ ต้องแบก: แผงถัดไป 2 ครั้งปิด"
+    }
+   }
+  },
+  {
+   "id": "gold",
+   "name": {
+    "en": "Chef Quack",
+    "tr": "Şef Vak",
+    "th": "เชฟกาบ"
+   },
+   "domain": {
+    "en": "the Special, Luck",
+    "tr": "Gözde, Şans",
+    "th": "เมนูเด็ด โชค"
+   },
+   "rival": "moonbiter",
+   "unlock": {
+    "start": true
+   },
+   "local": [
+    "c3"
+   ],
+   "portrait": {
+    "calm": "spirit/gold_calm",
+    "glad": "spirit/gold_glad",
+    "cross": "spirit/gold_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 1,
+    "spice": 0.5,
+    "trick": 2,
+    "charm": -1,
+    "curse": 0.5,
+    "skip": -1
+   },
+   "hint": {
+    "en": "Likes tricks. Hates charms and skipped nights.",
+    "tr": "Numaraları sever. Tılsımdan ve atlanan geceden nefret eder.",
+    "th": "ชอบกลเม็ด เกลียดไอเท็มกับการข้ามคืน"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "gold_2",
+     "name": {
+      "en": "Chef's Pick",
+      "tr": "Şefin Seçimi",
+      "th": "เมนูเชฟเลือก"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "luck",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: +1 Luck.",
+      "tr": "Her zaman: +1 Şans.",
+      "th": "ตลอดเวลา: โชค +1"
+     }
+    },
+    {
+     "at": 5,
+     "id": "gold_5",
+     "name": {
+      "en": "Your Order",
+      "tr": "Senin Siparişin",
+      "th": "สั่งเองได้"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "pickFirstFav",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: you choose the Special for the first spin of each round.",
+      "tr": "Her zaman: her elin ilk çevirişinde Gözdeyi sen seçersin.",
+      "th": "ตลอดเวลา: เลือกเมนูเด็ดเองในตาแรกของทุกรอบ"
+     }
+    },
+    {
+     "at": 8,
+     "id": "gold_8",
+     "name": {
+      "en": "Two Specials",
+      "tr": "İki Özel",
+      "th": "เมนูเด็ดสองอย่าง"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "twoFavs",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: each spin has two Specials.",
+      "tr": "Her zaman: her çevirişte iki Gözde olur.",
+      "th": "ตลอดเวลา: ทุกตามีเมนูเด็ดสองอย่าง"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "id": "gold_2",
+     "name": {
+      "en": "Menu Hidden",
+      "tr": "Menü Gizli",
+      "th": "ซ่อนเมนู"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "hideFav",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: you cannot see the Special.",
+      "tr": "Her zaman: Gözdeyi göremezsin.",
+      "th": "ตลอดเวลา: มองไม่เห็นเมนูเด็ด"
+     }
+    },
+    {
+     "at": -5,
+     "id": "gold_5",
+     "name": {
+      "en": "Burnt Pan",
+      "tr": "Yanık Tava",
+      "th": "กระทะไหม้"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "luck",
+         "n": -3
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: −3 Luck.",
+      "tr": "Her zaman: −3 Şans.",
+      "th": "ตลอดเวลา: โชค −3"
+     }
+    }
+   ],
+   "gifts": [
+    {
+     "id": "gold_burner",
+     "icon": "ui/luck",
+     "name": {
+      "en": "Hot Burner",
+      "tr": "Kızgın Ocak",
+      "th": "เตาร้อน"
+     },
+     "effects": [
+      {
+       "type": "luck",
+       "n": 2,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "+2 Luck this debt.",
+      "tr": "+2 Şans (bu borç).",
+      "th": "โชค +2 ในหนี้นี้"
+     }
+    },
+    {
+     "id": "gold_gadgets",
+     "icon": "ui/trick_bag",
+     "name": {
+      "en": "Kitchen Gadgets",
+      "tr": "Mutfak Aletleri",
+      "th": "ของใช้ในครัว"
+     },
+     "effects": [
+      {
+       "type": "trick",
+       "n": 2
+      }
+     ],
+     "text": {
+      "en": "Gain 2 random tricks.",
+      "tr": "2 rastgele numara kazan.",
+      "th": "ได้กลเม็ดสุ่ม 2 ชิ้น"
+     }
+    },
+    {
+     "id": "gold_peek",
+     "icon": "ui/favour",
+     "name": {
+      "en": "Peek at the Board",
+      "tr": "Tahtaya Göz At",
+      "th": "ชะโงกดูกระดาน"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "seeNextFav",
+       "v": true,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "You see the next spin's Special this debt.",
+      "tr": "Bir sonraki çevirişin Gözdesini görürsün (bu borç).",
+      "th": "เห็นเมนูเด็ดของตาถัดไป ในหนี้นี้"
+     }
+    },
+    {
+     "id": "gold_touch",
+     "icon": "ui/star",
+     "name": {
+      "en": "Chef's Touch",
+      "tr": "Şefin Dokunuşu",
+      "th": "ฝีมือเชฟ"
+     },
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 2,
+       "sym": "favoured",
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "The Special value +2 this debt.",
+      "tr": "Gözde değeri +2 (bu borç).",
+      "th": "ค่าเมนูเด็ด +2 ในหนี้นี้"
+     }
+    }
+   ],
+   "red": {
+    "id": "rush_order",
+    "icon": "deal/luck",
+    "name": {
+     "en": "Rush Order",
+     "tr": "Acil Sipariş",
+     "th": "ออเดอร์ด่วน"
+    },
+    "boon": [
+     {
+      "type": "luck",
+      "n": 5,
+      "scope": "debt"
+     }
+    ],
+    "curse": null,
+    "carry": [],
+    "text": {
+     "en": "+5 Luck this debt. Due: pay this debt within 2 nights, or lose your priciest charm.",
+     "tr": "+5 Şans (bu borç). Vade: 2 gecede öde, yoksa en pahalı tılsımını kaybet.",
+     "th": "โชค +5 ในหนี้นี้ กำหนด: จ่ายหนี้ภายใน 2 คืน ไม่งั้นเสียไอเท็มที่แพงที่สุด"
+    },
+    "due": {
+     "rounds": 2,
+     "else": [
+      {
+       "type": "loseCharm",
+       "pick": "best"
+      }
+     ]
+    }
+   },
+   "ownCurse": "sticky_fingers",
+   "omen": "favBoard",
+   "demand": "letMePick",
+   "lines": {
+    "meet": {
+     "en": "Quack! Chef Quack, head of the Special. The Special is my department.",
+     "tr": "Vak! Şef Vak, Gözde'nin başı. Gözde benim bölümüm.",
+     "th": "ก๊าบ! เชฟกาบ หัวหน้าเมนูเด็ดครับ เมนูเด็ดเป็นแผนกของผม"
+    },
+    "gift": {
+     "en": "Order up! Hot and free. Do not tell the customers.",
+     "tr": "Sipariş hazır! Sıcak ve bedava. Müşterilere söyleme.",
+     "th": "ออเดอร์ออกแล้ว! ร้อนๆ ฟรี อย่าบอกลูกค้านะ"
+    },
+    "red": {
+     "en": "Rush order: lots of Luck now. Pay late and I take your best charm.",
+     "tr": "Acil sipariş: hemen bol Şans. Geç ödersen en iyi tılsımını alırım.",
+     "th": "ออเดอร์ด่วน โชคเยอะทันที จ่ายช้าผมยึดไอเท็มที่ดีที่สุดนะ"
+    },
+    "loved": {
+     "en": "A new gadget! Quack quack. Best tip of the night.",
+     "tr": "Yeni bir alet! Vak vak. Gecenin en iyi bahşişi.",
+     "th": "ของเล่นชิ้นใหม่! ก๊าบๆ ทิปดีที่สุดของคืนนี้"
+    },
+    "insult": {
+     "en": "I am a duck, not a bin. Take that away.",
+     "tr": "Ben ördeğim, çöp kutusu değil. Götür şunu.",
+     "th": "ผมเป็ดนะ ไม่ใช่ถังขยะ เอาไปเลย"
+    },
+    "noticed": {
+     "en": "You ordered the Special twice. Good taste.",
+     "tr": "Gözde'yi iki kez sipariş ettin. İyi zevk.",
+     "th": "สั่งเมนูเด็ดสองรอบเลย รสนิยมดี"
+    },
+    "friend": {
+     "en": "You pick the first dish. Do not burn it.",
+     "tr": "İlk yemeği sen seç. Yakma.",
+     "th": "จานแรกคุณเลือกเอง อย่าทำไหม้ล่ะ"
+    },
+    "patron": {
+     "en": "Two Specials tonight! Chef's kiss. Quack.",
+     "tr": "Bu gece iki Özel! Şefin öpücüğü. Vak.",
+     "th": "คืนนี้เมนูเด็ดสองอย่าง! จุ๊บเชฟ ก๊าบ"
+    },
+    "wrath": {
+     "en": "The board is covered up. Nobody eats until I say.",
+     "tr": "Tahta örtüldü. Ben demeden kimse yemek yemez.",
+     "th": "ผมปิดกระดานเมนูแล้ว ผมไม่สั่ง ไม่มีใครได้กิน"
+    },
+    "himOrMe": {
+     "en": "Scrubby wipes my board clean. I cook, it scrapes. Pick a side.",
+     "tr": "Kazıcı tahtamı siler. Ben pişiririm, o kazır. Taraf seç.",
+     "th": "แปรงขัดมาเช็ดกระดานผมจนเกลี้ยง ผมทำอาหาร มันขัดทิ้ง เลือกข้างสิ"
+    },
+    "omenTpl": {
+     "en": "I read the board over the cook's shoulder: {v}.",
+     "tr": "Aşçının omzu üstünden tahtayı okudum: {v}.",
+     "th": "ผมชะโงกดูกระดานเหนือไหล่พ่อครัว: {v}"
+    },
+    "demand": {
+     "en": "Let me choose the Special for one spin. Trust the chef.",
+     "tr": "Bir çeviriş için Gözde'yi ben seçeyim. Şefe güven.",
+     "th": "ให้ผมเลือกเมนูเด็ดสักตาหนึ่ง เชื่อใจเชฟสิ"
+    },
+    "epilogue": {
+     "en": "Chef Quack has a stool beside Nim's stall. The Special sells out every night. Nobody knows how.",
+     "tr": "Şef Vak, Nim'in tezgâhının yanında bir tabureye sahip. Gözde her gece tükeniyor. Kimse nasıl olduğunu bilmiyor.",
+     "th": "เชฟกาบมีเก้าอี้ข้างแผงของนิ่ม เมนูเด็ดหมดทุกคืน ไม่มีใครรู้ว่าทำได้ยังไง"
+    }
+   },
+   "text": {
+    "red": {
+     "en": "+5 Luck this debt. Due: pay this debt within 2 nights, or lose your priciest charm.",
+     "tr": "+5 Şans (bu borç). Vade: 2 gecede öde, yoksa en pahalı tılsımını kaybet.",
+     "th": "โชค +5 ในหนี้นี้ กำหนด: จ่ายหนี้ภายใน 2 คืน ไม่งั้นเสียไอเท็มที่แพงที่สุด"
+    }
+   }
+  },
+  {
+   "id": "wire",
+   "name": {
+    "en": "Uncle Wire",
+    "tr": "Tel Amca",
+    "th": "ลุงสายไฟ"
+   },
+   "domain": {
+    "en": "tricks, the bench",
+    "tr": "numaralar, tezgâh",
+    "th": "กลเม็ด โต๊ะช่าง"
+   },
+   "rival": "beckon",
+   "unlock": {
+    "c": "c2"
+   },
+   "local": [
+    "c2",
+    "c9"
+   ],
+   "portrait": {
+    "calm": "spirit/wire_calm",
+    "glad": "spirit/wire_glad",
+    "cross": "spirit/wire_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 0.5,
+    "spice": 1,
+    "trick": 2,
+    "charm": 1,
+    "curse": -1,
+    "skip": -1
+   },
+   "hint": {
+    "en": "Likes tricks. Hates curses and skipped nights.",
+    "tr": "Numaraları sever. Lanetten ve atlanan geceden nefret eder.",
+    "th": "ชอบกลเม็ด เกลียดคำสาปกับการข้ามคืน"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "wire_2",
+     "name": {
+      "en": "Fourth Pocket",
+      "tr": "Dördüncü Cep",
+      "th": "กระเป๋าที่สี่"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "trickPockets",
+         "v": 1
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: +1 trick pocket.",
+      "tr": "Her zaman: +1 numara cebi.",
+      "th": "ตลอดเวลา: +1 ช่องกลเม็ด"
+     }
+    },
+    {
+     "at": 5,
+     "id": "wire_5",
+     "name": {
+      "en": "Odd Jobs",
+      "tr": "Ufak Tefek İşler",
+      "th": "งานจิปาถะ"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "firstTrickFree",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: the first trick each round is not used up.",
+      "tr": "Her zaman: her elin ilk numarası harcanmaz.",
+      "th": "ตลอดเวลา: กลเม็ดแรกของแต่ละรอบไม่หมดไป"
+     }
+    },
+    {
+     "at": 8,
+     "id": "wire_8",
+     "name": {
+      "en": "Splice Hand",
+      "tr": "Usta El",
+      "th": "มือช่างต่อสาย"
+     },
+     "rules": [
+      {
+       "trigger": "onDebtStart",
+       "cond": {},
+       "effects": [
+        {
+         "type": "trick",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "New debt: gain 2 random tricks.",
+      "tr": "Yeni borçta: 2 rastgele numara kazan.",
+      "th": "เริ่มหนี้ใหม่: ได้กลเม็ดสุ่ม 2 ชิ้น"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "id": "wire_2",
+     "name": {
+      "en": "Jammed Pocket",
+      "tr": "Sıkışan Cep",
+      "th": "กระเป๋าติด"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "trickPockets",
+         "v": -1
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: −1 trick pocket.",
+      "tr": "Her zaman: −1 numara cebi.",
+      "th": "ตลอดเวลา: −1 ช่องกลเม็ด"
+     }
+    },
+    {
+     "at": -5,
+     "id": "wire_5",
+     "name": {
+      "en": "Blown Fuse",
+      "tr": "Atan Sigorta",
+      "th": "ฟิวส์ขาด"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "trickPockets",
+         "v": -1
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: −1 trick pocket.",
+      "tr": "Her zaman: −1 numara cebi.",
+      "th": "ตลอดเวลา: −1 ช่องกลเม็ด"
+     }
+    }
+   ],
+   "gifts": [
+    {
+     "id": "wire_parts",
+     "icon": "ui/trick_bag",
+     "name": {
+      "en": "Spare Parts",
+      "tr": "Yedek Parça",
+      "th": "อะไหล่"
+     },
+     "effects": [
+      {
+       "type": "trick",
+       "n": 2
+      }
+     ],
+     "text": {
+      "en": "Gain 2 random tricks.",
+      "tr": "2 rastgele numara kazan.",
+      "th": "ได้กลเม็ดสุ่ม 2 ชิ้น"
+     }
+    },
+    {
+     "id": "wire_pocket",
+     "icon": "deal/slot",
+     "name": {
+      "en": "Extra Pocket",
+      "tr": "Ek Cep",
+      "th": "กระเป๋าเพิ่ม"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "trickPockets",
+       "v": 1,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "+1 trick pocket this debt.",
+      "tr": "+1 numara cebi (bu borç).",
+      "th": "+1 ช่องกลเม็ด ในหนี้นี้"
+     }
+    },
+    {
+     "id": "wire_fix",
+     "icon": "deal/power",
+     "name": {
+      "en": "Free Fix",
+      "tr": "Bedava Tamir",
+      "th": "ซ่อมฟรี"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "benchDiscount",
+       "v": 100,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "Bench work is free this debt.",
+      "tr": "Tezgâh işleri bedava (bu borç).",
+      "th": "งานโต๊ะช่างฟรี ในหนี้นี้"
+     }
+    },
+    {
+     "id": "wire_jump",
+     "icon": "ui/honk",
+     "name": {
+      "en": "Jump Start",
+      "tr": "Takviye",
+      "th": "จั๊มพ์สตาร์ท"
+     },
+     "effects": [
+      {
+       "type": "charge",
+       "n": 99
+      }
+     ],
+     "text": {
+      "en": "Fully recharge every active charm.",
+      "tr": "Tüm etkin tılsımları tam şarj et.",
+      "th": "ชาร์จไอเท็มกดใช้ทุกชิ้นให้เต็ม"
+     }
+    }
+   ],
+   "red": {
+    "id": "hot_wire",
+    "icon": "deal/power",
+    "name": {
+     "en": "Hot-wire",
+     "tr": "Kaçak Bağlantı",
+     "th": "ต่อตรง"
+    },
+    "boon": [
+     {
+      "type": "trick",
+      "n": 3
+     },
+     {
+      "type": "flag",
+      "flag": "trickFree",
+      "v": true,
+      "scope": "debt"
+     }
+    ],
+    "curse": "short_circuit",
+    "carry": [],
+    "text": {
+     "en": "Gain 3 random tricks, tricks are not used up this debt. You carry: Short Circuit.",
+     "tr": "3 rastgele numara kazan, numaralar harcanmaz (bu borç). Taşıdığın: Kısa Devre.",
+     "th": "ได้กลเม็ดสุ่ม 3 ชิ้น, กลเม็ดไม่หมดไป ในหนี้นี้ ต้องแบก: ไฟช็อต"
+    }
+   },
+   "ownCurse": "short_circuit",
+   "omen": "benchPrices",
+   "demand": "handTrick",
+   "lines": {
+    "meet": {
+     "en": "Hey, friend! Wire, street fixes. I have a trick. It has a hole. You have a thumb.",
+     "tr": "Hey dostum! Tel, sokak tamircisi. Bir numaram var. Deliği var. Senin de başparmağın.",
+     "th": "ไงเพื่อน! ลุงสายไฟ ช่างข้างถนน ผมมีกลเม็ดอันนึง มีรู ส่วนคุณมีนิ้วโป้ง"
+    },
+    "gift": {
+     "en": "Spare part, brand new. Well, new to you.",
+     "tr": "Yedek parça, sıfır. Yani senin için sıfır.",
+     "th": "อะไหล่ใหม่เอี่ยม ก็ใหม่สำหรับคุณนะ"
+    },
+    "red": {
+     "en": "Hot-wire! Three tricks, free to use. The wiring may hum. It is fine.",
+     "tr": "Kaçak bağlantı! Üç numara, bedava kullan. Kablo vızıldayabilir. Sorun yok.",
+     "th": "ต่อตรง! กลเม็ดสามชิ้น ใช้ฟรี สายอาจจะหึ่งๆ หน่อย ไม่เป็นไร"
+    },
+    "loved": {
+     "en": "A trick for the toolbox. You know my heart, friend.",
+     "tr": "Alet çantasına bir numara. Kalbimi biliyorsun dostum.",
+     "th": "กลเม็ดเข้ากล่องเครื่องมือ รู้ใจกันจริงๆ เพื่อน"
+    },
+    "insult": {
+     "en": "Skip a night? I do not sleep, you do not skip. Take it back.",
+     "tr": "Gece mi atlayacaksın? Ben uyumam, sen atlamazsın. Geri al.",
+     "th": "ข้ามคืนเหรอ ผมไม่นอน คุณก็ไม่ข้าม เอากลับไป"
+    },
+    "noticed": {
+     "en": "Fourth pocket. Tools do not carry themselves.",
+     "tr": "Dördüncü cep. Aletler kendi kendine taşınmaz.",
+     "th": "กระเป๋าที่สี่ เครื่องมือไม่เดินเองหรอก"
+    },
+    "friend": {
+     "en": "One trick a night, free. I never saw anything.",
+     "tr": "Geceye bir numara, bedava. Ben hiçbir şey görmedim.",
+     "th": "คืนละกลเม็ดฟรี ผมไม่เห็นอะไรทั้งนั้น"
+    },
+    "patron": {
+     "en": "Bench jobs are cheaper now. I know a guy. I am the guy.",
+     "tr": "Tezgâh işleri ucuzladı. Bir adam tanıyorum. O adam benim.",
+     "th": "งานโต๊ะช่างถูกลงแล้ว ผมรู้จักช่างคนนึง ก็ผมนี่แหละ"
+    },
+    "wrath": {
+     "en": "A pocket jammed? Happens when you ignore the neighbours.",
+     "tr": "Cep mi sıkıştı? Komşuları görmezden gelince olur.",
+     "th": "กระเป๋าติดเหรอ เป็นงี้แหละเวลาไม่สนใจเพื่อนบ้าน"
+    },
+    "himOrMe": {
+     "en": "Madam Receipt has a cash drawer. I have a street. Streets are free.",
+     "tr": "Bayan Fiş'in para çekmecesi var. Benim sokağım. Sokaklar bedava.",
+     "th": "คุณนายใบเสร็จมีลิ้นชักเก็บเงิน ผมมีถนน ถนนไม่เสียค่าเช่า"
+    },
+    "omenTpl": {
+     "en": "Heard it at the bench. Prices: {v}.",
+     "tr": "Tezgâhta duydum. Fiyatlar: {v}.",
+     "th": "ได้ข่าวจากโต๊ะช่าง ราคา: {v}"
+    },
+    "demand": {
+     "en": "Give me a trick, I give you two. Fair? Fair.",
+     "tr": "Bana bir numara ver, sana iki vereyim. Adil mi? Adil.",
+     "th": "ให้กลเม็ดผมหนึ่ง ผมให้คุณสอง แฟร์ใช่ไหม แฟร์"
+    },
+    "epilogue": {
+     "en": "Uncle Wire rewired the whole street for Nim. Half of it works. The tower has Wi-Fi now. Do not ask.",
+     "tr": "Tel Amca bütün sokağı Nim için yeniden kablolayı. Yarısı çalışıyor. Kulede artık Wi-Fi var. Sorma.",
+     "th": "ลุงสายไฟเดินสายใหม่ทั้งซอยให้นิ่ม ใช้ได้ครึ่งหนึ่ง ตึกสูงมีไวไฟแล้ว อย่าถามว่าทำไงนะ"
+    }
+   },
+   "text": {
+    "red": {
+     "en": "Gain 3 random tricks, tricks are not used up this debt. You carry: Short Circuit.",
+     "tr": "3 rastgele numara kazan, numaralar harcanmaz (bu borç). Taşıdığın: Kısa Devre.",
+     "th": "ได้กลเม็ดสุ่ม 3 ชิ้น, กลเม็ดไม่หมดไป ในหนี้นี้ ต้องแบก: ไฟช็อต"
+    }
+   }
+  },
+  {
+   "id": "waiting",
+   "name": {
+    "en": "Mr. Lost-and-Found",
+    "tr": "Kayıp Eşya Bey",
+    "th": "พี่ของหาย"
+   },
+   "domain": {
+    "en": "second chances, the white call",
+    "tr": "ikinci şanslar, beyaz arama",
+    "th": "โอกาสที่สอง สายสีขาว"
+   },
+   "rival": "brimble",
+   "unlock": {
+    "c": "c3",
+    "whiteCall": true
+   },
+   "local": [
+    "c8"
+   ],
+   "portrait": {
+    "calm": "spirit/waiting_calm",
+    "glad": "spirit/waiting_glad",
+    "cross": "spirit/waiting_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 1,
+    "spice": 0.5,
+    "trick": -1,
+    "charm": 2,
+    "curse": 0.5,
+    "skip": 2
+   },
+   "hint": {
+    "en": "Likes charms and skipped nights. Hates tricks.",
+    "tr": "Tılsımı ve atlanan geceyi sever. Numaradan nefret eder.",
+    "th": "ชอบไอเท็มกับการข้ามคืน เกลียดกลเม็ด"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "waiting_2",
+     "name": {
+      "en": "Spare One",
+      "tr": "Yedek",
+      "th": "ของสำรอง"
+     },
+     "rules": [
+      {
+       "trigger": "onDebtStart",
+       "cond": {},
+       "effects": [
+        {
+         "type": "trick",
+         "n": 1,
+         "id": "spare_candle"
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "New debt: gain a Late Pass.",
+      "tr": "Yeni borçta: Mühlet kazan.",
+      "th": "เริ่มหนี้ใหม่: ได้ขอผ่อนผัน"
+     }
+    },
+    {
+     "at": 5,
+     "id": "waiting_5",
+     "name": {
+      "en": "Second Chance",
+      "tr": "İkinci Şans",
+      "th": "โอกาสที่สอง"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "extraLife",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: once: if you miss a deadline you get 1 extra round.",
+      "tr": "Her zaman: bir kez: vadeyi kaçırırsan 1 ek el kazanırsın.",
+      "th": "ตลอดเวลา: หนึ่งครั้ง: ถ้าจ่ายไม่ทันจะได้เพิ่ม 1 รอบ"
+     }
+    },
+    {
+     "at": 8,
+     "id": "waiting_8",
+     "name": {
+      "en": "Found Again",
+      "tr": "Yeniden Bulundu",
+      "th": "เจอกันอีกครั้ง"
+     },
+     "rules": [
+      {
+       "trigger": "onHangUp",
+       "cond": {},
+       "effects": [
+        {
+         "type": "luck",
+         "n": 1
+        },
+        {
+         "type": "wick",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "When you hang up: +1 Luck, +2 Caps.",
+      "tr": "Telefonu kapatınca: +1 Şans, +2 Kapak.",
+      "th": "เมื่อวางสาย: โชค +1, +2 ฝาขวด"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "id": "waiting_2",
+     "name": {
+      "en": "Stops Calling",
+      "tr": "Aramayı Keser",
+      "th": "เลิกโทรหา"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noBeads",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: refused calls light no beads.",
+      "tr": "Her zaman: reddedilen aramalar boncuk yakmaz.",
+      "th": "ตลอดเวลา: วางสายแล้วลูกปัดไม่ติด"
+     }
+    },
+    {
+     "at": -5,
+     "id": "waiting_5",
+     "name": {
+      "en": "Lockers Shut",
+      "tr": "Dolaplar Kapalı",
+      "th": "ปิดตู้"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noBeads",
+         "v": true
+        }
+       ]
+      },
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noRelic",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: refused calls light no beads. Always: no Left Luggage relic.",
+      "tr": "Her zaman: reddedilen aramalar boncuk yakmaz. Her zaman: Emanet Dolabı eşyası gelmez.",
+      "th": "ตลอดเวลา: วางสายแล้วลูกปัดไม่ติด ตลอดเวลา: ไม่ได้ของจากตู้ฝากของ"
+     }
+    }
+   ],
+   "gifts": [
+    {
+     "id": "waiting_spare",
+     "icon": "trick/spare_candle",
+     "name": {
+      "en": "Spare One",
+      "tr": "Yedek",
+      "th": "ของสำรอง"
+     },
+     "effects": [
+      {
+       "type": "trick",
+       "n": 1,
+       "id": "spare_candle"
+      }
+     ],
+     "text": {
+      "en": "Gain a Late Pass.",
+      "tr": "Mühlet kazan.",
+      "th": "ได้ขอผ่อนผัน"
+     }
+    },
+    {
+     "id": "waiting_caps",
+     "icon": "ui/wick",
+     "name": {
+      "en": "Found Caps",
+      "tr": "Bulunan Kapaklar",
+      "th": "ฝาขวดที่เจอ"
+     },
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ],
+     "text": {
+      "en": "+3 Caps.",
+      "tr": "+3 Kapak.",
+      "th": "+3 ฝาขวด"
+     }
+    },
+    {
+     "id": "waiting_luck",
+     "icon": "ui/luck",
+     "name": {
+      "en": "Lucky Find",
+      "tr": "Şanslı Buluntu",
+      "th": "ของที่เจอโชคดี"
+     },
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1
+      }
+     ],
+     "text": {
+      "en": "+1 Luck.",
+      "tr": "+1 Şans.",
+      "th": "โชค +1"
+     }
+    },
+    {
+     "id": "waiting_claim",
+     "icon": "ui/collect",
+     "name": {
+      "en": "Claim Ticket",
+      "tr": "Teslim Fişi",
+      "th": "บัตรรับของ"
+     },
+     "effects": [
+      {
+       "type": "liftCurse",
+       "n": 1
+      }
+     ],
+     "text": {
+      "en": "Lift 1 curse of your choice.",
+      "tr": "Seçtiğin 1 laneti kaldır.",
+      "th": "ถอนคำสาปที่เลือก 1 อย่าง"
+     }
+    }
+   ],
+   "red": null,
+   "white": [
+    {
+     "id": "white_symbols",
+     "icon": "ui/star",
+     "name": {
+      "en": "Clean Slate",
+      "tr": "Temiz Sayfa",
+      "th": "เริ่มใหม่"
+     },
+     "effects": [
+      {
+       "type": "symMult",
+       "n": 1,
+       "sym": "all"
+      }
+     ],
+     "text": {
+      "en": "All symbols mult +1.",
+      "tr": "Tüm semboller çarpanı +1.",
+      "th": "ตัวคูณทุกสัญลักษณ์ +1"
+     }
+    },
+    {
+     "id": "white_patterns",
+     "icon": "deal/power",
+     "name": {
+      "en": "Wide Open",
+      "tr": "Sonuna Kadar Açık",
+      "th": "เปิดกว้าง"
+     },
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 1,
+       "pattern": "all"
+      }
+     ],
+     "text": {
+      "en": "All patterns mult +1.",
+      "tr": "Tüm desenler çarpanı +1.",
+      "th": "ตัวคูณทุกลาย +1"
+     }
+    },
+    {
+     "id": "white_stare",
+     "icon": "sym/redeye",
+     "name": {
+      "en": "Stare Back",
+      "tr": "Karşılık Ver",
+      "th": "จ้องกลับ"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeBless",
+       "v": true
+      }
+     ],
+     "text": {
+      "en": "Red Eyes do not punish and the spin pays ×3.",
+      "tr": "Kırmızı Göz cezalandırmaz, çeviriş ×3 öder.",
+      "th": "ดวงตาแดงไม่ลงโทษและตานั้นได้ ×3"
+     }
+    }
+   ],
+   "ownCurse": "heavy_hands",
+   "omen": "shortfall",
+   "demand": "waitWithMe",
+   "lines": {
+    "meet": {
+     "en": "Hello! Lost-and-Found. Anything missing? I might have it.",
+     "tr": "Merhaba! Kayıp Eşya. Bir şey mi kayıp? Bende olabilir.",
+     "th": "สวัสดีครับ! ฝ่ายของหาย อะไรหายไหม ผมอาจเก็บไว้อยู่"
+    },
+    "gift": {
+     "en": "Found this in the back. It is yours now, I think.",
+     "tr": "Bunu arka tarafta buldum. Artık senin sanırım.",
+     "th": "เจอของนี่หลังตู้ ตอนนี้เป็นของคุณแล้วมั้ง"
+    },
+    "red": {
+     "en": "Nothing hidden. Take it or leave it. Both are fine.",
+     "tr": "Gizli bir şey yok. Al ya da bırak. İkisi de olur.",
+     "th": "ไม่มีอะไรซ่อนครับ จะรับหรือไม่รับก็ได้ ไม่เป็นไร"
+    },
+    "loved": {
+     "en": "A charm for the shelf! I will keep it safe until you need it.",
+     "tr": "Rafa bir tılsım! İhtiyacın olana kadar saklarım.",
+     "th": "ไอเท็มเข้าชั้น! ผมเก็บไว้ให้จนกว่าคุณจะต้องใช้"
+    },
+    "insult": {
+     "en": "Tricks? They always get lost. Sorry, I cannot hold those.",
+     "tr": "Numaralar mı? Hep kaybolur. Özür dilerim, onları tutamam.",
+     "th": "กลเม็ดเหรอ หายทุกที ขอโทษนะ ผมเก็บให้ไม่ได้"
+    },
+    "noticed": {
+     "en": "A spare in your pocket, in case. You never know.",
+     "tr": "Cebinde bir yedek, ne olur ne olmaz.",
+     "th": "ใส่ของสำรองไว้ในกระเป๋าให้ เผื่อไว้ก่อน"
+    },
+    "friend": {
+     "en": "Missed a deadline? Come back. One more night, no questions.",
+     "tr": "Vadeyi mi kaçırdın? Geri gel. Bir gece daha, soru yok.",
+     "th": "ตกกำหนดเหรอ กลับมาสิ อีกหนึ่งคืน ไม่ต้องถามอะไร"
+    },
+    "patron": {
+     "en": "Hang up on a call and I will hold a little luck for you.",
+     "tr": "Bir aramayı kapat, sana biraz şans saklarım.",
+     "th": "วางสายสักสาย ผมเก็บโชคเล็กๆ ไว้ให้"
+    },
+    "wrath": {
+     "en": "I stopped calling and the lockers are shut. Not angry, only quiet.",
+     "tr": "Aramayı bıraktım, dolaplar kapalı. Kızgın değilim, sadece sessizim.",
+     "th": "ผมเลิกโทรแล้ว ตู้ก็ปิด ไม่ได้โกรธ แค่เงียบไปเฉยๆ"
+    },
+    "himOrMe": {
+     "en": "Mr. Ruby never gives anything back. I only give things back. Which of us?",
+     "tr": "Bay Ruby hiçbir şeyi geri vermez. Ben yalnızca geri veririm. Hangimiz?",
+     "th": "มิสเตอร์รูบี้ไม่เคยคืนอะไรเลย ผมมีแต่คืนของ เลือกเอานะ"
+    },
+    "omenTpl": {
+     "en": "I counted what is missing from the tin. Short by: {v}.",
+     "tr": "Teneke'den eksik olanı saydım. Eksik: {v}.",
+     "th": "ผมนับของที่ขาดในกระป๋องแล้ว ยังขาดอีก: {v}"
+    },
+    "demand": {
+     "en": "Skip the next night and sit with me. I will mind your things.",
+     "tr": "Sıradaki geceyi atla, benimle otur. Eşyalarına bakarım.",
+     "th": "ข้ามคืนหน้าไปนั่งกับผมสิ ผมดูของให้"
+    },
+    "epilogue": {
+     "en": "Mr. Lost-and-Found returned everything Nim ever lost. The last thing was her old cart, repainted.",
+     "tr": "Kayıp Eşya Bey, Nim'in kaybettiği her şeyi geri verdi. Sonuncusu, yeniden boyanmış eski arabasıydı.",
+     "th": "พี่ของหายคืนทุกอย่างที่นิ่มเคยทำหาย ชิ้นสุดท้ายคือรถเข็นคันเก่าที่ทาสีใหม่"
+    }
+   },
+   "text": {
+    "red": {
+     "en": "Never offers a red card. Hang up on three red cards and he calls with a white one.",
+     "tr": "Asla kırmızı kart sunmaz. Üç kırmızı kartı kapatırsan beyaz kartla arar.",
+     "th": "ไม่มีการ์ดแดง วางสายใส่การ์ดแดงสามครั้ง เขาจะโทรมาพร้อมการ์ดสีขาว"
+    }
+   }
+  },
+  {
+   "id": "tide",
+   "name": {
+    "en": "Grandmother Tide",
+    "tr": "Gelgit Nine",
+    "th": "ยายน้ำขึ้น"
+   },
+   "domain": {
+    "en": "interest, patience",
+    "tr": "faiz, sabır",
+    "th": "ดอกเบี้ย ความอดทน"
+   },
+   "rival": "lamplit",
+   "unlock": {
+    "c": "c5"
+   },
+   "local": [
+    "c5"
+   ],
+   "portrait": {
+    "calm": "spirit/tide_calm",
+    "glad": "spirit/tide_glad",
+    "cross": "spirit/tide_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 1,
+    "spice": -1,
+    "trick": 0.5,
+    "charm": -1,
+    "curse": 0.5,
+    "skip": 2
+   },
+   "hint": {
+    "en": "Likes a skipped night. Hates Spice and charms.",
+    "tr": "Atlanan geceyi sever. Acıdan ve tılsımdan nefret eder.",
+    "th": "ชอบการข้ามคืน เกลียดความเผ็ดกับไอเท็ม"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "tide_2",
+     "name": {
+      "en": "High Tide",
+      "tr": "Kabarma",
+      "th": "น้ำขึ้น"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "interest",
+         "n": 2
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: interest +2%.",
+      "tr": "Her zaman: faiz +2 puan.",
+      "th": "ตลอดเวลา: ดอกเบี้ย +2%"
+     }
+    },
+    {
+     "at": 5,
+     "id": "tide_5",
+     "name": {
+      "en": "Slack Tide",
+      "tr": "Durgun Su",
+      "th": "น้ำนิ่ง"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "carrySpins",
+         "v": 3
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: unused spins carry over, up to 3.",
+      "tr": "Her zaman: kullanılmayan çevirişler en fazla 3 tane devreder.",
+      "th": "ตลอดเวลา: ตาที่เหลือยกไปรอบหน้าได้สูงสุด 3"
+     }
+    },
+    {
+     "at": 8,
+     "id": "tide_8",
+     "name": {
+      "en": "Spring Tide",
+      "tr": "Büyük Gelgit",
+      "th": "น้ำใหญ่"
+     },
+     "rules": [
+      {
+       "trigger": "onDebtStart",
+       "cond": {},
+       "effects": [
+        {
+         "type": "spins",
+         "n": 1
+        },
+        {
+         "type": "luck",
+         "n": 2,
+         "scope": "round"
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "New debt: +1 spin, +2 Luck this round.",
+      "tr": "Yeni borçta: +1 çeviriş, +2 Şans (bu el).",
+      "th": "เริ่มหนี้ใหม่: +1 ตา, โชค +2 ในรอบนี้"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "id": "tide_2",
+     "name": {
+      "en": "Ebb",
+      "tr": "Cezir",
+      "th": "น้ำลง"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "interestHalf",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: interest is halved.",
+      "tr": "Her zaman: faiz yarıya iner.",
+      "th": "ตลอดเวลา: ดอกเบี้ยลดครึ่ง"
+     }
+    },
+    {
+     "at": -5,
+     "id": "tide_5",
+     "name": {
+      "en": "Dry Bank",
+      "tr": "Kuru Nehir",
+      "th": "น้ำแห้ง"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noInterest",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: you earn no interest.",
+      "tr": "Her zaman: faiz alamazsın.",
+      "th": "ตลอดเวลา: ไม่ได้ดอกเบี้ย"
+     }
+    }
+   ],
+   "gifts": [
+    {
+     "id": "tide_money",
+     "icon": "ui/interest",
+     "name": {
+      "en": "Slow Money",
+      "tr": "Yavaş Para",
+      "th": "เงินงอกช้าๆ"
+     },
+     "effects": [
+      {
+       "type": "interest",
+       "n": 3,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "Interest +3% this debt.",
+      "tr": "Faiz +3 puan (bu borç).",
+      "th": "ดอกเบี้ย +3% ในหนี้นี้"
+     }
+    },
+    {
+     "id": "tide_hours",
+     "icon": "trick/hourglass",
+     "name": {
+      "en": "Extra Hours",
+      "tr": "Ek Saat",
+      "th": "ชั่วโมงเพิ่ม"
+     },
+     "effects": [
+      {
+       "type": "spins",
+       "n": 2
+      }
+     ],
+     "text": {
+      "en": "+2 spin.",
+      "tr": "+2 çeviriş.",
+      "th": "+2 ตา"
+     }
+    },
+    {
+     "id": "tide_tea",
+     "icon": "ui/heat",
+     "name": {
+      "en": "Hot Tea",
+      "tr": "Sıcak Çay",
+      "th": "ชาร้อน"
+     },
+     "effects": [
+      {
+       "type": "charge",
+       "n": 99
+      }
+     ],
+     "text": {
+      "en": "Fully recharge every active charm.",
+      "tr": "Tüm etkin tılsımları tam şarj et.",
+      "th": "ชาร์จไอเท็มกดใช้ทุกชิ้นให้เต็ม"
+     }
+    },
+    {
+     "id": "tide_change",
+     "icon": "ui/coin",
+     "name": {
+      "en": "Pocket Change",
+      "tr": "Bozuk Para",
+      "th": "เงินทอน"
+     },
+     "effects": [
+      {
+       "type": "coins",
+       "n": 15
+      }
+     ],
+     "text": {
+      "en": "+{c:15} coins.",
+      "tr": "+{c:15} para.",
+      "th": "+{c:15} เหรียญ"
+     }
+    }
+   ],
+   "red": {
+    "id": "cargo_credit",
+    "icon": "deal/time",
+    "name": {
+     "en": "Cargo on Credit",
+     "tr": "Veresiye Kargo",
+     "th": "ของเชื่อ"
+    },
+    "boon": [
+     {
+      "type": "gainCharm",
+      "n": 2,
+      "rarity": "uncommon",
+      "family": "random"
+     }
+    ],
+    "curse": "slow_water",
+    "carry": [],
+    "text": {
+     "en": "Gain 2 random uncommon charms of one random family. You carry: Slow Water.",
+     "tr": "2 rastgele nadir tılsım kazan, aynı rastgele aileden. Taşıdığın: Yavaş Su.",
+     "th": "ได้ไอเท็มหายาก 2 ชิ้น จากตระกูลเดียวกันที่สุ่มได้ ต้องแบก: น้ำไหลช้า"
+    }
+   },
+   "ownCurse": "slow_water",
+   "omen": "nextTerms",
+   "demand": "keepCool",
+   "lines": {
+    "meet": {
+     "en": "Sit. Tea is hot. The river is slow. So are good things.",
+     "tr": "Otur. Çay sıcak. Nehir yavaş. İyi şeyler de öyle.",
+     "th": "นั่งสิลูก ชายังร้อน แม่น้ำไหลช้า ของดีก็มาช้าเหมือนกัน"
+    },
+    "gift": {
+     "en": "Here, a little extra. Do not spend it all at once.",
+     "tr": "Al, biraz fazladan. Hepsini bir anda harcama.",
+     "th": "นี่ เพิ่มให้นิดหน่อย อย่าใช้หมดทีเดียวนะ"
+    },
+    "red": {
+     "en": "Cargo on credit. Slow water comes with it.",
+     "tr": "Veresiye kargo. Yavaş su da onunla gelir.",
+     "th": "ของเชื่อนะ น้ำไหลช้ามาด้วย"
+    },
+    "loved": {
+     "en": "You rested a night? Good child. Slow money is honest money.",
+     "tr": "Bir gece dinlendin mi? Aferin. Yavaş para dürüst paradır.",
+     "th": "พักไปหนึ่งคืนเหรอ เด็กดี เงินที่มาช้าเป็นเงินสุจริต"
+    },
+    "insult": {
+     "en": "Spice for an old woman? The tea is hot enough. No.",
+     "tr": "Yaşlı kadına acı mı? Çay yeterince sıcak. Hayır.",
+     "th": "เผ็ดให้คนแก่เหรอ ชาก็ร้อนพอแล้ว ไม่เอา"
+    },
+    "noticed": {
+     "en": "You are learning patience. High tide for you.",
+     "tr": "Sabrı öğreniyorsun. Senin için kabarma.",
+     "th": "เริ่มรู้จักอดทนแล้วนะ น้ำขึ้นให้เลย"
+    },
+    "friend": {
+     "en": "Unused hours may carry over. The river does not mind.",
+     "tr": "Kullanılmayan saatler devredebilir. Nehir aldırmaz.",
+     "th": "ตาที่เหลือยกไปได้ แม่น้ำไม่ว่าอะไรหรอก"
+    },
+    "patron": {
+     "en": "Spring tide. The first night of every debt is long and lovely.",
+     "tr": "Büyük gelgit. Her borcun ilk gecesi uzun ve güzel.",
+     "th": "น้ำใหญ่แล้ว คืนแรกของทุกหนี้ยาวและสวย"
+    },
+    "wrath": {
+     "en": "Ebb tide. I am not angry. I am gone, for now.",
+     "tr": "Cezir. Kızgın değilim. Şimdilik gittim.",
+     "th": "น้ำลงแล้ว ยายไม่ได้โกรธ แค่ไปก่อน"
+    },
+    "himOrMe": {
+     "en": "Lamplit burns bright and short. I burn slow and long. Choose, dear.",
+     "tr": "Lamba parlak ve kısa yanar. Ben yavaş ve uzun. Seç, evladım.",
+     "th": "เจ๊หลอดไฟสว่างวาบแล้วดับ ยายสว่างช้าแต่ยาว เลือกเถอะลูก"
+    },
+    "omenTpl": {
+     "en": "The barge hands told me tomorrow's terms: {v}.",
+     "tr": "Mavna adamları yarının şartlarını söyledi: {v}.",
+     "th": "ลูกเรือเรือบรรทุกบอกยายว่าเงื่อนไขพรุ่งนี้: {v}"
+    },
+    "demand": {
+     "en": "Keep it cool tonight. Spice 2 or less. Tea will help.",
+     "tr": "Bu gece soğukkanlı ol. Acı 2 veya altı. Çay yardımcı olur.",
+     "th": "คืนนี้ใจเย็นๆ เผ็ดไม่เกิน 2 ดื่มชาจะช่วยได้"
+    },
+    "epilogue": {
+     "en": "Grandmother Tide's barge now ties up next to Nim's stall. She still says to go slow. Nim does not.",
+     "tr": "Gelgit Nine'nin mavnası artık Nim'in tezgâhının yanına yanaşıyor. Hâlâ yavaş git diyor. Nim gitmiyor.",
+     "th": "เรือบรรทุกของยายน้ำขึ้นจอดข้างแผงของนิ่มแล้ว ยายยังบอกให้ไปช้าๆ แต่นิ่มไม่ฟัง"
+    }
+   },
+   "text": {
+    "red": {
+     "en": "Gain 2 random uncommon charms of one random family. You carry: Slow Water.",
+     "tr": "2 rastgele nadir tılsım kazan, aynı rastgele aileden. Taşıdığın: Yavaş Su.",
+     "th": "ได้ไอเท็มหายาก 2 ชิ้น จากตระกูลเดียวกันที่สุ่มได้ ต้องแบก: น้ำไหลช้า"
+    }
+   }
+  },
+  {
+   "id": "moonbiter",
+   "name": {
+    "en": "Scrubby",
+    "tr": "Kazıcı",
+    "th": "แปรงขัด"
+   },
+   "domain": {
+    "en": "Soot, removal, curses",
+    "tr": "İs, çıkarma, lanetler",
+    "th": "เขม่า การถอดออก คำสาป"
+   },
+   "rival": "gold",
+   "unlock": {
+    "c": "c6"
+   },
+   "local": [
+    "c6"
+   ],
+   "portrait": {
+    "calm": "spirit/moonbiter_calm",
+    "glad": "spirit/moonbiter_glad",
+    "cross": "spirit/moonbiter_cross"
+   },
+   "taste": {
+    "coins": 0.5,
+    "caps": -1,
+    "spice": 1,
+    "trick": 1,
+    "charm": 2,
+    "curse": 2,
+    "skip": 0.5
+   },
+   "hint": {
+    "en": "Likes charms and curses. Hates Caps.",
+    "tr": "Tılsımı ve laneti sever. Kapaktan nefret eder.",
+    "th": "ชอบไอเท็มกับคำสาป เกลียดฝาขวด"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "moonbiter_2",
+     "name": {
+      "en": "Soot Pennies",
+      "tr": "İs Kuruşları",
+      "th": "เศษเหรียญเขม่า"
+     },
+     "rules": [
+      {
+       "trigger": "onSymbolLand",
+       "cond": {
+        "sym": "ash"
+       },
+       "effects": [
+        {
+         "type": "coins",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Each Soot that lands: +{c:1} coins.",
+      "tr": "İnen her İs: +{c:1} para.",
+      "th": "เขม่าทุกตัวที่ตก: +{c:1} เหรียญ"
+     }
+    },
+    {
+     "at": 5,
+     "id": "moonbiter_5",
+     "name": {
+      "en": "Elbow Grease",
+      "tr": "Dirsek Yağı",
+      "th": "แรงขัด"
+     },
+     "rules": [
+      {
+       "trigger": "onScorch",
+       "cond": {},
+       "effects": [
+        {
+         "type": "wick",
+         "n": 2
+        },
+        {
+         "type": "patMult",
+         "n": 0.5,
+         "pattern": "all",
+         "scope": "round"
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "On a Flare-up: +2 Caps, all patterns mult +0.5 this round.",
+      "tr": "Parlamada: +2 Kapak, tüm desenler çarpanı +0.5 (bu el).",
+      "th": "เมื่อไฟลุก: +2 ฝาขวด, ตัวคูณทุกลาย +0.5 ในรอบนี้"
+     }
+    },
+    {
+     "at": 8,
+     "id": "moonbiter_8",
+     "name": {
+      "en": "Soot Is Special",
+      "tr": "İs de Özel",
+      "th": "เขม่าก็เมนูเด็ด"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "ashIsFav",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: Soot counts as the Special in patterns (value 0).",
+      "tr": "Her zaman: İs desenlerde Gözde sayılır (değeri 0).",
+      "th": "ตลอดเวลา: เขม่านับเป็นเมนูเด็ดในลาย (ค่า 0)"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "id": "moonbiter_2",
+     "name": {
+      "en": "Sooty Floor",
+      "tr": "Isli Zemin",
+      "th": "พื้นเขม่า"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "weight",
+         "n": 1.5,
+         "sym": "ash"
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: Soot ×1.5 as often.",
+      "tr": "Her zaman: İs ×1.5 sıklıkla gelir.",
+      "th": "ตลอดเวลา: เขม่าออกบ่อย ×1.5"
+     }
+    },
+    {
+     "at": -5,
+     "id": "moonbiter_5",
+     "name": {
+      "en": "Hollow Centre",
+      "tr": "Boş Merkez",
+      "th": "ช่องกลางโหว่"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "deadCentre",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: the centre cell is always Soot.",
+      "tr": "Her zaman: orta hücre hep İs olur.",
+      "th": "ตลอดเวลา: ช่องกลางเป็นเขม่าเสมอ"
+     }
+    }
+   ],
+   "gifts": [
+    {
+     "id": "moonbiter_scrape",
+     "icon": "deal/symbol",
+     "name": {
+      "en": "Scrape One",
+      "tr": "Birini Kazı",
+      "th": "ขัดออกหนึ่งอย่าง"
+     },
+     "effects": [
+      {
+       "type": "removeSymbol",
+       "n": 1
+      }
+     ],
+     "text": {
+      "en": "Remove 1 symbol of your choice from the machine.",
+      "tr": "Makineden seçtiğin 1 sembolü çıkar.",
+      "th": "ถอดสัญลักษณ์ที่เลือก 1 ชนิดออกจากเครื่อง"
+     }
+    },
+    {
+     "id": "moonbiter_curse",
+     "icon": "curse/crack",
+     "name": {
+      "en": "Scrub a Curse",
+      "tr": "Laneti Kazı",
+      "th": "ขัดคำสาป"
+     },
+     "effects": [
+      {
+       "type": "liftCurse",
+       "n": 1
+      }
+     ],
+     "text": {
+      "en": "Lift 1 curse of your choice.",
+      "tr": "Seçtiğin 1 laneti kaldır.",
+      "th": "ถอนคำสาปที่เลือก 1 อย่าง"
+     }
+    },
+    {
+     "id": "moonbiter_clean",
+     "icon": "sym/ash",
+     "name": {
+      "en": "No Soot Tonight",
+      "tr": "Bu Gece İs Yok",
+      "th": "คืนนี้ไม่มีเขม่า"
+     },
+     "effects": [
+      {
+       "type": "weight",
+       "n": 0,
+       "sym": "ash",
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "Soot never lands this debt.",
+      "tr": "İs hiç gelmez (bu borç).",
+      "th": "เขม่าไม่ออกเลย ในหนี้นี้"
+     }
+    },
+    {
+     "id": "moonbiter_caps",
+     "icon": "ui/wick",
+     "name": {
+      "en": "Scrap Caps",
+      "tr": "Hurda Kapaklar",
+      "th": "ฝาขวดเก็บตก"
+     },
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      }
+     ],
+     "text": {
+      "en": "+3 Caps.",
+      "tr": "+3 Kapak.",
+      "th": "+3 ฝาขวด"
+     }
+    }
+   ],
+   "red": {
+    "id": "deep_clean",
+    "icon": "deal/symbol",
+    "name": {
+     "en": "Deep Clean",
+     "tr": "Derin Temizlik",
+     "th": "ขัดล้างใหญ่"
+    },
+    "boon": [
+     {
+      "type": "removeSymbol",
+      "n": 2
+     },
+     {
+      "type": "allMult",
+      "n": 1.5,
+      "scope": "debt"
+     }
+    ],
+    "curse": "hollow_centre",
+    "carry": [],
+    "text": {
+     "en": "Remove 2 symbols of your choice from the machine, spin total ×1.5 this debt. You carry: Hollow Centre.",
+     "tr": "Makineden seçtiğin 2 sembolü çıkar, çeviriş toplamı ×1.5 (bu borç). Taşıdığın: Boş Merkez.",
+     "th": "ถอดสัญลักษณ์ที่เลือก 2 ชนิดออกจากเครื่อง, ยอดรวมตานี้ ×1.5 ในหนี้นี้ ต้องแบก: ช่องกลางโหว่"
+    }
+   },
+   "ownCurse": "hollow_centre",
+   "omen": "ashNext",
+   "demand": "feed",
+   "lines": {
+    "meet": {
+     "en": "Hello. Scrubby. I clean things. Sorry in advance.",
+     "tr": "Merhaba. Kazıcı. Bir şeyleri temizlerim. Şimdiden kusura bakma.",
+     "th": "สวัสดีครับ แปรงขัด ผมขัดของ ขอโทษล่วงหน้านะครับ"
+    },
+    "gift": {
+     "en": "Sorry, may I? There. One thing less.",
+     "tr": "Pardon, izin var mı? Tamam. Bir şey eksildi.",
+     "th": "ขอโทษครับ ขอหน่อย เรียบร้อย ของหายไปหนึ่งอย่าง"
+    },
+    "red": {
+     "en": "Deep clean: two symbols gone and everything pays more. The middle stays hollow.",
+     "tr": "Derin temizlik: iki sembol gider, her şey daha çok öder. Orta boş kalır.",
+     "th": "ขัดล้างใหญ่ สัญลักษณ์หายไปสองอย่าง ทุกอย่างจ่ายมากขึ้น แต่ช่องกลางจะโหว่"
+    },
+    "loved": {
+     "en": "Something to scrub? You spoil me.",
+     "tr": "Kazınacak bir şey mi? Beni şımartıyorsun.",
+     "th": "มีของให้ขัดเหรอ ตามใจกันจัง"
+    },
+    "insult": {
+     "en": "Caps? Sorry. They stick to everything. I cannot take them.",
+     "tr": "Kapak mı? Üzgünüm. Her şeye yapışırlar. Alamam.",
+     "th": "ฝาขวดเหรอ ขอโทษครับ มันติดไปหมด ผมรับไม่ได้"
+    },
+    "noticed": {
+     "en": "You are neat. I like neat. A little Soot for you.",
+     "tr": "Düzenlisin. Düzeni severim. Sana biraz İs.",
+     "th": "คุณเรียบร้อยดี ผมชอบ แถมเขม่านิดหน่อย"
+    },
+    "friend": {
+     "en": "Elbow grease! After every Flare-up I pay for the cleaning.",
+     "tr": "Dirsek yağı! Her Parlamadan sonra temizliği ben öderim.",
+     "th": "แรงขัดมาแล้ว! หลังไฟลุกทุกครั้งผมจ่ายค่าขัดเอง"
+    },
+    "patron": {
+     "en": "Even Soot counts as the Special now. Sorry! I tidied the rules.",
+     "tr": "Artık İs bile Gözde sayılır. Pardon! Kuralları topladım.",
+     "th": "ตอนนี้แม้แต่เขม่าก็นับเป็นเมนูเด็ด ขอโทษนะ ผมจัดกฎใหม่"
+    },
+    "wrath": {
+     "en": "I am hungry and cross. The floor is dirty. It is your fault.",
+     "tr": "Açım ve kızgınım. Zemin kirli. Senin suçun.",
+     "th": "ผมหิวและหงุดหงิด พื้นสกปรก เพราะคุณนั่นแหละ"
+    },
+    "himOrMe": {
+     "en": "Chef Quack is too bright. Everything he fries leaves a mark. Me or him?",
+     "tr": "Şef Vak fazla parlak. Kızarttığı her şey iz bırakır. Ben mi o mu?",
+     "th": "เชฟกาบสว่างเกินไป ทอดอะไรก็เป็นรอยหมด ผมหรือเขา"
+    },
+    "omenTpl": {
+     "en": "I swept under the machine. Expect about {v} Soot next spin.",
+     "tr": "Makinenin altını süpürdüm. Sonraki çevirişte yaklaşık {v} İs bekle.",
+     "th": "ผมกวาดใต้เครื่องแล้ว ตาหน้าน่าจะมีเขม่าประมาณ {v}"
+    },
+    "demand": {
+     "en": "Feed me a charm or a curse next time. Please. Sorry. Please.",
+     "tr": "Bir dahaki sefere bir tılsım ya da lanet ver. Lütfen. Pardon. Lütfen.",
+     "th": "คราวหน้าป้อนไอเท็มหรือคำสาปให้ผมหน่อย ขอร้อง ขอโทษ ขอร้อง"
+    },
+    "epilogue": {
+     "en": "Scrubby polished the machine until it shone, then apologised to it. It still shines.",
+     "tr": "Kazıcı makineyi parlayana kadar cilaladı, sonra ondan özür diledi. Hâlâ parlıyor.",
+     "th": "แปรงขัดขัดเครื่องจนเงา แล้วก็ขอโทษมัน ตอนนี้ยังเงาอยู่"
+    }
+   },
+   "text": {
+    "red": {
+     "en": "Remove 2 symbols of your choice from the machine, spin total ×1.5 this debt. You carry: Hollow Centre.",
+     "tr": "Makineden seçtiğin 2 sembolü çıkar, çeviriş toplamı ×1.5 (bu borç). Taşıdığın: Boş Merkez.",
+     "th": "ถอดสัญลักษณ์ที่เลือก 2 ชนิดออกจากเครื่อง, ยอดรวมตานี้ ×1.5 ในหนี้นี้ ต้องแบก: ช่องกลางโหว่"
+    }
+   }
+  },
+  {
+   "id": "lamplit",
+   "name": {
+    "en": "Lady Lamplit",
+    "tr": "Lamba Hanım",
+    "th": "เจ๊หลอดไฟ"
+   },
+   "domain": {
+    "en": "Spice, dares",
+    "tr": "Acı, meydan okumalar",
+    "th": "ความเผ็ด การท้า"
+   },
+   "rival": "tide",
+   "unlock": {
+    "c": "c7"
+   },
+   "local": [
+    "c7"
+   ],
+   "portrait": {
+    "calm": "spirit/lamplit_calm",
+    "glad": "spirit/lamplit_glad",
+    "cross": "spirit/lamplit_cross"
+   },
+   "taste": {
+    "coins": 1,
+    "caps": 1,
+    "spice": 2,
+    "trick": 0.5,
+    "charm": -1,
+    "curse": 0.5,
+    "skip": 0.5
+   },
+   "hint": {
+    "en": "Likes Spice. Hates charms.",
+    "tr": "Acıyı sever. Tılsımdan nefret eder.",
+    "th": "ชอบความเผ็ด เกลียดไอเท็ม"
+   },
+   "stages": [
+    {
+     "at": 2,
+     "id": "lamplit_2",
+     "name": {
+      "en": "Warm Hands",
+      "tr": "Sıcak Eller",
+      "th": "มืออุ่นๆ"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "heatFloor",
+         "v": 1
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: Spice never drops below 1.",
+      "tr": "Her zaman: Acı 1 altına düşmez.",
+      "th": "ตลอดเวลา: เผ็ดไม่ต่ำกว่า 1"
+     }
+    },
+    {
+     "at": 5,
+     "id": "lamplit_5",
+     "name": {
+      "en": "Burning Bright",
+      "tr": "Parlak Yanış",
+      "th": "ไฟลุกโชน"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "heatStep",
+         "v": 25
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: each Spice level pays +25% more.",
+      "tr": "Her zaman: her Acı seviyesi ödemeye +%25 ekler.",
+      "th": "ตลอดเวลา: เผ็ดแต่ละระดับเพิ่มเงิน +25%"
+     }
+    },
+    {
+     "at": 8,
+     "id": "lamplit_8",
+     "name": {
+      "en": "Fireproof",
+      "tr": "Yanmaz",
+      "th": "กันไฟ"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "scorchBurn",
+         "v": 10
+        }
+       ]
+      },
+      {
+       "trigger": "onScorch",
+       "cond": {},
+       "effects": [
+        {
+         "type": "wick",
+         "n": 1
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: a Flare-up burns 10% of your purse. On a Flare-up: +1 Caps.",
+      "tr": "Her zaman: Parlama kesenin %10 kadarını yakar. Parlamada: +1 Kapak.",
+      "th": "ตลอดเวลา: ไฟลุกเผาถุงเงิน 10% เมื่อไฟลุก: +1 ฝาขวด"
+     }
+    }
+   ],
+   "wrath": [
+    {
+     "at": -2,
+     "id": "lamplit_2",
+     "name": {
+      "en": "Dim Bulb",
+      "tr": "Sönük Ampul",
+      "th": "หลอดสลัว"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "heatMax",
+         "v": 8
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: Spice tops out at 8.",
+      "tr": "Her zaman: Acı en çok 8 olur.",
+      "th": "ตลอดเวลา: เผ็ดสูงสุดแค่ 8"
+     }
+    },
+    {
+     "at": -5,
+     "id": "lamplit_5",
+     "name": {
+      "en": "Lights Out",
+      "tr": "Işıklar Söndü",
+      "th": "ไฟดับ"
+     },
+     "rules": [
+      {
+       "trigger": "passive",
+       "cond": {},
+       "effects": [
+        {
+         "type": "flag",
+         "flag": "noStoke",
+         "v": true
+        }
+       ]
+      }
+     ],
+     "text": {
+      "en": "Always: you cannot Spice Up and Spice stays at 0.",
+      "tr": "Her zaman: Acılandıramazsın, Acı 0 kalır.",
+      "th": "ตลอดเวลา: เพิ่มเผ็ดไม่ได้และเผ็ดอยู่ที่ 0"
+     }
+    }
+   ],
+   "gifts": [
+    {
+     "id": "lamplit_warm",
+     "icon": "ui/heat",
+     "name": {
+      "en": "Warm Up",
+      "tr": "Isınma",
+      "th": "วอร์มเครื่อง"
+     },
+     "effects": [
+      {
+       "type": "heat",
+       "n": 3
+      },
+      {
+       "type": "flag",
+       "flag": "heatNoCool",
+       "v": true,
+       "scope": "round"
+      }
+     ],
+     "text": {
+      "en": "+3 Spice, Spice does not cool at round start this round.",
+      "tr": "+3 Acı, Acı el başında düşmez (bu el).",
+      "th": "เผ็ด +3, เผ็ดไม่ลดตอนเริ่มรอบ ในรอบนี้"
+     }
+    },
+    {
+     "id": "lamplit_apron",
+     "icon": "deal/power",
+     "name": {
+      "en": "Fireproof Apron",
+      "tr": "Yanmaz Önlük",
+      "th": "ผ้ากันเปื้อนกันไฟ"
+     },
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "scorchBurn",
+       "v": 10,
+       "scope": "debt"
+      }
+     ],
+     "text": {
+      "en": "A Flare-up burns 10% of your purse this debt.",
+      "tr": "Parlama kesenin %10 kadarını yakar (bu borç).",
+      "th": "ไฟลุกเผาถุงเงิน 10% ในหนี้นี้"
+     }
+    },
+    {
+     "id": "lamplit_bulbs",
+     "icon": "ui/wick",
+     "name": {
+      "en": "Spare Bulbs",
+      "tr": "Yedek Ampuller",
+      "th": "หลอดไฟสำรอง"
+     },
+     "effects": [
+      {
+       "type": "wick",
+       "n": 4
+      }
+     ],
+     "text": {
+      "en": "+4 Caps.",
+      "tr": "+4 Kapak.",
+      "th": "+4 ฝาขวด"
+     }
+    },
+    {
+     "id": "lamplit_bright",
+     "icon": "ui/star",
+     "name": {
+      "en": "Bright Night",
+      "tr": "Parlak Gece",
+      "th": "คืนสว่างไสว"
+     },
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 1.5,
+       "scope": "round"
+      }
+     ],
+     "text": {
+      "en": "Spin total ×1.5 this round.",
+      "tr": "Çeviriş toplamı ×1.5 (bu el).",
+      "th": "ยอดรวมตานี้ ×1.5 ในรอบนี้"
+     }
+    }
+   ],
+   "red": {
+    "id": "midnight_run",
+    "icon": "ui/heat",
+    "name": {
+     "en": "Midnight Run",
+     "tr": "Gece Koşusu",
+     "th": "วิ่งเที่ยงคืน"
+    },
+    "boon": [
+     {
+      "type": "heat",
+      "n": 10
+     },
+     {
+      "type": "flag",
+      "flag": "heatNoCool",
+      "v": true,
+      "scope": "round"
+     },
+     {
+      "type": "allMult",
+      "n": 2,
+      "scope": "round"
+     }
+    ],
+    "curse": "dark_wick",
+    "carry": [],
+    "text": {
+     "en": "+10 Spice, Spice does not cool at round start this round, spin total ×2 this round. You carry: Dim Bulb.",
+     "tr": "+10 Acı, Acı el başında düşmez (bu el), çeviriş toplamı ×2 (bu el). Taşıdığın: Sönük Ampul.",
+     "th": "เผ็ด +10, เผ็ดไม่ลดตอนเริ่มรอบ ในรอบนี้, ยอดรวมตานี้ ×2 ในรอบนี้ ต้องแบก: หลอดไฟสลัว"
+    }
+   },
+   "ownCurse": "dark_wick",
+   "omen": "scorchOdds",
+   "demand": "dare",
+   "lines": {
+    "meet": {
+     "en": "Well, hello. Lamplit. I stay up late. So do you.",
+     "tr": "Vay, merhaba. Lamba. Ben geç yatarım. Sen de.",
+     "th": "โอ้ สวัสดีจ้ะ เจ๊หลอดไฟ เจ๊นอนดึก เธอก็ด้วย"
+    },
+    "gift": {
+     "en": "A little warmth for the road. Go on, take it.",
+     "tr": "Yol için biraz sıcaklık. Hadi, al.",
+     "th": "ความอุ่นเล็กๆ ไว้ติดตัว เอาไปเลยจ้ะ"
+    },
+    "red": {
+     "en": "Midnight run. All the Spice, all the pay. Careful with the sparks.",
+     "tr": "Gece koşusu. Bütün acı, bütün ödeme. Kıvılcımlara dikkat.",
+     "th": "วิ่งเที่ยงคืน เผ็ดสุด จ่ายสุด ระวังประกายไฟนะจ๊ะ"
+    },
+    "loved": {
+     "en": "Spice! You burn it for me? Oh, you are my favourite.",
+     "tr": "Acı! Benim için mi yaktın? Ah, sen favorimsin.",
+     "th": "ความเผ็ด! เผาให้เจ๊เหรอ โอ๊ย เธอนี่โปรดที่สุดเลย"
+    },
+    "insult": {
+     "en": "Swap me for a charm? Darling, I am not for sale.",
+     "tr": "Beni tılsımla mı değişeceksin? Tatlım, ben satılık değilim.",
+     "th": "เอาไอเท็มมาแลกเจ๊เหรอ จ๊ะที่รัก เจ๊ไม่ขายนะ"
+    },
+    "noticed": {
+     "en": "Warm hands tonight. I like that in a customer.",
+     "tr": "Bu gece sıcak eller. Müşteride bunu severim.",
+     "th": "คืนนี้มืออุ่นๆ เจ๊ชอบลูกค้าแบบนี้"
+    },
+    "friend": {
+     "en": "Burning bright. Past five, every level pays more.",
+     "tr": "Parlak yanış. Beşten sonra her seviye daha çok öder.",
+     "th": "ไฟลุกโชน เลยห้าไปแล้วทุกระดับจ่ายเพิ่ม"
+    },
+    "patron": {
+     "en": "Fireproof. Flare-ups barely scorch and they even pay you.",
+     "tr": "Yanmaz. Parlamalar zar zor yakar, hatta sana ödeme yapar.",
+     "th": "กันไฟ ไฟลุกแทบไม่ไหม้ แถมยังจ่ายให้อีก"
+    },
+    "wrath": {
+     "en": "The bulb is dim. Your fault. Go on, say sorry.",
+     "tr": "Ampul sönük. Senin suçun. Hadi, özür dile.",
+     "th": "หลอดสลัวแล้วนะ ก็เพราะเธอ ไปขอโทษสิจ๊ะ"
+    },
+    "himOrMe": {
+     "en": "Tide puts out every spark. Choose me and the night stays lit.",
+     "tr": "Gelgit her kıvılcımı söndürür. Beni seç, gece aydınlık kalsın.",
+     "th": "ยายน้ำขึ้นดับประกายทุกอัน เลือกเจ๊สิ แล้วคืนนี้จะสว่างต่อ"
+    },
+    "omenTpl": {
+     "en": "I smelled the pan. Flare-up chance, next 3 spins: {v}.",
+     "tr": "Tavayı kokladım. Parlama ihtimali, sonraki 3 çeviriş: {v}.",
+     "th": "เจ๊ได้กลิ่นกระทะแล้ว โอกาสไฟลุก 3 ตาถัดไป: {v}"
+    },
+    "demand": {
+     "en": "Dare me. Reach Spice 8 and keep the lights on. Do not blink.",
+     "tr": "Cesaretin var mı? Acı 8'e çık ve ışıkları açık tut. Göz kırpma.",
+     "th": "ท้าเจ๊สิ ขึ้นไปเผ็ด 8 แล้วอย่าให้ไฟดับ ห้ามกะพริบตา"
+    },
+    "epilogue": {
+     "en": "Lady Lamplit hangs over the tower terrace and never switches off. Nim keeps a dimmer on the wall. Neither of them touches it.",
+     "tr": "Lamba Hanım kulenin terasında asılı, asla sönmez. Nim duvarda bir dimmer tutuyor. İkisi de ona dokunmuyor.",
+     "th": "เจ๊หลอดไฟห้อยอยู่เหนือระเบียงตึกสูงและไม่เคยดับ นิ่มติดสวิตช์หรี่ไฟไว้ที่ผนัง ทั้งคู่ไม่เคยแตะมัน"
+    }
+   },
+   "text": {
+    "red": {
+     "en": "+10 Spice, Spice does not cool at round start this round, spin total ×2 this round. You carry: Dim Bulb.",
+     "tr": "+10 Acı, Acı el başında düşmez (bu el), çeviriş toplamı ×2 (bu el). Taşıdığın: Sönük Ampul.",
+     "th": "เผ็ด +10, เผ็ดไม่ลดตอนเริ่มรอบ ในรอบนี้, ยอดรวมตานี้ ×2 ในรอบนี้ ต้องแบก: หลอดไฟสลัว"
+    }
+   }
+  }
+ ]
+}

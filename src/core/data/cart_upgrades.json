@@ -1,0 +1,556 @@
+{
+ "upgrades": [
+  {
+   "id": "up_h3",
+   "icon": "cart/up_row",
+   "name": {
+    "en": "Line of 3 Tune-up",
+    "tr": "3'lü Sıra Bakımı",
+    "th": "จูนแถว 3"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "h3"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Line of 3 mult +1.",
+    "tr": "3'lü Sıra çarpanı +1.",
+    "th": "ตัวคูณแถว 3 +1"
+   }
+  },
+  {
+   "id": "up_v3",
+   "icon": "cart/up_column",
+   "name": {
+    "en": "Column Tune-up",
+    "tr": "Sütun Bakımı",
+    "th": "จูนแนวตั้ง"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "v3"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Column mult +1.",
+    "tr": "Sütun çarpanı +1.",
+    "th": "ตัวคูณแนวตั้ง +1"
+   }
+  },
+  {
+   "id": "up_d3",
+   "icon": "cart/up_diag",
+   "name": {
+    "en": "Diagonal Tune-up",
+    "tr": "Çapraz Bakımı",
+    "th": "จูนแนวทแยง"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "d3"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Diagonal mult +1.",
+    "tr": "Çapraz çarpanı +1.",
+    "th": "ตัวคูณแนวทแยง +1"
+   }
+  },
+  {
+   "id": "up_h4",
+   "icon": "cart/up_row",
+   "name": {
+    "en": "Line of 4 Tune-up",
+    "tr": "4'lü Sıra Bakımı",
+    "th": "จูนแถว 4"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "h4"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Line of 4 mult +1.",
+    "tr": "4'lü Sıra çarpanı +1.",
+    "th": "ตัวคูณแถว 4 +1"
+   }
+  },
+  {
+   "id": "up_halo",
+   "icon": "cart/up_corners",
+   "name": {
+    "en": "Halo Tune-up",
+    "tr": "Hale Bakımı",
+    "th": "จูนวงแหวน"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "halo"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Halo mult +1.",
+    "tr": "Hale çarpanı +1.",
+    "th": "ตัวคูณวงแหวน +1"
+   }
+  },
+  {
+   "id": "up_corners",
+   "icon": "cart/up_corners",
+   "name": {
+    "en": "Four Corners Tune-up",
+    "tr": "Dört Köşe Bakımı",
+    "th": "จูนสี่มุม"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "corners"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Four Corners mult +1.",
+    "tr": "Dört Köşe çarpanı +1.",
+    "th": "ตัวคูณสี่มุม +1"
+   }
+  },
+  {
+   "id": "up_h5",
+   "icon": "cart/up_row",
+   "name": {
+    "en": "Line of 5 Tune-up",
+    "tr": "5'li Sıra Bakımı",
+    "th": "จูนแถว 5"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "h5"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Line of 5 mult +1.",
+    "tr": "5'li Sıra çarpanı +1.",
+    "th": "ตัวคูณแถว 5 +1"
+   }
+  },
+  {
+   "id": "up_saw",
+   "icon": "cart/up_diag",
+   "name": {
+    "en": "Sawtooth Tune-up",
+    "tr": "Testere Bakımı",
+    "th": "จูนฟันเลื่อย"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "saw"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Sawtooth mult +1.",
+    "tr": "Testere çarpanı +1.",
+    "th": "ตัวคูณฟันเลื่อย +1"
+   }
+  },
+  {
+   "id": "up_vee",
+   "icon": "cart/up_diag",
+   "name": {
+    "en": "Vee Tune-up",
+    "tr": "V Yolu Bakımı",
+    "th": "จูนทางตัววี"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "vee"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Vee mult +1.",
+    "tr": "V Yolu çarpanı +1.",
+    "th": "ตัวคูณทางตัววี +1"
+   }
+  },
+  {
+   "id": "up_cross",
+   "icon": "cart/up_plus",
+   "name": {
+    "en": "Cross Tune-up",
+    "tr": "Artı Bakımı",
+    "th": "จูนกากบาท"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "cross"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Cross mult +1.",
+    "tr": "Artı çarpanı +1.",
+    "th": "ตัวคูณกากบาท +1"
+   }
+  },
+  {
+   "id": "up_frame",
+   "icon": "cart/up_frame",
+   "name": {
+    "en": "Frame Tune-up",
+    "tr": "Çerçeve Bakımı",
+    "th": "จูนกรอบ"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "frame"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Frame mult +1.",
+    "tr": "Çerçeve çarpanı +1.",
+    "th": "ตัวคูณกรอบ +1"
+   }
+  },
+  {
+   "id": "up_full",
+   "icon": "cart/up_frame",
+   "name": {
+    "en": "Full Market Tune-up",
+    "tr": "Tam Pazar Bakımı",
+    "th": "จูนเต็มตลาด"
+   },
+   "kind": "pattern",
+   "effects": [
+    {
+     "type": "patMult",
+     "n": 1,
+     "pattern": "full"
+    }
+   ],
+   "price": {
+    "coins": 10
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Full Market mult +1.",
+    "tr": "Tam Pazar çarpanı +1.",
+    "th": "ตัวคูณเต็มตลาด +1"
+   }
+  },
+  {
+   "id": "up_moth",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Lime Crate",
+    "tr": "Limon Kasası",
+    "th": "ตุนมะนาว"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "moth"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Lime ×1.5 as often.",
+    "tr": "Limon ×1.5 sıklıkla gelir.",
+    "th": "มะนาวออกบ่อย ×1.5"
+   }
+  },
+  {
+   "id": "up_candle",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Fish Balls Crate",
+    "tr": "Köfte Şiş Kasası",
+    "th": "ตุนลูกชิ้น"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "candle"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Fish Balls ×1.5 as often.",
+    "tr": "Köfte Şiş ×1.5 sıklıkla gelir.",
+    "th": "ลูกชิ้นออกบ่อย ×1.5"
+   }
+  },
+  {
+   "id": "up_tooth",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Sticky Rice Crate",
+    "tr": "Yapışkan Pirinç Kasası",
+    "th": "ตุนข้าวเหนียว"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "tooth"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Sticky Rice ×1.5 as often.",
+    "tr": "Yapışkan Pirinç ×1.5 sıklıkla gelir.",
+    "th": "ข้าวเหนียวออกบ่อย ×1.5"
+   }
+  },
+  {
+   "id": "up_key",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Mango Crate",
+    "tr": "Mango Kasası",
+    "th": "ตุนมะม่วง"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "key"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Mango ×1.5 as often.",
+    "tr": "Mango ×1.5 sıklıkla gelir.",
+    "th": "มะม่วงออกบ่อย ×1.5"
+   }
+  },
+  {
+   "id": "up_eye",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Coconut Crate",
+    "tr": "Hindistan Cevizi Kasası",
+    "th": "ตุนมะพร้าว"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "eye"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Coconut ×1.5 as often.",
+    "tr": "Hindistan Cevizi ×1.5 sıklıkla gelir.",
+    "th": "มะพร้าวออกบ่อย ×1.5"
+   }
+  },
+  {
+   "id": "up_mask",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Durian Crate",
+    "tr": "Durian Kasası",
+    "th": "ตุนทุเรียน"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "mask"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Durian ×1.5 as often.",
+    "tr": "Durian ×1.5 sıklıkla gelir.",
+    "th": "ทุเรียนออกบ่อย ×1.5"
+   }
+  },
+  {
+   "id": "up_crow",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Longtail Boat Crate",
+    "tr": "Uzun Kuyruklu Tekne Kasası",
+    "th": "ตุนเรือหางยาว"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "crow"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Longtail Boat ×1.5 as often.",
+    "tr": "Uzun Kuyruklu Tekne ×1.5 sıklıkla gelir.",
+    "th": "เรือหางยาวออกบ่อย ×1.5"
+   }
+  },
+  {
+   "id": "up_lantern",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Elephant Crate",
+    "tr": "Fil Kasası",
+    "th": "ตุนช้าง"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "lantern"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Elephant ×1.5 as often.",
+    "tr": "Fil ×1.5 sıklıkla gelir.",
+    "th": "ช้างออกบ่อย ×1.5"
+   }
+  },
+  {
+   "id": "up_crown",
+   "icon": "cart/up_stock",
+   "name": {
+    "en": "Gold Bar Crate",
+    "tr": "Külçe Altın Kasası",
+    "th": "ตุนทองคำแท่ง"
+   },
+   "kind": "weight",
+   "effects": [
+    {
+     "type": "weight",
+     "n": 1.5,
+     "sym": "crown"
+    }
+   ],
+   "price": {
+    "coins": 8
+   },
+   "minDebt": 1,
+   "text": {
+    "en": "Gold Bar ×1.5 as often.",
+    "tr": "Külçe Altın ×1.5 sıklıkla gelir.",
+    "th": "ทองคำแท่งออกบ่อย ×1.5"
+   }
+  }
+ ],
+ "offers": 2,
+ "rule": {
+  "en": "Cart upgrades last the whole run. Two show at every stall. Each one raises a shape or adds weight to one symbol.",
+  "tr": "Araba yükseltmeleri bütün oyun sürer. Her tezgâhta ikisi görünür. Her biri bir şekli yükseltir ya da bir sembole ağırlık ekler.",
+  "th": "อัปเกรดรถเข็นอยู่ไปตลอดรอบ ทุกแผงมีให้เลือกสองอย่าง แต่ละอย่างเพิ่มค่าของรูปทรงหรือเพิ่มน้ำหนักให้สัญลักษณ์หนึ่งชนิด"
+ }
+}

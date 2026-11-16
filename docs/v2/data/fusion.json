@@ -1,0 +1,148 @@
+{
+ "same": {
+  "cost": {
+   "common": 2,
+   "uncommon": 3,
+   "rare": 4
+  },
+  "pickOf": 2,
+  "note": {
+   "en": "Two charms of the same family and rarity make one charm of that family, one rarity up. You pick 1 of 2.",
+   "tr": "Aynı aileden ve aynı nadirlikten iki tılsım, o aileden bir kademe yukarıda bir tılsım olur. 2 üzerinden 1 seçersin.",
+   "th": "ไอเท็มตระกูลและระดับเดียวกันสองชิ้น รวมเป็นหนึ่งชิ้นของตระกูลเดิมระดับสูงขึ้นหนึ่งขั้น เลือก 1 จาก 2"
+  }
+ },
+ "recipeCost": 5,
+ "recipeMinRarity": "uncommon",
+ "excluded": [
+  "legendary",
+  "fused"
+ ],
+ "holdMs": 600,
+ "firstRecipeFavour": {
+  "spirit": "wire",
+  "n": 1
+ },
+ "recipes": [
+  {
+   "a": "swarm",
+   "b": "ember",
+   "out": "f_skewer_cart"
+  },
+  {
+   "a": "swarm",
+   "b": "wisp",
+   "out": "f_firefly_snack"
+  },
+  {
+   "a": "swarm",
+   "b": "crown",
+   "out": "f_street_gold"
+  },
+  {
+   "a": "swarm",
+   "b": "ledger",
+   "out": "f_market_scale"
+  },
+  {
+   "a": "ember",
+   "b": "hex",
+   "out": "f_smog_wok"
+  },
+  {
+   "a": "ember",
+   "b": "pact",
+   "out": "f_neon_grill"
+  },
+  {
+   "a": "ember",
+   "b": "omen",
+   "out": "f_lucky_chili"
+  },
+  {
+   "a": "hex",
+   "b": "pact",
+   "out": "f_ruby_umbrella"
+  },
+  {
+   "a": "hex",
+   "b": "ledger",
+   "out": "f_rainy_day_fund"
+  },
+  {
+   "a": "hex",
+   "b": "crown",
+   "out": "f_monsoon_gold"
+  },
+  {
+   "a": "ledger",
+   "b": "pact",
+   "out": "f_small_print_lawyer"
+  },
+  {
+   "a": "ledger",
+   "b": "tinker",
+   "out": "f_meter_taxi"
+  },
+  {
+   "a": "ledger",
+   "b": "crown",
+   "out": "f_gold_shop"
+  },
+  {
+   "a": "pact",
+   "b": "omen",
+   "out": "f_calling_luck"
+  },
+  {
+   "a": "pact",
+   "b": "crown",
+   "out": "f_rooftop_lease"
+  },
+  {
+   "a": "omen",
+   "b": "stitch",
+   "out": "f_lucky_combo"
+  },
+  {
+   "a": "omen",
+   "b": "wisp",
+   "out": "f_glowing_special"
+  },
+  {
+   "a": "omen",
+   "b": "tinker",
+   "out": "f_lucky_tuktuk"
+  },
+  {
+   "a": "stitch",
+   "b": "wisp",
+   "out": "f_spinning_elbow"
+  },
+  {
+   "a": "stitch",
+   "b": "tinker",
+   "out": "f_clinch_tool"
+  },
+  {
+   "a": "stitch",
+   "b": "crown",
+   "out": "f_golden_belt"
+  },
+  {
+   "a": "wisp",
+   "b": "tinker",
+   "out": "f_firefly_lamp"
+  },
+  {
+   "a": "wisp",
+   "b": "crown",
+   "out": "f_gold_dust"
+  },
+  {
+   "a": "tinker",
+   "b": "crown",
+   "out": "f_gold_rims"
+  }
+ ]
+}

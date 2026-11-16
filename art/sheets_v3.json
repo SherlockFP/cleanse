@@ -1,0 +1,591 @@
+{
+ "style": "hand-painted gouache cut-paper sprite, visible brush strokes, thick cream paper edge around each object, bold single silhouette, warm Bangkok night-market mood, palette: deep indigo night, chili red, lime green, mango yellow, gold, warm bulb orange, coral (no pure magenta), flat magenta #FF00FF background, no text, no letters, no numbers, no shadow on background, each object centered in its own cell with clear gap. On 4x4 sheets keep every object small and well separated with a clear magenta gap between cells.",
+ "sheets": [
+  {
+   "file": "art/raw/v3_people_a.png",
+   "cols": 3,
+   "rows": 3,
+   "size": 320,
+   "ids": [
+    "spirit/beckon_calm",
+    "spirit/beckon_glad",
+    "spirit/beckon_cross",
+    "spirit/gold_calm",
+    "spirit/gold_glad",
+    "spirit/gold_cross",
+    "spirit/moonbiter_calm",
+    "spirit/moonbiter_glad",
+    "spirit/moonbiter_cross"
+   ],
+   "subjects": [
+    "bust portrait of Madam Receipt: a tall curling roll of till receipt paper standing like a thin lady, round glasses on the top curl, a pencil tucked in a curl, one paper arm holding a rubber stamp, calm polite smile, no printed text",
+    "the same receipt-paper lady printing a long happy ribbon of blank paper, wide smile, stamp raised",
+    "the same receipt-paper lady crumpled tight, glasses slipping, frowning, stamp held like a hammer",
+    "bust portrait of Chef Quack: a fat yellow rubber duck in a tiny paper chef hat and a neat apron, wooden spoon in one wing, bossy proud look",
+    "the same rubber duck chef tossing the spoon, beak open in a delighted quack, hat tilted, small sparkles",
+    "the same rubber duck chef with the hat crooked, beak flat, one wing on hip, glaring, spoon pointed",
+    "bust portrait of Scrubby: a round worn steel-wool scrubbing pad creature, black with soot, two small polite white eyes, a tiny apron string, shy and apologetic",
+    "the same sooty steel-wool pad with a shy happy smile and one gleaming clean spot on its cheek",
+    "the same sooty steel-wool pad bristling, eyes narrowed, hungry and annoyed"
+   ]
+  },
+  {
+   "file": "art/raw/v3_people_b.png",
+   "cols": 3,
+   "rows": 3,
+   "size": 320,
+   "ids": [
+    "spirit/waiting_calm",
+    "spirit/waiting_glad",
+    "spirit/waiting_cross",
+    "spirit/lamplit_calm",
+    "spirit/lamplit_glad",
+    "spirit/lamplit_cross",
+    "spirit/tide_calm",
+    "spirit/tide_glad",
+    "spirit/tide_cross"
+   ],
+   "subjects": [
+    "bust portrait of Lost Property: a lumpy brown cardboard lost-property box on two small legs, an umbrella handle and one flip-flop poking out of the top, round kind eyes, a clip-on tie, holding a bundle of paper tickets, no text on the box",
+    "the same cardboard box smiling with its lid flapping open, a bright scarf waving out of it",
+    "the same cardboard box with the lid shut tight and flaps folded like arms, hurt and stubborn look",
+    "bust portrait of Lady Lamplit: a big warm round light bulb with a playful painted face and a curl of electric cable like a hair curl, glowing orange, teasing half smile",
+    "the same glowing light-bulb lady laughing, glowing brighter, little sparks around her",
+    "the same light-bulb lady flickering dim and cross, filament frown, cable curl drooping",
+    "bust portrait of Grandmother Tide: a broad weathered old Thai river-barge woman in a yellow plastic raincoat and rubber boots, holding an enamel tea mug, steady calm face",
+    "the same old barge woman in a yellow raincoat chuckling, raising her tea mug",
+    "the same old barge woman in a yellow raincoat scowling, arms folded, rain dripping from her hood"
+   ]
+  },
+  {
+   "file": "art/raw/v3_people_c.png",
+   "cols": 3,
+   "rows": 3,
+   "size": 320,
+   "ids": [
+    "spirit/wire_calm",
+    "spirit/wire_glad",
+    "spirit/wire_cross",
+    "devil/phone",
+    "char/yai",
+    "char/beng",
+    "char/pla",
+    "char/mali",
+    "char/nim_boss"
+   ],
+   "subjects": [
+    "bust portrait of Uncle Wire: a grinning thin man whose hair is a tangle of black overhead power cables, a tool belt of keys and spoons, a food-cart apron, calm sly smile",
+    "the same cable-haired street hustler laughing, cables sparking happily, thumbs up",
+    "the same cable-haired street hustler annoyed, cables tangled into a knot, arms crossed",
+    "Mr. Ruby the slim red devil in a floral shirt and sunglasses, holding an old red phone receiver to his ear, smug smile",
+    "bust portrait of Grandma Yai: a tiny elderly Thai noodle seller with a ladle, a towel over her shoulder, steam rising, sharp eyes",
+    "bust portrait of Beng: a skinny teenage Thai motorbike-taxi boy in an orange vest with no readable numbers, helmet under his arm, cheeky grin",
+    "bust portrait of Pla: a young Thai boxer girl with taped hands, a plain towel round her neck, confident grin, no headband, no armbands",
+    "bust portrait of Mali: a tired cheerful Thai night-bus conductor woman with a metal ticket tube, uniform cap, kind eyes",
+    "Nim, a 19-year-old Thai woman with a short black bob, now in a sharp blazer with sunglasses pushed up, confident smile, city lights behind"
+   ]
+  },
+  {
+   "file": "art/raw/v3_props.png",
+   "cols": 3,
+   "rows": 3,
+   "size": 384,
+   "ids": [
+    "machine/lever",
+    "machine/kiosk",
+    "machine/phone",
+    "ui/tin",
+    "machine/blender",
+    "machine/awning_1",
+    "machine/awning_2",
+    "machine/awning_3",
+    "sym/redeye"
+   ],
+   "subjects": [
+    "a tall chrome crank lever on a short brass track, red ball knob at the top, taped grip, side view, standing upright",
+    "a small battered street ATM kiosk on a stand with a dark empty screen, a coin funnel on top and a little striped awning, stickers peeling, no text",
+    "an old red rotary phone on a small wooden shelf bolted to a cart pole, cord hanging, rain drops, no text",
+    "a round blue butter-biscuit tin with the lid slightly open and one small fairy light clipped on its rim, no text",
+    "a big street-stall fruit blender on a cart counter, a tall glass jug, two empty funnels feeding into it, chrome base with one big button",
+    "a short striped red-and-white cloth awning to sit on top of a street machine, wide and shallow",
+    "a hand-painted wooden stall sign board with string lights around it, blank, no letters",
+    "a bright neon tube frame in pink and green shaped like a crest of stars, no letters",
+    "a glowing red neon sign shaped like a single wide-open eye with a tiny horn on top, no text"
+   ]
+  },
+  {
+   "file": "art/raw/v3_icons_a.png",
+   "cols": 4,
+   "rows": 4,
+   "size": 192,
+   "ids": [
+    "ui/phone",
+    "ui/call_green",
+    "ui/white_call",
+    "ui/kiosk",
+    "ui/blender",
+    "ui/honk",
+    "ui/hand",
+    "ui/charge_on",
+    "ui/charge_off",
+    "ui/bead_off",
+    "ui/bead_on",
+    "ui/key_brass",
+    "ui/key_silver",
+    "ui/key_red",
+    "ui/locker_shut",
+    "ui/locker_open"
+   ],
+   "subjects": [
+    "an old red rotary telephone",
+    "a green rotary telephone with a soft glow",
+    "a white rotary telephone with a soft glow",
+    "a small street ATM kiosk with a glowing screen and a coin slot, no text",
+    "a fruit blender jug full of orange and green fruit",
+    "a round rubber tuk-tuk bulb horn with a brass trumpet",
+    "a white cartoon glove hand pointing with its index finger, bold outline",
+    "a small glowing yellow battery cell, full",
+    "a small grey empty battery cell",
+    "a plain dull wooden bead",
+    "a glowing white bead with a soft halo",
+    "an old brass key with a round bow",
+    "a silver key with a square bow",
+    "a red-painted key with a heart-shaped bow",
+    "a small dented tin locker door with a padlock, closed",
+    "the same small tin locker door swung open, empty inside"
+   ]
+  },
+  {
+   "file": "art/raw/v3_icons_b.png",
+   "cols": 4,
+   "rows": 4,
+   "size": 192,
+   "ids": [
+    "ui/luggage",
+    "ui/postcard_back",
+    "ui/map_pin",
+    "ui/pin_done",
+    "ui/pin_locked",
+    "ui/favour_pip",
+    "ui/stamp_bronze",
+    "ui/stamp_silver",
+    "ui/stamp_gold",
+    "ui/notebook",
+    "ui/codex",
+    "ui/wrath",
+    "ui/fused_rim",
+    "ui/storm",
+    "ui/lesson",
+    "ui/taste_loved"
+   ],
+   "subjects": [
+    "a battered travel suitcase with a paper luggage tag, no text",
+    "the back of a postcard with a stamp box and lines, no text",
+    "a red map pin with a round head",
+    "a green map pin with a round head and a small tick mark",
+    "a grey map pin with a tiny padlock hanging from it",
+    "a small round paper token with a warm glow",
+    "a round bronze rubber-stamp mark with a little cart in the middle, no text",
+    "a round silver rubber-stamp mark with a little shop front in the middle, no text",
+    "a round gold rubber-stamp mark with a little tower in the middle, no text",
+    "a school exercise notebook with a pencil clipped on, no text",
+    "a fat scrapbook with tabs and photos sticking out, no text",
+    "a small black storm cloud with a red lightning bolt",
+    "an empty round gold frame ring with small rivets",
+    "a rain cloud with a small umbrella under it and falling drops",
+    "a sheet of lined paper with a big green tick mark and no writing",
+    "a round yellow smiley face with heart eyes"
+   ]
+  },
+  {
+   "file": "art/raw/v3_icons_c.png",
+   "cols": 4,
+   "rows": 4,
+   "size": 192,
+   "ids": [
+    "ui/taste_fine",
+    "ui/taste_meh",
+    "ui/taste_hated",
+    "charm/bike_horn",
+    "charm/fish_sauce",
+    "charm/ice_bucket",
+    "charm/megaphone",
+    "charm/spare_tyre",
+    "charm/sweeper",
+    "charm/price_gun",
+    "charm/neon_open",
+    "charm/double_shift",
+    "charm/wok_toss",
+    "charm/calculator",
+    "charm/rubber_band",
+    "charm/coin_flip"
+   ],
+   "subjects": [
+    "a round yellow smiley face with a small calm smile",
+    "a round yellow face with a flat straight mouth",
+    "a round green face with a sour twisted mouth",
+    "a chrome bicycle bell horn",
+    "a glass bottle of fish sauce with a red cap, no label text",
+    "a metal bucket of ice cubes",
+    "a white plastic megaphone",
+    "a spare motorbike tyre",
+    "a street sweeper's long broom and dustpan",
+    "a handheld price-tag gun",
+    "a small neon shop sign shaped like an open door, no letters",
+    "two coffee cups stacked, steaming",
+    "a wok tossing noodles into the air",
+    "a pocket calculator, no numbers on the screen",
+    "a ball of red rubber bands",
+    "a coin spinning in the air"
+   ]
+  },
+  {
+   "file": "art/raw/v3_icons_d.png",
+   "cols": 4,
+   "rows": 4,
+   "size": 192,
+   "ids": [
+    "charm/gold_spray",
+    "charm/taxi_meter",
+    "charm/bike_jump",
+    "charm/eye_drops",
+    "charm/staring",
+    "charm/omen_jar",
+    "charm/ruby_shades",
+    "charm/night_owl",
+    "charm/red_eye_flight",
+    "charm/counter_stare",
+    "charm/taillight",
+    "curse/haggler",
+    "curse/hollow_centre",
+    "curse/dark_wick",
+    "curse/slow_water",
+    "curse/short_circuit"
+   ],
+   "subjects": [
+    "a gold spray-paint can",
+    "a taxi meter box with a blank red display",
+    "a small motorbike mid-jump over a puddle",
+    "a small bottle of eye drops",
+    "two cartoon eyes staring wide, red veins",
+    "a glass jar holding a small glowing red eye",
+    "a pair of red-lens sunglasses",
+    "a small brown owl with big orange eyes",
+    "a small passenger plane at night with a red light",
+    "a round mirror reflecting a red eye back",
+    "a red motorbike taillight glowing",
+    "a shadowy hand pinching a price tag",
+    "a donut with a black empty hole",
+    "a light bulb with a black burnt filament",
+    "a slow brown river with a snail on a leaf",
+    "a sparking tangled plug socket"
+   ]
+  },
+  {
+   "file": "art/raw/v3_icons_e.png",
+   "cols": 4,
+   "rows": 4,
+   "size": 192,
+   "ids": [
+    "curse/heavy_hands",
+    "charm/f_skewer_cart",
+    "charm/f_firefly_snack",
+    "charm/f_street_gold",
+    "charm/f_market_scale",
+    "charm/f_smog_wok",
+    "charm/f_neon_grill",
+    "charm/f_lucky_chili",
+    "charm/f_ruby_umbrella",
+    "charm/f_rainy_day_fund",
+    "charm/f_monsoon_gold",
+    "charm/f_small_print_lawyer",
+    "charm/f_meter_taxi",
+    "charm/f_gold_shop",
+    "charm/f_calling_luck",
+    "charm/f_rooftop_lease"
+   ],
+   "subjects": [
+    "two hands chained to a heavy suitcase",
+    "a grill cart with skewers smoking on charcoal",
+    "a paper cone of snacks with a firefly sitting on top",
+    "a fish-ball skewer dipped in gold",
+    "a market hanging scale with limes in its pan",
+    "a wok in grey smog with rain drops",
+    "a neon pink grill flame",
+    "a red chili with a four-leaf clover leaf",
+    "a red umbrella with small horns on the tip",
+    "a piggy bank under a rain cloud",
+    "gold bars shining in heavy rain",
+    "a magnifying glass over a tiny contract, no text",
+    "a pink taxi with a coin on its roof",
+    "a gold shop window with gold chains on red velvet, no text",
+    "a red business card with a clover",
+    "a rooftop with a key on a red ribbon"
+   ]
+  },
+  {
+   "file": "art/raw/v3_icons_f.png",
+   "cols": 4,
+   "rows": 4,
+   "size": 192,
+   "ids": [
+    "charm/f_lucky_combo",
+    "charm/f_glowing_special",
+    "charm/f_lucky_tuktuk",
+    "charm/f_spinning_elbow",
+    "charm/f_clinch_tool",
+    "charm/f_golden_belt",
+    "charm/f_firefly_lamp",
+    "charm/f_gold_dust",
+    "charm/f_gold_rims",
+    "place/c1",
+    "place/c2",
+    "place/c3",
+    "place/c4",
+    "place/c5",
+    "place/c6",
+    "place/c7"
+   ],
+   "subjects": [
+    "two red boxing gloves with a clover between them",
+    "a dinner plate glowing with a firefly over it",
+    "a tuk-tuk with a clover on its hood",
+    "a spinning boxing elbow pad with motion lines",
+    "a wrench and a boxing glove tied together",
+    "a gold champion belt with a plain round plate, no text",
+    "a jar lamp full of fireflies",
+    "a pile of gold dust with a firefly",
+    "a shiny gold motorbike wheel rim",
+    "a folding street food cart with one bulb and a plastic stool",
+    "a striped night-market tent with a string of bulbs and a short piece of railway track",
+    "a gold shop window with a row of gold bars on red cloth, no text",
+    "a big backpacker rucksack with a water bottle and a tied-on flip-flop",
+    "an empty striped beach deck chair under a small palm",
+    "a night-bazaar stall with an orange lamp glowing through haze",
+    "a beach cabana with a striped towel and a cocktail glass"
+   ]
+  },
+  {
+   "file": "art/raw/v3_icons_g.png",
+   "cols": 4,
+   "rows": 4,
+   "size": 192,
+   "ids": [
+    "place/c8",
+    "place/c9",
+    "place/c10",
+    "cart/up_row",
+    "cart/up_column",
+    "cart/up_diag",
+    "cart/up_corners",
+    "cart/up_plus",
+    "cart/up_frame",
+    "cart/up_stock",
+    "cart/up_firefly",
+    "cart/up_sweep",
+    "post/rainy_day",
+    "post/hot_pan",
+    "post/fresh_fish",
+    "post/night_bus"
+   ],
+   "subjects": [
+    "a small wooden river pier with a hanging lamp and a moored boat",
+    "a white scale model of a condo tower on a little table",
+    "a tall cocktail glass with a tiny umbrella on a glass rooftop rail",
+    "a wooden skewer rack with five filled sticks in a row",
+    "a tall stack of three crates",
+    "a zig-zag string of lights",
+    "a square tray with four brass corner caps",
+    "a plus-shaped steel grill rack",
+    "an empty wooden stall frame with a tarp roll on top",
+    "a crate full of mixed fruit",
+    "a jar of fireflies hanging on a cart hook",
+    "a tin of cleaning powder with a sponge",
+    "a picture postcard of a rainy soi street with umbrellas, no text",
+    "a picture postcard of a hot frying pan with chilies, no text",
+    "a picture postcard of fresh fish on ice at a market, no text",
+    "a picture postcard of a night bus with lit windows, no text"
+   ]
+  },
+  {
+   "file": "art/raw/v3_icons_h.png",
+   "cols": 4,
+   "rows": 4,
+   "size": 192,
+   "ids": [
+    "post/borrowed_coat",
+    "post/short_cut",
+    "post/crooked_scale",
+    "post/old_photo",
+    "post/thumb_scale",
+    "post/empty_wallet",
+    "post/all_pocket",
+    "post/mothers_voice",
+    "post/staring_contest",
+    "post/spare_blender",
+    "post/party_line",
+    "post/quiet_phone",
+    "post/full_charge",
+    "post/late_kiosk"
+   ],
+   "subjects": [
+    "a picture postcard of a coat on a hook, no text",
+    "a picture postcard of a narrow alley shortcut between buildings, no text",
+    "a picture postcard of a crooked market scale, no text",
+    "a picture postcard of an old faded photo of a bus station bench with a lost umbrella, no text",
+    "a picture postcard of a thumb pressing on a scale pan, no text",
+    "a picture postcard of an empty open wallet, no text",
+    "a picture postcard of a jacket with many bulging pockets, no text",
+    "a picture postcard of an old radio on a kitchen table, no text",
+    "a picture postcard of a red neon eye in a dark alley, no text",
+    "a picture postcard of a fruit blender on a cart, no text",
+    "a picture postcard of three old phones with tangled cords, no text",
+    "a picture postcard of a phone with its receiver off the hook, no text",
+    "a picture postcard of a row of glowing batteries, no text",
+    "a picture postcard of a street ATM kiosk at dawn, no text"
+   ]
+  }
+ ],
+ "singles": [
+  {
+   "file": "art/raw/bg_map.png",
+   "id": "bg/map",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait hand-painted illustrated map of Thailand as a long strip, rivers and coastline, tiny drawn icons along a winding road: a food cart, a train market, a gold shop street, a backpacker street, a beach, hills, a beach club, a river pier, a tower, no text"
+  },
+  {
+   "file": "art/raw/bg_c2.png",
+   "id": "bg/c2",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a big weekend night market with rows of tents and string lights beside old railway tracks, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_c3.png",
+   "id": "bg/c3",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a busy Chinatown street at night, neon signs with no letters, gold shop windows, street food carts, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_c4.png",
+   "id": "bg/c4",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a packed backpacker street at night with hostels, neon with no letters, street bars and fruit carts, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_c5.png",
+   "id": "bg/c5",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a quiet beach-town promenade in low season, empty deck chairs, palm trees, a few lit bars, the sea at dusk, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_c6.png",
+   "id": "bg/c6",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a northern night bazaar in hazy smoky air, orange lights glowing through haze, hills far behind, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_c7.png",
+   "id": "bg/c7",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a beach club at night with a pool, cabanas, fairy lights and a dark sea, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_c8.png",
+   "id": "bg/c8",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a small boutique by a wide river at night, a wooden deck, boats with lights on the water, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_c9.png",
+   "id": "bg/c9",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a glass condo sales lobby at night with a scale model on a table, tall windows on city lights, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_c10.png",
+   "id": "bg/c10",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a rooftop sky bar sixty floors up at night, glass railing, the city spread below, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_home_2.png",
+   "id": "bg/home_2",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, inside a rented shophouse room with a tiled floor, a folding shutter door, a ceiling fan, empty floor space, no furniture, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_home_3.png",
+   "id": "bg/home_3",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, inside a small modern condo with a balcony door and city view, wooden floor, empty floor space, no furniture, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_home_4.png",
+   "id": "bg/home_4",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, inside a penthouse with floor-to-ceiling windows over the night skyline, polished floor, empty floor space, no furniture, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_phone.png",
+   "id": "bg/phone",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, close-up of a street cart corner at night with an old red phone on a shelf and a biscuit tin with a fairy light, rain on the tarp, warm bulb light, empty middle, no characters, no text"
+  },
+  {
+   "file": "art/raw/bg_locker.png",
+   "id": "bg/locker",
+   "size": 1024,
+   "magenta": false,
+   "subject": "portrait background, a wall of twenty dented tin lockers with blank number plates in a back alley, four larger luggage lockers at the bottom, one bare bulb, no text"
+  },
+  {
+   "file": "art/raw/story_p1.png",
+   "id": "story/p1",
+   "size": 1024,
+   "magenta": false,
+   "subject": "a small family food cart on fire in a narrow soi at night, a young woman with a short black bob holding grill tongs in shock, neighbours with buckets, no text"
+  },
+  {
+   "file": "art/raw/story_p2.png",
+   "id": "story/p2",
+   "size": 1024,
+   "magenta": false,
+   "subject": "a slim red devil in a floral shirt and sunglasses holding out a paper and a gold pen to the young woman beside a burnt cart, neon fortune machine behind him, no text"
+  },
+  {
+   "file": "art/raw/story_p3.png",
+   "id": "story/p3",
+   "size": 1024,
+   "magenta": false,
+   "subject": "a small warm flame inside a glass jar sitting on top of a neon street fortune machine, the devil hand resting on the jar lid, no text"
+  },
+  {
+   "file": "art/raw/ending_the_refuser.png",
+   "id": "ending/the_refuser",
+   "size": 1024,
+   "magenta": false,
+   "subject": "a young woman with a short black bob hanging up an old red phone at dawn on a quiet soi, a friendly cardboard box on little legs beside her holding up a bundle of tickets, no text"
+  },
+  {
+   "file": "art/raw/ending_left_luggage.png",
+   "id": "ending/left_luggage",
+   "size": 1024,
+   "magenta": false,
+   "subject": "four open luggage lockers glowing gold in an alley, the neon fortune machine unplugged with its cable on the ground, the devil sitting on a suitcase looking surprised, no text"
+  }
+ ]
+}

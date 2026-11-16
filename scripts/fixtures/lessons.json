@@ -1,0 +1,277 @@
+{
+ "lessons": [
+  {
+   "id": 1,
+   "key": "line4",
+   "name": {
+    "en": "line4",
+    "tr": "line4",
+    "th": "line4"
+   },
+   "cond": {
+    "stat": "pattern:h4",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 10
+   },
+   "text": {
+    "en": "line4",
+    "tr": "line4",
+    "th": "line4"
+   }
+  },
+  {
+   "id": 2,
+   "key": "spice3",
+   "name": {
+    "en": "spice3",
+    "tr": "spice3",
+    "th": "spice3"
+   },
+   "cond": {
+    "stat": "heat3Spins",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 10
+   },
+   "text": {
+    "en": "spice3",
+    "tr": "spice3",
+    "th": "spice3"
+   }
+  },
+  {
+   "id": 3,
+   "key": "bank",
+   "name": {
+    "en": "bank",
+    "tr": "bank",
+    "th": "bank"
+   },
+   "cond": {
+    "stat": "interestTotal",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 10
+   },
+   "text": {
+    "en": "bank",
+    "tr": "bank",
+    "th": "bank"
+   }
+  },
+  {
+   "id": 4,
+   "key": "charms3",
+   "name": {
+    "en": "charms3",
+    "tr": "charms3",
+    "th": "charms3"
+   },
+   "cond": {
+    "stat": "familyFull",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "charms3",
+    "tr": "charms3",
+    "th": "charms3"
+   }
+  },
+  {
+   "id": 5,
+   "key": "trick",
+   "name": {
+    "en": "trick",
+    "tr": "trick",
+    "th": "trick"
+   },
+   "cond": {
+    "stat": "tricksUsed",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "trick",
+    "tr": "trick",
+    "th": "trick"
+   }
+  },
+  {
+   "id": 6,
+   "key": "tin",
+   "name": {
+    "en": "tin",
+    "tr": "tin",
+    "th": "tin"
+   },
+   "cond": {
+    "stat": "offerings",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "tin",
+    "tr": "tin",
+    "th": "tin"
+   }
+  },
+  {
+   "id": 7,
+   "key": "sign_refuse",
+   "name": {
+    "en": "sign_refuse",
+    "tr": "sign_refuse",
+    "th": "sign_refuse"
+   },
+   "cond": {
+    "stat": "dealsSigned",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "sign_refuse",
+    "tr": "sign_refuse",
+    "th": "sign_refuse"
+   }
+  },
+  {
+   "id": 8,
+   "key": "friend",
+   "name": {
+    "en": "friend",
+    "tr": "friend",
+    "th": "friend"
+   },
+   "cond": {
+    "stat": "stagesFriend",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "friend",
+    "tr": "friend",
+    "th": "friend"
+   }
+  },
+  {
+   "id": 9,
+   "key": "bench",
+   "name": {
+    "en": "bench",
+    "tr": "bench",
+    "th": "bench"
+   },
+   "cond": {
+    "stat": "benchJobs",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "bench",
+    "tr": "bench",
+    "th": "bench"
+   }
+  },
+  {
+   "id": 10,
+   "key": "fall_rise",
+   "name": {
+    "en": "fall_rise",
+    "tr": "fall_rise",
+    "th": "fall_rise"
+   },
+   "cond": {
+    "stat": "fallRise",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "fall_rise",
+    "tr": "fall_rise",
+    "th": "fall_rise"
+   }
+  },
+  {
+   "id": 11,
+   "key": "honk",
+   "name": {
+    "en": "honk",
+    "tr": "honk",
+    "th": "honk"
+   },
+   "cond": {
+    "stat": "honks",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "honk",
+    "tr": "honk",
+    "th": "honk"
+   }
+  },
+  {
+   "id": 12,
+   "key": "blend",
+   "name": {
+    "en": "blend",
+    "tr": "blend",
+    "th": "blend"
+   },
+   "cond": {
+    "stat": "blends",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "blend",
+    "tr": "blend",
+    "th": "blend"
+   }
+  },
+  {
+   "id": 13,
+   "key": "stare",
+   "name": {
+    "en": "stare",
+    "tr": "stare",
+    "th": "stare"
+   },
+   "cond": {
+    "stat": "staredDown",
+    "gte": 1
+   },
+   "reward": {
+    "stash": 15
+   },
+   "text": {
+    "en": "stare",
+    "tr": "stare",
+    "th": "stare"
+   }
+  }
+ ]
+}

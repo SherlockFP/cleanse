@@ -1,0 +1,23 @@
+{
+ "symbols": [
+  {
+   "id": "redeye",
+   "name": {
+    "en": "Red Eye",
+    "tr": "Red Eye",
+    "th": "Red Eye"
+   },
+   "tier": 0,
+   "value": 0,
+   "weight": 0,
+   "kind": "omen",
+   "group": null,
+   "icon": "sym/redeye",
+   "text": {
+    "en": "Never matches. Blocks patterns.",
+    "tr": "Never matches. Blocks patterns.",
+    "th": "Never matches. Blocks patterns."
+   }
+  }
+ ]
+}

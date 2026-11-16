@@ -11,7 +11,7 @@
  },
  "heat": {
   "max": 10,
-  "payoutPerLevel": 0.2,
+  "payoutPerLevel": 0.25,
   "ashWeightPerLevel": 2.25,
   "coolAtRoundStart": 2,
   "scorchAsh": 3,
@@ -20,7 +20,7 @@
  },
  "interest": {
   "basePct": 8,
-  "capPctOfDebt": 25
+  "capPctOfDebt": 20
  },
  "earlyPay": {
   "wickPerUnusedRound": 2,
@@ -44,9 +44,9 @@
      }
     ],
     "text": {
-     "en": "+6 Wick",
-     "tr": "+6 Fitil",
-     "th": "+6 ไส้เทียน"
+     "en": "+6 Caps",
+     "tr": "+6 Kapak",
+     "th": "+6 ฝาขวด"
     }
    },
    {
@@ -60,7 +60,7 @@
     "text": {
      "en": "gain a random rare charm",
      "tr": "rastgele bir ender tılsım kazan",
-     "th": "ได้เครื่องรางหายากมากสุ่มหนึ่งชิ้น"
+     "th": "ได้ไอเท็มหายากมากสุ่มหนึ่งชิ้น"
     }
    },
    {
@@ -133,7 +133,7 @@
    },
    "name": {
     "en": "Polish",
-    "tr": "Cila",
+    "tr": "Cilala",
     "th": "ขัดเงา"
    },
    "text": {
@@ -152,9 +152,9 @@
     "coins": 5
    },
    "name": {
-    "en": "Load",
-    "tr": "Ağırlık",
-    "th": "ถ่วงน้ำหนัก"
+    "en": "Stock Up",
+    "tr": "Stokla",
+    "th": "ตุนของ"
    },
    "text": {
     "en": "One symbol: weight +30%.",
@@ -172,9 +172,9 @@
     "wick": 4
    },
    "name": {
-    "en": "Gild",
-    "tr": "Yaldız",
-    "th": "ปิดทอง"
+    "en": "Upgrade",
+    "tr": "Yükselt",
+    "th": "อัปเกรด"
    },
    "text": {
     "en": "One symbol: mult +0.25.",
@@ -193,8 +193,8 @@
    },
    "name": {
     "en": "Pull Out",
-    "tr": "Sök",
-    "th": "ถอดออก"
+    "tr": "Çıkar",
+    "th": "ดึงออก"
    },
    "text": {
     "en": "Remove one symbol from the machine for this run.",
@@ -213,8 +213,8 @@
    },
    "name": {
     "en": "Lift a Curse",
-    "tr": "Lanet Kaldır",
-    "th": "ถอนคำสาป"
+    "tr": "Laneti Kaldır",
+    "th": "ปลดคำสาป"
    },
    "text": {
     "en": "Remove one curse of your choice.",
@@ -231,9 +231,9 @@
   {
    "id": "auditor",
    "name": {
-    "en": "The Auditor",
-    "tr": "Müfettiş",
-    "th": "ผู้ตรวจบัญชี"
+    "en": "The City Warden",
+    "tr": "Zabıta",
+    "th": "เทศกิจ"
    },
    "effects": [
     {
@@ -244,15 +244,15 @@
    "text": {
     "en": "3-cell patterns pay half.",
     "tr": "3 hücreli desenler yarım öder.",
-    "th": "ลาย 3 ช่องจ่ายครึ่งเดียว"
+    "th": "ลาย 3 ช่องได้เหรียญครึ่งเดียว"
    }
   },
   {
    "id": "collector",
    "name": {
-    "en": "The Collector",
-    "tr": "Tahsildar",
-    "th": "คนทวงหนี้"
+    "en": "The Rent Collector",
+    "tr": "Kira Tahsildarı",
+    "th": "คนเก็บค่าเช่า"
    },
    "effects": [
     {
@@ -262,17 +262,17 @@
     }
    ],
    "text": {
-    "en": "Ash always has +3 weight.",
-    "tr": "Kül her zaman +3 ağırlıkla gelir.",
-    "th": "เถ้ามีน้ำหนัก +3 เสมอ"
+    "en": "Soot always has +3 weight.",
+    "tr": "İs her zaman +3 ağırlıkla gelir.",
+    "th": "เขม่ามีน้ำหนัก +3 เสมอ"
    }
   },
   {
    "id": "veiled_clerk",
    "name": {
-    "en": "The Veiled Clerk",
-    "tr": "Peçeli Kâtip",
-    "th": "เสมียนคลุมหน้า"
+    "en": "The Man in Shades",
+    "tr": "Siyah Gözlüklü Adam",
+    "th": "ชายใส่แว่นดำ"
    },
    "effects": [
     {
@@ -281,17 +281,17 @@
     }
    ],
    "text": {
-    "en": "You cannot see the Favourite.",
+    "en": "You cannot see the Special.",
     "tr": "Gözdeyi göremezsin.",
-    "th": "มองไม่เห็นตัวโปรด"
+    "th": "มองไม่เห็นเมนูเด็ด"
    }
   },
   {
    "id": "miser",
    "name": {
-    "en": "The Miser",
-    "tr": "Cimri",
-    "th": "ตาเฒ่าขี้เหนียว"
+    "en": "The Landlord",
+    "tr": "Ev Sahibi",
+    "th": "เจ้าของตึก"
    },
    "effects": [
     {
@@ -308,9 +308,9 @@
   {
    "id": "timekeeper",
    "name": {
-    "en": "The Timekeeper",
-    "tr": "Saat Bekçisi",
-    "th": "คนคุมเวลา"
+    "en": "The Night Watchman",
+    "tr": "Gece Bekçisi",
+    "th": "ยามกะดึก"
    },
    "effects": [
     {
@@ -328,9 +328,9 @@
   {
    "id": "head_inspector",
    "name": {
-    "en": "The Head Inspector",
-    "tr": "Baş Müfettiş",
-    "th": "หัวหน้าผู้ตรวจ"
+    "en": "The Chief Warden",
+    "tr": "Zabıta Amiri",
+    "th": "หัวหน้าเทศกิจ"
    },
    "effects": [
     {
@@ -341,7 +341,7 @@
    "text": {
     "en": "3-cell patterns pay nothing.",
     "tr": "3 hücreli desenler ödemez.",
-    "th": "ลาย 3 ช่องไม่จ่าย"
+    "th": "ลาย 3 ช่องไม่ได้เหรียญ"
    }
   }
  ],
@@ -383,81 +383,81 @@
   {
    "id": "swarm",
    "name": {
-    "en": "Swarm",
-    "tr": "Sürü",
-    "th": "ฝูง"
+    "en": "Street Food",
+    "tr": "Sokak Lezzeti",
+    "th": "สตรีทฟู้ด"
    }
   },
   {
    "id": "ember",
    "name": {
-    "en": "Ember",
-    "tr": "Köz",
-    "th": "ถ่านไฟ"
+    "en": "Wok",
+    "tr": "Wok",
+    "th": "กระทะ"
    }
   },
   {
    "id": "hex",
    "name": {
-    "en": "Hex",
-    "tr": "Büyü",
-    "th": "อาถรรพ์"
+    "en": "Monsoon",
+    "tr": "Muson",
+    "th": "มรสุม"
    }
   },
   {
    "id": "ledger",
    "name": {
-    "en": "Ledger",
-    "tr": "Defter",
-    "th": "สมุดบัญชี"
+    "en": "Haggle",
+    "tr": "Pazarlık",
+    "th": "ต่อราคา"
    }
   },
   {
    "id": "pact",
    "name": {
-    "en": "Pact",
-    "tr": "Ahit",
-    "th": "พันธสัญญา"
+    "en": "Neon",
+    "tr": "Neon",
+    "th": "นีออน"
    }
   },
   {
    "id": "omen",
    "name": {
-    "en": "Omen",
-    "tr": "Alamet",
-    "th": "ลางบอกเหตุ"
+    "en": "Lucky",
+    "tr": "Uğur",
+    "th": "นำโชค"
    }
   },
   {
    "id": "stitch",
    "name": {
-    "en": "Stitch",
-    "tr": "Dikiş",
-    "th": "ฝีเข็ม"
+    "en": "Muay Thai",
+    "tr": "Muay Thai",
+    "th": "มวยไทย"
    }
   },
   {
    "id": "wisp",
    "name": {
-    "en": "Wisp",
-    "tr": "Cin Ateşi",
-    "th": "ผีโขมด"
+    "en": "Firefly",
+    "tr": "Ateşböceği",
+    "th": "หิ่งห้อย"
    }
   },
   {
    "id": "tinker",
    "name": {
-    "en": "Tinker",
-    "tr": "Tamirci",
-    "th": "ช่างซ่อม"
+    "en": "Tuk-tuk",
+    "tr": "Tuk-tuk",
+    "th": "ตุ๊กตุ๊ก"
    }
   },
   {
    "id": "crown",
    "name": {
-    "en": "Crown",
-    "tr": "Taç",
-    "th": "มงกุฎ"
+    "en": "Gold",
+    "tr": "Altın",
+    "th": "ทอง"
    }
   }
  ]

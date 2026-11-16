@@ -1,0 +1,978 @@
+{
+ "tabs": [
+  {
+   "id": "charms",
+   "name": {
+    "en": "Charms",
+    "tr": "Tılsımlar",
+    "th": "ไอเท็ม"
+   },
+   "entries": 172,
+   "how": {
+    "en": "Own it once to read it. Mastered = clear a place with it 3 times.",
+    "tr": "Okumak için bir kez sahip ol. Ustalık = onunla bir yeri 3 kez bitir.",
+    "th": "ต้องมีสักครั้งถึงจะอ่านได้ ชำนาญ = ผ่านด่านด้วยไอเท็มนี้ 3 ครั้ง"
+   },
+   "reward": {
+    "stash": [
+     10,
+     20,
+     30,
+     60
+    ],
+    "key": {
+     "at": 50,
+     "key": "brass"
+    }
+   }
+  },
+  {
+   "id": "tricks",
+   "name": {
+    "en": "Tricks",
+    "tr": "Numaralar",
+    "th": "กลเม็ด"
+   },
+   "entries": 20,
+   "how": {
+    "en": "Use it once to read it.",
+    "tr": "Okumak için bir kez kullan.",
+    "th": "ใช้สักครั้งถึงจะอ่านได้"
+   },
+   "reward": {
+    "key": {
+     "at": 100,
+     "key": "silver"
+    }
+   }
+  },
+  {
+   "id": "symbols",
+   "name": {
+    "en": "Symbols and shapes",
+    "tr": "Semboller ve desenler",
+    "th": "สัญลักษณ์และลาย"
+   },
+   "entries": 25,
+   "how": {
+    "en": "See it on the machine, then land it, then land it with 5 or more cells.",
+    "tr": "Makinede gör, sonra indir, sonra 5+ hücreyle indir.",
+    "th": "เห็นบนเครื่อง แล้วทำให้ได้ แล้วทำให้ได้ 5 ช่องขึ้นไป"
+   },
+   "reward": {
+    "postcard": {
+     "at": 100
+    }
+   }
+  },
+  {
+   "id": "deals",
+   "name": {
+    "en": "Deals and curses",
+    "tr": "Anlaşmalar ve lanetler",
+    "th": "ดีลและคำสาป"
+   },
+   "entries": 46,
+   "how": {
+    "en": "See it, sign it or carry it, then survive it.",
+    "tr": "Gör, imzala ya da taşı, sonra atlat.",
+    "th": "เห็น เซ็นหรือแบก แล้วผ่านมันไปให้ได้"
+   },
+   "reward": {
+    "key": {
+     "at": 50,
+     "key": "brass"
+    }
+   }
+  },
+  {
+   "id": "neighbours",
+   "name": {
+    "en": "Neighbours",
+    "tr": "Komşular",
+    "th": "เพื่อนบ้าน"
+   },
+   "entries": 80,
+   "how": {
+    "en": "Each page opens by an event with that neighbour: meet, tip, a step up, a fed-up moment, a red deal, Him or Me.",
+    "tr": "Her sayfa o komşuyla bir olayla açılır: tanışma, bahşiş, bir basamak, küsme, kırmızı anlaşma, O mu Ben mi.",
+    "th": "แต่ละหน้าเปิดจากเหตุการณ์กับเพื่อนบ้านคนนั้น เช่น พบกัน ทิป สนิทขึ้น หงุดหงิด ดีลแดง เลือกฉันหรือเขา"
+   },
+   "reward": {
+    "stash": [
+     100
+    ]
+   }
+  },
+  {
+   "id": "people",
+   "name": {
+    "en": "People and places",
+    "tr": "İnsanlar ve yerler",
+    "th": "ผู้คนและสถานที่"
+   },
+   "entries": 33,
+   "how": {
+    "en": "Meet them, clear the place, earn the stamp.",
+    "tr": "Tanış, yeri bitir, mührü kazan.",
+    "th": "พบเขา ผ่านด่าน รับตราประทับ"
+   },
+   "reward": {
+    "deedProgress": true
+   }
+  },
+  {
+   "id": "fusion",
+   "name": {
+    "en": "Blender recipes",
+    "tr": "Karıştırma tarifleri",
+    "th": "สูตรปั่นไอเท็ม"
+   },
+   "entries": 24,
+   "how": {
+    "en": "Blend a pair once to write its recipe in. Unfound recipes show the two families and a question mark.",
+    "tr": "Bir çifti bir kez karıştır, tarifi yazılır. Bulunmayanlar iki aileyi ve bir soru işareti gösterir.",
+    "th": "ปั่นคู่นั้นสักครั้งเพื่อจดสูตร สูตรที่ยังไม่เจอจะโชว์สองตระกูลกับเครื่องหมายคำถาม"
+   },
+   "reward": {
+    "stash": [
+     60
+    ]
+   }
+  }
+ ],
+ "pages": [
+  {
+   "spirit": "brimble",
+   "n": 1,
+   "event": "meet",
+   "text": {
+    "en": "He set up a folding table beside the burnt cart and called it an office.",
+    "tr": "Yanık arabanın yanına katlanır bir masa kurdu, adına ofis dedi.",
+    "th": "เขากางโต๊ะพับข้างรถเข็นที่ไหม้ แล้วเรียกมันว่าออฟฟิศ"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 2,
+   "event": "firstTip",
+   "text": {
+    "en": "Nim tipped him. He asked for a receipt and a better tip.",
+    "tr": "Nim ona bahşiş verdi. Makbuz ve daha iyi bir bahşiş istedi.",
+    "th": "นิ่มให้ทิปเขา เขาขอใบเสร็จและขอทิปที่มากกว่านี้"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 3,
+   "event": "firstLoved",
+   "text": {
+    "en": "Caps, he says, are the only honest money. He counts them twice.",
+    "tr": "Kapaklar, diyor, tek dürüst para. İki kez sayıyor.",
+    "th": "เขาว่าฝาขวดเป็นเงินสุจริตอย่างเดียว แล้วก็นับสองรอบ"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 4,
+   "event": "firstInsult",
+   "text": {
+    "en": "She tipped the creditor with a charm. He filed it as an attempted bribe.",
+    "tr": "Alacaklıya tılsımla bahşiş verdi. Rüşvet girişimi diye dosyaladı.",
+    "th": "เธอให้ไอเท็มเป็นทิปเจ้าหนี้ เขาจดว่าเป็นความพยายามติดสินบน"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 5,
+   "event": "noticed",
+   "text": {
+    "en": "He noticed she reads the clauses. Nobody reads the clauses.",
+    "tr": "Maddeleri okuduğunu fark etti. Kimse maddeleri okumaz.",
+    "th": "เขาเห็นว่าเธออ่านข้อสัญญา ปกติไม่มีใครอ่านกัน"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 6,
+   "event": "friend",
+   "text": {
+    "en": "He gave her a friend rate. It is only slightly worse than the others.",
+    "tr": "Ona dost faizi verdi. Diğerlerinden yalnızca biraz daha kötü.",
+    "th": "เขาให้เรตเพื่อน ซึ่งแย่กว่าคนอื่นแค่นิดเดียว"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 7,
+   "event": "regular",
+   "text": {
+    "en": "A stool with her name on it. He sits on it when she is out.",
+    "tr": "Üstünde adı yazan bir tabure. O yokken kendisi oturuyor.",
+    "th": "มีเก้าอี้เขียนชื่อเธอ เวลาเธอไม่อยู่เขานั่งเอง"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 8,
+   "event": "wrath",
+   "text": {
+    "en": "A late notice, hand-delivered. He even brought a pen.",
+    "tr": "Elden verilen bir gecikme ihtarı. Kalemi bile getirdi.",
+    "th": "หนังสือเตือนส่งถึงมือ เขาเอาปากกามาด้วย"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 9,
+   "event": "redCall",
+   "text": {
+    "en": "He signs his own deals in red. Black ink is for customers who read.",
+    "tr": "Kendi anlaşmalarını kırmızıyla imzalar. Siyah mürekkep okuyan müşteriler içindir.",
+    "th": "เขาเซ็นดีลของตัวเองด้วยหมึกแดง หมึกดำไว้ให้ลูกค้าที่อ่านสัญญา"
+   }
+  },
+  {
+   "spirit": "brimble",
+   "n": 10,
+   "event": "himOrMe",
+   "text": {
+    "en": "He and Lost-and-Found cannot share a lift. One returns things, one keeps them.",
+    "tr": "O ile Kayıp Eşya aynı asansöre binemez. Biri geri verir, biri tutar.",
+    "th": "เขากับพี่ของหายนั่งลิฟต์ด้วยกันไม่ได้ คนหนึ่งคืนของ อีกคนเก็บของ"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 1,
+   "event": "meet",
+   "text": {
+    "en": "She printed a receipt for her own arrival. It is pinned to the stall wall.",
+    "tr": "Kendi gelişi için bir fiş bastı. Tezgâhın duvarında asılı.",
+    "th": "เธอพิมพ์ใบเสร็จการมาถึงของตัวเอง แปะอยู่บนผนังแผง"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 2,
+   "event": "firstTip",
+   "text": {
+    "en": "Nim's first tip came back as a receipt with a smiley stamp.",
+    "tr": "Nim'in ilk bahşişi gülen yüzlü bir fiş olarak geri döndü.",
+    "th": "ทิปแรกของนิ่มกลับมาเป็นใบเสร็จพร้อมตราหน้ายิ้ม"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 3,
+   "event": "firstLoved",
+   "text": {
+    "en": "Plain coins, counted twice. She says rounding is a crime.",
+    "tr": "Düz para, iki kez sayıldı. Yuvarlamak suç, diyor.",
+    "th": "เหรียญธรรมดา นับสองรอบ เธอว่าการปัดเศษเป็นความผิด"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 4,
+   "event": "firstInsult",
+   "text": {
+    "en": "A curse as a tip? She stamped it VOID and had to sit down.",
+    "tr": "Bahşiş olarak lanet mi? Üstüne GEÇERSİZ damgası vurup oturmak zorunda kaldı.",
+    "th": "ให้คำสาปเป็นทิปเหรอ เธอตราประทับว่าโมฆะแล้วต้องนั่งพัก"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 5,
+   "event": "noticed",
+   "text": {
+    "en": "She keeps a file on people who pay on time. Nim's file is thick.",
+    "tr": "Zamanında ödeyenlerin dosyasını tutar. Nim'inki kalın.",
+    "th": "เธอมีแฟ้มเก็บคนจ่ายตรงเวลา แฟ้มของนิ่มหนามาก"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 6,
+   "event": "friend",
+   "text": {
+    "en": "A loyalty card with ten stamps. The tenth is a hug, which is not on the card.",
+    "tr": "On mühürlü sadakat kartı. Onuncusu bir sarılma, kartta yazmıyor.",
+    "th": "บัตรสะสมแต้มสิบดวง ดวงที่สิบคือกอดหนึ่งครั้ง ซึ่งไม่ได้เขียนไว้ในบัตร"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 7,
+   "event": "regular",
+   "text": {
+    "en": "She stays open late for Nim. The lights are cheaper at night, she says.",
+    "tr": "Nim için geç saate kadar açık kalıyor. Işık geceleri daha ucuz, diyor.",
+    "th": "เธอเปิดดึกเพื่อนิ่ม ค่าไฟกลางคืนถูกกว่า เธอว่าอย่างนั้น"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 8,
+   "event": "wrath",
+   "text": {
+    "en": "Prices went up the very morning she got upset. Coincidence, she says.",
+    "tr": "Fiyatlar tam kızdığı sabah arttı. Tesadüf, diyor.",
+    "th": "ราคาขึ้นในเช้าวันที่เธอไม่พอใจพอดี เธอว่าบังเอิญ"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 9,
+   "event": "redCall",
+   "text": {
+    "en": "Her red card is a closing sale. She sells everything except the receipts.",
+    "tr": "Kırmızı kartı bir stok eritme. Fişler dışında her şeyi satıyor.",
+    "th": "การ์ดแดงของเธอคือเซลล้างสต็อก ขายหมดทุกอย่างยกเว้นใบเสร็จ"
+   }
+  },
+  {
+   "spirit": "beckon",
+   "n": 10,
+   "event": "himOrMe",
+   "text": {
+    "en": "She and Uncle Wire share a pavement and a long, polite feud.",
+    "tr": "O ile Tel Amca bir kaldırımı ve uzun, kibar bir kavgayı paylaşıyor.",
+    "th": "เธอกับลุงสายไฟแบ่งทางเท้ากัน และทะเลาะกันแบบสุภาพมาอย่างยาวนาน"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 1,
+   "event": "meet",
+   "text": {
+    "en": "A rubber duck in a paper hat was running the Special. Nobody asked how.",
+    "tr": "Kâğıt şapkalı bir lastik ördek Gözde'yi yönetiyordu. Kimse nasıl diye sormadı.",
+    "th": "เป็ดยางสวมหมวกกระดาษกำลังคุมเมนูเด็ด ไม่มีใครถามว่าทำไงถึงทำได้"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 2,
+   "event": "firstTip",
+   "text": {
+    "en": "Nim's first tip: he checked it with his beak. It passed.",
+    "tr": "Nim'in ilk bahşişini gagasıyla kontrol etti. Geçti.",
+    "th": "ทิปแรกของนิ่ม เขาเอาปากจิ้มตรวจดู ผ่าน"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 3,
+   "event": "firstLoved",
+   "text": {
+    "en": "He loves gadgets. A whisk led to a full tour of his kitchen.",
+    "tr": "Aletlere bayılır. Bir çırpıcı yüzünden mutfağı baştan sona gezdirdi.",
+    "th": "เขารักของใช้ในครัว ตะกร้อมือเดียวพาเดินทัวร์ครัวทั้งห้อง"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 4,
+   "event": "firstInsult",
+   "text": {
+    "en": "He quacked for a full minute at a skipped night. Nim got the message.",
+    "tr": "Atlanan geceye bir dakika boyunca vakladı. Nim mesajı aldı.",
+    "th": "เขาร้องก๊าบใส่การข้ามคืนทั้งนาที นิ่มเข้าใจแล้ว"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 5,
+   "event": "noticed",
+   "text": {
+    "en": "He started saving the first dish for Nim.",
+    "tr": "İlk yemeği Nim için ayırmaya başladı.",
+    "th": "เขาเริ่มเก็บจานแรกไว้ให้นิ่ม"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 6,
+   "event": "friend",
+   "text": {
+    "en": "She picks the first dish now. He watches, trembling, in case she burns it.",
+    "tr": "İlk yemeği artık o seçiyor. Yakacak diye titreyerek izliyor.",
+    "th": "ตอนนี้เธอเลือกจานแรกเอง เขายืนดูตัวสั่นเผื่อเธอทำไหม้"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 7,
+   "event": "regular",
+   "text": {
+    "en": "Two Specials a night. He insists the second is only for taste testing.",
+    "tr": "Geceye iki Özel. İkincisinin sadece tadım için olduğunda ısrar ediyor.",
+    "th": "คืนละสองเมนูเด็ด เขายืนยันว่าอันที่สองไว้ชิมเท่านั้น"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 8,
+   "event": "wrath",
+   "text": {
+    "en": "The board stayed covered. He sat on the lid and would not discuss it.",
+    "tr": "Tahta örtülü kaldı. Kapağın üstüne oturdu, konuşmayı reddetti.",
+    "th": "กระดานเมนูถูกปิดไว้ เขานั่งทับฝาและไม่ยอมคุย"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 9,
+   "event": "redCall",
+   "text": {
+    "en": "A rush order: the luck arrives fast, the bill arrives faster.",
+    "tr": "Acil sipariş: şans hızlı gelir, hesap daha hızlı.",
+    "th": "ออเดอร์ด่วน โชคมาไว แต่บิลมาไวกว่า"
+   }
+  },
+  {
+   "spirit": "gold",
+   "n": 10,
+   "event": "himOrMe",
+   "text": {
+    "en": "He and Scrubby share a stove. One cooks, one scrapes, nobody talks.",
+    "tr": "O ile Kazıcı bir ocağı paylaşıyor. Biri pişirir, biri kazır, kimse konuşmaz.",
+    "th": "เขากับแปรงขัดใช้เตาเดียวกัน คนหนึ่งทำอาหาร คนหนึ่งขัด ไม่มีใครคุยกัน"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 1,
+   "event": "meet",
+   "text": {
+    "en": "He fixed the stall light with a spoon and a smile. It still works.",
+    "tr": "Tezgâh lambasını bir kaşık ve bir gülümsemeyle tamir etti. Hâlâ çalışıyor.",
+    "th": "เขาซ่อมไฟแผงด้วยช้อนกับรอยยิ้ม ตอนนี้ก็ยังติดอยู่"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 2,
+   "event": "firstTip",
+   "text": {
+    "en": "She tipped him a trick. He gave her a tour of the wires over her head.",
+    "tr": "Ona bir numara bahşiş verdi. O da başının üstündeki kabloların turunu attırdı.",
+    "th": "เธอให้กลเม็ดเป็นทิป เขาพาเดินดูสายไฟเหนือหัวเธอ"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 3,
+   "event": "firstLoved",
+   "text": {
+    "en": "A trick for the toolbox: his eyes lit up and so did a street lamp.",
+    "tr": "Alet çantası için bir numara: gözleri parladı, bir sokak lambası da.",
+    "th": "กลเม็ดเข้ากล่องเครื่องมือ ตาเขาเป็นประกาย เสาไฟข้างทางก็ติดตาม"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 4,
+   "event": "firstInsult",
+   "text": {
+    "en": "He does not sleep, so a skipped night makes him feel unwanted.",
+    "tr": "Uyumaz, bu yüzden atlanan gece onu istenmemiş hissettirir.",
+    "th": "เขาไม่นอน เลยรู้สึกไม่มีใครต้องการเวลาข้ามคืน"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 5,
+   "event": "noticed",
+   "text": {
+    "en": "A fourth pocket, sewn into her apron while she looked elsewhere.",
+    "tr": "Önlüğüne dördüncü bir cep dikildi, o başka yere bakarken.",
+    "th": "กระเป๋าที่สี่ถูกเย็บติดผ้ากันเปื้อนตอนเธอมองไปทางอื่น"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 6,
+   "event": "friend",
+   "text": {
+    "en": "One free trick a night. He never saw it. He was across the street.",
+    "tr": "Geceye bir bedava numara. Görmedi. Karşı sokaktaydı.",
+    "th": "คืนละกลเม็ดฟรี เขาไม่เห็นหรอก เขาอยู่อีกฝั่งถนน"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 7,
+   "event": "regular",
+   "text": {
+    "en": "Cheap bench jobs. He knows a guy. He is the guy and the guy's cousin.",
+    "tr": "Ucuz tezgâh işleri. Bir adam tanıyor. O adam kendisi ve adamın kuzeni.",
+    "th": "งานโต๊ะช่างราคาถูก เขารู้จักช่างคนนึง ก็ตัวเขาเองกับลูกพี่ลูกน้องช่าง"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 8,
+   "event": "wrath",
+   "text": {
+    "en": "A jammed pocket and a shrug. Wires get tangled, he says.",
+    "tr": "Sıkışan bir cep ve omuz silkme. Kablolar dolaşır, diyor.",
+    "th": "กระเป๋าติดกับการยักไหล่ สายไฟมันพันกันได้ เขาว่า"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 9,
+   "event": "redCall",
+   "text": {
+    "en": "Hot-wire: the stall hums for a night, and so does the fridge next door.",
+    "tr": "Kaçak bağlantı: tezgâh bir gece vızıldar, yan taraftaki buzdolabı da.",
+    "th": "ต่อตรง แผงหึ่งทั้งคืน ตู้เย็นข้างบ้านก็หึ่งด้วย"
+   }
+  },
+  {
+   "spirit": "wire",
+   "n": 10,
+   "event": "himOrMe",
+   "text": {
+    "en": "He and Madam Receipt argue about who owns the pavement. It belongs to the city.",
+    "tr": "O ile Bayan Fiş kaldırımın kimin olduğunu tartışıyor. Şehrin.",
+    "th": "เขากับคุณนายใบเสร็จเถียงกันว่าทางเท้าเป็นของใคร จริงๆ เป็นของเมือง"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 1,
+   "event": "meet",
+   "text": {
+    "en": "He sits by the night bus stop with a box. Anything left behind finds him.",
+    "tr": "Gece otobüsü durağında bir kutuyla oturuyor. Geride kalan her şey onu bulur.",
+    "th": "เขานั่งข้างป้ายรถเมล์กลางคืนกับกล่องใบหนึ่ง ของที่ลืมไว้จะมาหาเขาเอง"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 2,
+   "event": "firstTip",
+   "text": {
+    "en": "Her first tip went into the box. He promised to keep it until needed.",
+    "tr": "İlk bahşişi kutuya girdi. İhtiyaç olana kadar saklamaya söz verdi.",
+    "th": "ทิปแรกของเธอลงกล่อง เขาสัญญาว่าจะเก็บไว้จนกว่าจะต้องใช้"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 3,
+   "event": "firstLoved",
+   "text": {
+    "en": "A charm for the shelf made him do a little dance in cardboard.",
+    "tr": "Rafa bir tılsım onu kartonun içinde küçük bir dansa kaldırdı.",
+    "th": "ไอเท็มเข้าชั้นทำให้เขาเต้นเบาๆ อยู่ในกล่องกระดาษ"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 4,
+   "event": "firstInsult",
+   "text": {
+    "en": "She offered a trick. It left at once, he says. They always do.",
+    "tr": "Bir numara önerdi. Hemen kaybolmuş, diyor. Hep öyle olur.",
+    "th": "เธอยื่นกลเม็ดให้ มันหายไปทันที เขาว่า มันหายทุกที"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 5,
+   "event": "noticed",
+   "text": {
+    "en": "A spare in her pocket. He says everyone needs a spare.",
+    "tr": "Cebinde bir yedek. Herkesin bir yedeğe ihtiyacı var, diyor.",
+    "th": "ของสำรองในกระเป๋าเธอ เขาว่าทุกคนควรมีของสำรอง"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 6,
+   "event": "friend",
+   "text": {
+    "en": "He lets a missed deadline pass once. After that, the box has rules.",
+    "tr": "Bir kaçırılan vadeyi bir kez geçirir. Sonrasında kutunun kuralları var.",
+    "th": "เขายอมให้ตกกำหนดได้หนเดียว หลังจากนั้นกล่องก็มีกฎ"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 7,
+   "event": "regular",
+   "text": {
+    "en": "Hang up on a call and he quietly keeps her some luck.",
+    "tr": "Bir aramayı kapat, sessizce ona biraz şans saklar.",
+    "th": "วางสายสักสาย เขาก็เก็บโชคไว้ให้เธออย่างเงียบๆ"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 8,
+   "event": "wrath",
+   "text": {
+    "en": "He stopped calling. The lockers stay shut. He is not angry, only very quiet.",
+    "tr": "Aramayı bıraktı. Dolaplar kapalı. Kızgın değil, sadece çok sessiz.",
+    "th": "เขาเลิกโทรแล้ว ตู้ปิดอยู่ ไม่ได้โกรธ แค่เงียบมาก"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 9,
+   "event": "redCall",
+   "text": {
+    "en": "A white call is a clean slate. He has been saving it for years.",
+    "tr": "Beyaz arama bir temiz sayfa. Yıllardır saklıyor.",
+    "th": "สายสีขาวคือการเริ่มใหม่ เขาเก็บไว้หลายปีแล้ว"
+   }
+  },
+  {
+   "spirit": "waiting",
+   "n": 10,
+   "event": "himOrMe",
+   "text": {
+    "en": "He cannot stand Mr. Ruby: a man who keeps everything and returns nothing.",
+    "tr": "Bay Ruby'ye dayanamaz: her şeyi tutan, hiçbir şeyi geri vermeyen bir adam.",
+    "th": "เขาทนมิสเตอร์รูบี้ไม่ไหว คนที่เก็บทุกอย่างและไม่คืนอะไรเลย"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 1,
+   "event": "meet",
+   "text": {
+    "en": "She poured tea before Nim finished saying hello.",
+    "tr": "Nim merhaba demeyi bitirmeden çay doldurdu.",
+    "th": "ยายรินชาให้ก่อนที่นิ่มจะทักทายเสร็จ"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 2,
+   "event": "firstTip",
+   "text": {
+    "en": "A tip arrived and she put it straight into the river-money jar.",
+    "tr": "Bir bahşiş geldi, hemen nehir parası kavanozuna koydu.",
+    "th": "ทิปมาถึง ยายใส่โหลเงินแม่น้ำทันที"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 3,
+   "event": "firstLoved",
+   "text": {
+    "en": "A skipped night earned a pat on the head and a sweet bun.",
+    "tr": "Atlanan gece, başa bir okşama ve tatlı bir çörek getirdi.",
+    "th": "การข้ามคืนได้ลูบหัวกับขนมปังหวานหนึ่งลูก"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 4,
+   "event": "firstInsult",
+   "text": {
+    "en": "Spice for an old woman: she held the tea cup to her cheek and said no.",
+    "tr": "Yaşlı kadına acı: çay fincanını yanağına dayayıp hayır dedi.",
+    "th": "ให้ความเผ็ดกับคนแก่ ยายยกถ้วยชาแนบแก้มแล้วบอกไม่เอา"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 5,
+   "event": "noticed",
+   "text": {
+    "en": "High tide: the money grows while you sleep. She approves of sleeping.",
+    "tr": "Kabarma: para sen uyurken büyür. Uykuyu onaylıyor.",
+    "th": "น้ำขึ้น เงินงอกเงยขณะนอนหลับ ยายเห็นดีกับการนอน"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 6,
+   "event": "friend",
+   "text": {
+    "en": "Unused hours rolled into tomorrow. She calls it the river's savings.",
+    "tr": "Kullanılmayan saatler yarına aktı. Buna nehrin birikimi diyor.",
+    "th": "ตาที่เหลือไหลไปพรุ่งนี้ ยายเรียกว่าเงินเก็บของแม่น้ำ"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 7,
+   "event": "regular",
+   "text": {
+    "en": "Her barge now docks beside the stall. The tea is always hot.",
+    "tr": "Mavnası artık tezgâhın yanına yanaşıyor. Çay hep sıcak.",
+    "th": "เรือของยายจอดข้างแผงแล้ว ชาร้อนอยู่เสมอ"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 8,
+   "event": "wrath",
+   "text": {
+    "en": "She went quiet and sailed off. The river does not hurry, and neither does she.",
+    "tr": "Sessizleşip yola çıktı. Nehir acele etmez, o da etmez.",
+    "th": "ยายเงียบแล้วพายเรือออกไป แม่น้ำไม่รีบ ยายก็ไม่รีบ"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 9,
+   "event": "redCall",
+   "text": {
+    "en": "Cargo on credit: three crates and one polite reminder.",
+    "tr": "Veresiye kargo: üç sandık ve bir kibar hatırlatma.",
+    "th": "ของเชื่อ ลังสามใบกับคำเตือนสุภาพหนึ่งที"
+   }
+  },
+  {
+   "spirit": "tide",
+   "n": 10,
+   "event": "himOrMe",
+   "text": {
+    "en": "She and Lady Lamplit argue about sparks. The tea keeps winning.",
+    "tr": "O ile Lamba Hanım kıvılcımlar yüzünden tartışıyor. Çay hep kazanıyor.",
+    "th": "ยายกับเจ๊หลอดไฟเถียงเรื่องประกายไฟ ชาชนะตลอด"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 1,
+   "event": "meet",
+   "text": {
+    "en": "A steel-wool pad on a hot grill said sorry before it said hello.",
+    "tr": "Sıcak ızgaradaki bir tel sünger merhaba demeden önce özür diledi.",
+    "th": "ใยขัดบนเตาร้อนขอโทษก่อนที่จะทักทาย"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 2,
+   "event": "firstTip",
+   "text": {
+    "en": "A tip: he scrubbed it twice and handed it back shinier.",
+    "tr": "Bir bahşiş: iki kez kazıdı ve daha parlak geri verdi.",
+    "th": "ทิปชิ้นหนึ่ง เขาขัดสองรอบแล้วส่งคืนให้เงากว่าเดิม"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 3,
+   "event": "firstLoved",
+   "text": {
+    "en": "A curse for him? He wept a little and ate it politely.",
+    "tr": "Onun için bir lanet mi? Biraz ağladı ve nazikçe yedi.",
+    "th": "คำสาปให้เขาเหรอ เขาน้ำตาซึมนิดหน่อยแล้วกินอย่างสุภาพ"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 4,
+   "event": "firstInsult",
+   "text": {
+    "en": "She tried tipping him Caps. They stuck to him. He apologised for hours.",
+    "tr": "Ona Kapak bahşiş vermeye çalıştı. Yapıştılar. Saatlerce özür diledi.",
+    "th": "เธอลองให้ฝาขวดเป็นทิป มันติดตัวเขา เขาขอโทษอยู่หลายชั่วโมง"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 5,
+   "event": "noticed",
+   "text": {
+    "en": "He noticed the grill was neat. He cried a little with joy.",
+    "tr": "Izgaranın düzenli olduğunu fark etti. Sevinçten biraz ağladı.",
+    "th": "เขาเห็นว่าเตาเรียบร้อยดี เขาน้ำตาไหลเพราะดีใจ"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 6,
+   "event": "friend",
+   "text": {
+    "en": "After a Flare-up he pays for the cleaning. He insists on a receipt.",
+    "tr": "Parlamadan sonra temizliği o öder. Fiş konusunda ısrarcı.",
+    "th": "หลังไฟลุกเขาออกค่าขัดล้างเอง และยืนยันขอใบเสร็จ"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 7,
+   "event": "regular",
+   "text": {
+    "en": "Even the Soot is special now. He rewrote the rules and apologised.",
+    "tr": "Artık İs bile özel. Kuralları yeniden yazdı ve özür diledi.",
+    "th": "ตอนนี้แม้แต่เขม่าก็พิเศษ เขาเขียนกฎใหม่แล้วขอโทษ"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 8,
+   "event": "wrath",
+   "text": {
+    "en": "He went hungry and the floor stayed dirty. Nobody was happy.",
+    "tr": "Aç kaldı, zemin kirli kaldı. Kimse mutlu değildi.",
+    "th": "เขาหิวและพื้นก็ยังสกปรก ไม่มีใครมีความสุข"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 9,
+   "event": "redCall",
+   "text": {
+    "en": "Deep clean: two things gone and the centre stays hollow. Sorry.",
+    "tr": "Derin temizlik: iki şey gitti, orta boş kaldı. Pardon.",
+    "th": "ขัดล้างใหญ่ ของหายไปสองอย่าง ช่องกลางโหว่ ขอโทษครับ"
+   }
+  },
+  {
+   "spirit": "moonbiter",
+   "n": 10,
+   "event": "himOrMe",
+   "text": {
+    "en": "He and Chef Quack share a stove. One makes the mess, one cleans it.",
+    "tr": "O ile Şef Vak bir ocağı paylaşıyor. Biri dağıtır, biri temizler.",
+    "th": "เขากับเชฟกาบใช้เตาเดียวกัน คนหนึ่งทำเลอะ คนหนึ่งขัด"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 1,
+   "event": "meet",
+   "text": {
+    "en": "A light bulb on a cable greeted her and asked what time she goes to bed.",
+    "tr": "Kablodaki bir ampul onu selamladı ve kaçta yattığını sordu.",
+    "th": "หลอดไฟบนสายทักทายเธอและถามว่าปกตินอนกี่โมง"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 2,
+   "event": "firstTip",
+   "text": {
+    "en": "A tip made her glow. She said it was the electric bill.",
+    "tr": "Bir bahşiş onu parlattı. Elektrik faturası, dedi.",
+    "th": "ทิปทำให้เธอเรืองแสง เธอบอกว่านั่นคือค่าไฟ"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 3,
+   "event": "firstLoved",
+   "text": {
+    "en": "Spice offered gladly: she hummed a happy buzz for a full minute.",
+    "tr": "Acı gönülle verildi: bir dakika boyunca mutlu mutlu vızıldadı.",
+    "th": "ให้ความเผ็ดอย่างเต็มใจ เธอส่งเสียงหึ่งอย่างมีความสุขทั้งนาที"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 4,
+   "event": "firstInsult",
+   "text": {
+    "en": "She was offered a charm and flickered, offended.",
+    "tr": "Ona bir tılsım uzatıldı, gücenip titreşti.",
+    "th": "มีคนยื่นไอเท็มให้เธอ เธอกะพริบถี่อย่างไม่พอใจ"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 5,
+   "event": "noticed",
+   "text": {
+    "en": "Warm hands tonight. She says it is the best thing to meet.",
+    "tr": "Bu gece sıcak eller. Tanışılacak en güzel şey, diyor.",
+    "th": "คืนนี้มืออุ่นๆ เธอว่าเป็นสิ่งที่ดีที่สุดที่จะได้เจอ"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 6,
+   "event": "friend",
+   "text": {
+    "en": "Burning bright: every level pays more. She counted them with her cable.",
+    "tr": "Parlak yanış: her seviye daha çok öder. Kablosuyla saydı.",
+    "th": "ไฟลุกโชน ทุกระดับจ่ายเพิ่ม เธอใช้สายไฟนับ"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 7,
+   "event": "regular",
+   "text": {
+    "en": "Fireproof: a Flare-up now only singes and even pays out.",
+    "tr": "Yanmaz: Parlama artık sadece kavurur, hatta ödeme yapar.",
+    "th": "กันไฟ ตอนนี้ไฟลุกแค่ลวกและยังจ่ายให้ด้วย"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 8,
+   "event": "wrath",
+   "text": {
+    "en": "The bulb went dim. Nim said sorry. The bulb said not yet.",
+    "tr": "Ampul söndü. Nim özür diledi. Ampul daha değil dedi.",
+    "th": "หลอดไฟสลัวลง นิ่มขอโทษ หลอดไฟบอกว่ายัง"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 9,
+   "event": "redCall",
+   "text": {
+    "en": "Midnight run: all the Spice, all the pay, one dim bulb afterwards.",
+    "tr": "Gece koşusu: bütün acı, bütün ödeme, ardından sönük bir ampul.",
+    "th": "วิ่งเที่ยงคืน เผ็ดสุด จ่ายสุด หลังจากนั้นหลอดไฟสลัวหนึ่งดวง"
+   }
+  },
+  {
+   "spirit": "lamplit",
+   "n": 10,
+   "event": "himOrMe",
+   "text": {
+    "en": "She and Grandmother Tide have argued since the first rain. It rains a lot.",
+    "tr": "O ile Gelgit Nine ilk yağmurdan beri tartışıyor. Çok yağmur yağıyor.",
+    "th": "เธอกับยายน้ำขึ้นเถียงกันมาตั้งแต่ฝนแรก ฝนตกบ่อยมาก"
+   }
+  }
+ ],
+ "redEye": {
+  "id": "redeye",
+  "icon": "sym/redeye",
+  "name": {
+   "en": "The Red Eye",
+   "tr": "Kırmızı Göz",
+   "th": "ดวงตาแดง"
+  },
+  "unlock": {
+   "redEyesMin": 1
+  },
+  "text": {
+   "en": "A red neon eye that sometimes switches on in the middle of the machine. From debt 3 it appears on its own, and the chance is always shown on the machine trim. It never matches and blocks every shape through it. Debts 3 to 4: that spin pays nothing. Debts 5 to 6: it also takes what you won this round from the purse. Debt 7 and later: the purse goes to nothing. Coins in the Kiosk are always safe. After an eye, every call card is red.",
+   "tr": "Makinenin ortasında bazen yanan kırmızı bir neon göz. 3. borçtan itibaren kendiliğinden çıkar, ihtimali makinenin çerçevesinde hep görünür. Hiçbir şeyle eşleşmez, içinden geçen her şekli keser. 3-4. borçlar: o çeviriş ödemez. 5-6. borçlar: bu el kazandığını da kesenden alır. 7. borç ve sonrası: kese sıfırlanır. Kiosk'taki para her zaman güvende. Bir gözden sonra her arama kartı kırmızıdır.",
+   "th": "ดวงตานีออนสีแดงที่บางครั้งติดขึ้นกลางเครื่อง ตั้งแต่หนี้ที่ 3 มันโผล่เอง และโอกาสแสดงบนขอบเครื่องเสมอ มันไม่จับคู่กับอะไรและขวางทุกรูปทรงที่ผ่าน หนี้ 3 ถึง 4 ตานั้นไม่ได้เหรียญ หนี้ 5 ถึง 6 ยังเอาเงินที่ได้ในรอบนี้ออกจากถุงด้วย หนี้ 7 ขึ้นไป ถุงเงินเหลือศูนย์ เหรียญในตู้ฝากเงินปลอดภัยเสมอ หลังดวงตาแดงทุกการ์ดโทรศัพท์จะเป็นสีแดง"
+  }
+ },
+ "locked": {
+  "silhouette": {
+   "en": "Not found yet",
+   "tr": "Henüz bulunmadı",
+   "th": "ยังไม่เจอ"
+  },
+  "where": {
+   "en": "Where: {where}",
+   "tr": "Nerede: {where}",
+   "th": "ได้จาก: {where}"
+  }
+ },
+ "completion": {
+  "total": 401
+ }
+}

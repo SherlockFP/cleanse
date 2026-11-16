@@ -1,4 +1,4 @@
-// Settings: language, sound and music volume, vibration, fast spin, reduced motion, and a door to How to play.
+// Settings: language, sound and music volume, vibration, fast spin, reduced motion, Lever only (hides the SPIN button), a door to How to play, and Replay tutorial.
 import { t, LANGS } from '../i18n.js';
 import { h, btn, put } from './dom.js';
 
@@ -14,8 +14,8 @@ export function render(el, data, ctx) {
     h('section', {}, h('h3', {}, t('ui.language')),
       h('div', { class: 'seg', role: 'radiogroup' }, LANGS.map((l) => seg(ctx.lang() === l, t('ui.lang' + l[0].toUpperCase() + l[1]), () => ctx.setSettings({ lang: l }))))),
     slider('sfx', t('ui.sound')), slider('music', t('ui.music')),
-    toggle('haptics', t('ui.haptics')), toggle('fast', t('ui.fast')), toggle('reduceMotion', t('ui.reduceMotion')),
-    btn(t('ui.howto'), () => ctx.open('howto', {})),
+    toggle('haptics', t('ui.haptics')), toggle('fast', t('ui.fast')), toggle('reduceMotion', t('ui.reduceMotion')), toggle('leverOnly', t('ui.leverOnlySet')),
+    btn(t('ui.howto'), () => ctx.open('howto', {})), btn(t('ui.replayTut'), () => ctx.call('replayTutorial')),
     h('p', { class: 'note' }, t('ui.privacyText')),
     ctx.foot(btn(t('ui.close'), ctx.close, 'primary')));
 }

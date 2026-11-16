@@ -10,5 +10,5 @@
   {"id": "vee", "name": {"en": "Vee", "tr": "V Yolu", "th": "ทางตัววี"}, "mult": 5, "size": 5, "cells": [[0, 6, 12, 8, 4], [10, 6, 2, 8, 14]], "beats": []},
   {"id": "cross", "name": {"en": "Cross", "tr": "Artı", "th": "กากบาท"}, "mult": 6, "size": 5, "cells": [[2, 6, 7, 8, 12]], "beats": ["halo"]},
   {"id": "frame", "name": {"en": "Frame", "tr": "Çerçeve", "th": "กรอบ"}, "mult": 10, "size": 12, "cells": [[0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14]], "beats": []},
-  {"id": "full", "name": {"en": "Full Fair", "tr": "Tam Panayır", "th": "เต็มงาน"}, "mult": 25, "size": 15, "cells": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]], "beats": []}
+  {"id": "full", "name": {"en": "Full Market", "tr": "Tam Pazar", "th": "เต็มตลาด"}, "mult": 25, "size": 15, "cells": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]], "beats": []}
 ]}

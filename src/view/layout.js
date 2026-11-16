@@ -1,8 +1,8 @@
 // Portrait layout from window size. Pure JS (no three, no DOM). All rects are {x, y, w, h} in CSS px, origin top-left of the window.
 // Desktop rule: a window wider than 0.6 x its height gets a centered column of 9:19.5; the rest is background. Phones use the whole window.
 //
-// Top to bottom: hud (DOM text + canvas debt bar), curses, stage (heat meter | speech | devil), machine case with the 5x3 window,
-// charm shelf, trick pockets, buttons (STOKE | SPIN/COLLECT | BANK).
+// Top to bottom: hud (DOM text + canvas debt bar), curses, stage (heat meter | speech | spirits | devil), omen gauge, machine case with
+// the 5x3 window and the lever strip on its right, charm shelf, trick pockets (HONK at their left end), buttons (STOKE | SPIN/COLLECT | BANK).
 
 // Placeholder for public/img/machine/case_rects.json (written by cut-art.py): case canvas size in px and 15 window rects as
 // fractions [x0, y0, x1, y1] of the case, row-major. computeLayout(w, h, rects) takes the real file once it exists.
@@ -40,7 +40,9 @@ export function computeLayout(w, h, caseRects = DEFAULT_CASE, ins = null) {
   const stoke = r(Math.round(X + pad), btnY + Math.round((btnH - sideH) / 2), sideW, sideH);
   const bank = r(Math.round(X + W - pad - sideW), stoke.y, sideW, sideH);
   const pockH = clamp(Math.round(H * 0.065), 40, 64);
-  const pockets = r(X + pad, btnY - g - pockH, W - 2 * pad, pockH);
+  const honkS = pockH; // HONK sits at the left end of the pocket row; the pockets take the rest
+  const pockets = r(X + pad + honkS + g, btnY - g - pockH, W - 2 * pad - honkS - g, pockH);
+  const honk = r(X + pad, pockets.y, honkS, pockH);
   const charmH = clamp(Math.round(H * 0.075), 44, 72);
   const charms = r(X + pad, pockets.y - g - charmH, W - 2 * pad, charmH);
 
@@ -54,35 +56,47 @@ export function computeLayout(w, h, caseRects = DEFAULT_CASE, ins = null) {
   // When the case is width-bound (desktop column, tall phones) the height it cannot use goes to the stage, so Brimble is not tiny.
   const span = floor - stageTop, spare = Math.round(span - W * 0.98 * (caseRects.size[1] / caseRects.size[0]) - 2 * g);
   const stageH = ins ? clamp(Math.max(Math.round(span * 0.2), spare), 40, 170) : clamp(Math.max(Math.round(H * 0.1), spare), 60, 170);
+  // The lever stands beside the machine: its strip (plus an inset from the screen edge, for the back-swipe zone) is taken off the grid width.
+  const leverW = clamp(Math.round(W * 0.09), 30, 48), leverInset = Math.max(12, Math.round(W * 0.04)), reserve = leverW + leverInset;
+  const omenH = clamp(Math.round(H * 0.028), 14, 24); // the gauge on the trim, above the 5x3 window
   const stage = r(X + pad, stageTop, W - 2 * pad, stageH);
   const meterW = Math.min(stageH * 0.34, W * 0.1);
   const meter = r(stage.x, stage.y, meterW, stageH);
   const [dwA, dhA] = [0.62, 1]; // devil sprite is about 0.62 wide per tall
   const devW = Math.min(stageH * dwA * dhA, W * 0.32);
   const devil = r(stage.x + stage.w - devW, stage.y, devW, stageH);
-  const speech = r(meter.x + meter.w + pad, stage.y, devil.x - meter.x - meter.w - 2 * pad, stageH);
+  const spW = clamp(Math.round(stageH * 0.42), 24, Math.round(W * 0.13)); // the two spirit portraits that are here this night, stacked
+  const spirits = r(devil.x - g - spW, stage.y, spW, stageH);
+  const speech = r(meter.x + meter.w + pad, stage.y, spirits.x - meter.x - meter.w - 2 * pad, stageH);
 
   // The case takes what is left.
   const [cw0, ch0] = caseRects.size, aspect = ch0 / cw0;
-  const top = stage.y + stage.h + g, avail = Math.max(60, floor - g - top);
+  const top = stage.y + stage.h + g, avail = Math.max(60, floor - g - top - omenH), gridTop = top + omenH;
   // Size the case by its 5x3 window, not its outline: the window fills the width and the painted cabinet may run off the
   // sides and behind the HUD and charm bar. `case` is the part of it that stays on screen; `caseArt` is where the art is drawn.
   const ws = caseRects.windows, wx0 = Math.min(...ws.map((q) => q[0])), wx1 = Math.max(...ws.map((q) => q[2]));
   const wy0 = Math.min(...ws.map((q) => q[1])), wy1 = Math.max(...ws.map((q) => q[3]));
-  const cw = Math.min(W * 0.96 / (wx1 - wx0), avail * 0.94 / ((wy1 - wy0) * aspect), Math.max(W * 0.98, avail / aspect) * 4), chh = cw * aspect;
-  const caseArt = r(X + W / 2 - ((wx0 + wx1) / 2) * cw, top + avail / 2 - ((wy0 + wy1) / 2) * chh, cw, chh);
-  const vx0 = Math.max(caseArt.x, X), vy0 = Math.max(caseArt.y, top), vx1 = Math.min(caseArt.x + cw, X + W), vy1 = Math.min(caseArt.y + chh, top + avail);
+  const gridW = W * 0.97 - reserve, gridCx = X + W * 0.015 + gridW / 2; // grid centred in what is left of the column once the lever strip is out
+  const cw = Math.min(gridW / (wx1 - wx0), avail * 0.94 / ((wy1 - wy0) * aspect), Math.max(W * 0.98, avail / aspect) * 4), chh = cw * aspect;
+  const caseArt = r(gridCx - ((wx0 + wx1) / 2) * cw, gridTop + avail / 2 - ((wy0 + wy1) / 2) * chh, cw, chh);
+  const vx0 = Math.max(caseArt.x, X), vy0 = Math.max(caseArt.y, top), vx1 = Math.min(caseArt.x + cw, X + W), vy1 = Math.min(caseArt.y + chh, gridTop + avail);
   const kase = r(vx0, vy0, vx1 - vx0, vy1 - vy0);
   const cells = ws.map(([a, b, c, d]) => r(caseArt.x + a * cw, caseArt.y + b * chh, (c - a) * cw, (d - b) * chh));
   const cell = cells[0].w, gap = cells[1].x - cells[0].x - cell;
   const grid = { x: cells[0].x, y: cells[0].y, cell, gap };
+  const gx1 = cells[4].x + cell, gy1 = cells[14].y + cell;
+  const omen = r(grid.x, grid.y - omenH - 1, gx1 - grid.x, omenH);
+  const lever = r(X + W - leverInset - leverW, grid.y, leverW, gy1 - grid.y);
+  const anchors = { goalBar: bar, lever, honk, omen, spirits, spin, 'spin.stoke': stoke, 'spin.bank': bank };
 
   return {
     screen: r(0, 0, w, h), column: col, scale: W / 390,
-    machine: kase, case: kase, caseArt, cells, grid, hud, bar, curses, stage, meter, speech, devil, charms, pockets,
+    machine: kase, case: kase, caseArt, cells, grid, hud, bar, curses, stage, meter, speech, spirits, devil, charms, pockets, honk, omen, lever, anchors,
     buttons: { spin, collect: spin, stoke, bank }, spin, stoke, bank,
   };
 }
 
 // Rects that must not overlap each other (cells live inside the case; bar inside the hud; collect shares the spin rect).
-export const EXCLUSIVE = ['hud', 'curses', 'meter', 'speech', 'devil', 'case', 'charms', 'pockets', 'stoke', 'spin', 'bank'];
+export const EXCLUSIVE = ['hud', 'curses', 'meter', 'speech', 'spirits', 'devil', 'case', 'charms', 'pockets', 'honk', 'stoke', 'spin', 'bank'];
+// Draw on the machine itself (inside or beside the case), so they may overlap `case` but never a cell, the buttons or each other.
+export const OVERLAYS = ['lever', 'omen'];

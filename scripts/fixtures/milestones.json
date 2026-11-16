@@ -1,0 +1,28 @@
+{
+ "milestones": [
+  {
+   "id": "run1",
+   "cond": {
+    "stat": "runs",
+    "gte": 1
+   },
+   "name": {
+    "en": "run1",
+    "tr": "run1",
+    "th": "run1"
+   }
+  },
+  {
+   "id": "debts10",
+   "cond": {
+    "stat": "debtsPaid",
+    "gte": 10
+   },
+   "name": {
+    "en": "debts10",
+    "tr": "debts10",
+    "th": "debts10"
+   }
+  }
+ ]
+}

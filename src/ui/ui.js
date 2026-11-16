@@ -12,9 +12,14 @@
 //   Meta         buyHideout(id) -> { ok, reason }   daily() -> start the daily run   dailyInfo() -> { charId, contractId, termsId, curseId }
 //   Reads        derive(run) -> overrides for the numbers the HUD prints (see model.js)
 //   Ads          adReady(placement) -> bool   watchAd(placement) -> Promise<bool>   (shop_reroll, double_wax)
+//   v3 run       payNow()  honk()  buyCart(i)  callPick(i)  callReroll()  hangUp({ looked })  lookRed(i)  offer(kind, size, target?)  acceptDemand()  himOrMe('drop'|'keep')
+//                blendPreview(a, b) -> { ok, cost, kind, outs }  blend(a, b, pickId)  storyDone()  replayTutorial()  luggage(slot, charmIndex)
+//   v3 meta      buyNode(id)  openLocker(id)  progressOf(item) -> { have, need, where, text? }  getMeta() -> meta
+//   Tutorial     tutEvent(name) is called by the UI on its own events (kioskOpen, dealOpen, tap...); main.js calls tutorial.event(name) for the rest. anchor(name) -> viewport rect of a view anchor
+//   Derived      derive(run) may also return kiosk, pace, beads, redEye, due, honkReady, payNow, spirits, blender (see model.js)
 //   Settings     settingsChanged(settings) { lang, sfx, music, haptics, fast, reduceMotion }; also called once at init
 //
-// showScreen(name, data): home | charselect | ladder | terms | shop | deal | pawn | paid | endless | runend | ending | shelf | howto | collection | daily | store | settings
+// showScreen(name, data): title | home | map | notebook | lockers | collection (the Codex) | charselect | terms | shop | phone | himorme | deal | pawn | paid | endless | runend | ending | shelf | howto | daily | store | settings
 //   data.run is the live core run, data.meta the save meta. A screen opened with ctx.open() returns to the screen under it on close.
 //   terms { run, offers }  shop { run, offers }  deal { run, offers: deal[] }  pawn { run }  paid { run, outcome: 'paid'|'saved', info }  endless { run, next }
 //   runend { run, summary, result: { wax, newAchievements, unlocks }, won, ending }  ending { ending }  shelf { run, tab }
@@ -26,7 +31,14 @@ import { mountHud, goalStrip } from './hud.js';
 import { detailSheet } from './cards.js';
 import * as home from './home.js';
 import * as charselect from './charselect.js';
-import * as ladder from './ladder.js';
+import * as map from './map.js';
+import * as notebook from './notebook.js';
+import * as lockers from './lockers.js';
+import * as codex from './codex.js';
+import * as phone from './phone.js';
+import * as himorme from './himorme.js';
+import * as title from './title.js';
+import { mountCoach } from './coach.js';
 import * as terms from './terms.js';
 import * as shop from './shop.js';
 import * as deal from './deal.js';
@@ -37,16 +49,15 @@ import * as runend from './runend.js';
 import * as ending from './ending.js';
 import * as shelf from './shelf.js';
 import * as howto from './howto.js';
-import * as collection from './collection.js';
 import * as daily from './daily.js';
 import * as store from './store.js';
 import * as settingsScreen from './settings.js';
 
-const SCREENS = { home, charselect, ladder, terms, shop, deal, pawn, paid, endless, runend, ending, shelf, howto, collection, daily, store, settings: settingsScreen };
-const IN_RUN = new Set(['terms', 'shop', 'deal', 'pawn', 'paid', 'shelf']); // these get the goal strip on top: the goal is on screen everywhere
-export const settings = { lang: null, sfx: 1, music: 1, haptics: true, fast: false, reduceMotion: false };
+const SCREENS = { title, home, map, notebook, lockers, collection: codex, charselect, terms, shop, phone, himorme, deal, pawn, paid, endless, runend, ending, shelf, howto, daily, store, settings: settingsScreen };
+const IN_RUN = new Set(['terms', 'shop', 'phone', 'himorme', 'deal', 'pawn', 'paid', 'shelf']); // these get the goal strip on top: the goal is on screen everywhere
+export const settings = { lang: null, sfx: 1, music: 1, haptics: true, fast: false, reduceMotion: false, leverOnly: false };
 
-let handlers = {}, col, layer, toasts, sheetEl, hud, cur = null, lastRun = null;
+let handlers = {}, col, layer, toasts, sheetEl, hud, cur = null, lastRun = null, coach = null;
 
 function applySettings() {
   setLang(settings.lang || detectLang());
@@ -67,7 +78,7 @@ const derive = (run) => handlers.derive?.(run) ?? {};
 function call(name, ...args) {
   const r = handlers[name]?.(...args);
   const done = (res) => {
-    if (res && res.ok === false) toast('why.' + (res.reason ?? 'unknown'));
+    if (res && res.ok === false) toast(t('why.' + res.reason) === 'why.' + res.reason ? 'why.unknown' : 'why.' + res.reason); // a reason with no text says the generic one
     if (lastRun) hud.update(lastRun);
     if (cur) mountScreen();
     return res;
@@ -86,11 +97,28 @@ export function initUi(h0 = {}, saved = {}) {
   toasts = h('div', { class: 'toasts', 'aria-live': 'polite' });
   host.append(col);
   speech = mountSpeech(col);
-  hud = mountHud(col, { call, say, toast, derive, sheet: openSheet, closeSheet, show: (n, d) => showScreen(n, d) });
+  hud = mountHud(col, { call, say, toast, derive, sheet: openSheet, closeSheet, show: (n, d) => showScreen(n, d), settings: () => settings, event: (n) => handlers.tutEvent?.(n) });
   col.append(layer, sheetEl, toasts);
+  coach = mountCoach(col, { anchor: anchorRect, vars: () => handlers.tutVars?.() ?? {}, onStep: (s, i) => handlers.tutStep?.(s, i), onDone: () => handlers.tutDone?.() });
   applySettings();
 }
 let speech;
+
+// The rect (px inside the column) of a named anchor: a DOM element with data-anchor first, else the view's anchor (viewport px, from handlers.anchor).
+function anchorRect(name) {
+  const base = col.getBoundingClientRect();
+  const el = [...col.querySelectorAll('[data-anchor]')].find((e) => e.dataset.anchor === name && e.offsetParent !== null);
+  if (el) {
+    let r = el.getBoundingClientRect();
+    // A target below the fold of a scrolling panel (the stall's tip and charm cards) is brought into view: the scrim blocks swipes (AUDIT2 4).
+    if (r.bottom > base.bottom || r.top < base.top) { el.scrollIntoView({ block: 'center' }); r = el.getBoundingClientRect(); }
+    return { x: r.left - base.left, y: r.top - base.top, w: r.width, h: r.height };
+  }
+  const v = handlers.anchor?.(name);
+  return v ? { x: v.x - base.left, y: v.y - base.top, w: v.w, h: v.h } : null;
+}
+// The tutorial overlay: tutorial.start(steps?, index?) / event(name) / stop(). The glue feeds it the run's events; the UI feeds it taps and sheet opens.
+export const tutorial = { start: (steps, i) => steps && coach?.start(steps, i), event: (n) => coach?.event(n), stop: () => coach?.stop(), idleHint: (w) => coach?.idleHint(w), get active() { return !!coach?.active; }, get step() { return coach?.step ?? null; }, get index() { return coach?.index ?? 0; } };
 
 export function updateHud(run) { lastRun = run; hud.update(run); if (cur?.data) cur.data.run = run ?? cur.data.run; }
 export const setBusy = (b) => hud.setBusy(b);
@@ -109,7 +137,7 @@ export function closeSheet() { sheetEl.hidden = true; clear(sheetEl); }
 // ---- screens ----
 function mountScreen() {
   const keep = layer.querySelector('.panel')?.scrollTop ?? 0;
-  const me = cur, { name, data, state } = cur;
+  const me = cur, { name, data, state } = cur, still = !!me.mounted;
   const panel = h('section', { class: `panel ${name}`, role: 'dialog', 'aria-modal': 'true', 'data-still': me.mounted }); // a repaint of the same screen does not slide in again
   me.mounted = true;
   const foot = h('footer', { class: 'foot' }), over = [];
@@ -131,7 +159,7 @@ function mountScreen() {
   stay();
   layer.replaceChildren(panel, foot, ...over);
   layer.hidden = false;
-  panel.scrollTop = keep;
+  panel.scrollTop = still ? keep : 0; // a new screen opens at its top (AUDIT2: Home came back scrolled after the map)
   // Scroll cue: a small tab on the footer line while there is more page below.
   const cue = () => foot.classList.toggle('more', panel.scrollHeight - panel.scrollTop - panel.clientHeight > 12);
   panel.addEventListener('scroll', cue, { passive: true });
@@ -144,8 +172,10 @@ export function showScreen(name, data = {}, back = null) {
   if (!SCREENS[name]) throw new Error('unknown screen ' + name);
   hush(); closeSheet(); // a bubble or sheet from the screen before never stays on the new one
   if (data.run) lastRun = data.run;
+  data.meta ??= handlers.getMeta?.();
   cur = { name, data, state: {}, back };
   mountScreen();
+  handlers.screenShown?.(name, data);
 }
 
 // Close button: back to the screen this one was opened from (ctx.open), or no screen at all.

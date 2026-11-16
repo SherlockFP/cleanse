@@ -1,41 +1,36 @@
-// Home: title, Brimble's line, the hideout (ghost-train carriage, 10 pieces bought with Wax), Play, and the other doors.
-// data: { meta }. Handlers: startRun({ charId, contractId, tutorial }), buyHideout(id) -> { ok, reason }.
-import { t, L, LANGS, fmt } from '../i18n.js';
+// Home: wealth rank, Stash, keys, the Lessons strip, the completion ring and every door (Play, Map, Notebook, Lockers, Codex, How to play, Daily, Store, Settings).
+// data: { meta }. Handlers: startRun({ charId, contractId, postcards, storm, tutorial }). PLAY repeats the last place and picks; with none yet it opens the map.
+import { t, L, LANGS } from '../i18n.js';
 import { h, btn, put, art } from './dom.js';
-import { HIDEOUT } from './content.js';
+import { LESSONS } from './content.js';
 import { chip } from './cards.js';
+import { rankOf } from './map.js';
+import { completion } from './codex.js';
 
-// Play: the very first run starts at once (no menu before the first spin); later runs pick a character and a contract only when there is a choice.
+// First launch: the story panels, then the guided run (no menu before the first spin). Later: the last setup, or the map.
 export function play(meta, ctx) {
-  if (!meta.tutorialDone) return ctx.call('startRun', { tutorial: true, charId: 'nim', contractId: 'c1' });
-  if ((meta.chars?.length ?? 1) > 1) return ctx.open('charselect', {});
-  if ((meta.contracts?.length ?? 1) > 1) return ctx.open('ladder', { charId: meta.chars?.[0] ?? 'nim' });
-  return ctx.call('startRun', { charId: meta.chars?.[0] ?? 'nim', contractId: meta.contracts?.[0] ?? 'c1' });
+  if (!meta.tutorialDone) return ctx.open('title', {});
+  if (meta.last) return ctx.call('startRun', meta.last);
+  return ctx.open('map', {});
 }
 
 export function render(el, { meta }, ctx) {
-  const owned = new Set(meta.hideout ?? ['cot']), wax = meta.wax | 0;
+  const rank = rankOf(meta), stash = meta.stash ?? meta.wax ?? 0, keys = meta.keys ?? {}, done = new Set(meta.lessons ?? []), c = completion(meta);
+  const next = LESSONS.filter((l) => !done.has(l.id)).slice(0, 3);
   if (!ctx.state.said) { ctx.state.said = true; ctx.say('brimble', 'home'); }
-  const tile = (p) => {
-    const have = owned.has(p.id), can = !have && wax >= p.costWax;
-    const buy = () => {
-      const r = ctx.call('buyHideout', p.id);
-      if (r?.ok) { ctx.toast('ui.bought', { name: L(p.name) }); ctx.closeSheet(); }
-    };
-    return h('button', { type: 'button', class: 'piece' + (have ? ' own' : can ? ' can' : ''),
-      onclick: () => ctx.sheet({ kind: 'hideout', id: p.id, note: have ? t('ui.owned') : t('ui.waxMore', { n: Math.max(0, p.costWax - wax) }),
-        actions: have ? [] : [{ label: `${t('ui.buy')} ${fmt(p.costWax)}`, cls: can ? 'primary' : 'dim', onclick: buy }] }) },
-    art(p.icon, 'ico lg'), h('span', { class: 'pname' }, L(p.name)), h('span', { class: 'pcost' }, have ? t('ui.owned') : h('b', {}, art('ui/wax', 'ico xs'), fmt(p.costWax))));
-  };
+  const door = (key, screen) => btn(t(key), () => ctx.open(screen, {}));
   put(el,
     h('div', { class: 'home-head' }, h('h1', {}, t('ui.title')), h('p', { class: 'sub' }, t('ui.tagline'))),
-    h('section', {}, h('div', { class: 'row-between' }, h('h3', {}, t('ui.hideout')), chip('ui/wax', t('ui.waxHave', { n: wax }))),
-      h('p', { class: 'note' }, t('ui.hideoutSub')),
-      h('div', { class: 'pieces' }, [...HIDEOUT].sort((a, b) => a.order - b.order).map(tile))),
+    h('div', { class: 'row-between rankrow' },
+      h('div', {}, h('span', { class: 'lc-label' }, t('ui.rankLabel')), h('b', { class: 'rank' }, t('ui.rank.' + rank))),
+      h('span', { class: 'ring', style: `--p:${c.pct}`, 'aria-label': t('ui.completion', { n: c.pct }) }, h('b', {}, c.pct + '%'))),
+    h('div', { class: 'chips' }, chip('ui/wax', t('ui.waxHave', { n: stash })), ['brass', 'silver', 'red'].map((k) => (keys[k] | 0) > 0 && h('span', { class: 'chip key-' + k }, art('ui/key_' + k, 'ico xs'), h('b', {}, `${t('ui.key.' + k)} ${keys[k]}`)))),
     !meta.tutorialDone && h('p', { class: 'note tutorial' }, t('ui.firstRunHint')),
+    LESSONS.length > 0 && h('section', { 'data-anchor': 'lessons', class: 'lessons' }, h('div', { class: 'row-between' }, h('h3', {}, t('ui.lessonsTitle')), h('span', { class: 'note' }, t('ui.lessonsDone', { a: done.size, b: LESSONS.length }))),
+      next.length ? h('ul', { class: 'ticket' }, next.map((l) => h('li', {}, h('span', {}, h('b', {}, L(l.name)), ' ', L(l.text)), h('b', {}, l.reward?.stash ? '+' + l.reward.stash : '')))) : h('p', { class: 'note' }, t('ui.lessonsAll'))),
     h('div', { class: 'doors' },
-      btn(t('ui.daily'), () => ctx.open('daily', {})), btn(t('ui.collection'), () => ctx.open('collection', {})),
-      btn(t('ui.howto'), () => ctx.open('howto', {})), btn(t('ui.store'), () => ctx.open('store', {})), btn(t('ui.settings'), () => ctx.open('settings', {}))),
+      door('ui.map', 'map'), door('ui.notebook', 'notebook'), door('ui.lockers', 'lockers'), door('ui.collection', 'collection'),
+      btn(t('ui.daily'), () => ctx.open('daily', {})), btn(t('ui.howto'), () => ctx.open('howto', {})), btn(t('ui.store'), () => ctx.open('store', {})), btn(t('ui.settings'), () => ctx.open('settings', {}))),
     h('div', { class: 'seg', role: 'radiogroup', 'aria-label': t('ui.language') }, LANGS.map((l) =>
       h('button', { type: 'button', class: 'opt' + (ctx.lang() === l ? ' on' : ''), role: 'radio', 'aria-checked': String(ctx.lang() === l), onclick: () => ctx.setSettings({ lang: l }) }, t('ui.lang' + l[0].toUpperCase() + l[1])))),
     ctx.foot(btn(t('ui.play'), () => play(meta, ctx), 'primary big')));

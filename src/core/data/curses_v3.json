@@ -1,0 +1,166 @@
+{
+ "curses": [
+  {
+   "id": "haggler",
+   "name": {
+    "en": "Pinched Prices",
+    "tr": "Kıstırılan Fiyatlar",
+    "th": "ราคาถูกบีบ"
+   },
+   "icon": "curse/haggler",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "rerollDouble",
+       "v": true
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: rerolls cost double and you cannot lock.",
+    "tr": "Her zaman: yenileme iki kat tutar, kilitleyemezsin.",
+    "th": "ตลอดเวลา: สุ่มร้านใหม่แพงสองเท่าและล็อกไม่ได้"
+   }
+  },
+  {
+   "id": "short_circuit",
+   "name": {
+    "en": "Short Circuit",
+    "tr": "Kısa Devre",
+    "th": "ไฟช็อต"
+   },
+   "icon": "curse/short_circuit",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "trickPockets",
+       "v": -1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: −1 trick pocket.",
+    "tr": "Her zaman: −1 numara cebi.",
+    "th": "ตลอดเวลา: −1 ช่องกลเม็ด"
+   }
+  },
+  {
+   "id": "heavy_hands",
+   "name": {
+    "en": "Heavy Luggage",
+    "tr": "Ağır Bavul",
+    "th": "กระเป๋าหนัก"
+   },
+   "icon": "curse/heavy_hands",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "noRelic",
+       "v": true
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: no Left Luggage relic.",
+    "tr": "Her zaman: Emanet Dolabı eşyası gelmez.",
+    "th": "ตลอดเวลา: ไม่ได้ของจากตู้ฝากของ"
+   }
+  },
+  {
+   "id": "slow_water",
+   "name": {
+    "en": "Slow Water",
+    "tr": "Yavaş Su",
+    "th": "น้ำไหลช้า"
+   },
+   "icon": "curse/slow_water",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "spinsLess",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: −1 spin on every terms card.",
+    "tr": "Her zaman: her şart kartında −1 çeviriş.",
+    "th": "ตลอดเวลา: การ์ดเงื่อนไขทุกใบ −1 ตา"
+   }
+  },
+  {
+   "id": "hollow_centre",
+   "name": {
+    "en": "Hollow Centre",
+    "tr": "Boş Merkez",
+    "th": "ช่องกลางโหว่"
+   },
+   "icon": "curse/hollow_centre",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "deadCentre",
+       "v": true
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: the centre cell is always Soot.",
+    "tr": "Her zaman: orta hücre hep İs olur.",
+    "th": "ตลอดเวลา: ช่องกลางเป็นเขม่าเสมอ"
+   }
+  },
+  {
+   "id": "dark_wick",
+   "name": {
+    "en": "Dim Bulb",
+    "tr": "Sönük Ampul",
+    "th": "หลอดไฟสลัว"
+   },
+   "icon": "curse/dark_wick",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "heatMax",
+       "v": 8
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: Spice tops out at 8.",
+    "tr": "Her zaman: Acı en çok 8 olur.",
+    "th": "ตลอดเวลา: เผ็ดสูงสุดแค่ 8"
+   }
+  }
+ ]
+}

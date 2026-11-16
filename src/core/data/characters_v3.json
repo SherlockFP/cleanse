@@ -1,0 +1,229 @@
+{
+ "characters": [
+  {
+   "id": "yai",
+   "name": {
+    "en": "Grandma Yai",
+    "tr": "Yai Nine",
+    "th": "ยายใย"
+   },
+   "icon": "char/yai",
+   "unlock": "ach:crew_yai",
+   "start": {
+    "wick": 3,
+    "tricks": [],
+    "charms": [],
+    "curses": 0,
+    "slots": 5
+   },
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 2
+      },
+      {
+       "type": "flag",
+       "flag": "interestCapX",
+       "v": 1.5
+      }
+     ]
+    },
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 3,
+       "spirit": "tide"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "The noodle seller who counts slowly and never loses. Always: interest +2%, interest cap ×1.5. Run start: Favour +3 with Grandmother Tide.",
+    "tr": "Yavaş sayan ve asla kaybetmeyen makarnacı. Her zaman: faiz +2 puan, faiz tavanı ×1.5. Oyun başında: Gelgit Nine ile Hatır +3.",
+    "th": "แม่ค้าก๋วยเตี๋ยวที่นับช้าๆ แต่ไม่เคยขาดทุน ตลอดเวลา: ดอกเบี้ย +2%, เพดานดอกเบี้ย ×1.5 เริ่มเกม: น้ำใจกับยายน้ำขึ้น +3"
+   },
+   "tie": {
+    "spirit": "tide",
+    "favour": 3
+   }
+  },
+  {
+   "id": "beng",
+   "name": {
+    "en": "Beng",
+    "tr": "Beng",
+    "th": "เบ็ง"
+   },
+   "icon": "char/beng",
+   "unlock": "ach:crew_beng",
+   "start": {
+    "wick": 3,
+    "tricks": [],
+    "charms": [],
+    "curses": 0,
+    "slots": 5
+   },
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "trickPockets",
+       "v": 1
+      }
+     ]
+    },
+    {
+     "trigger": "onDebtStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "trick",
+       "n": 1,
+       "id": "nudge"
+      }
+     ]
+    },
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 3,
+       "spirit": "wire"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "The moped-taxi boy who knows every shortcut. Always: +1 trick pocket. New debt: gain a Nudge. Run start: Favour +3 with Uncle Wire.",
+    "tr": "Her kestirmeyi bilen moped taksi çocuğu. Her zaman: +1 numara cebi. Yeni borçta: Dürtme kazan. Oyun başında: Tel Amca ile Hatır +3.",
+    "th": "เด็กวินมอไซค์ที่รู้ทุกทางลัด ตลอดเวลา: +1 ช่องกลเม็ด เริ่มหนี้ใหม่: ได้สะกิด เริ่มเกม: น้ำใจกับลุงสายไฟ +3"
+   },
+   "tie": {
+    "spirit": "wire",
+    "favour": 3
+   }
+  },
+  {
+   "id": "pla",
+   "name": {
+    "en": "Pla",
+    "tr": "Pla",
+    "th": "ปลา"
+   },
+   "icon": "char/pla",
+   "unlock": "ach:crew_pla",
+   "start": {
+    "wick": 3,
+    "tricks": [],
+    "charms": [],
+    "curses": 0,
+    "slots": 5
+   },
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "startHeat",
+       "v": 2
+      }
+     ]
+    },
+    {
+     "trigger": "onScorch",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 3,
+       "spirit": "lamplit"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "The young boxer who likes it hot. Always: each round starts at Spice 2. On a Flare-up: +1 Caps. Run start: Favour +3 with Lady Lamplit.",
+    "tr": "Sıcağı seven genç boksör. Her zaman: her el Acı 2 ile başlar. Parlamada: +1 Kapak. Oyun başında: Lamba Hanım ile Hatır +3.",
+    "th": "นักมวยสาวที่ชอบอะไรร้อนๆ ตลอดเวลา: ทุกรอบเริ่มที่เผ็ด 2 เมื่อไฟลุก: +1 ฝาขวด เริ่มเกม: น้ำใจกับเจ๊หลอดไฟ +3"
+   },
+   "tie": {
+    "spirit": "lamplit",
+    "favour": 3
+   }
+  },
+  {
+   "id": "mali",
+   "name": {
+    "en": "Mali",
+    "tr": "Mali",
+    "th": "มะลิ"
+   },
+   "icon": "char/mali",
+   "unlock": "ach:crew_mali",
+   "start": {
+    "wick": 3,
+    "tricks": [],
+    "charms": [],
+    "curses": 0,
+    "slots": 5
+   },
+   "rules": [
+    {
+     "trigger": "onDebtStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "trick",
+       "n": 1,
+       "id": "spare_candle"
+      }
+     ]
+    },
+    {
+     "trigger": "onRunStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "favour",
+       "n": 3,
+       "spirit": "waiting"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "The night-bus conductor who always keeps a spare. New debt: gain a Late Pass. Run start: Favour +3 with Mr. Lost-and-Found.",
+    "tr": "Her zaman yedek tutan gece otobüsü biletçisi. Yeni borçta: Mühlet kazan. Oyun başında: Kayıp Eşya Bey ile Hatır +3.",
+    "th": "กระเป๋ารถเมล์กลางคืนที่มีของสำรองเสมอ เริ่มหนี้ใหม่: ได้ขอผ่อนผัน เริ่มเกม: น้ำใจกับพี่ของหาย +3"
+   },
+   "tie": {
+    "spirit": "waiting",
+    "favour": 3
+   }
+  }
+ ]
+}

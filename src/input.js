@@ -6,6 +6,7 @@ const el = (tag, cls) => Object.assign(document.createElement(tag), { className:
 
 export function initInput({ canvas, host, cellAt, onCell, onInspect, onPrimary, onFirstTouch }) {
   const coach = el('p', 'coach'), score = el('div', 'score-line');
+  score.dataset.anchor = 'scoreLine'; // tutorial step 7 points at it
   coach.setAttribute('role', 'status');
   host.append(score, coach);
   window.addEventListener('pointerdown', () => onFirstTouch?.(), { capture: true, passive: true });

@@ -20,10 +20,12 @@ const hash = (s) => { let h = 7; for (let i = 0; i < s.length; i++) h = Math.imu
 const fileOf = (id) => `${ART_BASE}${id}.${id.startsWith('bg/') ? 'jpg' : 'png'}`;
 // Size of a placeholder when the manifest does not know the id yet (by prefix, so a swap-in changes little).
 const DEFAULT_SIZE = { devil: [256, 384], char: [256, 256], bg: [512, 1024], ui: [192, 192], machine: DEFAULT_CASE.size };
+// v3 machine pieces are not case-shaped: their placeholders get their own proportions.
+const ID_SIZE = { 'machine/lever': [128, 384], 'machine/blender': [384, 384], 'machine/kiosk': [256, 384], 'machine/phone': [256, 256], 'machine/awning_1': [512, 128], 'machine/awning_2': [256, 160], 'machine/awning_3': [256, 160], 'bg/map': [512, 1024] };
 function sizeOf(id) {
   if (REAL.has(id)) { const i = REAL.get(id); return [i.naturalWidth || i.width, i.naturalHeight || i.height]; }
   if (manifest[id]) return manifest[id];
-  return DEFAULT_SIZE[id.split('/')[0]] ?? [192, 192];
+  return ID_SIZE[id] ?? DEFAULT_SIZE[id.split('/')[0]] ?? [192, 192];
 }
 
 // ---------- placeholder ----------
@@ -61,7 +63,7 @@ function drawPlaceholder(c, w, h, id) {
     c.fillStyle = PAL.bone; c.fillRect(e, e, w - 2 * e, h - 2 * e); c.fillStyle = fill; c.fillRect(e * 2, e * 2, w - 4 * e, h - 4 * e);
   } else blob(c, w / 2, h / 2, w * 0.4, h * 0.4, seed, fill, e);
   c.fillStyle = PAL.plum; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `bold ${Math.round(w * 0.16)}px sans-serif`;
-  c.fillText(name.slice(0, 7), w / 2, h / 2, w * 0.8);
+  if (import.meta.env?.DEV) c.fillText(name.slice(0, 7), w / 2, h / 2, w * 0.8); // the id only in dev: a build never shows a raw id
 }
 
 // ---------- textures ----------

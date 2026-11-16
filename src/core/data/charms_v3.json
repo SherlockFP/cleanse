@@ -1,0 +1,2199 @@
+{
+ "charms": [
+  {
+   "id": "bike_horn",
+   "name": {
+    "en": "Bike Horn",
+    "tr": "Bisiklet Kornası",
+    "th": "แตรจักรยาน"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/bike_horn",
+   "price": {
+    "coins": 6
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 3,
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "text": {
+    "en": "When you HONK: +3 Luck this spin. Needs 1 charge.",
+    "tr": "KORNA çalınca: +3 Şans (bu çeviriş). 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: โชค +3 ในตานี้ ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "ice_bucket",
+   "name": {
+    "en": "Ice Bucket",
+    "tr": "Buz Kovası",
+    "th": "ถังน้ำแข็ง"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/ice_bucket",
+   "price": {
+    "coins": 6
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "heat",
+       "n": -3
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "text": {
+    "en": "When you HONK: −3 Spice. Needs 1 charge.",
+    "tr": "KORNA çalınca: −3 Acı. 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: เผ็ด −3 ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "sweeper",
+   "name": {
+    "en": "Street Sweeper",
+    "tr": "Sokak Süpürücü",
+    "th": "คนกวาดถนน"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/sweeper",
+   "price": {
+    "coins": 6
+   },
+   "unlock": "pool:common",
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "weight",
+       "n": 0,
+       "sym": "ash",
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "unlockText": {
+    "en": "Opens with the Street Cabinet in the Notebook (Pool tab).",
+    "tr": "Defterin Havuz sekmesindeki Sokak Dolabı ile açılır.",
+    "th": "ปลดล็อกด้วยตู้ของริมถนนในสมุดโน้ต (แท็บคลัง)"
+   },
+   "text": {
+    "en": "When you HONK: Soot never lands this spin. Needs 1 charge.",
+    "tr": "KORNA çalınca: İs hiç gelmez (bu çeviriş). 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: เขม่าไม่ออกเลย ในตานี้ ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "price_gun",
+   "name": {
+    "en": "Price Gun",
+    "tr": "Etiket Tabancası",
+    "th": "ปืนติดป้ายราคา"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/price_gun",
+   "price": {
+    "coins": 6
+   },
+   "unlock": "pool:common",
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "coins",
+       "n": 10
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "unlockText": {
+    "en": "Opens with the Street Cabinet in the Notebook (Pool tab).",
+    "tr": "Defterin Havuz sekmesindeki Sokak Dolabı ile açılır.",
+    "th": "ปลดล็อกด้วยตู้ของริมถนนในสมุดโน้ต (แท็บคลัง)"
+   },
+   "text": {
+    "en": "When you HONK: +{c:10} coins. Needs 1 charge.",
+    "tr": "KORNA çalınca: +{c:10} para. 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: +{c:10} เหรียญ ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "wok_toss",
+   "name": {
+    "en": "Wok Toss",
+    "tr": "Wok Savurma",
+    "th": "เหวี่ยงกระทะ"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "active"
+   ],
+   "rarity": "common",
+   "icon": "charm/wok_toss",
+   "price": {
+    "coins": 6
+   },
+   "unlock": "pool:common",
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "heat",
+       "n": 3
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "unlockText": {
+    "en": "Opens with the Street Cabinet in the Notebook (Pool tab).",
+    "tr": "Defterin Havuz sekmesindeki Sokak Dolabı ile açılır.",
+    "th": "ปลดล็อกด้วยตู้ของริมถนนในสมุดโน้ต (แท็บคลัง)"
+   },
+   "text": {
+    "en": "When you HONK: +3 Spice. Needs 1 charge.",
+    "tr": "KORNA çalınca: +3 Acı. 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: เผ็ด +3 ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "fish_sauce",
+   "name": {
+    "en": "Fish Sauce",
+    "tr": "Balık Sosu",
+    "th": "น้ำปลา"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/fish_sauce",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 2,
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "text": {
+    "en": "When you HONK: spin total ×2. Needs 1 charge.",
+    "tr": "KORNA çalınca: çeviriş toplamı ×2. 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: ยอดรวมตานี้ ×2 ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "calculator",
+   "name": {
+    "en": "Pocket Calculator",
+    "tr": "Cep Hesap Makinesi",
+    "th": "เครื่องคิดเลขพกพา"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/calculator",
+   "price": {
+    "coins": 10
+   },
+   "unlock": "pool:uncommon",
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 3,
+       "scope": "round"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "unlockText": {
+    "en": "Opens with the Night Cabinet in the Notebook (Pool tab).",
+    "tr": "Defterin Havuz sekmesindeki Gece Dolabı ile açılır.",
+    "th": "ปลดล็อกด้วยตู้ยามค่ำในสมุดโน้ต (แท็บคลัง)"
+   },
+   "text": {
+    "en": "When you HONK: interest +3% this round. Needs 1 charge.",
+    "tr": "KORNA çalınca: faiz +3 puan (bu el). 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: ดอกเบี้ย +3% ในรอบนี้ ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "coin_flip",
+   "name": {
+    "en": "Coin Flip",
+    "tr": "Yazı Tura",
+    "th": "โยนเหรียญ"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/coin_flip",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {
+      "chance": 50
+     },
+     "effects": [
+      {
+       "type": "coins",
+       "n": 20
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "text": {
+    "en": "When you HONK, 50% chance: +{c:20} coins. Needs 1 charge.",
+    "tr": "KORNA çalınca, %50 ihtimalle: +{c:20} para. 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร โอกาส 50%: +{c:20} เหรียญ ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "megaphone",
+   "name": {
+    "en": "Megaphone",
+    "tr": "Megafon",
+    "th": "โทรโข่ง"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/megaphone",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "place",
+       "n": 3,
+       "sym": "favoured"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "text": {
+    "en": "When you HONK: turn 3 cells into the Special. Needs 1 charge.",
+    "tr": "KORNA çalınca: 3 hücreyi Gözde yap. 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: เปลี่ยน 3 ช่องเป็นเมนูเด็ด ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "rubber_band",
+   "name": {
+    "en": "Rubber Band",
+    "tr": "Lastik Bant",
+    "th": "หนังยาง"
+   },
+   "family": "stitch",
+   "tags": [
+    "stitch",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/rubber_band",
+   "price": {
+    "coins": 10
+   },
+   "unlock": "pool:uncommon",
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "trick",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "unlockText": {
+    "en": "Opens with the Night Cabinet in the Notebook (Pool tab).",
+    "tr": "Defterin Havuz sekmesindeki Gece Dolabı ile açılır.",
+    "th": "ปลดล็อกด้วยตู้ยามค่ำในสมุดโน้ต (แท็บคลัง)"
+   },
+   "text": {
+    "en": "When you HONK: gain 1 random trick. Needs 1 charge.",
+    "tr": "KORNA çalınca: 1 rastgele numara kazan. 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: ได้กลเม็ดสุ่ม 1 ชิ้น ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "taxi_meter",
+   "name": {
+    "en": "Taxi Meter",
+    "tr": "Taksimetre",
+    "th": "มิเตอร์แท็กซี่"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "active"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/taxi_meter",
+   "price": {
+    "coins": 10
+   },
+   "unlock": "pool:uncommon",
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 1
+   },
+   "unlockText": {
+    "en": "Opens with the Night Cabinet in the Notebook (Pool tab).",
+    "tr": "Defterin Havuz sekmesindeki Gece Dolabı ile açılır.",
+    "th": "ปลดล็อกด้วยตู้ยามค่ำในสมุดโน้ต (แท็บคลัง)"
+   },
+   "text": {
+    "en": "When you HONK: +2 Caps. Needs 1 charge.",
+    "tr": "KORNA çalınca: +2 Kapak. 1 şarj gerekir.",
+    "th": "เมื่อบีบแตร: +2 ฝาขวด ต้องชาร์จ 1"
+   }
+  },
+  {
+   "id": "spare_tyre",
+   "name": {
+    "en": "Spare Tyre",
+    "tr": "Yedek Lastik",
+    "th": "ยางอะไหล่"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "active"
+   ],
+   "rarity": "rare",
+   "icon": "charm/spare_tyre",
+   "price": {
+    "wick": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "spins",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 2
+   },
+   "text": {
+    "en": "When you HONK: +2 spin. Needs 2 charges.",
+    "tr": "KORNA çalınca: +2 çeviriş. 2 şarj gerekir.",
+    "th": "เมื่อบีบแตร: +2 ตา ต้องชาร์จ 2"
+   }
+  },
+  {
+   "id": "neon_open",
+   "name": {
+    "en": "Neon Open Sign",
+    "tr": "Neon Açık Tabelası",
+    "th": "ป้ายนีออนเปิดร้าน"
+   },
+   "family": "pact",
+   "tags": [
+    "pact",
+    "active"
+   ],
+   "rarity": "rare",
+   "icon": "charm/neon_open",
+   "price": {
+    "wick": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 2,
+       "pattern": "all",
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 2
+   },
+   "text": {
+    "en": "When you HONK: all patterns mult +2 this spin. Needs 2 charges.",
+    "tr": "KORNA çalınca: tüm desenler çarpanı +2 (bu çeviriş). 2 şarj gerekir.",
+    "th": "เมื่อบีบแตร: ตัวคูณทุกลาย +2 ในตานี้ ต้องชาร์จ 2"
+   }
+  },
+  {
+   "id": "double_shift",
+   "name": {
+    "en": "Double Shift",
+    "tr": "Çift Vardiya",
+    "th": "ควบสองกะ"
+   },
+   "family": "pact",
+   "tags": [
+    "pact",
+    "active"
+   ],
+   "rarity": "rare",
+   "icon": "charm/double_shift",
+   "price": {
+    "wick": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 3,
+       "scope": "spin"
+      },
+      {
+       "type": "heat",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 2
+   },
+   "text": {
+    "en": "When you HONK: spin total ×3, +2 Spice. Needs 2 charges.",
+    "tr": "KORNA çalınca: çeviriş toplamı ×3, +2 Acı. 2 şarj gerekir.",
+    "th": "เมื่อบีบแตร: ยอดรวมตานี้ ×3, เผ็ด +2 ต้องชาร์จ 2"
+   }
+  },
+  {
+   "id": "gold_spray",
+   "name": {
+    "en": "Gold Spray Can",
+    "tr": "Altın Sprey",
+    "th": "สีสเปรย์ทอง"
+   },
+   "family": "crown",
+   "tags": [
+    "crown",
+    "active"
+   ],
+   "rarity": "rare",
+   "icon": "charm/gold_spray",
+   "price": {
+    "wick": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 4,
+       "sym": "high",
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 2
+   },
+   "text": {
+    "en": "When you HONK: high symbols value +4 this spin. Needs 2 charges.",
+    "tr": "KORNA çalınca: yüksek semboller değeri +4 (bu çeviriş). 2 şarj gerekir.",
+    "th": "เมื่อบีบแตร: ค่าสัญลักษณ์สูง +4 ในตานี้ ต้องชาร์จ 2"
+   }
+  },
+  {
+   "id": "bike_jump",
+   "name": {
+    "en": "Motorbike Jump",
+    "tr": "Motosiklet Atlayışı",
+    "th": "มอไซค์กระโดด"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "active"
+   ],
+   "rarity": "legendary",
+   "icon": "charm/bike_jump",
+   "price": {
+    "wick": 9
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onActivate",
+     "cond": {},
+     "effects": [
+      {
+       "type": "spins",
+       "n": 1
+      },
+      {
+       "type": "luck",
+       "n": 2,
+       "scope": "spin"
+      },
+      {
+       "type": "patMult",
+       "n": 2,
+       "pattern": "big",
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "active": {
+    "need": 2
+   },
+   "text": {
+    "en": "When you HONK: +1 spin, +2 Luck this spin, 5+ cell patterns mult +2 this spin. Needs 2 charges.",
+    "tr": "KORNA çalınca: +1 çeviriş, +2 Şans (bu çeviriş), 5+ hücreli desenler çarpanı +2 (bu çeviriş). 2 şarj gerekir.",
+    "th": "เมื่อบีบแตร: +1 ตา, โชค +2 ในตานี้, ตัวคูณลาย 5 ช่องขึ้นไป +2 ในตานี้ ต้องชาร์จ 2"
+   }
+  },
+  {
+   "id": "eye_drops",
+   "name": {
+    "en": "Eye Drops",
+    "tr": "Göz Damlası",
+    "th": "ยาหยอดตา"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "common",
+   "icon": "charm/eye_drops",
+   "price": {
+    "coins": 6
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeSoft",
+       "v": 1
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: Red Eye punishment is 1 level lighter.",
+    "tr": "Her zaman: Kırmızı Göz cezası 1 kademe hafifler.",
+    "th": "ตลอดเวลา: โทษดวงตาแดงเบาลง 1 ระดับ"
+   }
+  },
+  {
+   "id": "taillight",
+   "name": {
+    "en": "Taillight",
+    "tr": "Stop Lambası",
+    "th": "ไฟท้าย"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "common",
+   "icon": "charm/taillight",
+   "price": {
+    "coins": 6
+   },
+   "unlock": "pool:common",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1,
+       "per": "redEyes"
+      }
+     ]
+    }
+   ],
+   "unlockText": {
+    "en": "Opens with the Street Cabinet in the Notebook (Pool tab).",
+    "tr": "Defterin Havuz sekmesindeki Sokak Dolabı ile açılır.",
+    "th": "ปลดล็อกด้วยตู้ของริมถนนในสมุดโน้ต (แท็บคลัง)"
+   },
+   "text": {
+    "en": "Always: +1 Luck per Red Eye this run.",
+    "tr": "Her zaman: +1 Şans (bu oyundaki Kırmızı Göz başına).",
+    "th": "ตลอดเวลา: โชค +1 ต่อดวงตาแดงในเกมนี้"
+   }
+  },
+  {
+   "id": "staring",
+   "name": {
+    "en": "Staring Contest",
+    "tr": "Bakışma Yarışı",
+    "th": "แข่งจ้องตา"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/staring",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "stack",
+       "n": 1
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symMult",
+       "n": 0.25,
+       "sym": "all",
+       "per": "stack"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "On a Red Eye: +1 charge. Always: all symbols mult +0.25 per charge.",
+    "tr": "Kırmızı Göz'de: +1 birikim. Her zaman: tüm semboller çarpanı +0.25 (birikim başına).",
+    "th": "เมื่อดวงตาแดงโผล่: +1 แต้มสะสม ตลอดเวลา: ตัวคูณทุกสัญลักษณ์ +0.25 ต่อแต้มสะสม"
+   }
+  },
+  {
+   "id": "omen_jar",
+   "name": {
+    "en": "Bad Omen Jar",
+    "tr": "Kötü Fal Kavanozu",
+    "th": "โหลลางร้าย"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/omen_jar",
+   "price": {
+    "coins": 10
+   },
+   "unlock": "pool:uncommon",
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "coins",
+       "n": 20
+      }
+     ]
+    }
+   ],
+   "unlockText": {
+    "en": "Opens with the Night Cabinet in the Notebook (Pool tab).",
+    "tr": "Defterin Havuz sekmesindeki Gece Dolabı ile açılır.",
+    "th": "ปลดล็อกด้วยตู้ยามค่ำในสมุดโน้ต (แท็บคลัง)"
+   },
+   "text": {
+    "en": "On a Red Eye: +{c:20} coins.",
+    "tr": "Kırmızı Göz'de: +{c:20} para.",
+    "th": "เมื่อดวงตาแดงโผล่: +{c:20} เหรียญ"
+   }
+  },
+  {
+   "id": "red_eye_flight",
+   "name": {
+    "en": "Red-eye Flight",
+    "tr": "Gece Uçuşu",
+    "th": "เที่ยวบินดึก"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "uncommon",
+   "icon": "charm/red_eye_flight",
+   "price": {
+    "coins": 10
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "spins",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "On a Red Eye: +2 spin.",
+    "tr": "Kırmızı Göz'de: +2 çeviriş.",
+    "th": "เมื่อดวงตาแดงโผล่: +2 ตา"
+   }
+  },
+  {
+   "id": "ruby_shades",
+   "name": {
+    "en": "Ruby's Shades",
+    "tr": "Ruby'nin Gözlüğü",
+    "th": "แว่นของรูบี้"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "rare",
+   "icon": "charm/ruby_shades",
+   "price": {
+    "wick": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeRate",
+       "v": 2
+      },
+      {
+       "type": "allMult",
+       "n": 1.25
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: Red Eye chance 2 points higher, spin total ×1.25.",
+    "tr": "Her zaman: Kırmızı Göz ihtimali 2 puan artar, çeviriş toplamı ×1.25.",
+    "th": "ตลอดเวลา: โอกาสดวงตาแดงเพิ่ม 2 จุด, ยอดรวมตานี้ ×1.25"
+   }
+  },
+  {
+   "id": "night_owl",
+   "name": {
+    "en": "Night Owl",
+    "tr": "Gece Baykuşu",
+    "th": "นกฮูกกลางคืน"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "rare",
+   "icon": "charm/night_owl",
+   "price": {
+    "wick": 5
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "onRedEye",
+     "cond": {},
+     "effects": [
+      {
+       "type": "gainCharm",
+       "rarity": "rare"
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "On a Red Eye: gain a random rare charm.",
+    "tr": "Kırmızı Göz'de: rastgele bir ender tılsım kazan.",
+    "th": "เมื่อดวงตาแดงโผล่: ได้ไอเท็มหายากมากสุ่มหนึ่งชิ้น"
+   }
+  },
+  {
+   "id": "counter_stare",
+   "name": {
+    "en": "Counter-stare",
+    "tr": "Karşı Bakış",
+    "th": "จ้องตอบ"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "redeye"
+   ],
+   "rarity": "legendary",
+   "icon": "charm/counter_stare",
+   "price": {
+    "wick": 9
+   },
+   "unlock": null,
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "flag",
+       "flag": "redEyeBless",
+       "v": true
+      }
+     ]
+    }
+   ],
+   "text": {
+    "en": "Always: Red Eyes do not punish and the spin pays ×3.",
+    "tr": "Her zaman: Kırmızı Göz cezalandırmaz, çeviriş ×3 öder.",
+    "th": "ตลอดเวลา: ดวงตาแดงไม่ลงโทษและตานั้นได้ ×3"
+   }
+  },
+  {
+   "id": "f_skewer_cart",
+   "name": {
+    "en": "Skewer Cart",
+    "tr": "Şiş Arabası",
+    "th": "รถเข็นไม้เสียบ"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "ember",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_skewer_cart",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 2,
+       "sym": "low"
+      },
+      {
+       "type": "symMult",
+       "n": 0.1,
+       "sym": "low",
+       "per": "heat"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "swarm",
+    "ember"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Always: low symbols value +2, low symbols mult +0.1 per Spice.",
+    "tr": "Her zaman: düşük semboller değeri +2, düşük semboller çarpanı +0.1 (Acı başına).",
+    "th": "ตลอดเวลา: ค่าสัญลักษณ์ต่ำ +2, ตัวคูณสัญลักษณ์ต่ำ +0.1 ต่อเผ็ด"
+   }
+  },
+  {
+   "id": "f_firefly_snack",
+   "name": {
+    "en": "Firefly Snack",
+    "tr": "Ateşböceği Atıştırmalığı",
+    "th": "ของกินเล่นหิ่งห้อย"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "wisp",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_firefly_snack",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "group": "low",
+      "hasWisp": true
+     },
+     "effects": [
+      {
+       "type": "retrigger",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "swarm",
+    "wisp"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Each pattern, if one of the low symbols, if it holds a Firefly: it pays again.",
+    "tr": "Her desen, düşük semboller arasındaysa, içinde Ateşböceği varsa: bir kez daha öder.",
+    "th": "ทุกลาย ถ้าเป็นสัญลักษณ์ต่ำ ถ้ามีหิ่งห้อยอยู่ในลาย: ได้เหรียญซ้ำอีกครั้ง"
+   }
+  },
+  {
+   "id": "f_street_gold",
+   "name": {
+    "en": "Street Gold",
+    "tr": "Sokak Altını",
+    "th": "ทองข้างถนน"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_street_gold",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "group": "low",
+      "minCells": 5
+     },
+     "effects": [
+      {
+       "type": "coins",
+       "n": 5
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "swarm",
+    "crown"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Each pattern, if one of the low symbols, if 5+ cells: +{c:5} coins.",
+    "tr": "Her desen, düşük semboller arasındaysa, 5+ hücreliyse: +{c:5} para.",
+    "th": "ทุกลาย ถ้าเป็นสัญลักษณ์ต่ำ ถ้า 5 ช่องขึ้นไป: +{c:5} เหรียญ"
+   }
+  },
+  {
+   "id": "f_market_scale",
+   "name": {
+    "en": "Market Scale",
+    "tr": "Pazar Terazisi",
+    "th": "ตาชั่งตลาด"
+   },
+   "family": "swarm",
+   "tags": [
+    "swarm",
+    "ledger",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_market_scale",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onSymbolLand",
+     "cond": {
+      "group": "low",
+      "every": 10
+     },
+     "effects": [
+      {
+       "type": "interest",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "swarm",
+    "ledger"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Each low symbol that lands, every 10 times: interest +1%.",
+    "tr": "İnen her düşük sembol, her 10 seferde bir: faiz +1 puan.",
+    "th": "ทุกสัญลักษณ์ต่ำที่ตก ทุก 10 ครั้ง: ดอกเบี้ย +1%"
+   }
+  },
+  {
+   "id": "f_smog_wok",
+   "name": {
+    "en": "Smog Wok",
+    "tr": "Sisli Wok",
+    "th": "กระทะหมอกควัน"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "hex",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_smog_wok",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 0.5,
+       "pattern": "all",
+       "per": "curses"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "ember",
+    "hex"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Always: all patterns mult +0.5 per curse.",
+    "tr": "Her zaman: tüm desenler çarpanı +0.5 (lanet başına).",
+    "th": "ตลอดเวลา: ตัวคูณทุกลาย +0.5 ต่อคำสาป"
+   }
+  },
+  {
+   "id": "f_neon_grill",
+   "name": {
+    "en": "Neon Grill",
+    "tr": "Neon Izgara",
+    "th": "เตาย่างนีออน"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "pact",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_neon_grill",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onScorch",
+     "cond": {},
+     "effects": [
+      {
+       "type": "wick",
+       "n": 3
+      },
+      {
+       "type": "coins",
+       "n": 10
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "ember",
+    "pact"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "On a Flare-up: +3 Caps, +{c:10} coins.",
+    "tr": "Parlamada: +3 Kapak, +{c:10} para.",
+    "th": "เมื่อไฟลุก: +3 ฝาขวด, +{c:10} เหรียญ"
+   }
+  },
+  {
+   "id": "f_lucky_chili",
+   "name": {
+    "en": "Lucky Chili",
+    "tr": "Şanslı Biber",
+    "th": "พริกนำโชค"
+   },
+   "family": "ember",
+   "tags": [
+    "ember",
+    "omen",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_lucky_chili",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 0.5,
+       "per": "heat"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "ember",
+    "omen"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Always: +0.5 Luck per Spice.",
+    "tr": "Her zaman: +0.5 Şans (Acı başına).",
+    "th": "ตลอดเวลา: โชค +0.5 ต่อเผ็ด"
+   }
+  },
+  {
+   "id": "f_ruby_umbrella",
+   "name": {
+    "en": "Ruby Umbrella",
+    "tr": "Ruby Şemsiyesi",
+    "th": "ร่มรูบี้"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "pact",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_ruby_umbrella",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onCurse",
+     "cond": {},
+     "effects": [
+      {
+       "type": "coins",
+       "n": 15
+      }
+     ]
+    },
+    {
+     "trigger": "passive",
+     "cond": {
+      "cursesMin": 3
+     },
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 1.5
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "hex",
+    "pact"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "When you gain a curse: +{c:15} coins. Always, if you carry 3+ curses: spin total ×1.5.",
+    "tr": "Lanet alınca: +{c:15} para. Her zaman, 3+ lanetin varsa: çeviriş toplamı ×1.5.",
+    "th": "เมื่อได้คำสาป: +{c:15} เหรียญ ตลอดเวลา ถ้ามีคำสาป 3+: ยอดรวมตานี้ ×1.5"
+   }
+  },
+  {
+   "id": "f_rainy_day_fund",
+   "name": {
+    "en": "Rainy Day Fund",
+    "tr": "Yağmurlu Gün Fonu",
+    "th": "เงินเผื่อฝนตก"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "ledger",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_rainy_day_fund",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 1,
+       "per": "curses"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "hex",
+    "ledger"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Always: interest +1% per curse.",
+    "tr": "Her zaman: faiz +1 puan (lanet başına).",
+    "th": "ตลอดเวลา: ดอกเบี้ย +1% ต่อคำสาป"
+   }
+  },
+  {
+   "id": "f_monsoon_gold",
+   "name": {
+    "en": "Monsoon Gold",
+    "tr": "Muson Altını",
+    "th": "ทองหน้าฝน"
+   },
+   "family": "hex",
+   "tags": [
+    "hex",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_monsoon_gold",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 1,
+       "sym": "crown",
+       "per": "curses"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "hex",
+    "crown"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Always: Gold Bar value +1 per curse.",
+    "tr": "Her zaman: Külçe Altın değeri +1 (lanet başına).",
+    "th": "ตลอดเวลา: ค่าทองคำแท่ง +1 ต่อคำสาป"
+   }
+  },
+  {
+   "id": "f_small_print_lawyer",
+   "name": {
+    "en": "Small-print Lawyer",
+    "tr": "Küçük Yazı Avukatı",
+    "th": "ทนายตัวหนังสือเล็ก"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "pact",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_small_print_lawyer",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onDeal",
+     "cond": {},
+     "effects": [
+      {
+       "type": "interest",
+       "n": 2
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "ledger",
+    "pact"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "When you sign a deal: interest +2%.",
+    "tr": "Anlaşma imzalayınca: faiz +2 puan.",
+    "th": "เมื่อเซ็นข้อตกลง: ดอกเบี้ย +2%"
+   }
+  },
+  {
+   "id": "f_meter_taxi",
+   "name": {
+    "en": "Meter Taxi",
+    "tr": "Taksimetreli Taksi",
+    "th": "แท็กซี่มิเตอร์"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "tinker",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_meter_taxi",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onTrick",
+     "cond": {},
+     "effects": [
+      {
+       "type": "coins",
+       "n": 3
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "ledger",
+    "tinker"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "When you use a trick: +{c:3} coins.",
+    "tr": "Numara kullanınca: +{c:3} para.",
+    "th": "เมื่อใช้กลเม็ด: +{c:3} เหรียญ"
+   }
+  },
+  {
+   "id": "f_gold_shop",
+   "name": {
+    "en": "Gold Shop",
+    "tr": "Kuyumcu",
+    "th": "ร้านทอง"
+   },
+   "family": "ledger",
+   "tags": [
+    "ledger",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_gold_shop",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onInterest",
+     "cond": {},
+     "effects": [
+      {
+       "type": "symValue",
+       "n": 1,
+       "sym": "crown"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "ledger",
+    "crown"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "When interest pays: Gold Bar value +1.",
+    "tr": "Faiz gelince: Külçe Altın değeri +1.",
+    "th": "เมื่อได้ดอกเบี้ย: ค่าทองคำแท่ง +1"
+   }
+  },
+  {
+   "id": "f_calling_luck",
+   "name": {
+    "en": "Calling Luck",
+    "tr": "Kartvizit Şansı",
+    "th": "นามบัตรนำโชค"
+   },
+   "family": "pact",
+   "tags": [
+    "pact",
+    "omen",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_calling_luck",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onSymbolLand",
+     "cond": {
+      "sym": "sigil"
+     },
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1,
+       "scope": "round"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "pact",
+    "omen"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Each Calling Card that lands: +1 Luck this round.",
+    "tr": "İnen her Kartvizit: +1 Şans (bu el).",
+    "th": "นามบัตรทุกตัวที่ตก: โชค +1 ในรอบนี้"
+   }
+  },
+  {
+   "id": "f_rooftop_lease",
+   "name": {
+    "en": "Rooftop Lease",
+    "tr": "Çatı Kirası",
+    "th": "เช่าดาดฟ้า"
+   },
+   "family": "pact",
+   "tags": [
+    "pact",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_rooftop_lease",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onDeal",
+     "cond": {},
+     "effects": [
+      {
+       "type": "gainCharm",
+       "rarity": "rare"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "pact",
+    "crown"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "When you sign a deal: gain a random rare charm.",
+    "tr": "Anlaşma imzalayınca: rastgele bir ender tılsım kazan.",
+    "th": "เมื่อเซ็นข้อตกลง: ได้ไอเท็มหายากมากสุ่มหนึ่งชิ้น"
+   }
+  },
+  {
+   "id": "f_lucky_combo",
+   "name": {
+    "en": "Lucky Combo",
+    "tr": "Şanslı Kombo",
+    "th": "คอมโบนำโชค"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "stitch",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_lucky_combo",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "favoured": true
+     },
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 1,
+       "pattern": "this"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "omen",
+    "stitch"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Each pattern, if it is the Special: this pattern mult +1.",
+    "tr": "Her desen, Gözdeyse: bu desen çarpanı +1.",
+    "th": "ทุกลาย ถ้าเป็นเมนูเด็ด: ตัวคูณลายนี้ +1"
+   }
+  },
+  {
+   "id": "f_glowing_special",
+   "name": {
+    "en": "Glowing Special",
+    "tr": "Parlayan Özel",
+    "th": "เมนูเด็ดเรืองแสง"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "wisp",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_glowing_special",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "weight",
+       "n": 2,
+       "sym": "wisp"
+      },
+      {
+       "type": "luck",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "omen",
+    "wisp"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Always: Firefly ×2 as often, +1 Luck.",
+    "tr": "Her zaman: Ateşböceği ×2 sıklıkla gelir, +1 Şans.",
+    "th": "ตลอดเวลา: หิ่งห้อยออกบ่อย ×2, โชค +1"
+   }
+  },
+  {
+   "id": "f_lucky_tuktuk",
+   "name": {
+    "en": "Lucky Tuk-tuk",
+    "tr": "Şanslı Tuk-tuk",
+    "th": "ตุ๊กตุ๊กนำโชค"
+   },
+   "family": "omen",
+   "tags": [
+    "omen",
+    "tinker",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_lucky_tuktuk",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onTrick",
+     "cond": {},
+     "effects": [
+      {
+       "type": "luck",
+       "n": 1,
+       "scope": "round"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "omen",
+    "tinker"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "When you use a trick: +1 Luck this round.",
+    "tr": "Numara kullanınca: +1 Şans (bu el).",
+    "th": "เมื่อใช้กลเม็ด: โชค +1 ในรอบนี้"
+   }
+  },
+  {
+   "id": "f_spinning_elbow",
+   "name": {
+    "en": "Spinning Elbow",
+    "tr": "Dönen Dirsek",
+    "th": "ศอกกลับ"
+   },
+   "family": "stitch",
+   "tags": [
+    "stitch",
+    "wisp",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_spinning_elbow",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "hasWisp": true
+     },
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 2,
+       "pattern": "this"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "stitch",
+    "wisp"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Each pattern, if it holds a Firefly: this pattern mult +2.",
+    "tr": "Her desen, içinde Ateşböceği varsa: bu desen çarpanı +2.",
+    "th": "ทุกลาย ถ้ามีหิ่งห้อยอยู่ในลาย: ตัวคูณลายนี้ +2"
+   }
+  },
+  {
+   "id": "f_clinch_tool",
+   "name": {
+    "en": "Clinch Tool",
+    "tr": "Clinch Aleti",
+    "th": "ประแจเข้าล็อก"
+   },
+   "family": "stitch",
+   "tags": [
+    "stitch",
+    "tinker",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_clinch_tool",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onSpinEnd",
+     "cond": {
+      "distinctMin": 3
+     },
+     "effects": [
+      {
+       "type": "allMult",
+       "n": 2,
+       "scope": "spin"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "stitch",
+    "tinker"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "After each spin, if 3+ different shapes: spin total ×2.",
+    "tr": "Her çevirişten sonra, 3+ farklı şekil varsa: çeviriş toplamı ×2.",
+    "th": "หลังหมุนทุกตา ถ้ามี 3 รูปทรงต่างกันขึ้นไป: ยอดรวมตานี้ ×2"
+   }
+  },
+  {
+   "id": "f_golden_belt",
+   "name": {
+    "en": "Golden Belt",
+    "tr": "Altın Kemer",
+    "th": "เข็มขัดทอง"
+   },
+   "family": "stitch",
+   "tags": [
+    "stitch",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_golden_belt",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "patMult",
+       "n": 2,
+       "pattern": "big"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "stitch",
+    "crown"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Always: 5+ cell patterns mult +2.",
+    "tr": "Her zaman: 5+ hücreli desenler çarpanı +2.",
+    "th": "ตลอดเวลา: ตัวคูณลาย 5 ช่องขึ้นไป +2"
+   }
+  },
+  {
+   "id": "f_firefly_lamp",
+   "name": {
+    "en": "Firefly Lamp",
+    "tr": "Ateşböceği Lambası",
+    "th": "ตะเกียงหิ่งห้อย"
+   },
+   "family": "wisp",
+   "tags": [
+    "wisp",
+    "tinker",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_firefly_lamp",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onSpinStart",
+     "cond": {},
+     "effects": [
+      {
+       "type": "place",
+       "n": 1,
+       "sym": "wisp"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "wisp",
+    "tinker"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Before each spin: place 1 Firefly.",
+    "tr": "Her çevirişten önce: 1 Ateşböceği yerleşir.",
+    "th": "ก่อนหมุนทุกตา: วางหิ่งห้อย 1 ตัว"
+   }
+  },
+  {
+   "id": "f_gold_dust",
+   "name": {
+    "en": "Gold Dust",
+    "tr": "Altın Tozu",
+    "th": "ผงทอง"
+   },
+   "family": "wisp",
+   "tags": [
+    "wisp",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_gold_dust",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "onPattern",
+     "cond": {
+      "group": "high",
+      "hasWisp": true
+     },
+     "effects": [
+      {
+       "type": "retrigger",
+       "n": 1
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "wisp",
+    "crown"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Each pattern, if one of the high symbols, if it holds a Firefly: it pays again.",
+    "tr": "Her desen, yüksek semboller arasındaysa, içinde Ateşböceği varsa: bir kez daha öder.",
+    "th": "ทุกลาย ถ้าเป็นสัญลักษณ์สูง ถ้ามีหิ่งห้อยอยู่ในลาย: ได้เหรียญซ้ำอีกครั้ง"
+   }
+  },
+  {
+   "id": "f_gold_rims",
+   "name": {
+    "en": "Gold Rims",
+    "tr": "Altın Jantlar",
+    "th": "ล้อทอง"
+   },
+   "family": "tinker",
+   "tags": [
+    "tinker",
+    "crown",
+    "fused"
+   ],
+   "rarity": "fused",
+   "icon": "charm/f_gold_rims",
+   "price": {
+    "coins": 30
+   },
+   "unlock": "blend",
+   "rules": [
+    {
+     "trigger": "passive",
+     "cond": {},
+     "effects": [
+      {
+       "type": "slot",
+       "n": 1
+      },
+      {
+       "type": "symValue",
+       "n": 1,
+       "sym": "high"
+      }
+     ]
+    }
+   ],
+   "fused": [
+    "tinker",
+    "crown"
+   ],
+   "buyable": false,
+   "unlockText": {
+    "en": "Blend two charms of the right families in the Blender.",
+    "tr": "Doğru ailelerden iki tılsımı Karıştırıcıda karıştır.",
+    "th": "ปั่นไอเท็มสองชิ้นของตระกูลที่ถูกต้องในเครื่องปั่น"
+   },
+   "text": {
+    "en": "Always: +1 charm slot, high symbols value +1.",
+    "tr": "Her zaman: +1 tılsım yuvası, yüksek semboller değeri +1.",
+    "th": "ตลอดเวลา: +1 ช่องไอเท็ม, ค่าสัญลักษณ์สูง +1"
+   }
+  }
+ ]
+}
