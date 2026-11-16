@@ -1,111 +1,100 @@
-// Shop: offers with printed odds, buy / sell / reroll / lock / remove, trinket inspect on tap.
-// data: { run, coach? }. coach: first run, so the first shop says what the free trinket on the shelf does. All rules and prices come from core/shop.js. Handlers: changed(run, action, res) after each core call, leaveShop() on Continue.
-import { t } from '../i18n.js';
-import { h, pct, btn, put, art, hold } from './dom.js';
-import { rollShop, effectiveOdds, priceOf, buyOffer, sellTrinket, removeToken, reroll, lockOffer } from '../core/shop.js';
-import { chartOf } from '../core/run.js';
-import { TRINKETS } from '../core/data/trinkets.js';
-import { SYMBOLS } from '../core/data/symbols.js';
-import { PRICES } from '../core/econ.js';
-import { renderBagList, symText } from './bag.js';
+// The wagon (shop): charms, tricks, bench. data: { run, offers: { charms[], tricks[], bench[] } } (offer = id or { id, locked, sold }).
+// Handlers: buyCharm(i) sellCharm(slot) moveCharm(from,to) buyTrick(i) bench(i,target) buySlot() reroll() lock(i) leaveShop(),
+// price(item, kind) -> { coins?, wick? } (kind: charm | sell | trick | bench | slot | reroll), watchAd('shop_reroll'), adReady(placement).
+import { t, L, fmt } from '../i18n.js';
+import { h, btn, put, art } from './dom.js';
+import { CHARM, TRICK, BENCH, SYM, CURSE, CONFIG } from './content.js';
+import { model } from './model.js';
+import { itemCard, priceChip, pic, chip } from './cards.js';
 
-const TR = new Map(TRINKETS.map((x) => [x.id, x]));
-const SYM = new Map(SYMBOLS.map((x) => [x.id, x]));
+const idOf = (o) => (typeof o === 'string' ? o : o?.id);
 
-// What a failed core call says to the player. Keys are core's reason strings.
-const REASON = { coins: 'ui.notEnough', 'shelf full': 'ui.shelfFull', cap: 'ui.atCap', 'bag minimum': 'ui.bagMinN' };
+export function render(el, { run, offers }, ctx) {
+  const m = model(run, ctx.derive(run)), S = m.scale, tab = ctx.state.tab ?? 'charms';
+  const of = offers ?? run.shop ?? {};
+  if (!ctx.state.said) { ctx.state.said = true; ctx.say('pip', 'shop'); }
 
-// Sell value for the button. Mirrors core listTrinket / PRICES.sellDiv (core does not export it); the real coins come back from sellTrinket.
-const sellValue = (run, grade) => Math.floor(Math.max(1, Math.round(PRICES.trinket[grade - 1] * (chartOf(run).trinketPriceMul ?? 1))) / PRICES.sellDiv);
-
-// A card or sheet described the same way for trinkets and tokens.
-function describe(run, o) {
-  if (o.kind === 'trinket') {
-    const d = TR.get(o.id);
-    return { icon: `trinket/${o.id}`, name: t(d.nameKey), tag: t('ui.grade', { n: o.grade ?? d.grade }), short: t(d.shortKey), full: t(d.descKey), grade: o.grade ?? d.grade };
-  }
-  const d = SYM.get(o.sym);
-  return { icon: `sym/${o.sym}`, name: t(d.nameKey), tag: t('ui.token'), short: symText(d), full: symText(d) };
-}
-
-export function render(el, { run, coach }, ctx) {
-  const s = rollShop(run), st = ctx.state;
-  if (st.visit !== s.visit) { st.visit = s.visit; ctx.say('deni', 'shop_enter'); }
-  const act = (action, res, say) => {
-    if (res.ok) { ctx.h.changed?.(run, action, res); if (say) ctx.say('deni', say); }
-    else { ctx.toast(REASON[res.reason] ?? 'ui.notEnough', { n: PRICES.bagMin }); if (res.reason === 'coins') ctx.say('deni', 'shop_broke'); }
-    st.sheet = null; st.picking = false;
-    ctx.rerender();
+  // Core price when the glue gives one, else the list price times the debt scale.
+  const base = (item, kind) => {
+    const p = item.price ?? {};
+    return { ...(p.coins != null && { coins: p.coins * S }), ...(p.wick != null && { wick: p.wick }) };
   };
-  // Price buttons: label, coin sprite, number. One helper, so the card and the sheet read the same.
-  const coin = () => art('fx/coin', 'ico coin');
-  const buyBtn = (o, i) => { const p = priceOf(run, o); return h('button', { type: 'button', class: 'btn primary buy' + (run.jar < p ? ' dim' : ''), 'aria-label': `${t('ui.buy')} ${t('ui.price', { n: p })}`, onclick: () => act('buy', buyOffer(run, i), 'shop_buy') }, t('ui.buy'), coin(), String(p)); };
+  const price = (item, kind) => ctx.h.price?.(item, kind) ?? (kind === 'sell' ? halve(base(item)) : kind === 'slot' ? { wick: CONFIG.shop.slotPriceWick } : kind === 'reroll' ? { coins: CONFIG.shop.rerollBase * S } : base(item));
+  const halve = (p) => ({ ...(p.coins != null && { coins: Math.floor(p.coins * CONFIG.shop.sellPct / 100) }), ...(p.wick != null && { wick: Math.floor(p.wick * CONFIG.shop.sellPct / 100) }) });
+  const can = (p) => (p.coins == null || m.purse >= p.coins) && (p.wick == null || m.wick >= p.wick);
+  const why = (p) => (p.coins != null && m.purse < p.coins ? 'why.coins' : 'why.wick');
+  const buyBtn = (p, fn) => h('button', { type: 'button', class: 'btn buy ' + (can(p) ? 'primary' : 'dim'), onclick: () => (can(p) ? fn() : ctx.toast(why(p))) }, t('ui.buy'));
+  const sellLabel = (p) => t('ui.sell', { n: p.coins != null ? fmt(p.coins) : `${fmt(p.wick ?? 0)} ${t('ui.wick')}` });
 
-  // ---- inspect sheet ----
-  const sheet = () => {
-    const x = st.sheet;
-    if (!x) return null;
-    const own = x.slot != null, o = own ? { kind: 'trinket', id: run.trinkets[x.slot]?.id } : s.offers[x.i];
-    if (!o || (own && !o.id)) return null;
-    const d = describe(run, o);
-    const acts = own
-      ? [btn(t('ui.sell', { n: sellValue(run, d.grade) }), () => act('sell', sellTrinket(run, x.slot)), 'warn')]
-      : o.sold ? [] : [buyBtn(o, x.i)];
-    const shut = () => { st.sheet = null; ctx.rerender(); };
-    return h('div', { class: 'scrim', onclick: (e) => { if (e.target === e.currentTarget) shut(); } },
-      h('div', { class: 'sheet', role: 'dialog', 'aria-label': d.name },
-        h('button', { type: 'button', class: 'btn x', 'aria-label': t('ui.close'), onclick: shut }, '\u00d7'),
-        art(d.icon, 'ico big'), h('span', { class: 'tag' }, d.tag), h('h3', {}, d.name), h('p', {}, d.full), acts));
+  const picker = (title, entries, pick) => ctx.openNode(h('section', { class: 'sheet-card', role: 'dialog', 'aria-modal': 'true' },
+    h('h2', {}, title),
+    entries.length ? h('div', { class: 'cards' }, entries.map((e) => h('button', { type: 'button', class: 'card pick', onclick: () => { ctx.closeSheet(); pick(e.id); } },
+      h('span', { class: 'pic' }, art(e.icon, 'ico lg')), h('div', { class: 'card-text' }, h('strong', {}, e.label), e.sub && h('span', { class: 'fx' }, e.sub)))))
+      : h('p', { class: 'note' }, t('ui.noCurses')),
+    h('div', { class: 'sheet-acts' }, btn(t('ui.close'), ctx.closeSheet))));
+
+  const charmsTab = () => {
+    const list = (of.charms ?? []).map((o, i) => {
+      const c = CHARM[idOf(o)];
+      if (!c) return null;
+      const sold = !!o.sold, p = price(c, 'charm'), locked = !!o.locked;
+      return itemCard('charm', c, { S, price: sold ? null : p, cls: sold ? 'sold' : '' },
+        sold ? h('span', { class: 'sold-mark' }, t('ui.sold')) : buyBtn(p, () => ctx.call('buyCharm', i)),
+        !sold && h('button', { type: 'button', class: 'btn small' + (locked ? ' on' : ''), 'aria-pressed': String(locked),
+          onclick: () => (m.noLock ? ctx.toast('why.noLock') : ctx.call('lock', i)) }, art('ui/lock', 'ico xs'), locked ? t('ui.unlock') : t('ui.lock')));
+    });
+    const mine = run.charms ?? [], slots = run.slots ?? 5;
+    return [
+      h('div', { class: 'cards' }, list.some(Boolean) ? list : h('p', { class: 'note' }, t('ui.shopEmpty'))),
+      h('section', {}, h('h3', {}, t('ui.yourCharms', { n: mine.length, m: slots })), h('p', { class: 'note' }, t('ui.orderNote')),
+        h('div', { class: 'cards' }, mine.map((c, slot) => {
+          const d = CHARM[c.id];
+          if (!d) return null;
+          return h('article', { class: 'card charm r-' + d.rarity }, pic(d.icon, d.rarity),
+            h('div', { class: 'card-text' }, h('strong', {}, L(d.name)), h('span', { class: 'fx' }, t('ui.sellFor', { n: sellLabelOnly(price(d, 'sell')) }))),
+            h('div', { class: 'card-act row' },
+              h('button', { type: 'button', class: 'btn small' + (slot === 0 ? ' dim' : ''), 'aria-label': t('ui.moveLeft'), onclick: () => slot > 0 && ctx.call('moveCharm', slot, slot - 1) }, '‹'),
+              h('button', { type: 'button', class: 'btn small' + (slot === mine.length - 1 ? ' dim' : ''), 'aria-label': t('ui.moveRight'), onclick: () => slot < mine.length - 1 && ctx.call('moveCharm', slot, slot + 1) }, '›'),
+              h('button', { type: 'button', class: 'btn small', onclick: () => ctx.call('sellCharm', slot) }, sellLabel(price(d, 'sell')))));
+        }))),
+      h('section', {}, h('div', { class: 'card slotbuy' }, art('ui/slot_empty', 'ico lg'),
+        h('div', { class: 'card-text' }, h('strong', {}, t('ui.slotBuy')), h('span', { class: 'fx' }, t('ui.slotText'))),
+        h('div', { class: 'card-act' }, priceChip(price({}, 'slot')), buyBtn(price({}, 'slot'), () => ctx.call('buySlot'))))),
+    ];
+  };
+  const sellLabelOnly = (p) => (p.coins != null ? fmt(p.coins) : `${fmt(p.wick ?? 0)} ${t('ui.wick')}`);
+
+  const tricksTab = () => h('div', { class: 'cards' }, (of.tricks ?? []).map((o, i) => {
+    const d = TRICK[idOf(o)];
+    if (!d) return null;
+    const p = price(d, 'trick');
+    return itemCard('trick', d, { S, price: p, cls: o.sold ? 'sold' : '' }, o.sold ? h('span', { class: 'sold-mark' }, t('ui.sold')) : buyBtn(p, () => ctx.call('buyTrick', i)));
+  }));
+
+  const benchTab = () => {
+    const symbols = () => Object.values(SYM).filter((s) => s.kind === 'score' && !(run.removed ?? []).includes(s.id))
+      .map((s) => ({ id: s.id, icon: s.icon, label: L(s.name), sub: t('ui.symVal', { v: s.value }) }));
+    const curses = () => (run.curses ?? []).map((id) => ({ id, icon: CURSE[id]?.icon, label: L(CURSE[id]?.name), sub: L(CURSE[id]?.text) }));
+    return [h('p', { class: 'note' }, t('ui.benchNote')), h('div', { class: 'cards' }, (of.bench ?? []).map((o, i) => {
+      const d = BENCH[idOf(o)];
+      if (!d) return null;
+      const p = price(d, 'bench');
+      const go = () => (d.id === 'lift' ? picker(t('ui.benchCurse'), curses(), (id) => ctx.call('bench', i, id)) : picker(t('ui.benchSymbol'), symbols(), (id) => ctx.call('bench', i, id)));
+      return h('article', { class: 'card bench' + (o.sold ? ' sold' : '') }, h('span', { class: 'pic' }, art('trick/kit', 'ico lg')),
+        h('div', { class: 'card-text' }, h('strong', {}, L(d.name)), h('span', { class: 'fx' }, L(d.text))),
+        h('div', { class: 'card-act' }, !o.sold && priceChip(p), o.sold ? h('span', { class: 'sold-mark' }, t('ui.sold')) : buyBtn(p, go)));
+    }))];
   };
 
-  // ---- offers ----
-  const offer = (o, i) => {
-    if (!o) return null;
-    const d = describe(run, o), kept = s.lock === i;
-    return h('article', { class: 'card' + (o.sold ? ' sold' : '') + (kept ? ' kept' : '') },
-      hold(h('button', { type: 'button', class: 'card-main', onclick: () => { st.sheet = { i }; ctx.rerender(); } },
-        art(d.icon), h('span', { class: 'tag' }, d.tag), h('strong', {}, d.name), h('span', { class: 'fx' }, d.short)), () => { st.sheet = { i }; ctx.rerender(); }),
-      o.sold ? h('span', { class: 'sold-mark' }, t('ui.sold')) : [
-        buyBtn(o, i),
-        btn(kept ? t('ui.unlock') : t('ui.lock'), () => act('lock', lockOffer(run, i)), 'link' + (kept ? ' on' : '')),
-      ]);
-  };
-
-  // ---- printed odds, straight from core effectiveOdds ----
-  const eo = effectiveOdds(run), kind = pct([eo.trinket, eo.token]), grades = pct(eo.grades);
-  const odds = h('section', { class: 'odds' },
-    h('h3', {}, t('ui.shopOdds')),
-    h('p', { class: 'note' }, t('ui.shopOddsNote')),
-    h('p', {}, t('ui.oddsKind', { a: kind[0], b: kind[1] })));
-  const own = coach && run.tide === 1 && run.trinkets[0] && describe(run, { kind: 'trinket', id: run.trinkets[0].id });
-
-  const rrPrice = priceOf(run, { kind: 'reroll' }), rmPrice = priceOf(run, { kind: 'removal' });
-  const shelf = run.trinkets.map((x, slot) => {
-    const d = describe(run, { kind: 'trinket', id: x.id });
-    return h('li', {}, hold(h('button', { type: 'button', class: 'chip', onclick: () => { st.sheet = { slot }; ctx.rerender(); } }, art(d.icon, 'ico sm'), h('strong', {}, d.name)), () => { st.sheet = { slot }; ctx.rerender(); })); // a tap opens the full rule and Sell
-  });
-
-  if (st.picking) {
-    put(el, h('h2', {}, t('ui.removePick')),
-      renderBagList(run, (id) => act('remove', removeToken(run, id), 'remove_token')),
-      ctx.foot(btn(t('ui.back'), () => { st.picking = false; ctx.rerender(); })));
-    return;
-  }
-  put(el, 
-    h('h2', {}, t('ui.shop')),
-    h('p', { class: 'sub' }, `${t('ui.jar')}: ${run.jar} `, coin()),
-    h('ul', { class: 'grades', 'aria-label': t('ui.shopOdds') }, grades.map((p, g) => h('li', {}, t('ui.oddsGrade', { n: g + 1, p })))), // the printed grade odds, before any offer
-    // the shelf sits above the offers, so what you own is on screen while you choose
-    h('div', { class: 'shelfrow' }, h('strong', {}, t('ui.shelf')), shelf.length ? h('ul', { class: 'chips' }, shelf) : h('span', { class: 'note' }, t('ui.emptyPlace'))),
-    own && h('p', { class: 'note tutorial' }, t('ui.coachShelf', { name: own.name, text: own.short })),
-    h('div', { class: 'cards' }, s.offers.map(offer)),
-    h('div', { class: 'row2' },
-      btn([rrPrice ? t('ui.reroll', { n: rrPrice }) : t('ui.rerollFree'), rrPrice ? coin() : null], () => act('reroll', reroll(run)), run.jar < rrPrice ? 'dim' : ''),
-      btn([rmPrice ? t('ui.removeToken', { n: rmPrice }) : t('ui.removeFree'), rmPrice ? coin() : null], () => { st.picking = true; ctx.rerender(); }, run.jar < rmPrice ? 'dim' : '')),
-    odds,
-    h('p', { class: 'note' }, t('ui.jarCarries')),
-    h('p', { class: 'note' }, t('ui.noRealMoney')),
-    ctx.foot(btn(t('ui.continue'), () => { ctx.close(); ctx.h.leaveShop?.(); }, 'primary')),
-    ctx.over(sheet()),
-  );
+  const rr = price({}, 'reroll');
+  const tabs = [['charms', 'ui.tabCharms'], ['tricks', 'ui.tabTricks'], ['bench', 'ui.tabBench']];
+  put(el,
+    h('h2', {}, t('ui.wagon')),
+    h('div', { class: 'chips' }, chip('ui/coin', fmt(m.purse), 'purse'), chip('ui/wick', fmt(m.wick))),
+    h('div', { class: 'seg', role: 'tablist' }, tabs.map(([id, key]) => h('button', { type: 'button', class: 'opt' + (tab === id ? ' on' : ''), role: 'tab', 'aria-selected': String(tab === id), onclick: () => { ctx.state.tab = id; ctx.rerender(); } }, t(key)))),
+    tab === 'charms' ? charmsTab() : tab === 'tricks' ? tricksTab() : benchTab(),
+    h('div', { class: 'row-wrap' },
+      h('button', { type: 'button', class: 'btn' + (can(rr) ? '' : ' dim'), onclick: () => (can(rr) ? ctx.call('reroll') : ctx.toast(why(rr))) }, art('ui/btn_reroll', 'ico xs'), t('ui.reroll', { n: fmt(rr.coins ?? 0) })),
+      ctx.h.adReady?.('shop_reroll') && btn(t('ads.watch.shop_reroll'), () => ctx.call('watchAd', 'shop_reroll'), 'ad')),
+    ctx.foot(btn(t('ui.nextNight'), () => ctx.call('leaveShop'), 'primary')));
 }

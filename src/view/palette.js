@@ -1,15 +1,13 @@
-// ART.md palette (gouache: cream, navy, tomato, teal, sunflower, pink; key names kept from the riso version). Pure JS (no three). Skins are palette swaps of the same sprites (ART.md section 3).
+// Night palette (docs/v2/ART_LIST.md). Pure JS (no three). Hex strings; hexToRgb gives 0..1 floats for shaders.
 export const PAL = Object.freeze({
-  paper: '#F4EAD2', navy: '#22304F', coral: '#D8452E', teal: '#2F8F8A', mustard: '#EDB13C', blush: '#EFA7A0',
+  plum: '#1c1220', candle: '#f08a2a', bone: '#f1e6cf', green: '#7fd13b', red: '#b3202a', brass: '#d9a62e',
 });
-// Overprint tones; the shader makes these, they are listed for reference and QA.
-export const OVERPRINT = Object.freeze({ coralTeal: '#6B4A4E', mustardTeal: '#7FA05A', coralMustard: '#E0703A' });
-// Index order used by the riso shader (uPal[i]).
-export const INK_ORDER = Object.freeze(['paper', 'navy', 'coral', 'teal', 'mustard', 'blush']);
-export const SKINS = Object.freeze({ default: PAL });
+// Slightly lifted plum for panels and empty slots on top of the background.
+export const PLUM_LIFT = '#2e1f36';
+// Colours cycled for pattern highlights, in evaluation order.
+export const PATTERN_COLORS = Object.freeze([PAL.candle, PAL.green, PAL.brass, PAL.red, PAL.bone]);
 
 export function hexToRgb(hex) {
   const n = parseInt(hex.slice(1), 16);
   return [((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255];
 }
-export const paletteArray = (pal = PAL) => INK_ORDER.map((k) => hexToRgb(pal[k]));

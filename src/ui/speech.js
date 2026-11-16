@@ -1,6 +1,6 @@
-// Deni and Orhan speech bubbles. Lines live in i18n as line.<who>.<trigger>.<n>; the picker never repeats the last pick.
+// Nim, Brimble and Pip speech bubbles. Lines live in i18n as line.<who>.<trigger>.<n>; the picker never repeats the last pick.
 import { t, lineCount } from '../i18n.js';
-import { h } from './dom.js';
+import { h, art } from './dom.js';
 
 const last = new Map(); // 'who.trigger' -> last index
 let box = null, timer = 0;
@@ -36,8 +36,8 @@ export function say(who, trigger, vars = {}) {
   const text = pickLine(who, trigger, vars);
   if (text == null) return null;
   if (box) {
-    const name = who === 'deni' ? t('ui.deni') : who === 'orhan' ? t('ui.orhan') : '';
-    const b = h('p', { class: `bubble ${who}` }, name && h('b', {}, name), text);
+    const name = t(`ui.${who}`), face = who === 'brimble' ? 'devil/grin' : who === 'nim' ? 'char/nim' : 'char/pip';
+    const b = h('p', { class: `bubble ${who}` }, art(face, 'face'), h('span', {}, h('b', {}, name), text));
     box.replaceChildren(b); // one bubble at a time
     clearTimeout(timer);
     timer = setTimeout(() => b.remove(), 3800 + text.length * 30);

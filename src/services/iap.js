@@ -8,33 +8,27 @@ import { isNative, modal, env } from './platform.js';
 export const PRODUCTS = Object.freeze([
   { id: 'remove_ads', type: 'non_consumable', usd: 3.99, try: 149.99, lite: true },
   { id: 'starter_pack', type: 'non_consumable', usd: 1.99, try: 79.99, lite: true },
-  { id: 'pier_keeper', type: 'non_consumable', usd: 7.99, try: 299.99, lite: false },
-  { id: 'pier_keeper_upgrade', type: 'non_consumable', usd: 4.99, try: 179.99, lite: false }, // only for owners of remove_ads; grants pier_keeper
-  { id: 'cos_reels', type: 'non_consumable', usd: 2.99, try: 119.99, lite: false },
-  { id: 'cos_deni', type: 'non_consumable', usd: 2.99, try: 119.99, lite: false },
-  { id: 'cos_harbor', type: 'non_consumable', usd: 2.99, try: 119.99, lite: false },
+  // cosmetics: listed for the stores, hidden in the game (lite: false) until their art exists
+  { id: 'cos_machine', type: 'non_consumable', usd: 2.99, try: 119.99, lite: false },
+  { id: 'cos_hats', type: 'non_consumable', usd: 2.99, try: 119.99, lite: false },
+  { id: 'cos_wallpaper', type: 'non_consumable', usd: 2.99, try: 119.99, lite: false },
 ]);
 const IDS = PRODUCTS.map((p) => p.id);
 
 // ---- pure rules --------------------------------------------------------------------------------
 // `owned` is a plain { id: true } object (the save's `iap` cache).
-export const owns = (owned, id) => !!owned[id] || (id === 'remove_ads' && !!owned.pier_keeper); // pier_keeper includes remove_ads
+export const owns = (owned, id) => !!owned[id] || (id === 'remove_ads' && !!owned.starter_pack); // the starter pack includes remove_ads
 export function canBuy(owned, id) {
   if (!IDS.includes(id)) return { ok: false, reason: 'unknown_product' };
-  if (id === 'pier_keeper_upgrade') {
-    if (owned.pier_keeper) return { ok: false, reason: 'already_owned' };
-    return owned.remove_ads ? { ok: true, reason: '' } : { ok: false, reason: 'needs_remove_ads' };
-  }
   if (owns(owned, id)) return { ok: false, reason: 'already_owned' };
-  if (id === 'pier_keeper' && owned.remove_ads) return { ok: false, reason: 'use_upgrade' };
   return { ok: true, reason: '' };
 }
-export const grant = (owned, id) => ({ ...owned, [id === 'pier_keeper_upgrade' ? 'pier_keeper' : id]: true });
+export const grant = (owned, id) => ({ ...owned, [id]: true });
 // Store product ids (Play may append ":base") -> entitlement object.
 export const ownedFromStore = (ids) => ids.map((s) => s.split(':')[0]).reduce((o, id) => (IDS.includes(id) ? grant(o, id) : o), {});
 
 // ---- state -------------------------------------------------------------------------------------
-const WEB_KEY = 'slp.iap.test.v1';
+const WEB_KEY = 'pact.iap.test';
 let owned = {};
 let cache = null;
 let onChange = () => {};
@@ -98,7 +92,7 @@ export async function getProducts({ all = false } = {}) {
   }));
 }
 
-// -> { ok, reason }. reason: cancelled, already_owned, needs_remove_ads, use_upgrade, unknown_product, store_error
+// -> { ok, reason }. reason: cancelled, already_owned, unknown_product, store_error
 export async function purchase(id) {
   const c = canBuy(owned, id);
   if (!c.ok) return c;
@@ -120,7 +114,7 @@ export async function purchase(id) {
     if (!products.length) return { ok: false, reason: 'store_error' };
     const { customerInfo } = await Purchases.purchaseStoreProduct({ product: products[0] });
     setOwned(ownedFromStore(customerInfo.allPurchasedProductIdentifiers));
-    const ok = has(id === 'pier_keeper_upgrade' ? 'pier_keeper' : id);
+    const ok = has(id);
     return { ok, reason: ok ? '' : 'store_error' };
   } catch (e) {
     return { ok: false, reason: e?.userCancelled ? 'cancelled' : 'store_error' };

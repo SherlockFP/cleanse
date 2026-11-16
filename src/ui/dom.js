@@ -12,8 +12,22 @@ export function h(tag, props, ...kids) {
   return e;
 }
 
-// Cut art as an <img> (trinket icons, Orhan). A missing file removes itself, so a gap in the art never shows a broken image.
-export const art = (id, cls = 'ico') => h('img', { src: `./img/${id}.png`, alt: '', class: cls, draggable: 'false', onerror: (e) => e.target.remove() });
+// Cut art as an <img>. Ids the art manifest does not list (setArtIds) get a code-drawn stand-in: cream paper edge, flat fill, the id's last word.
+let real = new Set();
+export const setArtIds = (ids) => { real = new Set(ids); };
+const stubs = new Map(), FILL = ['#f08a2a', '#7fd13b', '#b3202a', '#d9a62e', '#6b4a7a'];
+function stub(id) {
+  if (stubs.has(id)) return stubs.get(id);
+  const c = Object.assign(document.createElement('canvas'), { width: 96, height: 96 }), g = c.getContext('2d');
+  if (/^ui\/(slot_empty|rarity_)/.test(id)) { stubs.set(id, c.toDataURL()); return stubs.get(id); } // frames and tag backs: nothing is better than a labelled blob
+  let n = 7; for (const ch of id) n = (n * 31 + ch.charCodeAt(0)) % 9973;
+  g.fillStyle = '#f1e6cf'; g.beginPath(); g.arc(48, 48, 45, 0, 7); g.fill();
+  g.fillStyle = FILL[n % FILL.length]; g.beginPath(); g.arc(48, 48, 38, 0, 7); g.fill();
+  g.fillStyle = '#1c1220'; g.font = 'bold 17px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+  g.fillText(id.split('/').pop().replace(/^btn_/, '').slice(0, 8), 48, 49, 70);
+  const url = c.toDataURL(); stubs.set(id, url); return url;
+}
+export const art = (id, cls = 'ico') => h('img', { src: real.has(id) ? `./img/${id}.png` : stub(id), alt: '', class: cls, draggable: 'false', onerror: (e) => { if (e.target.src !== stub(id)) e.target.src = stub(id); } });
 
 export const clear = (e) => { while (e.firstChild) e.removeChild(e.firstChild); return e; };
 

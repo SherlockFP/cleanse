@@ -1,18 +1,19 @@
-// Text-mode run (ROADMAP.md M1 peg gate). Plays the real src/core in the terminal.
-// node scripts/play-cli.mjs [--seed S] [--installment N] [--trinket ID] [--chart ID] [--auto BOT] [command ...]
-// Commands (one per argument or per stdin line, ';' also separates):
-//   peg 1 4 7    set pegs to exactly these cells (0-8, row-major); 'peg' alone lifts all pegs
-//   spin         spin; after the last spin the tide is paid or the run ends
-//   buy N        buy offer N (0-based)      reroll      remove SYMBOL      lock N
-//   next         leave the shop for the next tide      quit
-// --auto BOT plays the whole run with a sim bot: no-build, random, greedy, bag-focus, lookahead.
+// Text-mode run on the real src/core.
+// node scripts/play-cli.mjs [--seed S] [--contract c1] [--char nim] [--auto greedy|random] [command ...]
+// Commands (one per argument, or one per stdin line; ';' also separates):
+//   terms N      pick terms card N (0-2)         stoke            +1 Heat
+//   spin         spin                            collect          take the result (after post tricks)
+//   use P [t]    use trick in pocket P; target t is a column/row/cell number, 'a,b' for two cells, or a symbol
+//   bank [N]     bank N coins (default all)      end              end the round (interest, deadline)
+//   buy N | tbuy N | reroll | lock N | sell N | bench I SYMBOL | leave      the wagon
+//   sign N | refuse | pawn N | nopawn | quit
 import { createInterface } from 'node:readline';
-import { hashSeed } from '../src/core/rng.js';
-import { makeBag, bagOdds } from '../src/core/reel.js';
-import { newRun, spin, togglePeg, canPeg, endTide, nextTide, enterLamplight, runSummary } from '../src/core/run.js';
-import { rollShop, buyOffer, removeToken, reroll, lockOffer, priceOf } from '../src/core/shop.js';
-import { SYMBOLS } from '../src/core/data/symbols.js';
-import { BOTS, pegGreedy, bestPick } from './sim-balance.mjs';
+import { makeRng } from '../src/core/rng.js';
+import { SYM, CHARM, DEAL, TRICK } from '../src/core/data.js';
+import { newRun, pickTerms, termsOffer, stoke, spin, collect, bank, endRound, leaveShop, pawn, declinePawn, useTrick, trickTarget, info, summary } from '../src/core/run.js';
+import { buyCharm, buyTrick, reroll, toggleLock, sellCharm, doBench, price } from '../src/core/shop.js';
+import { signDeal, refuseDeals } from '../src/core/deals.js';
+import { BOTS, playRun } from './sim-quick.mjs';
 
 const argv = process.argv.slice(2);
 const opt = {}, cmds = [];
@@ -20,97 +21,85 @@ for (let i = 0; i < argv.length; i++) {
   if (argv[i].startsWith('--')) opt[argv[i].slice(2)] = argv[++i];
   else cmds.push(argv[i]);
 }
-const NAME = Object.fromEntries(SYMBOLS.map((s) => [s.id, s.en]));
-const seed = /^\d+$/.test(opt.seed ?? '') ? Number(opt.seed) : hashSeed(opt.seed ?? 'play');
-const run = newRun({
-  seed, installment: Number(opt.installment ?? 1), chartId: opt.chart ?? null,
-  startTrinket: opt.trinket ?? (opt.auto ? bestPick() : 'first_light'), unlocked: ['start', 'cat_basket', 'radio', 'tea_corner'],
-});
+const run = newRun({ seed: opt.seed ?? 'play', contractId: opt.contract ?? 'c1', charId: opt.char ?? 'nim' });
 const out = (s = '') => console.log(s);
+const nm = (id) => SYM[id]?.name.en ?? id;
 
 function show() {
-  if (run.phase === 'tide') {
-    out(`\nTide ${run.tide}/5  spin ${run.spin}/${run.spinsMax}  jar ${run.jar}  quota ${run.quota}${run.event ? '  event ' + run.event : ''}  pegs ${run.held.length}/${run.pegsMax}`);
-    if (run.grid) {
-      for (let r = 0; r < 3; r++) {
-        out('  ' + [0, 1, 2].map((c) => { const i = r * 3 + c; return `${i}:${(NAME[run.grid[i]] ?? run.grid[i]).padEnd(11)}${run.held.includes(i) ? '*' : ' '}`; }).join(' '));
-      }
-    } else out('  (no grid yet: spin first)');
-    const bag = makeBag(run.bag);
-    out(`  bag ${bag.size}: ` + bagOdds(bag).map((o) => `${NAME[o.id]} ${o.count} (${(o.p * 100).toFixed(0)}%)`).join(', '));
-    out(`  trinkets: ${run.trinkets.map((t) => t.id).join(', ') || 'none'}`);
-  } else if (run.phase === 'shop') {
-    out(`\nShop after tide ${run.tide}  jar ${run.jar}  next quota ${run.quota}  trinkets: ${run.trinkets.map((t) => t.id).join(', ') || 'none'}`);
-    run.shop.offers.forEach((o, i) => out(`  ${i}: ${o.sold ? '(sold)' : `${o.kind === 'trinket' ? o.id : 'token ' + o.sym}  ${priceOf(run, o)} coins`}`));
-    out(`  reroll ${priceOf(run, { kind: 'reroll' })}, remove token ${priceOf(run, { kind: 'removal' })}; bag ${JSON.stringify(run.bag)}`);
+  const i = info(run);
+  out(`\nDEBT ${run.debtIdx + 1}  ${run.banked}/${run.debt}  round ${run.round + 1}/${run.rounds}  spins ${run.spinsLeft}  [${run.phase}]`);
+  out(`purse ${run.purse}  wick ${run.wick}  heat ${run.heat}  luck ${i.luck}  S x${i.S}  favourite ${i.favHidden ? '?' : run.favs.map(nm).join('+') || '-'}`);
+  out(`charms ${run.charms.map((c) => c.id).join(', ') || '-'}  tricks ${run.tricks.join(', ') || '-'}  curses ${run.curses.join(', ') || '-'}`);
+  if (run.grid && (run.phase === 'post' || run.phase === 'spin' || run.phase === 'roundend')) for (let r = 0; r < 3; r++) out('  ' + run.grid.slice(r * 5, r * 5 + 5).map((s) => nm(s).padEnd(8)).join(' '));
+  if (run.phase === 'terms') termsOffer(run).forEach((s, k) => out(`  [${k}] ${s.name.en}: ${s.text.en}`));
+  if (run.phase === 'shop') {
+    run.shop.charms.forEach((id, k) => out(`  charm ${k}: ${CHARM[id].name.en} (${CHARM[id].rarity}) ${JSON.stringify(price(run, { kind: 'charm', id }))} ${CHARM[id].text.en}`));
+    run.shop.tricks.forEach((id, k) => out(`  trick ${k}: ${TRICK[id].name.en} ${JSON.stringify(price(run, { kind: 'trick', id }))}`));
+    run.shop.bench.forEach((id, k) => out(`  bench ${k}: ${id}`));
   }
+  if (run.phase === 'deal') run.dealOffer.forEach((id, k) => out(`  deal ${k}: ${DEAL[id].name.en}: ${DEAL[id].text.en}`));
+  if (run.phase === 'ended') out('RESULT ' + JSON.stringify(summary(run)));
 }
 
-// Take the quota once the last spin is done; open the shop.
-function finishTide() {
-  const e = endTide(run);
-  out(e.paid ? `Tide ${e.tide} paid (${e.quota})${e.mercy ? ' by mercy' : ''}${e.clutch ? ', clutch' : ''}.` : `Tide ${e.tide} failed: quota ${e.quota}, jar ${run.jar}.`);
-  if (run.phase === 'shop') rollShop(run);
-  if (run.phase === 'lamplight') out('Tide 5 cleared: the run is won (Lamplight is not played in this tool).');
+function showScore(s) {
+  for (const p of s.patterns) out(`  ${p.id} of ${nm(p.sym)}: ${p.value} x ${p.symMult} x ${p.patMult} = ${p.pay}${p.repeats ? ` (+${p.repeats} repeat)` : ''}`);
+  if (s.scorch) out(`  SCORCH, purse burns ${s.burn}`);
+  out(`  total ${s.total} (heat x${s.heatMult.toFixed(2)}) + flat ${s.flat}   top: ${s.top3.map((c) => c.id + '+' + c.gain).join(', ')}`);
+}
+
+function target(id, v) {
+  const tg = trickTarget(id);
+  if (!tg) return {};
+  const n = Number(v);
+  if (tg === 'col') return { col: n };
+  if (tg === 'row') return { row: n };
+  if (tg === 'cell') return { cell: n };
+  if (tg === 'sym') return { sym: v };
+  const [a, b] = String(v).split(',').map(Number);
+  return { a, b, from: a, to: b };
 }
 
 function exec(line) {
-  const [c, ...a] = line.trim().split(/\s+/);
+  const [c, a, b] = line.trim().split(/\s+/);
   if (!c) return true;
-  try {
-    if (c === 'quit') return false;
-    if (c === 'peg') {
-      for (const h of [...run.held]) togglePeg(run, h);
-      for (const x of a.map(Number)) if (!togglePeg(run, x)) out(`cannot peg ${x}`);
-    } else if (c === 'spin') {
-      if (run.phase !== 'tide') return out('not in a tide'), true;
-      const r = spin(run);
-      out(`spin ${r.spin}: +${r.total}` + (r.lines.length ? '  lines ' + r.lines.map((l) => `${l.id}=${NAME[l.sym] ?? l.sym}`).join(' ') : ''));
-      if (run.spin === run.spinsMax) finishTide();
-    } else if (c === 'buy') out(JSON.stringify(buyOffer(run, Number(a[0]))));
-    else if (c === 'reroll') out(JSON.stringify(reroll(run)));
-    else if (c === 'remove') out(JSON.stringify(removeToken(run, a[0])));
-    else if (c === 'lock') out(JSON.stringify(lockOffer(run, Number(a[0]))));
-    else if (c === 'next') {
-      if (run.phase === 'shop') nextTide(run);
-      else if (run.phase === 'lamplight') enterLamplight(run);
-      else out('nothing to continue');
-    } else out(`unknown command: ${c}`);
-  } catch (e) {
-    out('error: ' + e.message);
+  const n = Number(a);
+  switch (c) {
+    case 'terms': pickTerms(run, termsOffer(run)[n].id); break;
+    case 'stoke': out(stoke(run) ? 'stoked' : 'cannot stoke'); break;
+    case 'spin': { const r = spin(run); if (r.score) showScore(r.score); break; }
+    case 'collect': showScore(collect(run)); break;
+    case 'use': out(JSON.stringify(useTrick(run, n, target(run.tricks[n], b)))); break;
+    case 'bank': out('banked ' + bank(run, a ? n : Infinity)); break;
+    case 'end': out(JSON.stringify(endRound(run))); break;
+    case 'buy': out(String(buyCharm(run, n))); break;
+    case 'tbuy': out(String(buyTrick(run, n))); break;
+    case 'reroll': out(String(reroll(run))); break;
+    case 'lock': out(String(toggleLock(run, n))); break;
+    case 'sell': out(String(sellCharm(run, n))); break;
+    case 'bench': out(String(doBench(run, n, b))); break;
+    case 'leave': out(String(leaveShop(run))); break;
+    case 'sign': out(String(signDeal(run, run.dealOffer[n]))); break;
+    case 'refuse': out(String(refuseDeals(run))); break;
+    case 'pawn': out(String(pawn(run, n))); break;
+    case 'nopawn': out(String(declinePawn(run))); break;
+    case 'quit': return false;
+    default: out('?? ' + c);
   }
-  if (run.phase === 'over') return out('Run over: ' + JSON.stringify(runSummary(run))), false;
-  if (run.phase === 'lamplight') return out(JSON.stringify(runSummary(run))), false;
-  show();
   return true;
 }
 
-function auto(name) {
-  const bot = BOTS[name];
-  if (!bot) throw new Error('unknown bot ' + name + ' (' + Object.keys(BOTS).join(', ') + ')');
-  const ctx = { buys: [] };
+if (opt.auto) {
+  playRun(run, BOTS[opt.auto], makeRng('cli-' + opt.auto));
   show();
-  while (run.phase === 'tide' || run.phase === 'shop') {
-    if (run.phase === 'tide') {
-      if (run.grid) { pegGreedy(run); out(`peg ${run.held.join(' ')}`); }
-      if (!exec('spin')) break;
-    } else {
-      const n = ctx.buys.length;
-      bot.shop?.(run, ctx, {});
-      out('bot buys: ' + (ctx.buys.slice(n).join(', ') || 'nothing'));
-      if (!exec('next')) break;
-    }
-  }
+  process.exit(0);
 }
-
-if (opt.auto) auto(opt.auto);
-else {
-  show();
-  let go = true;
-  for (const line of cmds.flatMap((c) => c.split(';'))) { go = exec(line); if (!go) break; }
-  if (go && cmds.length === 0) {
-    const rl = createInterface({ input: process.stdin, prompt: '> ' });
-    rl.prompt();
-    rl.on('line', (l) => { for (const c of l.split(';')) if (!exec(c)) { rl.close(); return; } rl.prompt(); });
-  }
+let go = true;
+for (const line of cmds.join(' ').split(';')) { if (go) { try { go = exec(line); } catch (e) { out('error: ' + e.message); } } }
+show();
+if (!cmds.length && process.stdin.isTTY !== false) {
+  const rl = createInterface({ input: process.stdin });
+  rl.on('line', (l) => {
+    for (const x of l.split(';')) { try { if (!exec(x)) { rl.close(); return; } } catch (e) { out('error: ' + e.message); } }
+    show();
+  });
 }

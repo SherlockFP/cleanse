@@ -1,251 +1,241 @@
-// Content tables (v1.0-lite scope: 12 symbols, 35 trinkets, 6 charts, 4 events, 8 lines) and one unit test per lite trinket.
-// Full counts (16/64/...) arrive with the monthly drops.
-import assert from 'node:assert/strict';
-import { SYMBOLS } from '../src/core/data/symbols.js';
-import { TRINKETS, HOOKS, FAMILIES } from '../src/core/data/trinkets.js';
-import { LINES } from '../src/core/data/lines.js';
-import { CHARTS } from '../src/core/data/charts.js';
-import { EVENTS } from '../src/core/data/events.js';
-import { PRICES, LINE_PAY } from '../src/core/econ.js';
-import { scoreSpin } from '../src/core/reel.js';
-import { applyTrinkets, scoringState, settleSpin, EFFECTS } from '../src/core/trinkets.js';
-import { newRun, endTide, quotaFor } from '../src/core/run.js';
-import { rollShop, priceOf, removeToken } from '../src/core/shop.js';
+// Content check: every charm, deal, curse, trick, stake, contract, character, hideout piece and
+// achievement loads, uses only known primitives and tags, has en/tr/th text, and every charm rule can
+// fire in a constructed state without throwing. node scripts/check-content.mjs
+import {
+  CONFIG, SYM, SCORING, CHARMS, CHARM, DEALS, CURSES, CURSE, TRICKS, STAKES, CONTRACTS, CHARS, HIDEOUT, ACHIEVEMENTS, ACH, PATTERN_DATA, BENCH, RARITIES,
+} from '../src/core/data.js';
+import { TRIGGERS, COND_KEYS, EFFECT_TYPES, FLAGS, PER_KEYS, SYM_TARGETS, snapshot, fire, runEffects, addCharm } from '../src/core/effects.js';
+import { newRun, pickTerms, termsOffer, useTrick, trickTarget, spin, collect } from '../src/core/run.js';
 
-const deepFrozen = (o) => !o || typeof o !== 'object' || (Object.isFrozen(o) && Object.values(o).every(deepFrozen));
-const unique = (a) => new Set(a).size === a.length;
-const count = (a, f) => a.filter(f).length;
+let ok = 0, bad = 0;
+const t = (cond, msg) => { if (cond) ok++; else { bad++; console.log('FAIL ' + msg); } };
+const LANGS = ['en', 'tr', 'th'];
+const FAMILIES = CONFIG.families.map((f) => f.id);
+const PATTERN_IDS = PATTERN_DATA.map((p) => p.id);
+const ALL_SYMS = Object.keys(SYM);
+const TRICK_OPS = ['shiftColumn', 'holdColumn', 'respinRow', 'retriggerBest', 'swapAdjacent', 'setCell', 'rerollSymbol', 'spins', 'heat', 'stash', 'luck', 'patMult', 'pickFav', 'copyAdjacent', 'loan', 'muteCurses', 'freeBench', 'saveDeadline'];
+const TRICK_WHEN = ['pre', 'post', 'any', 'shop', 'auto'];
+const HIDE_EFFECTS = ['none', 'startTrick', 'startCharmPick', 'shopOffers', 'benchOffers', 'foresight', 'keepCharm', 'startWick', 'seededRuns', 'refuseWick'];
+const STATS = ['debtsPaid', 'contract', 'reachDebt', 'spinCoins', 'heat10Spins', 'scorches', 'cursesHeld', 'dealsSigned', 'dealsRefused', 'cleanContract', 'interestTotal', 'earlyPays', 'exactChange', 'tricksUsed', 'tricksOneSpin', 'symbolsRemoved', 'wispsOneSpin', 'luckReached', 'favPatterns', 'crownPatterns', 'familyFull', 'charmsBought', 'charmsSold', 'dailyRuns', 'charWins', 'hideout', 'patternsOneSpin'];
 
-// counts
-assert.equal(SYMBOLS.length, 12);
-assert.equal(TRINKETS.length, 35);
-assert.equal(CHARTS.length, 6);
-assert.equal(EVENTS.length, 4);
-assert.equal(LINES.length, 8);
-assert.equal(HOOKS.length, 18);
-for (const t of [SYMBOLS, TRINKETS, LINES, HOOKS, FAMILIES, CHARTS, EVENTS]) assert.ok(deepFrozen(t));
-
-// unique ids
-for (const t of [SYMBOLS, TRINKETS, LINES, CHARTS, EVENTS]) assert.ok(unique(t.map((x) => x.id)));
-assert.ok(unique(HOOKS));
-
-// symbols
-const symIds = new Set(SYMBOLS.map((s) => s.id));
-assert.equal(SYMBOLS.reduce((a, s) => a + s.start, 0), 16); // start bag
-const ALIAS = { knot: 'three_knots', seaglass: 'sea_glass', cormorant: 'golden_cormorant' }; // data ids vs econ.js keys
-for (const s of SYMBOLS) {
-  assert.equal(s.nameKey, `sym.${s.id}`);
-  assert.ok(s.en && s.tr, s.id);
-  assert.ok(['line', 'wild', 'special', 'junk'].includes(s.type), s.id);
-  if (s.type === 'line' || s.type === 'wild') assert.equal(s.pay, LINE_PAY[ALIAS[s.id] ?? s.id], `${s.id} pay vs econ.js`);
-  else assert.equal(s.pay, 0, s.id);
-  if (s.type === 'special') { assert.ok(s.rule && s.cap === 3, s.id); assert.ok(s.price !== null, s.id); }
-  if (s.rule?.kind === 'adjacent') for (const t of s.rule.targets) assert.ok(symIds.has(t), `${s.id} target ${t}`);
-  if (s.price !== null) assert.ok(s.price >= PRICES.tokenMin && s.price <= PRICES.tokenMax, `${s.id} price`);
-  if (s.type === 'junk') assert.equal(s.price, null);
-}
-assert.equal(count(SYMBOLS, (s) => s.type === "line"), 5);
-assert.equal(count(SYMBOLS, (s) => s.type === 'special'), 4);
-
-// trinkets
-const GRADE_COUNT = [16, 13, 6, 0];
-const FAMILY_COUNT = { catch: 8, hearth: 8, peg: 3, tide: 8, ledger: 8 };
-for (const t of TRINKETS) {
-  assert.ok(FAMILIES.includes(t.family), t.id);
-  assert.ok([1, 2, 3, 4].includes(t.grade), t.id);
-  assert.equal(t.price, PRICES.trinket[t.grade - 1], `${t.id} price vs grade`);
-  assert.ok(t.hooks.length && t.hooks.every((h) => HOOKS.includes(h)), `${t.id} names an unknown hook`);
-  assert.equal(t.hook, t.hooks[0]);
-  assert.deepEqual(Object.keys(EFFECTS[t.id] ?? {}).filter((k) => k !== 'settle').sort(), [...t.hooks].sort(), `${t.id} handlers vs hooks`);
-  assert.ok(t.params && typeof t.params === 'object', t.id);
-  if (t.params.sym) assert.ok(symIds.has(t.params.sym), `${t.id} sym`);
-  assert.equal(t.nameKey, `trinket.${t.id}.name`);
-  assert.equal(t.shortKey, `trinket.${t.id}.short`);
-  assert.equal(t.descKey, `trinket.${t.id}.desc`);
-  assert.ok(t.en && t.tr, t.id);
-  assert.ok(['start', 'cat_basket', 'radio', 'tea_corner'].includes(t.unlock), t.id);
-}
-for (const g of [1, 2, 3, 4]) assert.equal(count(TRINKETS, (t) => t.grade === g), GRADE_COUNT[g - 1], `grade ${g}`);
-for (const f of FAMILIES) assert.equal(count(TRINKETS, (t) => t.family === f), FAMILY_COUNT[f] ?? 0, f);
-
-// lines: 3 rows, 3 columns, 2 diagonals, every cell in 2-4 lines
-assert.deepEqual(['row', 'col', 'diag'].map((k) => count(LINES, (l) => l.kind === k)), [3, 3, 2]);
-for (const l of LINES) assert.ok(l.cells.length === 3 && unique(l.cells) && l.cells.every((c) => c >= 0 && c < 9), l.id);
-for (let c = 0; c < 9; c++) assert.ok([2, 3, 4].includes(count(LINES, (l) => l.cells.includes(c))), `cell ${c}`);
-
-// start pool: 22 trinkets, 12 / 7 / 3 / 0 by grade (CONTENT.md section 2)
-assert.equal(count(TRINKETS, (t) => t.unlock === 'start'), 22);
-assert.deepEqual([1, 2, 3, 4].map((g) => count(TRINKETS, (t) => t.unlock === 'start' && t.grade === g)), [12, 7, 3, 0]);
-
-// charts and events
-for (const c of CHARTS) assert.ok(c.en && c.tr && c.mods && c.nameKey === `chart.${c.id}.name`, c.id);
-for (const e of EVENTS) assert.ok(e.en && e.tr && e.mods && e.nameKey === `event.${e.id}.name`, e.id);
-assert.deepEqual(CHARTS.map((c) => c.id), ['spring_tide', 'neap_tide', 'bare_line', 'market_day', 'tight_shelf', 'long_evening']);
-assert.deepEqual(EVENTS.map((e) => e.id), ['auditor', 'fog_bank', 'short_day', 'low_water']);
-
-// ---- one unit test per lite trinket: state in, expected coins out. 'barnacle' is the filler: junk, pays 0.
-const g = (cells) => { const a = Array(9).fill('barnacle'); for (const [i, v] of Object.entries(cells)) a[i] = v; return a; };
-const at = (ids, v) => Object.fromEntries(ids.map((i) => [i, v]));
-const pay = (trinkets, grid, held = [], st = {}) => scoreSpin(grid, held, scoringState({ trinkets, ...st })).total;
-const tested = new Set();
-const unit = (id, fn) => { tested.add(id); fn(id); };
-const sardineRow = g(at([0, 1, 2], 'sardine')); // one line, base 6
-const lanternRow1 = g(at([3, 4, 5], 'lantern')); // one line, base 10
-const shop = (opts) => { const r = newRun({ seed: 7, ...opts }); r.phase = 'shop'; rollShop(r); return r; };
-
-unit('salt_barrel', (t) => { assert.equal(pay([t], sardineRow), 11); assert.equal(pay([t], g(at([0, 1, 2], 'tea'))), 7); });
-unit('fish_cart', (t) => {
-  const four = g(at([0, 1, 5, 7], 'sardine')); // 4 sardines, no line
-  assert.equal(pay([], four), 0); assert.equal(pay([t], four), 20);
-  assert.equal(pay([t], four, [0]), 0); assert.equal(pay([t], g(at([0, 1, 5, 7, 8], "sardine")), [0]), 20); // held sardines did not land
-});
-unit('net_mender', (t) => {
-  const netG = g({ 1: 'sardine', 3: 'sardine', 4: 'net' });
-  assert.equal(pay([], netG), 4); assert.equal(pay([t], netG), 24); assert.equal(pay([t], netG, [1, 3, 4]), 0);
-});
-unit('fish_hook', (t) => assert.equal(pay([t], sardineRow), 12));
-unit('ice_crate', (t) => {
-  assert.equal(pay([t], sardineRow, [0, 1]), 30); assert.equal(pay([t], sardineRow, [0]), 18); assert.equal(pay([t], sardineRow), 6);
-});
-unit('pier_cat', (t) => {
-  const cat = g({ 0: 'sardine', 1: 'sardine', 2: 'sardine', 4: 'cat' }); // line 6 + cat 4 (one adjacent sardine)
-  assert.equal(pay([], cat), 10); assert.equal(pay([t], cat), 19); // (6 + 5) + 4 x 2
-});
-unit('fish_scale', (t) => {
-  assert.equal(pay([{ id: t, bonus: 6 }], sardineRow), 12);
-  const e = { id: t }, st = scoringState({ trinkets: [e] });
-  for (const want of [6, 12, 18, 24, 30, 30, 30]) { settleSpin(st, scoreSpin(sardineRow, [], st)); assert.equal(e.bonus, want); }
-  assert.equal(pay([e], sardineRow), 36);
-  const two = g(at([0, 1, 2, 3, 4, 5], 'sardine')), e2 = { id: t }; // two paying lines in one spin grow it by 12
-  const st2 = scoringState({ trinkets: [e2] });
-  settleSpin(st2, scoreSpin(two, [], st2));
-  assert.equal(e2.bonus, 12);
-});
-unit('full_net', (t) => {
-  const six = g(at([0, 1, 3, 5, 7, 8], 'sardine')); // 6 sardines, no line
-  assert.equal(pay([], six), 0); assert.equal(pay([t], six), 40); assert.equal(pay([t], six, [0, 1]), 0);
-});
-unit('samovar_tap', (t) => assert.equal(pay([t], g(at([0, 1, 2], 'tea'))), 13));
-unit('lantern_oil', (t) => assert.equal(pay([t], lanternRow1), 18));
-unit('sugar_cube', (t) => {
-  const tl = g({ 0: 'tea', 1: 'lantern' });
-  assert.equal(pay([t], tl), 3); assert.equal(pay([t], tl, [0]), 3); assert.equal(pay([t], tl, [0, 1]), 0);
-  assert.equal(pay([t], g({ 0: 'tea', 2: 'lantern' })), 0); // not adjacent
-});
-unit('warm_rug', (t) => {
-  assert.equal(pay([t], g({}), [], { spin: 2 }), 6); assert.equal(pay([t], g({}), [], { spin: 1 }), 0);
-  assert.equal(pay([t], g({}), [4], { spin: 2 }), 0);
-  assert.equal(pay([t], g({}), [], { spin: 6, spins: 7 }), 6); assert.equal(pay([t], g({}), [], { spin: 7, spins: 7 }), 0); // spins 2-6 only
-});
-unit('grandmas_cup', (t) => assert.equal(pay([t], g(at([0, 1, 2], 'tea'))), 14));
-unit('hearth_stone', (t) => {
-  const end = (jar) => applyTrinkets('onTideEnd', { trinkets: [t] }, { jar }).coins;
-  assert.equal(end(50), 10); assert.equal(end(0), 0); assert.equal(end(500), 20);
-});
-unit('wick_trimmer', (t) => {
-  assert.equal(pay([t], lanternRow1), 30); assert.equal(pay([t], g(at([1, 4, 7], 'lantern'))), 30);
-  assert.equal(pay([t], g(at([0, 1, 2], 'lantern'))), 10); assert.equal(pay([t], g(at([0, 4, 8], 'lantern'))), 10);
-});
-unit('tea_garden', (t) => {
-  const both = g({ ...at([0, 1, 2], 'tea'), ...at([6, 7, 8], 'lantern') });
-  assert.equal(pay([], both), 17); assert.equal(pay([t], both), 51); assert.equal(pay([t], g(at([0, 1, 2], 'tea'))), 7);
-});
-unit('spare_peg', (t) => { assert.equal(applyTrinkets('onPegSupply', { trinkets: [t] }), 1); assert.equal(newRun({ seed: 1, startTrinket: t }).pegsMax, 4); });
-unit('steady_hand', (t) => { assert.equal(pay([t], sardineRow, [0, 1]), 9); assert.equal(pay([t], sardineRow, [0]), 6); assert.equal(pay([t], sardineRow), 6); });
-unit('brass_peg', (t) => {
-  assert.equal(pay([t], sardineRow, [0, 1]), 14);
-  const cross = g(at([0, 1, 2, 3, 6], 'sardine')); // a row and a column share held cell 0: paid once
-  assert.equal(pay([t], cross, [0]), 16);
-});
-unit('first_light', (t) => { assert.equal(pay([t], sardineRow, [], { spin: 1 }), 18); assert.equal(pay([t], sardineRow, [], { spin: 2 }), 6); });
-unit('tide_table', (t) => { assert.equal(pay([t], g({}), [], { spin: 3 }), 4); assert.equal(pay([t], g({}), [], { spin: 6 }), 4); assert.equal(pay([t], g({}), [], { spin: 2 }), 0); });
-unit('dry_spell', (t) => { assert.equal(pay([t], sardineRow, [], { prevZero: true }), 11); assert.equal(pay([t], sardineRow), 6); }); // ceil(6 x 1.75)
-unit('night_tide', (t) => {
-  assert.equal(pay([t], sardineRow, [], { spin: 6, spins: 6 }), 12); assert.equal(pay([t], sardineRow, [], { spin: 5, spins: 6 }), 6);
-  assert.equal(pay([t], sardineRow, [], { spin: 7, spins: 7 }), 12);
-});
-unit('lucky_sandal', (t) => {
-  assert.equal(pay([{ id: t, charges: 3 }], g({})), 30); assert.equal(pay([{ id: t, charges: 2 }], g({})), 0);
-  const e = { id: t }, st = scoringState({ trinkets: [e] });
-  for (const want of [1, 2, 3]) { settleSpin(st, scoreSpin(g({}), [], st)); assert.equal(e.charges, want); } // three empty spins
-  const paid = scoreSpin(g({}), [], st);
-  assert.equal(paid.total, 30); settleSpin(st, paid); assert.equal(e.charges, 0);
-  settleSpin(st, scoreSpin(sardineRow, [], st)); assert.equal(e.charges, 0); // a paying spin adds none
-});
-unit('slack_water', (t) => {
-  assert.equal(applyTrinkets('onQuota', { trinkets: [t] }), 0.92);
-  const r = newRun({ seed: 1, startTrinket: t });
-  assert.equal(r.quota, 14); assert.equal(quotaFor(r, 2), 28); // ceil(15 x .92), ceil(30 x .92)
-});
-unit('orhans_watch', (t) => { const r = newRun({ seed: 1, startTrinket: t }); assert.equal(r.spinsMax, 7); assert.equal(r.pegsMax, 4); });
-unit('second_wind', (t) => {
-  for (const [gap, mercy] of [[15, true], [20, true], [21, false]]) {
-    const q = newRun({ seed: 1, startTrinket: t });
-    q.spin = q.spinsMax; q.jar = q.quota - gap;
-    assert.equal(endTide(q).mercy, mercy, `gap ${gap}`);
+const text = (o, what) => {
+  t(o && LANGS.every((l) => typeof o[l] === 'string' && o[l].trim()), what + ' has en/tr/th text');
+  if (o && LANGS.every((l) => typeof o[l] === 'string')) {
+    const tok = (s) => (s.match(/\{c:[\d.]+\}/g) || []).sort().join();
+    t(tok(o.en) === tok(o.tr) && tok(o.en) === tok(o.th), what + ' same {c:N} tokens in every language');
   }
-  const r = newRun({ seed: 1, startTrinket: t });
-  const again = (jar) => { r.phase = 'tide'; r.spin = r.spinsMax; r.quota = 30; r.jar = jar; return endTide(r); };
-  assert.equal(again(12).mercy, true); assert.equal(again(12).mercy, true); // twice per run
-  assert.equal(again(12).paid, false); // a third time: no
-});
-unit('tin_cup', (t) => { assert.equal(applyTrinkets('onTideStart', { trinkets: [t] }).coins, 14); assert.equal(newRun({ seed: 1, startTrinket: t }).jar, 14); });
-unit('lucky_ledger', (t) => {
-  const r = shop({ startTrinket: t });
-  const costs = [];
-  for (let i = 0; i < 4; i++) { costs.push(priceOf(r, { kind: 'reroll' })); r.shop.reroll++; }
-  assert.deepEqual(costs, [0, 0, 8, 11]);
-  assert.equal(priceOf(shop({}), { kind: 'reroll' }), 2);
-});
-unit('pebble_jar', (t) => assert.equal(pay([t], g(at([0, 1, 2], 'pebble'))), 8));
-unit('skipping_stone', (t) => {
-  assert.equal(pay([t], g(at([0, 1, 5, 7], 'pebble'))), 6); assert.equal(pay([t], g(at([0, 1, 3, 5, 7, 8], 'pebble'))), 9);
-  assert.equal(pay([t], g(at([0, 1, 5], 'pebble'))), 3); assert.equal(pay([t], g(at([0, 1, 5, 7], 'pebble')), [0, 1]), 3);
-});
-unit('hagglers_cap', (t) => {
-  const r = shop({ startTrinket: t }), plain = shop({});
-  assert.equal(priceOf(plain, { kind: 'trinket', id: 'salt_barrel' }), 5); assert.equal(priceOf(r, { kind: 'trinket', id: 'salt_barrel' }), 4);
-  assert.equal(priceOf(r, { kind: 'trinket', id: 'fish_hook' }), 6); assert.equal(priceOf(r, { kind: 'trinket', id: 'full_net' }), 10);
-  assert.equal(priceOf(r, { kind: 'token', sym: 'lantern' }), 4); assert.equal(priceOf(r, { kind: 'reroll' }), 2);
-});
-unit('junk_cart', (t) => {
-  const r = shop({ startTrinket: t });
-  r.jar = 100;
-  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 0 }); assert.equal(r.jar, 100);
-  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 26 }); // flat price; the free one still used one of the 3 removals
-  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 26 });
-  assert.deepEqual(removeToken(r, 'pebble'), { ok: false, reason: 'no removals left' });
-  const plain = shop({});
-  plain.jar = 100;
-  assert.deepEqual(removeToken(plain, 'pebble'), { ok: true, price: 26 });
-});
-unit('kelp_pot', (t) => {
-  const k = g({ 0: 'kelp' });
-  const r1 = scoreSpin(k, [], scoringState({ trinkets: [t], kelp: 1 }));
-  assert.equal(r1.total, 1); assert.equal(r1.kelp, 6);
-  assert.equal(scoreSpin(k, [], scoringState({ trinkets: [t], kelp: 18 })).kelp, 20); // max 20
-  assert.equal(scoreSpin(k, [], scoringState({ trinkets: [], kelp: 3 })).kelp, 4);
-  const sold = scoreSpin(k, [], scoringState({ trinkets: [], kelp: 20 })); // Kelp Pot sold with the counter at 20: back to the plain max
-  assert.equal(sold.total, 5); assert.equal(sold.kelp, 5);
-});
-unit('sea_chest', (t) => {
-  assert.equal(applyTrinkets('onTideEnd', { trinkets: [t, 'tin_cup', 'salt_barrel'] }, { jar: 0 }).coins, 21);
-  assert.equal(applyTrinkets('onTideEnd', { trinkets: [t] }, { jar: 0 }).coins, 7);
-});
-assert.deepEqual([...tested].sort(), TRINKETS.map((t) => t.id).sort(), 'every lite trinket has a unit test');
+};
+const symOK = (s, allowTargets = true) => ALL_SYMS.includes(s) || (allowTargets && SYM_TARGETS.includes(s));
+const perOK = (p) => !p || PER_KEYS.includes(p) || (p.startsWith('family:') && FAMILIES.includes(p.slice(7))) || (p.startsWith('sym:') && ALL_SYMS.includes(p.slice(4)));
 
-// shelf order never changes a total: all 35 trinkets, three orders, one rich grid
-{
-  const all = TRINKETS.map((t) => t.id);
-  const rich = g({ 0: 'sardine', 1: 'sardine', 2: 'sardine', 3: 'tea', 4: 'cat', 5: 'tea', 6: 'lantern', 7: 'lantern', 8: 'lantern' });
-  const totals = [all, [...all].reverse(), [...all.slice(11), ...all.slice(0, 11)]].map((o) => pay(o, rich, [0, 1], { spin: 3, prevZero: true }));
-  assert.equal(new Set(totals).size, 1);
+function effectOK(e, what) {
+  t(EFFECT_TYPES.includes(e.type), `${what}: unknown effect ${e.type}`);
+  t(perOK(e.per), `${what}: bad per ${e.per}`);
+  t(e.n === undefined || Number.isFinite(e.n), `${what}: n must be a number`);
+  t(!e.scope || ['spin', 'round', 'debt'].includes(e.scope), `${what}: bad scope`);
+  if (['symValue', 'symMult', 'weight'].includes(e.type)) t(symOK(e.sym), `${what}: bad sym ${e.sym}`);
+  if (e.type === 'place') t(ALL_SYMS.includes(e.sym) && (!e.zone || ['corner', 'edge', 'midrow'].includes(e.zone)), `${what}: bad place`);
+  if (e.type === 'transform') t(ALL_SYMS.includes(e.from) && (ALL_SYMS.includes(e.to) || e.to === 'favoured'), `${what}: bad transform`);
+  if (e.type === 'patMult') t(['all', 'big', 'this'].includes(e.pattern) || PATTERN_IDS.includes(e.pattern), `${what}: bad pattern ${e.pattern}`);
+  if (e.type === 'gainCharm') t(RARITIES.includes(e.rarity), `${what}: bad rarity`);
+  if (e.type === 'flag') t(FLAGS.includes(e.flag), `${what}: unknown flag ${e.flag}`);
+}
+function condOK(c, what) {
+  for (const k of Object.keys(c)) t(COND_KEYS.includes(k), `${what}: unknown cond ${k}`);
+  if (c.sym) t(ALL_SYMS.includes(c.sym), `${what}: cond sym`);
+  if (c.group) t(['low', 'mid', 'high'].includes(c.group), `${what}: cond group`);
+  if (c.pattern) t(PATTERN_IDS.includes(c.pattern), `${what}: cond pattern`);
+  if (c.zone) t(['corner', 'edge', 'midrow'].includes(c.zone), `${what}: cond zone`);
+  if (c.spinIs) t(['first', 'last'].includes(c.spinIs), `${what}: cond spinIs`);
+  if (c.countMin) t(ALL_SYMS.includes(c.countMin[0]) && c.countMin[1] > 0, `${what}: cond countMin`);
+  if (c.limit) t(['round', 'debt'].includes(c.limit), `${what}: cond limit`);
+  if (c.chance !== undefined) t(c.chance > 0 && c.chance <= 100, `${what}: cond chance`);
+  if (c.every !== undefined) t(Number.isInteger(c.every) && c.every > 1, `${what}: cond every`);
+}
+function rulesOK(rules, what) {
+  t(Array.isArray(rules) && rules.length > 0, what + ' has rules');
+  for (const r of rules) {
+    t(TRIGGERS.includes(r.trigger), `${what}: unknown trigger ${r.trigger}`);
+    condOK(r.cond || {}, what);
+    t(Array.isArray(r.effects) && r.effects.length > 0, what + ' rule has effects');
+    for (const e of r.effects) effectOK(e, what);
+  }
 }
 
-// chart and event effects on pay
-assert.equal(scoreSpin(sardineRow, [], scoringState({ linePayMul: 1.25 })).total, 8); // spring_tide: ceil(7.5)
-const low = scoringState({ lineSkip: ['row2'] });
-assert.equal(scoreSpin(g(at([6, 7, 8], 'sardine')), [], low).total, 0); // low_water: bottom row does not pay
-assert.equal(scoreSpin(g(at([3, 4, 5], 'sardine')), [], low).total, 6);
+// ---------- static checks ----------
+const counts = { charms: 107, deals: 24, curses: 16, tricks: 20, stakes: 12, contracts: 10, chars: 6, hideout: 10, achievements: 43 };
+t(CHARMS.length === counts.charms && DEALS.length === counts.deals && CURSES.length === counts.curses && TRICKS.length === counts.tricks, 'content counts');
+t(STAKES.length === counts.stakes && CONTRACTS.length === counts.contracts && CHARS.length === counts.chars && HIDEOUT.length === counts.hideout && ACHIEVEMENTS.length === counts.achievements, 'content counts (2)');
+for (const list of [CHARMS, DEALS, CURSES, TRICKS, STAKES, CONTRACTS, CHARS, HIDEOUT, ACHIEVEMENTS, BENCH]) t(new Set(list.map((x) => x.id)).size === list.length, 'unique ids');
+for (const s of Object.values(SYM)) text(s.name, 'symbol ' + s.id);
+for (const p of PATTERN_DATA) { text(p.name, 'pattern ' + p.id); t(p.cells.every((c) => c.length === p.size), 'pattern size ' + p.id); }
 
-console.log('check-content: ok');
+const lockedBy = {};
+for (const a of ACHIEVEMENTS) if (a.reward.charm) lockedBy[a.reward.charm] = (lockedBy[a.reward.charm] || 0) + 1;
+for (const c of CHARMS) {
+  const w = 'charm ' + c.id;
+  text(c.name, w + ' name'); text(c.text, w);
+  t(RARITIES.includes(c.rarity), w + ' rarity');
+  t(FAMILIES.includes(c.family) && c.tags.includes(c.family) && c.tags.every((x) => FAMILIES.includes(x)), w + ' tags');
+  t(typeof c.icon === 'string' && c.icon, w + ' icon');
+  t(Number.isFinite(c.price.coins ?? c.price.wick), w + ' price');
+  rulesOK(c.rules, w);
+  if (c.unlock) t(c.unlock.startsWith('ach:') && ACH[c.unlock.slice(4)]?.reward.charm === c.id, w + ' unlock points at an achievement that gives it');
+  else t(!lockedBy[c.id], w + ' is both free and an achievement reward');
+}
+for (const id of Object.keys(lockedBy)) t(CHARMS.some((c) => c.id === id && c.unlock === 'ach:' + ACHIEVEMENTS.find((a) => a.reward.charm === id).id), 'achievement reward charm is locked: ' + id);
+for (const f of FAMILIES) t(CHARMS.some((c) => c.family === f), 'family has charms: ' + f);
+for (const d of DEALS) {
+  const w = 'deal ' + d.id;
+  text(d.name, w + ' name'); text(d.text, w);
+  t(d.boon.length > 0, w + ' boon');
+  for (const e of d.boon) effectOK(e, w);
+  t(d.curse === 'random' || CURSE[d.curse], w + ' curse exists');
+}
+for (const c of CURSES) { text(c.name, 'curse ' + c.id + ' name'); text(c.text, 'curse ' + c.id); rulesOK(c.rules, 'curse ' + c.id); }
+for (const x of TRICKS) {
+  const w = 'trick ' + x.id;
+  text(x.name, w + ' name'); text(x.text, w);
+  t(TRICK_OPS.includes(x.op.type), w + ' op ' + x.op.type);
+  t(TRICK_WHEN.includes(x.when), w + ' when');
+  t(Number.isFinite(x.price.coins ?? x.price.wick), w + ' price');
+}
+for (const s of STAKES) {
+  const w = 'stake ' + s.id;
+  text(s.name, w + ' name'); text(s.text, w);
+  t(s.spins >= 1 && s.minDebt >= 1 && s.weight > 0, w + ' numbers');
+  for (const e of s.effects) effectOK(e, w);
+}
+for (const c of CONTRACTS) {
+  const w = 'contract ' + c.id;
+  text(c.name, w + ' name'); text(c.text, w);
+  t(c.debts.every((d, i) => i === 0 || d > c.debts[i - 1]), w + ' debts rise');
+  t(c.debts.length <= CONFIG.priceScale.length, w + ' price scale long enough');
+  t(c.unlockAfter === null || CONTRACTS.some((o) => o.id === c.unlockAfter), w + ' unlockAfter');
+  for (const e of c.rules) effectOK(e, w);
+  t(!c.ending || CONFIG.endings.some((e) => e.id === c.ending && e.contract === c.id), w + ' ending');
+}
+for (const c of CHARS) {
+  const w = 'character ' + c.id;
+  text(c.name, w + ' name'); text(c.text, w);
+  t(c.start.tricks.every((x) => TRICKS.some((y) => y.id === x)) && c.start.charms.every((x) => CHARM[x]), w + ' start items exist');
+  rulesOK(c.rules, w);
+  t(!c.unlock || ACH[c.unlock.slice(4)]?.reward.char === c.id, w + ' unlock achievement gives this character');
+}
+for (const h of HIDEOUT) { text(h.name, 'hideout ' + h.id + ' name'); text(h.text, 'hideout ' + h.id); t(HIDE_EFFECTS.includes(h.effect.type), 'hideout effect ' + h.id); }
+for (const a of ACHIEVEMENTS) {
+  text(a.name, 'achievement ' + a.id + ' name'); text(a.text, 'achievement ' + a.id);
+  const stat = a.cond.stat.startsWith('pattern:') ? 'patternsOneSpin' : a.cond.stat;
+  t(STATS.includes(stat) && (!a.cond.stat.startsWith('pattern:') || PATTERN_IDS.includes(a.cond.stat.slice(8))), 'achievement stat ' + a.cond.stat);
+  t(a.reward.wax || (a.reward.charm && CHARM[a.reward.charm]) || (a.reward.char && CHARS.some((c) => c.id === a.reward.char)), 'achievement reward ' + a.id);
+}
+for (const b of BENCH) { text(b.name, 'bench ' + b.id + ' name'); text(b.text, 'bench ' + b.id); }
+for (const e of CONFIG.endings) t(CONTRACTS.some((c) => c.id === e.contract), 'ending contract ' + e.id);
+
+// ---------- every rule can fire ----------
+function stateFor(rules) {
+  const run = newRun({ seed: 'content' });
+  run.tricks = ['nudge'];
+  run.purse = 300;
+  run.debt = 1000;
+  run.spinsLeft = 1; run.spinInRound = 0;
+  for (const r of rules) {
+    const c = r.cond || {};
+    if (c.heatMin) run.heat = Math.max(run.heat, c.heatMin);
+    if (c.heatMax !== undefined) run.heat = Math.min(run.heat, c.heatMax);
+    if (c.cursesMin) for (const x of CURSES.slice(0, c.cursesMin)) run.curses.push(x.id);
+    if (c.purseMaxPct) run.purse = 0;
+  }
+  return run;
+}
+function ctxFor(rule) {
+  const c = rule.cond || {};
+  const sym = c.sym || (c.group === 'high' ? 'crow' : c.group === 'low' ? 'moth' : c.favoured ? 'moth' : 'moth');
+  const n = c.minCells || 3;
+  const cells = Array.from({ length: n }, (_, i) => (i < 3 ? i : i + 2));
+  const grid = new Array(15).fill('sigil');
+  for (const i of cells) grid[i] = sym;
+  if (c.countMin) for (let i = 0; i < c.countMin[1]; i++) grid[i + 5] = c.countMin[0];
+  const need = Math.max(c.minPatterns || 1, c.distinctMin || 1);
+  const ids = ['h3', 'v3', 'd3', 'h4', 'halo', 'corners'];
+  const found = Array.from({ length: need }, (_, i) => ({ id: ids[i % ids.length], cells, sym, wisps: 0 }));
+  const cell = c.zone === 'midrow' ? 6 : c.zone ? 0 : 3;
+  return { grid, favs: c.favoured ? [sym] : ['candle'], sc: { found, steps: [], flat: 0 }, cell, sym, pattern: { id: c.pattern || 'h3', cells, sym, wisps: c.hasWisp ? 1 : 0 }, edits: [], thisMult: 0, amount: 5, roundsLeft: 2, curse: 'jinx', charm: 'moth_jar', trick: 'nudge', deal: 'quick_cash' };
+}
+
+function checkHolder(kind, id, rules) {
+  const run = stateFor(rules);
+  if (kind === 'charm') addCharm(run, id);
+  else if (kind === 'curse') run.curses.push(id);
+  else { run.char = id; }
+  const w = `${kind} ${id}`;
+  const pas = rules.filter((r) => r.trigger === 'passive');
+  if (pas.length) {
+    const strip = (m) => JSON.stringify(m, (k, v) => (k === 'src' || k === 'grid' ? undefined : v));
+    let diff = false;
+    for (const hot of [false, true]) {
+      const mk = (withIt) => {
+        const r2 = stateFor(rules);
+        if (hot) { r2.heat = 10; for (const x of CURSES.slice(0, 4)) if (x.id !== id) r2.curses.push(x.id); }
+        if (kind === 'charm' && withIt) addCharm(r2, id);
+        if (kind === 'curse') { r2.curses = r2.curses.filter((x) => x !== id); if (withIt) r2.curses.push(id); }
+        if (kind === 'char') r2.char = withIt ? id : 'nim';
+        return r2;
+      };
+      try { if (strip(snapshot(mk(true))) !== strip(snapshot(mk(false)))) diff = true; } catch (e) { t(false, w + ' snapshot throws: ' + e.message); }
+    }
+    // a copyRight charm alone has nothing to copy (check-core tests it with a neighbour)
+    t(diff || kind === 'char' || rules.some((r) => r.effects.some((e) => e.flag === 'copyRight')), w + ' passive changes the snapshot');
+  }
+  for (const rule of rules) {
+    if (rule.trigger === 'passive') continue;
+    const ctx = ctxFor(rule);
+    const tries = (rule.cond?.every || 1) * (rule.cond?.chance !== undefined ? 400 : 1);
+    let fired = 0;
+    try {
+      for (let i = 0; i < tries && !fired; i++) fired += fire(run, rule.trigger, ctx).filter((e) => e.src.id === id).length;
+    } catch (e) { t(false, `${w} ${rule.trigger} throws: ${e.stack.split('\n')[1]} ${e.message}`); continue; }
+    t(fired > 0, `${w} ${rule.trigger} fires in a constructed state`);
+  }
+}
+for (const c of CHARMS) checkHolder('charm', c.id, c.rules);
+for (const c of CURSES) checkHolder('curse', c.id, c.rules);
+for (const c of CHARS) checkHolder('char', c.id, c.rules);
+
+// deals boons, trick ops, stakes, contracts, characters run
+for (const d of DEALS) {
+  try { const r = newRun({ seed: 'deal' }); r.pool = CHARMS.map((c) => c.id); runEffects(r, { kind: 'deal', id: d.id }, d.boon, {}); snapshot(r); ok++; } catch (e) { t(false, 'deal ' + d.id + ' boon throws ' + e.message); }
+}
+for (const x of TRICKS) {
+  if (x.when === 'auto') continue;
+  try {
+    const r = newRun({ seed: 'trick' });
+    r.tricks = [x.id];
+    r.phase = x.when === 'pre' ? 'spin' : x.when === 'shop' ? 'shop' : 'post';
+    r.grid = new Array(15).fill('moth'); r.grid[7] = 'ash'; r.grid[8] = 'candle'; r.favs = ['candle']; r.debt = 100; r.spinsLeft = 2;
+    const tg = trickTarget(x.id);
+    const target = tg === 'col' ? { col: 1 } : tg === 'row' ? { row: 1 } : tg === 'pair' ? { a: 6, b: 7, from: 7, to: 6 } : tg === 'cell' ? { cell: 7 } : tg === 'sym' ? { sym: 'eye' } : {};
+    const res = useTrick(r, 0, target);
+    t(res.ok, `trick ${x.id} works: ${res.why}`);
+  } catch (e) { t(false, 'trick ' + x.id + ' throws ' + e.message); }
+}
+for (const s of STAKES) {
+  try {
+    const r = newRun({ seed: 'stake' });
+    r.debtIdx = 2; r.debt = 400; r.termsOffer = [s.id];
+    pickTerms(r, s.id);
+    t(r.spinsLeft >= 1 && r.phase === 'spin', `stake ${s.id} starts a round`);
+    spin(r); if (r.phase === 'post') collect(r);
+  } catch (e) { t(false, 'stake ' + s.id + ' throws ' + e.message); }
+}
+for (const c of CONTRACTS) for (const ch of CHARS) {
+  try {
+    const r = newRun({ seed: 'c', contractId: c.id, charId: ch.id });
+    t(r.debt === c.debts[0] || r.debt > 0, `${c.id}/${ch.id} starts`);
+    pickTerms(r, termsOffer(r)[0].id);
+  } catch (e) { t(false, `${c.id}/${ch.id} throws ${e.message}`); }
+}
+t(SCORING.length === 9, 'nine scoring symbols');
+
+console.log(`check-content: ${ok} passed, ${bad} failed`);
+process.exit(bad ? 1 : 0);

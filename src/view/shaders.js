@@ -1,11 +1,10 @@
-// Riso-look materials (TECH.md section 5). Colors are passed raw (the view turns three's color management off), so palette
+// Reel strip and pattern stroke materials. Colors are passed raw (the view turns three's color management off), so palette
 // values and texture values compare directly in the shader. Every material is transparent and depth-less; draw order is renderOrder.
 import * as THREE from 'three';
-import { PAL, paletteArray } from './palette.js';
+import { PAL, hexToRgb } from './palette.js';
 
-// Shared paper grain, screen-locked. view.js calls setGrain(texture, dpr) once.
+// Shared paper grain uniforms (no grain texture is set in v2).
 const GRAIN = { uGrain: { value: null }, uGrainPx: { value: 1 / 128 } };
-export function setGrain(tex, dpr = 1) { GRAIN.uGrain.value = tex; GRAIN.uGrainPx.value = 1 / (128 * dpr); }
 
 const VERT = `
 varying vec2 vUv;
@@ -14,62 +13,6 @@ void main() {
   gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 }`;
 
-const HASH = `float hash21(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }`;
-
-const RISO_FRAG = `
-uniform sampler2D map;
-uniform sampler2D uGrain;
-uniform float uGrainPx;
-uniform vec2 uOff;
-uniform float uSeed;
-uniform vec3 uPal[6];
-varying vec2 vUv;
-${HASH}
-// Nearest palette ink: rgb in xyz, index in w (0 paper, 1 navy, 2 coral, 3 teal, 4 mustard, 5 blush).
-vec4 nearestInk(vec3 c) {
-  float best = 1e9;
-  int bi = 0;
-  for (int i = 0; i < 6; i++) {
-    vec3 d = c - uPal[i];
-    float dd = dot(d, d);
-    if (dd < best) { best = dd; bi = i; }
-  }
-  return vec4(uPal[bi], float(bi));
-}
-void main() {
-  vec4 a = texture2D(map, vUv);          // key line layer
-  vec4 b = texture2D(map, vUv + uOff);   // fill layer, one to two pixels off the line
-  vec4 ia = nearestInk(a.rgb);
-  vec4 ib = nearestInk(b.rgb);
-  float fillA = (ib.w < 0.5 || ib.w > 1.5) ? b.a : 0.0;
-  float lineA = (ia.w > 0.5 && ia.w < 1.5) ? a.a : 0.0;
-  float alpha = lineA + fillA * (1.0 - lineA);
-  vec3 col = (uPal[1] * lineA + ib.rgb * fillA * (1.0 - lineA)) / max(alpha, 0.0001);
-  float g = texture2D(uGrain, gl_FragCoord.xy * uGrainPx).r;
-  col *= 0.88 + 0.12 * g;
-  float skip = step(0.992, hash21(floor(vUv * 160.0) + uSeed));
-  col = mix(col, uPal[0], skip * 0.6 * step(0.5, max(ib.w, ia.w)));
-  gl_FragColor = vec4(col, alpha);
-}`;
-
-const fixedOffset = (seed) => { const a = (seed * 2.399) % 6.2832; return [Math.cos(a), Math.sin(a)]; };
-
-// Flat-color sprite -> two-ink posterize, misregistration, grain, ink skips. offPx is fixed per sprite (no shimmer).
-// Real gouache sprites are drawn as they are: a plain textured material, no posterize, no misregistration.
-export let PLAIN = false;
-export const setPlain = (on) => { PLAIN = on; };
-export function riso(tex, { seed = 0, size = 256, palette = PAL } = {}) {
-  if (PLAIN) return new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false, depthWrite: false, side: THREE.DoubleSide });
-  const [ox, oy] = fixedOffset(seed + 1), px = 1.5 / size;
-  return new THREE.ShaderMaterial({
-    uniforms: {
-      map: { value: tex }, uOff: { value: new THREE.Vector2(ox * px, oy * px) }, uSeed: { value: seed % 97 },
-      uPal: { value: paletteArray(palette).map((c) => new THREE.Vector3(...c)) }, ...GRAIN,
-    },
-    vertexShader: VERT, fragmentShader: RISO_FRAG, transparent: true, depthTest: false, depthWrite: false, side: THREE.DoubleSide,
-  });
-}
-export { riso as risoMaterial };
 
 const STRIP_FRAG = `
 uniform sampler2D uAtlas;
@@ -130,10 +73,10 @@ void main() {
 }`;
 
 // Coral painted stroke with a thin cream edge, opaque, revealed left to right by uReveal (0..1).
-export function inkLine(seed = 0, color = PAL.coral) {
+export function inkLine(seed = 0, color = PAL.candle) {
   const n = parseInt(color.slice(1), 16);
   return new THREE.ShaderMaterial({
-    uniforms: { uReveal: { value: 0 }, uSeed: { value: seed }, uColor: { value: new THREE.Vector3(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255) }, uPaper: { value: new THREE.Vector3(...paletteArray()[0]) } },
+    uniforms: { uReveal: { value: 0 }, uSeed: { value: seed }, uColor: { value: new THREE.Vector3(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255) }, uPaper: { value: new THREE.Vector3(...hexToRgb(PAL.bone)) } },
     vertexShader: VERT, fragmentShader: INK_FRAG, transparent: true, depthTest: false, depthWrite: false, side: THREE.DoubleSide,
   });
 }

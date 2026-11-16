@@ -1,0 +1,42 @@
+// All design data, one import point. JSON imports with attributes work in node and in Vite.
+import symbols from './data/symbols.json' with { type: 'json' };
+import patterns from './data/patterns.json' with { type: 'json' };
+import charms from './data/charms.json' with { type: 'json' };
+import deals from './data/deals.json' with { type: 'json' };
+import curses from './data/curses.json' with { type: 'json' };
+import tricks from './data/tricks.json' with { type: 'json' };
+import stakes from './data/stakes.json' with { type: 'json' };
+import contracts from './data/contracts.json' with { type: 'json' };
+import characters from './data/characters.json' with { type: 'json' };
+import hideout from './data/hideout.json' with { type: 'json' };
+import achievements from './data/achievements.json' with { type: 'json' };
+import config from './data/config.json' with { type: 'json' };
+
+const by = (a) => Object.fromEntries(a.map((x) => [x.id, x]));
+
+export const CONFIG = config;
+export const SYMBOLS = symbols.symbols;
+export const SYM = by(SYMBOLS);
+export const SCORING = SYMBOLS.filter((s) => s.kind === 'score').map((s) => s.id);
+export const PATTERN_DATA = patterns.patterns;
+export const CHARMS = charms.charms;
+export const CHARM = by(CHARMS);
+export const DEALS = deals.deals;
+export const DEAL = by(DEALS);
+export const CURSES = curses.curses;
+export const CURSE = by(CURSES);
+export const TRICKS = tricks.tricks;
+export const TRICK = by(TRICKS);
+export const STAKES = stakes.stakes;
+export const STAKE = by(STAKES);
+export const CONTRACTS = contracts.contracts;
+export const CONTRACT = by(CONTRACTS);
+export const CHARS = characters.characters;
+export const CHAR = by(CHARS);
+export const HIDEOUT = hideout.hideout;
+export const HIDE = by(HIDEOUT);
+export const ACHIEVEMENTS = achievements.achievements;
+export const ACH = by(ACHIEVEMENTS);
+export const BENCH = config.bench;
+export const BENCH_JOB = by(BENCH);
+export const RARITIES = ['common', 'uncommon', 'rare', 'legendary'];

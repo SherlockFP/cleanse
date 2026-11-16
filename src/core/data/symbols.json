@@ -1,0 +1,14 @@
+{"symbols": [
+  {"id": "moth", "name": {"en": "Moth", "tr": "Güve", "th": "แมลงเม่า"}, "tier": 1, "value": 2, "weight": 14, "kind": "score", "group": "low", "icon": "sym/moth"},
+  {"id": "candle", "name": {"en": "Candle", "tr": "Mum", "th": "เทียน"}, "tier": 1, "value": 2, "weight": 14, "kind": "score", "group": "low", "icon": "sym/candle"},
+  {"id": "tooth", "name": {"en": "Tooth", "tr": "Diş", "th": "ฟัน"}, "tier": 2, "value": 3, "weight": 11, "kind": "score", "group": "low", "icon": "sym/tooth"},
+  {"id": "key", "name": {"en": "Key", "tr": "Anahtar", "th": "กุญแจ"}, "tier": 2, "value": 3, "weight": 11, "kind": "score", "group": "low", "icon": "sym/key"},
+  {"id": "eye", "name": {"en": "Eye", "tr": "Göz", "th": "ลูกตา"}, "tier": 3, "value": 4, "weight": 9, "kind": "score", "group": "mid", "icon": "sym/eye"},
+  {"id": "mask", "name": {"en": "Mask", "tr": "Maske", "th": "หน้ากาก"}, "tier": 3, "value": 5, "weight": 8, "kind": "score", "group": "mid", "icon": "sym/mask"},
+  {"id": "crow", "name": {"en": "Crow", "tr": "Karga", "th": "อีกา"}, "tier": 4, "value": 6, "weight": 7, "kind": "score", "group": "high", "icon": "sym/crow"},
+  {"id": "lantern", "name": {"en": "Lantern", "tr": "Fener", "th": "โคม"}, "tier": 4, "value": 8, "weight": 5, "kind": "score", "group": "high", "icon": "sym/lantern"},
+  {"id": "crown", "name": {"en": "Crown", "tr": "Taç", "th": "มงกุฎ"}, "tier": 5, "value": 12, "weight": 3, "kind": "score", "group": "high", "icon": "sym/crown"},
+  {"id": "wisp", "name": {"en": "Wisp", "tr": "Cin Ateşi", "th": "ผีโขมด"}, "tier": 0, "value": 0, "weight": 2, "kind": "wild", "group": null, "icon": "sym/wisp", "text": {"en": "Wild. Stands in for any scoring symbol. A pattern needs at least one real symbol.", "tr": "Joker. Her puan sembolünün yerine geçer. Desende en az bir gerçek sembol gerekir.", "th": "แทนได้ทุกสัญลักษณ์ ลายต้องมีสัญลักษณ์จริงอย่างน้อยหนึ่งตัว"}},
+  {"id": "sigil", "name": {"en": "Sigil", "tr": "Mühür", "th": "ตราปีศาจ"}, "tier": 0, "value": 0, "weight": 2, "kind": "sigil", "group": null, "icon": "sym/sigil", "text": {"en": "Never matches. Each Sigil that lands gives +1 Wick. Three in one spin: a free trick.", "tr": "Eşleşmez. İnen her Mühür +1 Fitil verir. Bir çevirişte üç tane: bedava numara.", "th": "ไม่จับคู่ ตราแต่ละตัวที่ตกให้ +1 ไส้เทียน ครบสามในตาเดียว: ได้กลเม็ดฟรี"}},
+  {"id": "ash", "name": {"en": "Ash", "tr": "Kül", "th": "เถ้า"}, "tier": 0, "value": 0, "weight": 0, "kind": "ash", "group": null, "icon": "sym/ash", "text": {"en": "Comes only from Heat and curses. Blocks patterns. Three in one spin is a Scorch: the spin pays nothing, 10% of your purse burns, Heat −3.", "tr": "Yalnızca Ateş ve lanetlerden gelir. Desenleri keser. Bir çevirişte üç tane Kavrulmadır: çeviriş ödemez, kesenin %10'u yanar, Ateş −3.", "th": "มาจากไฟและคำสาปเท่านั้น ขวางลาย ครบสามในตาเดียวคือไหม้เกรียม: ตานั้นไม่จ่าย ถุงเงินไหม้ 10% ไฟ −3"}}
+]}

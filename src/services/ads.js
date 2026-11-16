@@ -1,18 +1,17 @@
 // Ads (MONETIZATION.md sections 3-5, TECH.md section 8). Rules are pure functions over a plain `ads` object (the save's `ads` field) so node can test them.
-// Numbers come from core/econ.js AD_CAPS. The clock is passed in: `today` is a "YYYY-MM-DD" string, `now` is seconds.
-// Never an ad inside a run; no reward ever touches spins, pegs, coins or odds (the four rewards are Planks x2, a skin day, a Daily retry, a postcard hint).
-import { AD_CAPS } from '../core/econ.js';
+// The daily rewarded cap and the interstitial gap come from config.json (ads); the per-placement caps are below. The clock is passed in: `today` is a "YYYY-MM-DD" string, `now` is seconds.
+// No interstitial inside a run; no reward ever touches spins, coins or odds (the two rewards are one free wagon reroll and Wax x2 at run end).
+import { CONFIG } from '../core/data.js';
 import { t } from '../i18n.js';
 import { isNative, platform, modal, env, isProdBuild } from './platform.js';
 import { getConsent, canRequestAds, isPersonalized } from './consent.js';
 import { has as ownsProduct } from './iap.js';
 
-export const PLACEMENTS = Object.freeze({
-  double_planks: 'doublePlanksPerDay',
-  skin_day: 'skinPerDay',
-  daily_retry: 'dailyRetryPerDay',
-  postcard_hint: 'postcardHintPerDay',
+export const AD_CAPS = Object.freeze({
+  rewardedPerDay: CONFIG.ads.rewardedPerDay, shopRerollPerDay: 3, doubleWaxPerDay: 3,
+  interstitialPerDay: 6, interstitialEveryRuns: 2, interstitialMinSeconds: CONFIG.ads.interstitialMinSeconds,
 });
+export const PLACEMENTS = Object.freeze({ shop_reroll: 'shopRerollPerDay', double_wax: 'doubleWaxPerDay' });
 export const MIN_RUN_SECONDS = 60;      // MONETIZATION.md section 4: no interstitial after a shorter run
 export const MIN_FINISHED_RUNS = 3;     // none before the 3rd finished run of an install (an ad after the 3rd is allowed)
 
@@ -29,7 +28,7 @@ export const rewardedToday = (ads) => Object.values(ads.rewarded).reduce((a, b) 
 export function rewardedCheck(ads, placement, ctx) {
   const cap = PLACEMENTS[placement];
   if (!cap) return { ok: false, reason: 'unknown_placement' };
-  if (ctx.inRun) return { ok: false, reason: 'in_run' };
+  if (ctx.inRun && placement !== 'shop_reroll') return { ok: false, reason: 'in_run' }; // the wagon reroll is the one reward offered between nights
   if (!ctx.canRequestAds) return { ok: false, reason: 'no_consent' };
   const a = rollDay(ads, ctx.today);
   if (rewardedToday(a) >= AD_CAPS.rewardedPerDay) return { ok: false, reason: 'daily_cap' };

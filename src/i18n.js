@@ -1,422 +1,198 @@
-// Small Luck Pier, v1.0-lite strings. EN + TR. All text goes through t(key, vars); {n} style placeholders.
-// Keys follow TECH.md section 7: ui.*, sym.<id>, trinket.<id>.name|short|desc, chart.<id>.*, event.<id>.*,
-// build.<id>.name, line.<who>.<trigger>.<n>. Content beyond lite (CONTENT.md) is added by the monthly drops.
-const EN = {};
-const TR = {};
-const add = (en, tr) => { Object.assign(EN, en); Object.assign(TR, tr); };
-
-// ---- Symbols (12 in lite) -------------------------------------------------------------------
-const SYMS = [
-  ['pebble', 'Pebble', 'Çakıl'], ['sardine', 'Sardine', 'Sardalya'], ['tea', 'Tea glass', 'Çay bardağı'],
-  ['lantern', 'Lantern', 'Fener'], ['gull', 'Gull', 'Martı'], ['knot', 'Knot', 'Düğüm'],
-  ['net', 'Net', 'Ağ'], ['kelp', 'Kelp', 'Yosun'], ['samovar', 'Samovar', 'Semaver'],
-  ['cat', 'Cat', 'Kedi'], ['barnacle', 'Barnacle', 'Midye kabuğu'], ['storm', 'Storm cloud', 'Fırtına bulutu'],
-];
-// One-line rule per symbol for the bag screen.
-const SYM_RULE = {
-  pebble: ['Line symbol. Pays 3.', 'Dizi sembolü. 3 öder.'],
-  sardine: ['Line symbol. Pays 6.', 'Dizi sembolü. 6 öder.'],
-  tea: ['Line symbol. Pays 10.', 'Dizi sembolü. 10 öder.'],
-  lantern: ['Line symbol. Pays 15.', 'Dizi sembolü. 15 öder.'],
-  gull: ['Line symbol. Pays 25.', 'Dizi sembolü. 25 öder.'],
-  knot: ['Counts as any line symbol. Three Knots pay 12.', 'Her dizi sembolü yerine geçer. Üç düğüm 12 öder.'],
-  net: ['Pays 2 for each Sardine next to it.', 'Yanındaki her sardalya için 2 öder.'],
-  kelp: ['Once per spin, if Kelp lands, pays its counter, then the counter grows by 1 (max 5).', 'Çevirmede yosun gelirse sayacı kadar öder, sonra sayaç 1 artar (en çok 5).'],
-  samovar: ['Pays 3 for each Tea glass next to it.', 'Yanındaki her çay bardağı için 3 öder.'],
-  cat: ['Pays 4 for each Sardine or Gull next to it.', 'Yanındaki her sardalya ya da martı için 4 öder.'],
-  barnacle: ['Pays nothing.', 'Hiçbir şey ödemez.'],
-  storm: ['Pays nothing. It and the squares next to it cannot be pegged.', 'Hiçbir şey ödemez. Kendisi ve yanındaki kareler mandallanamaz.'],
+// UI strings only (en, tr, th). Item, symbol, pattern and deal text comes from the data JSON ({en,tr,th} fields), read with L().
+// One table: key -> [en, tr, th]. Every key has all three by construction; scripts/check-i18n.mjs also checks placeholders and wording.
+// Speech lines are line.<who>.<trigger>.<n> (numbered from 1). Triggers the game can say():
+//   brimble: home start stoke heatHigh scorch dud big paid deal signed refuse pawn lose win tutDeal   pip: shop tutShop   nim: start paid scorch lose
+const T = {
+  // ---- common ----
+  "ui.title": ["Brimble's Bargain", "Brimble'ın Pazarlığı", "ข้อตกลงของบริมเบิล"],
+  "ui.tagline": ["Pay a small devil's debt with his own rickety fortune machine.", "Küçük bir şeytanın borcunu onun tahta fal makinesiyle öde.", "ปลดหนี้ของปีศาจตัวน้อยด้วยเครื่องดูดวงเก่าๆ ของเขาเอง"],
+  "ui.play": ["Play", "Oyna", "เล่น"], "ui.continue": ["Continue", "Devam", "ไปต่อ"], "ui.close": ["Close", "Kapat", "ปิด"], "ui.back": ["Back", "Geri", "กลับ"],
+  "ui.cancel": ["Cancel", "Vazgeç", "ยกเลิก"], "ui.on": ["On", "Açık", "เปิด"], "ui.off": ["Off", "Kapalı", "ปิด"], "ui.loading": ["Loading", "Yükleniyor", "กำลังโหลด"],
+  "ui.coins": ["coins", "para", "เหรียญ"], "ui.purse": ["Purse", "Kese", "ถุงเงิน"], "ui.wick": ["Wick", "Fitil", "ไส้เทียน"], "ui.wax": ["Wax", "Balmumu", "ขี้ผึ้ง"],
+  "ui.luck": ["Luck", "Şans", "โชค"], "ui.heat": ["Heat", "Ateş", "ไฟ"], "ui.interest": ["Interest", "Faiz", "ดอกเบี้ย"], "ui.fav": ["Favourite", "Gözde", "ตัวโปรด"],
+  "ui.favHidden": ["Hidden", "Gizli", "ซ่อนอยู่"], "ui.redrawFree": ["Tap the Favourite to redraw it: free", "Gözdeyi değiştirmek için dokun: bedava", "แตะตัวโปรดเพื่อสุ่มใหม่: ฟรี"],
+  "ui.redrawWick": ["Tap the Favourite to redraw it: {n} Wick", "Gözdeyi değiştirmek için dokun: {n} Fitil", "แตะตัวโปรดเพื่อสุ่มใหม่: {n} ไส้เทียน"], "ui.boss": ["Boss debt. {name}: {rule}", "Patron borcu. {name}: {rule}", "หนี้บอส {name}: {rule}"], "ui.nim": ["Nim", "Nim", "นิ่ม"], "ui.brimble": ["Mr. Brimble", "Bay Brimble", "คุณบริมเบิล"], "ui.pip": ["Pip", "Pip", "ปิ๊บ"],
+  "ui.rarity.common": ["Common", "Sıradan", "ทั่วไป"], "ui.rarity.uncommon": ["Uncommon", "Seyrek", "ไม่ธรรมดา"], "ui.rarity.rare": ["Rare", "Nadir", "หายาก"], "ui.rarity.legendary": ["Legendary", "Efsanevi", "ในตำนาน"],
+  "ui.price": ["Price", "Fiyat", "ราคา"], "ui.free": ["Free", "Bedava", "ฟรี"], "ui.stack": ["Charge {n}", "Yük {n}", "สะสม {n}"],
+  "why.coins": ["Not enough coins in the purse.", "Kesede yeterli para yok.", "เหรียญในถุงเงินไม่พอ"], "why.wick": ["Not enough Wick.", "Yeterli Fitil yok.", "ไส้เทียนไม่พอ"],
+  "why.wax": ["Not enough Wax.", "Yeterli Balmumu yok.", "ขี้ผึ้งไม่พอ"], "why.full": ["Your shelf is full. Sell a charm first.", "Raf dolu. Önce bir tılsım sat.", "ชั้นเต็มแล้ว ขายเครื่องรางก่อน"],
+  "why.max": ["Already at the maximum.", "Zaten en üstte.", "เต็มแล้ว"], "why.locked": ["Locked.", "Kilitli.", "ยังล็อกอยู่"], "why.unknown": ["That did not work.", "Olmadı.", "ไม่สำเร็จ"],
+  "why.noLock": ["No locking on this contract.", "Bu sözleşmede kilitleme yok.", "สัญญานี้ล็อกของไม่ได้"],   "ui.endNight": ["END NIGHT", "GECEYİ BİTİR", "จบคืนนี้"],
+  "ui.bankAfter": ["Collect first, then pay.", "Önce topla, sonra öde.", "เก็บเงินก่อน แล้วค่อยจ่าย"],
+  "ui.promptPair": ["Tap two cells side by side", "Yan yana iki hücreye dokun", "แตะสองช่องที่อยู่ติดกัน"],
+  "ui.scorched": ["Scorch! {n} coins burned.", "Kavruldu! {n} para yandı.", "ไหม้! เสียไป {n} เหรียญ"],
+  "ui.newCurse": ["New curse: {name}", "Yeni lanet: {name}", "คำสาปใหม่: {name}"],
+  "ui.pickCharm": ["Pick a charm to start with", "Başlangıç için bir tılsım seç", "เลือกเครื่องรางหนึ่งชิ้นไว้เริ่มเล่น"],
+  "ui.noPattern": ["No pattern", "Desen yok", "ไม่มีลาย"],
+  "why.target": ["That does nothing there.", "Orada işe yaramaz.", "ใช้ตรงนั้นไม่ได้ผล"],
+  "tut.spin": ["Tap SPIN. Three of one symbol in a row or a column pays.", "ÇEVİR'e dokun. Aynı sembolden üçü yan yana ya da alt alta gelirse kazanırsın.", "แตะ หมุน สัญลักษณ์เดียวกันสามตัวเรียงแถวนอนหรือแถวตั้งจะได้เหรียญ"],
+  "tut.collect": ["Tap COLLECT to take this result.", "Bu sonucu almak için TOPLA'ya dokun.", "แตะ เก็บเงิน เพื่อรับผลรอบนี้"],
+  "tut.nudge": ["Try the Nudge: tap the trick, then the lit column.", "Dürtmeyi dene: numaraya, sonra parlayan sütuna dokun.", "ลองใช้สะกิด: แตะกลเม็ด แล้วแตะแถวตั้งที่สว่าง"],
+  "tut.stoke": ["STOKE adds Heat: more pay, but more Ash. Three Ash burns your purse.", "KÖRÜKLE Ateş ekler: daha çok kazanç, ama daha çok Kül. Üç Kül keseni yakar.", "เติมไฟ ทำให้ไฟแรงขึ้น: จ่ายเพิ่ม แต่เถ้าก็เพิ่ม เถ้าสามกองจะเผาถุงเงิน"],
+  "tut.end": ["Night over. BANK pays the debt. Coins you keep earn interest. Then END NIGHT.", "Gece bitti. ÖDE borcu kapatır. Kesede kalan para faiz kazanır. Sonra GECEYİ BİTİR.", "หมดคืนแล้ว จ่ายหนี้ เพื่อใช้หนี้ เหรียญที่เก็บไว้ได้ดอกเบี้ย จากนั้นกด จบคืนนี้"],
+  "line.pip.tutShop.1": ["Charms work on their own every spin. Buy one you can pay for.", "Tılsımlar her çevirmede kendiliğinden çalışır. Paranın yettiği birini al.", "เครื่องรางทำงานเองทุกครั้งที่หมุน ซื้อชิ้นที่จ่ายไหวสักชิ้น"],
+  "line.brimble.tutDeal.1": ["SIGN: a boon now and a curse for the whole run. REFUSE: three Wick, no curse.", "İMZALA: şimdi bir lütuf, oyun boyu bir lanet. REDDET: üç Fitil, lanet yok.", "เซ็น: ได้ของดีทันที แต่ติดคำสาปทั้งรอบ ปฏิเสธ: ได้ไส้เทียนสามเส้น ไม่มีคำสาป"],
+"why.busy": ["Wait for the reels.", "Makine dönerken bekle.", "รอให้วงล้อหยุดก่อน"],
+  // ---- home, hideout ----
+  "ui.hideout": ["The Hideout", "Sığınak", "ที่ซ่อนตัว"], "ui.hideoutSub": ["An old ghost-train carriage. Spend Wax on it between runs.", "Eski bir hayalet treni vagonu. Oyunlar arasında Balmumu harca.", "ตู้รถไฟผีเก่าๆ ใช้ขี้ผึ้งแต่งระหว่างรอบเกม"],
+  "ui.waxHave": ["{n} Wax", "{n} Balmumu", "ขี้ผึ้ง {n}"], "ui.buy": ["Buy", "Satın al", "ซื้อ"], "ui.owned": ["Owned", "Alındı", "เป็นของเธอแล้ว"],
+  "ui.waxMore": ["{n} more Wax", "{n} Balmumu daha", "ขาดขี้ผึ้ง {n}"], "ui.bought": ["Bought: {name}", "Alındı: {name}", "ซื้อแล้ว: {name}"],
+  "ui.collection": ["Collection", "Koleksiyon", "คลังสะสม"], "ui.daily": ["Daily run", "Günlük oyun", "เกมประจำวัน"], "ui.store": ["Store", "Mağaza", "ร้านค้า"],
+  "ui.settings": ["Settings", "Ayarlar", "ตั้งค่า"], "ui.howto": ["How to play", "Nasıl oynanır", "วิธีเล่น"], "ui.language": ["Language", "Dil", "ภาษา"],
+  "ui.langEn": ["English", "English", "English"], "ui.langTr": ["Türkçe", "Türkçe", "Türkçe"], "ui.langTh": ["ไทย", "ไทย", "ไทย"],
+  "ui.firstRunHint": ["First night? Press Play. Brimble explains as you go.", "İlk gece mi? Oyna'ya bas. Brimble yolda anlatır.", "คืนแรกใช่ไหม กดเล่นได้เลย บริมเบิลจะอธิบายระหว่างทาง"],
+  // ---- character, contract ----
+  "ui.chooseChar": ["Who signs tonight?", "Bu gece kim imzalıyor?", "คืนนี้ใครเซ็น"], "ui.locked": ["Locked", "Kilitli", "ล็อก"], "ui.unlockBy": ["Unlock: {how}", "Açmak için: {how}", "ปลดล็อก: {how}"],
+  "ui.chooseContract": ["Choose a contract", "Bir sözleşme seç", "เลือกสัญญา"], "ui.debtsN": ["{n} debts", "{n} borç", "หนี้ {n} ก้อน"], "ui.nightsPer": ["{n} nights per debt", "Borç başına {n} gece", "ก้อนละ {n} คืน"],
+  "ui.reward": ["Reward: {n} Wax", "Ödül: {n} Balmumu", "รางวัล: ขี้ผึ้ง {n}"], "ui.cleared": ["Cleared", "Bitirildi", "ผ่านแล้ว"], "ui.clearFirst": ["Clear {name} first", "Önce {name} sözleşmesini bitir", "ผ่าน {name} ก่อน"],
+  "ui.start": ["Start", "Başla", "เริ่ม"], "ui.endingTag": ["Ending: {name}", "Son: {name}", "ตอนจบ: {name}"],
+  // ---- HUD ----
+  "ui.debtOf": ["Debt {n} of {m}", "Borç {n}/{m}", "หนี้ {n} จาก {m}"], "ui.nightOf": ["Night {n} of {m}", "Gece {n}/{m}", "คืนที่ {n} จาก {m}"], "ui.spinsN": ["Spins {n}", "Çeviriş {n}", "หมุนได้ {n}"],
+  "ui.owed": ["{a} / {b}", "{a} / {b}", "{a} / {b}"],
+  "ui.goal": ["Pay {left} more to clear debt {n} of {m} by the end of night {r}.", "{n}/{m}. borcu kapatmak için {r}. gecenin sonuna kadar {left} daha öde.", "จ่ายอีก {left} ให้หมดหนี้ก้อนที่ {n} จาก {m} ก่อนจบคืนที่ {r}"],
+  "ui.goalDone": ["Debt covered. Finish the night or pay it now.", "Borç karşılandı. Geceyi bitir ya da şimdi öde.", "หนี้ครบแล้ว เล่นให้จบคืนหรือจ่ายเลย"],
+  "ui.interestNext": ["Next interest", "Sıradaki faiz", "ดอกเบี้ยรอบหน้า"], "ui.heatLabel": ["Heat {n}", "Ateş {n}", "ไฟ {n}"], "ui.heatPay": ["+{n}% pay", "+%{n} kazanç", "จ่ายเพิ่ม {n}%"],
+  "ui.stoke": ["STOKE", "KÖRÜKLE", "เติมไฟ"], "ui.bank": ["BANK", "ÖDE", "จ่ายหนี้"], "ui.spin": ["SPIN", "ÇEVİR", "หมุน"], "ui.collect": ["COLLECT", "TOPLA", "เก็บเงิน"],
+  "ui.owedLeft": ["{n} owed", "{n} borç", "ค้าง {n}"], "ui.stokeWhy": ["More Heat: more pay, more Ash.", "Daha çok Ateş: daha çok kazanç, daha çok Kül.", "ไฟแรงขึ้น: จ่ายเพิ่ม เถ้าเพิ่ม"],
+  "ui.stokeMax": ["Heat is at the top.", "Ateş en üstte.", "ไฟสูงสุดแล้ว"], "ui.stokeNo": ["No stoking tonight.", "Bu gece körükleme yok.", "คืนนี้เติมไฟไม่ได้"],
+  "ui.noSpins": ["No spins left tonight.", "Bu gece çeviriş kalmadı.", "คืนนี้หมดตาหมุนแล้ว"],
+  "ui.bankTitle": ["Pay into the debt", "Borca öde", "จ่ายเข้าหนี้"], "ui.bankAll": ["All", "Hepsi", "ทั้งหมด"], "ui.bankHalf": ["Half", "Yarısı", "ครึ่งหนึ่ง"],
+  "ui.bankDo": ["Bank {n}", "{n} öde", "จ่าย {n}"], "ui.bankNote": ["Banked coins are safe from a Scorch but earn no interest.", "Ödenen para Kavrulmadan korunur ama faiz getirmez.", "เหรียญที่จ่ายแล้วปลอดภัยจากไหม้เกรียม แต่ไม่ได้ดอกเบี้ย"],
+  "ui.bankNone": ["Nothing in the purse to pay.", "Kesede ödenecek para yok.", "ไม่มีเหรียญในถุงให้จ่าย"],
+  "ui.pockets": ["Tricks", "Numaralar", "กลเม็ด"], "ui.pocketEmpty": ["Empty pocket", "Boş cep", "กระเป๋าว่าง"],
+  "ui.trickPre": ["Use it before the spin.", "Çevirmeden önce kullan.", "ใช้ก่อนหมุน"], "ui.trickPost": ["Use it after the reels stop.", "Makine durunca kullan.", "ใช้หลังวงล้อหยุด"],
+  "ui.trickShop": ["Use it in the wagon.", "Arabada kullan.", "ใช้ที่รถเข็น"], "ui.trickAuto": ["It works by itself when needed.", "Gerektiğinde kendiliğinden çalışır.", "ทำงานเองเมื่อจำเป็น"],
+  "ui.shelf": ["Charms", "Tılsımlar", "เครื่องราง"], "ui.curses": ["Curses", "Lanetler", "คำสาป"],
+  "ui.promptColumn": ["Tap a column", "Bir sütuna dokun", "แตะแถวตั้งหนึ่งแถว"], "ui.promptRow": ["Tap a row", "Bir satıra dokun", "แตะแถวนอนหนึ่งแถว"],
+  "ui.promptCell": ["Tap a cell", "Bir hücreye dokun", "แตะหนึ่งช่อง"], "ui.promptSymbol": ["Tap a symbol", "Bir sembole dokun", "แตะสัญลักษณ์"],
+  // ---- terms ----
+  "ui.termsTitle": ["Tonight's terms", "Bu gecenin şartları", "เงื่อนไขคืนนี้"], "ui.termsSub": ["Pick one card. It sets the spins and a rule for this night.", "Bir kart seç. Bu gecenin çeviriş sayısını ve kuralını belirler.", "เลือกหนึ่งใบ กำหนดจำนวนหมุนและกฎของคืนนี้"],
+  "ui.spinsBadge": ["{n} spins", "{n} çeviriş", "หมุน {n} ตา"],
+  "ui.whenPre": ["Before the spin", "Çevirmeden önce", "ก่อนหมุน"], "ui.whenPost": ["After the reels stop", "Makine durunca", "หลังวงล้อหยุด"], "ui.whenAny": ["Any time", "Her zaman", "ได้ทุกเวลา"],
+  "ui.whenShop": ["In the wagon", "Arabada", "ที่รถเข็น"], "ui.whenAuto": ["Automatic", "Otomatik", "ทำงานเอง"],
+  // ---- shop ----
+  "ui.wagon": ["Pip's wagon", "Pip'in arabası", "รถเข็นของปิ๊บ"], "ui.tabCharms": ["Charms", "Tılsımlar", "เครื่องราง"], "ui.tabTricks": ["Tricks", "Numaralar", "กลเม็ด"], "ui.tabBench": ["Bench", "Tezgâh", "โต๊ะช่าง"],
+  "ui.reroll": ["Reroll {n}", "Yenile {n}", "สุ่มใหม่ {n}"], "ui.lock": ["Lock", "Kilitle", "ล็อก"], "ui.unlock": ["Unlock", "Kilidi aç", "ปลดล็อก"], "ui.sell": ["Sell {n}", "Sat {n}", "ขาย {n}"],
+  "ui.sold": ["Sold", "Satıldı", "ขายแล้ว"], "ui.slotBuy": ["Extra charm slot", "Fazladan tılsım yuvası", "ช่องเครื่องรางเพิ่ม"], "ui.slotText": ["Hold one more charm. Once per run.", "Bir tılsım daha taşı. Oyun başına bir kez.", "ถือเครื่องรางได้อีกชิ้น ครั้งเดียวต่อเกม"],
+  "ui.yourCharms": ["Your charms ({n}/{m})", "Tılsımların ({n}/{m})", "เครื่องรางของเธอ ({n}/{m})"], "ui.moveLeft": ["Move left", "Sola taşı", "ย้ายซ้าย"], "ui.moveRight": ["Move right", "Sağa taşı", "ย้ายขวา"],
+  "ui.orderNote": ["Charms work left to right. Order matters.", "Tılsımlar soldan sağa çalışır. Sıra önemli.", "เครื่องรางทำงานจากซ้ายไปขวา ลำดับมีผล"],
+  "ui.nextNight": ["Leave the wagon", "Arabadan ayrıl", "ออกจากรถเข็น"], "ui.benchSymbol": ["Which symbol?", "Hangi sembol?", "สัญลักษณ์ไหน"], "ui.benchCurse": ["Which curse?", "Hangi lanet?", "คำสาปไหน"],
+  "ui.noCurses": ["You carry no curses.", "Hiç lanetin yok.", "ยังไม่มีคำสาป"], "ui.shopEmpty": ["Nothing left on this table.", "Bu tezgâhta bir şey kalmadı.", "โต๊ะนี้ของหมดแล้ว"],
+  "ui.benchNote": ["Bench work changes the machine for the rest of the run.", "Tezgâh işleri makineyi oyunun sonuna dek değiştirir.", "งานช่างเปลี่ยนเครื่องไปตลอดเกม"],
+  "ui.symVal": ["value {v}", "değer {v}", "ค่า {v}"], "ui.symRemoved": ["removed", "çıkarıldı", "ถอดแล้ว"],
+  // ---- deal, pawn ----
+  "ui.dealTitle": ["Mr. Brimble has a paper for you", "Bay Brimble'ın sana bir kâğıdı var", "คุณบริมเบิลมีกระดาษให้เซ็น"], "ui.boon": ["You get", "Sen alırsın", "เธอได้"], "ui.curseLabel": ["You carry", "Sen taşırsın", "เธอแบก"],
+  "ui.sign": ["SIGN", "İMZALA", "เซ็น"], "ui.refuse": ["REFUSE", "REDDET", "ปฏิเสธ"], "ui.refuseNote": ["Refuse both: +{n} Wick.", "İkisini de reddet: +{n} Fitil.", "ปฏิเสธทั้งสอง: ไส้เทียน +{n}"],
+  "ui.mustSign": ["Under this contract you must sign one.", "Bu sözleşmede birini imzalamak zorundasın.", "สัญญานี้ต้องเซ็นหนึ่งใบ"], "ui.forever": ["Lasts the whole run.", "Oyun boyunca sürer.", "อยู่ไปตลอดเกม"],
+  "ui.randomCurses": ["{n} random curses", "{n} rastgele lanet", "คำสาปสุ่ม {n} อย่าง"], "ui.randomCurse": ["A random curse", "Rastgele bir lanet", "คำสาปสุ่มหนึ่งอย่าง"],
+  "ui.pawnTitle": ["The Pawn", "Rehin", "จำนำ"], "ui.pawnSub": ["You are short. Brimble gives you one more night if you burn a charm and take a random curse. Once per run.", "Eksiksin. Bir tılsımı yakıp rastgele bir lanet alırsan Brimble sana bir gece daha verir. Oyunda bir kez.", "เธอยังขาด ถ้าเผาเครื่องรางหนึ่งชิ้นและรับคำสาปสุ่ม บริมเบิลให้เพิ่มอีกหนึ่งคืน ครั้งเดียวต่อเกม"],
+  "ui.pawnBurn": ["Burn it", "Yak", "เผา"], "ui.pawnDecline": ["Walk away", "Vazgeç", "ยอมแพ้"], "ui.pawnNone": ["You have no charm to burn.", "Yakacak tılsımın yok.", "ไม่มีเครื่องรางให้เผา"],
+  // ---- paid, end ----
+  "ui.paidTitle": ["Debt paid", "Borç ödendi", "ปลดหนี้แล้ว"], "ui.paidStamp": ["PAID", "ÖDENDİ", "จ่ายแล้ว"], "ui.paidEarly": ["{n} nights unused: +{w} Wick and a free trick.", "{n} gece kullanılmadı: +{w} Fitil ve bedava bir numara.", "เหลือ {n} คืน: ไส้เทียน +{w} และกลเม็ดฟรี"],
+  "ui.paidInterest": ["Interest earned: {n}", "Kazanılan faiz: {n}", "ดอกเบี้ยที่ได้: {n}"], "ui.paidKept": ["Purse carried over: {n}", "Devreden kese: {n}", "ถุงเงินยกไป: {n}"],
+  "ui.paidNext": ["Next debt: {n}", "Sıradaki borç: {n}", "หนี้ก้อนถัดไป: {n}"], "ui.toDeal": ["See Brimble's offer", "Brimble'ın teklifine bak", "ดูข้อเสนอของบริมเบิล"],
+  "ui.savedTitle": ["Saved at the last second", "Son saniyede kurtuldun", "รอดในวินาทีสุดท้าย"], "ui.savedBy": ["{name} burned so you could stay.", "{name} yandı, sen kaldın.", "{name} ถูกเผาเพื่อให้เธออยู่ต่อ"],
+  "ui.lostTitle": ["Brimble collects", "Brimble tahsil ediyor", "บริมเบิลมาเก็บหนี้"], "ui.lostSub": ["The snuffer comes down on night {r} of debt {d}.", "Mum söndürücü {d}. borcun {r}. gecesinde iniyor.", "ที่ดับเทียนลงมาในคืนที่ {r} ของหนี้ก้อนที่ {d}"],
+  "ui.lostShort": ["You were {n} short.", "{n} eksiktin.", "เธอขาดไป {n}"], "ui.winTitle": ["Contract cleared", "Sözleşme bitti", "สัญญาจบแล้ว"],
+  "ui.bestPattern": ["Best pattern: {name} for {n}", "En iyi desen: {name}, {n}", "ลายที่ดีที่สุด: {name} ได้ {n}"], "ui.statDebts": ["Debts paid", "Ödenen borç", "หนี้ที่ปลด"],
+  "ui.statBest": ["Biggest spin", "En büyük çeviriş", "ตาที่ได้มากสุด"], "ui.statScorch": ["Scorches", "Kavrulma", "ไหม้เกรียม"], "ui.statDeals": ["Deals signed", "İmzalanan anlaşma", "ข้อตกลงที่เซ็น"],
+  "ui.statCurses": ["Curses carried", "Taşınan lanet", "คำสาปที่แบก"], "ui.waxEarned": ["+{n} Wax", "+{n} Balmumu", "ขี้ผึ้ง +{n}"], "ui.unlocked": ["Unlocked", "Açıldı", "ปลดล็อกแล้ว"],
+  "ui.unlockChar": ["Character: {name}", "Karakter: {name}", "ตัวละคร: {name}"], "ui.unlockCharm": ["Charm: {name}", "Tılsım: {name}", "เครื่องราง: {name}"], "ui.unlockHideout": ["Hideout: {name}", "Sığınak: {name}", "ที่ซ่อนตัว: {name}"],
+  "ui.again": ["Again", "Tekrar", "เล่นอีก"], "ui.home": ["Home", "Ana ekran", "หน้าหลัก"], "ui.endingUnlocked": ["Ending reached: {name}", "Ulaşılan son: {name}", "ถึงตอนจบ: {name}"],
+  "ui.ending.paid_in_full": ["Paid in Full", "Tamamen Ödendi", "จ่ายครบทุกบาท"], "ui.ending.bought_the_machine": ["Bought the Machine", "Makineyi Satın Aldın", "ซื้อเครื่องมาเป็นของตัวเอง"], "ui.ending.new_management": ["New Management", "Yeni Yönetim", "ผู้บริหารชุดใหม่"],
+  "ui.endingText.paid_in_full": ["Nim's page is stamped and the stall is rebuilt. Brimble is back the next night with a new customer. Pip slips Nim the real contract.", "Nim'in sayfası mühürlendi, tezgâh yeniden kuruldu. Brimble ertesi gece yeni bir müşteriyle geri döndü. Pip, Nim'e asıl sözleşmeyi uzatıyor.", "หน้ากระดาษของนิ่มถูกประทับตรา แผงถูกสร้างใหม่ คืนต่อมาบริมเบิลกลับมาพร้อมลูกค้าคนใหม่ ปิ๊บแอบส่งสัญญาฉบับจริงให้นิ่ม"],
+  "ui.endingText.bought_the_machine": ["Nim pays Head Office herself and owns Brimble's debt paper. He is free and has nowhere to go. He moves into the armchair.", "Nim Genel Merkez'e kendisi ödedi ve Brimble'ın borç kâğıdının sahibi oldu. Brimble özgür ama gidecek yeri yok. Koltuğa yerleşti.", "นิ่มจ่ายสำนักงานใหญ่เอง และเป็นเจ้าของตั๋วหนี้ของบริมเบิล เขาเป็นอิสระแต่ไม่มีที่ไป จึงย้ายเข้าไปนั่งเก้าอี้นวม"],
+  "ui.endingText.new_management": ["Head Office promotes its best earner. Nim gets the hat and Brimble becomes her clerk. The last line is his: \"Three nights. Sixty coins. You say it, I've retired.\"", "Genel Merkez en çok kazananı terfi ettirdi. Şapka Nim'e geçti, Brimble onun katibi oldu. Son söz onun: \"Üç gece. Altmış para. Sen söyle, ben emekli oldum.\"", "สำนักงานใหญ่เลื่อนตำแหน่งคนทำเงินเก่งที่สุด นิ่มได้หมวก บริมเบิลกลายเป็นเสมียน คำสุดท้ายเป็นของเขา: \"สามคืน หกสิบเหรียญ เธอพูดสิ ฉันเกษียณแล้ว\""],
+  // ---- daily ----
+  "ui.dailyTitle": ["Daily run", "Günlük oyun", "เกมประจำวัน"], "ui.dailySub": ["The same pact for everyone today. Your first try counts.", "Bugün herkese aynı ahit. İlk denemen sayılır.", "วันนี้ทุกคนได้พันธสัญญาเดียวกัน ครั้งแรกของเธอเท่านั้นที่นับ"],
+  "ui.dailyToday": ["Today: {char}, {contract}", "Bugün: {char}, {contract}", "วันนี้: {char}, {contract}"], "ui.dailyForced": ["First terms card: {name}", "İlk şart kartı: {name}", "ใบเงื่อนไขแรก: {name}"],
+  "ui.dailyCurse": ["Starting curse: {name}", "Başlangıç laneti: {name}", "คำสาปตั้งต้น: {name}"], "ui.dailyBest": ["Best", "En iyi", "ดีที่สุด"], "ui.dailyScore": ["{d} debts, {c} coins", "{d} borç, {c} para", "หนี้ {d} ก้อน เหรียญ {c}"],
+  "ui.dailyStreak": ["Streak: {n} days", "Seri: {n} gün", "ต่อเนื่อง {n} วัน"], "ui.dailyDone": ["Played today. Come back tomorrow.", "Bugün oynadın. Yarın gel.", "เล่นวันนี้แล้ว พรุ่งนี้มาใหม่"],
+  "ui.dailyLocal": ["Scores stay on this phone.", "Skorlar bu telefonda kalır.", "คะแนนอยู่ในเครื่องนี้เท่านั้น"], "ui.dailyWax": ["A daily run gives +{n} Wax.", "Günlük oyun +{n} Balmumu verir.", "เกมประจำวันได้ขี้ผึ้ง +{n}"],
+  "ui.dailyGo": ["Play today's run", "Bugünün oyununu oyna", "เล่นเกมวันนี้"],
+  // ---- store, settings ----
+  "ui.storeTitle": ["Store", "Mağaza", "ร้านค้า"], "ui.sound": ["Sound effects", "Ses efektleri", "เสียงเอฟเฟกต์"], "ui.music": ["Music", "Müzik", "เพลง"], "ui.haptics": ["Vibration", "Titreşim", "สั่น"],
+  "ui.fast": ["Fast spin", "Hızlı çevirme", "หมุนเร็ว"], "ui.reduceMotion": ["Reduce motion", "Hareketi azalt", "ลดการเคลื่อนไหว"],
+  "ui.privacyText": ["Your progress stays on this phone. No real money is ever won or paid out, and spins are never sold.", "İlerlemen bu telefonda kalır. Gerçek para kazanılmaz ya da ödenmez, çevirişler satılmaz.", "ความคืบหน้าอยู่ในเครื่องนี้ ไม่มีการได้หรือจ่ายเงินจริง และไม่มีการขายตาหมุน"],
+  "ui.storeNote": ["Purchases remove ads or add looks. Nothing here changes spins, odds or Wax. No random items.", "Satın alımlar reklamı kaldırır ya da görünüm ekler. Hiçbiri çeviriş, olasılık ya da Balmumu vermez. Rastgele ürün yok.", "สิ่งที่ซื้อได้คือเอาโฆษณาออกหรือเพิ่มหน้าตา ไม่ได้เพิ่มตาหมุน โอกาส หรือขี้ผึ้ง ไม่มีของสุ่ม"],
+  "store.remove_ads.name": ["Remove ads", "Reklamları kaldır", "เอาโฆษณาออก"], "store.remove_ads.desc": ["No ads between runs, for good. Reward ads stay optional.", "Oyunlar arasında reklam çıkmaz, kalıcı. Ödüllü reklamlar isteğe bağlı kalır.", "ไม่มีโฆษณาระหว่างรอบเกมตลอดไป โฆษณารับรางวัลยังเลือกดูได้"],
+  "store.starter_pack.name": ["Starter pack", "Başlangıç paketi", "ชุดเริ่มต้น"], "store.starter_pack.desc": ["Remove ads, one machine skin and 100 Wax. Once.", "Reklamları kaldır, bir makine kılıfı ve 100 Balmumu. Tek seferlik.", "เอาโฆษณาออก สกินเครื่องหนึ่งแบบ และขี้ผึ้ง 100 ครั้งเดียว"],
+  "store.cos_machine.name": ["Machine skins", "Makine kılıfları", "สกินเครื่อง"], "store.cos_machine.desc": ["New paint for the fortune machine.", "Fal makinesi için yeni boya.", "สีใหม่ให้เครื่องดูดวง"],
+  "store.cos_hats.name": ["Brimble's hats", "Brimble'ın şapkaları", "หมวกของบริมเบิล"], "store.cos_hats.desc": ["Silly hats for a serious devil.", "Ciddi bir şeytan için komik şapkalar.", "หมวกตลกๆ สำหรับปีศาจจริงจัง"],
+  "store.cos_wallpaper.name": ["Hideout wallpaper", "Sığınak duvar kâğıdı", "วอลเปเปอร์ที่ซ่อนตัว"], "store.cos_wallpaper.desc": ["A new look for the ghost-train carriage.", "Hayalet treni vagonuna yeni bir görünüm.", "หน้าตาใหม่ให้ตู้รถไฟผี"],
+  "iap.buy": ["Buy", "Satın al", "ซื้อ"], "iap.owned": ["Owned", "Alındı", "ซื้อแล้ว"], "iap.restore": ["Restore purchases", "Satın alımları geri yükle", "กู้คืนการซื้อ"], "iap.restored": ["Restored: {n}", "Geri yüklendi: {n}", "กู้คืนแล้ว: {n}"],
+  "iap.restoreNone": ["Nothing to restore.", "Geri yüklenecek bir şey yok.", "ไม่มีอะไรให้กู้คืน"], "iap.restoreNote": ["Restoring brings back purchases only.", "Geri yükleme yalnızca satın alımları getirir.", "การกู้คืนได้เฉพาะของที่ซื้อ"],
+  "iap.failed": ["The purchase did not go through.", "Satın alma tamamlanmadı.", "การซื้อไม่สำเร็จ"], "iap.needsRemoveAds": ["That needs Remove ads first.", "Bunun için önce Reklamları kaldır gerekir.", "ต้องซื้อเอาโฆษณาออกก่อน"], "iap.useUpgrade": ["You own Remove ads, so buy the upgrade instead.", "Reklamları kaldır sende var, yükseltmeyi al.", "เธอมีเอาโฆษณาออกแล้ว ให้ซื้ออัปเกรดแทน"],
+  "iap.testLabel": ["Test purchase", "Deneme satın alımı", "ทดลองซื้อ"], "iap.testBody": ["No money is taken. Store price: {price}.", "Para çekilmez. Mağaza fiyatı: {price}.", "ไม่มีการตัดเงิน ราคาในร้าน: {price}"], "iap.testBuy": ["Buy (test)", "Satın al (deneme)", "ซื้อ (ทดลอง)"], "iap.cancel": ["Cancel", "Vazgeç", "ยกเลิก"],
+  "ads.watch.shop_reroll": ["Watch an ad: one free reroll", "Reklam izle: bir bedava yenileme", "ดูโฆษณา: สุ่มใหม่ฟรี 1 ครั้ง"], "ads.watch.double_wax": ["Watch an ad: double the Wax from this run", "Reklam izle: bu oyunun Balmumunu ikiye katla", "ดูโฆษณา: ขี้ผึ้งจากเกมนี้เป็นสองเท่า"],
+  "ads.left": ["{n} left today", "Bugün {n} tane kaldı", "วันนี้เหลือ {n}"], "ads.unavailable": ["No ad is available right now. Try again later.", "Şu an gösterilecek reklam yok. Sonra tekrar dene.", "ตอนนี้ไม่มีโฆษณา ลองใหม่ภายหลัง"], "ads.noReward": ["The ad closed early, so there is no reward.", "Reklam erken kapandı, ödül yok.", "ปิดโฆษณาก่อนจบ จึงไม่ได้รางวัล"],
+  "ads.testLabel": ["Test ad", "Deneme reklamı", "โฆษณาทดลอง"], "ads.testTitle": ["This is a test ad", "Bu bir deneme reklamı", "นี่คือโฆษณาทดลอง"], "ads.testBody": ["A real ad would play here. Reward in {n} s.", "Burada gerçek bir reklam oynardı. Ödül {n} sn sonra.", "โฆษณาจริงจะเล่นตรงนี้ รับรางวัลใน {n} วิ"], "ads.close": ["Close", "Kapat", "ปิด"],
+  // ---- how to play, board ----
+  "ui.howTitle": ["How to play", "Nasıl oynanır", "วิธีเล่น"], "ui.tabRules": ["Rules", "Kurallar", "กติกา"], "ui.tabSymbols": ["Symbols", "Semboller", "สัญลักษณ์"], "ui.tabPatterns": ["Patterns", "Desenler", "ลาย"],
+  "ui.rule1": ["You owe Brimble a debt. Each debt has a few nights to pay it.", "Brimble'a bir borcun var. Her borcu ödemek için birkaç gece var.", "เธอเป็นหนี้บริมเบิล แต่ละก้อนมีไม่กี่คืนให้จ่าย"],
+  "ui.rule2": ["Each night, pick one terms card. It sets the spins.", "Her gece bir şart kartı seç. Çeviriş sayısını o belirler.", "ทุกคืนเลือกใบเงื่อนไขหนึ่งใบ ใบนั้นกำหนดจำนวนหมุน"],
+  "ui.rule3": ["Check the Favourite. It is more likely to land. Then spin the 5 by 3 machine.", "Gözde'ye bak. İnme ihtimali daha yüksek. Sonra 5x3 makineyi çevir.", "ดูตัวโปรด มันออกง่ายกว่า แล้วหมุนเครื่อง 5x3"],
+  "ui.rule4": ["STOKE adds Heat: more pay, but more Ash. Three Ash is a Scorch and burns your purse.", "KÖRÜKLE Ateş ekler: daha çok kazanç ama daha çok Kül. Üç Kül Kavrulmadır, keseni yakar.", "เติมไฟเพิ่มไฟ: จ่ายมากขึ้นแต่เถ้าก็มากขึ้น เถ้าสามตัวคือไหม้เกรียม ถุงเงินจะไหม้"],
+  "ui.rule5": ["Tricks change the result after the reels stop. Charms work on their own.", "Numaralar makine durunca sonucu değiştirir. Tılsımlar kendiliğinden çalışır.", "กลเม็ดแก้ผลหลังวงล้อหยุด เครื่องรางทำงานเอง"],
+  "ui.rule6": ["Pay coins into the debt, or keep them in the purse for interest. The purse can burn.", "Parayı borca öde ya da faiz için kesede tut. Kese yanabilir.", "จ่ายเหรียญเข้าหนี้ หรือเก็บในถุงเพื่อดอกเบี้ย แต่ถุงเงินอาจไหม้"],
+  "ui.rule7": ["Pay a debt and Brimble offers deals: a boon and a curse that stays. Miss a deadline and he collects.", "Bir borcu öde, Brimble anlaşma sunar: bir ödül ve kalıcı bir lanet. Vadeyi kaçırırsan tahsil eder.", "ปลดหนี้แล้วบริมเบิลเสนอข้อตกลง: ของดีหนึ่งอย่างกับคำสาปที่อยู่ถาวร พลาดกำหนดเขาก็มาเก็บ"],
+  "ui.scoreOrder": ["How a spin is scored", "Bir çeviriş nasıl puanlanır", "การคิดคะแนนหนึ่งตา"],
+  "ui.score1": ["1. Each pattern pays: value × symbol mult × pattern mult.", "1. Her desen öder: değer × sembol çarpanı × desen çarpanı.", "1. แต่ละลายจ่าย: ค่า × ตัวคูณสัญลักษณ์ × ตัวคูณลาย"],
+  "ui.score2": ["2. Add all patterns together.", "2. Tüm desenleri topla.", "2. รวมทุกลายเข้าด้วยกัน"], "ui.score3": ["3. Multiply by Heat and any bonus.", "3. Ateş ve ek çarpanlarla çarp.", "3. คูณด้วยไฟและโบนัส"],
+  "ui.score4": ["4. Add flat coins. The total goes into the purse.", "4. Sabit paraları ekle. Toplam keseye girer.", "4. บวกเหรียญคงที่ ยอดรวมเข้าถุงเงิน"], "ui.scoreBeat": ["A bigger pattern beats the smaller one inside it.", "Büyük desen, içindeki küçüğü geçersiz kılar.", "ลายใหญ่ชนะลายเล็กที่อยู่ในนั้น"],
+  "ui.symValue": ["Value {n}", "Değer {n}", "ค่า {n}"], "ui.symWeight": ["Weight {n}", "Ağırlık {n}", "น้ำหนัก {n}"], "ui.patCells": ["{n} cells", "{n} hücre", "{n} ช่อง"], "ui.patMult": ["x{n}", "x{n}", "x{n}"], "ui.patPlaces": ["{n} placements", "{n} konum", "{n} ตำแหน่ง"],
+  // ---- collection, shelf, sheet ----
+  "ui.collTitle": ["Collection", "Koleksiyon", "คลังสะสม"], "ui.tabAch": ["Achievements", "Başarılar", "ความสำเร็จ"], "ui.tabSeen": ["Charms", "Tılsımlar", "เครื่องราง"], "ui.tabEndings": ["Endings", "Sonlar", "ตอนจบ"],
+  "ui.achCount": ["{a} of {b} done", "{a}/{b} tamam", "สำเร็จ {a} จาก {b}"], "ui.seenCount": ["{a} of {b} charms seen", "{a}/{b} tılsım görüldü", "เห็นแล้ว {a} จาก {b}"], "ui.unseen": ["Not seen yet", "Henüz görülmedi", "ยังไม่เคยเห็น"],
+  "ui.lockedBy": ["Locked: {how}", "Kilitli: {how}", "ล็อก: {how}"], "ui.rewardWax": ["+{n} Wax", "+{n} Balmumu", "ขี้ผึ้ง +{n}"], "ui.rewardCharm": ["Unlocks the charm {name}", "{name} tılsımını açar", "ปลดล็อกเครื่องราง {name}"], "ui.rewardChar": ["Unlocks {name}", "{name} karakterini açar", "ปลดล็อก {name}"],
+  "ui.noEnding": ["Not reached yet", "Henüz ulaşılmadı", "ยังไปไม่ถึง"],
+  "ui.shelfTitle": ["Your charms", "Tılsımların", "เครื่องรางของเธอ"], "ui.cursesTitle": ["Your curses", "Lanetlerin", "คำสาปของเธอ"], "ui.tricksTitle": ["Your tricks", "Numaraların", "กลเม็ดของเธอ"],
+  "ui.emptySlot": ["Empty slot", "Boş yuva", "ช่องว่าง"], "ui.noCurseYet": ["No curses. Brimble is disappointed.", "Hiç lanet yok. Brimble hayal kırıklığında.", "ยังไม่มีคำสาป บริมเบิลผิดหวัง"], "ui.slotsN": ["{a} of {b} slots", "{a}/{b} yuva", "ใช้ {a} จาก {b} ช่อง"],
+  "ui.tapInspect": ["Tap an item to read it.", "Okumak için bir öğeye dokun.", "แตะไอเทมเพื่ออ่าน"], "ui.family": ["Family: {name}", "Aile: {name}", "สาย: {name}"], "ui.sellFor": ["Sell for {n}", "{n} karşılığında sat", "ขายได้ {n}"],
+  "ui.curseHeld": ["A curse. It stays until the run ends.", "Bir lanet. Oyun bitene dek kalır.", "คำสาป อยู่จนจบเกม"], "ui.dealOnce": ["Taken from a deal.", "Bir anlaşmadan geldi.", "มาจากข้อตกลง"],
+  // ---- speech lines ----
+  "line.brimble.home.1": ["Three nights. Sixty coins. Or I take the candle. Company policy.", "Üç gece. Altmış para. Yoksa mumu alırım. Şirket politikası.", "สามคืน หกสิบเหรียญ ไม่งั้นฉันเอาเทียนไป นโยบายบริษัท"],
+  "line.brimble.home.2": ["Back already? The paperwork missed you.", "Yine mi geldin? Evraklar seni özledi.", "กลับมาแล้วเหรอ เอกสารคิดถึงเธอนะ"], "line.brimble.home.3": ["The machine is fine. It is held together with string, but fine.", "Makine iyi. İpla tutuyor ama iyi.", "เครื่องไม่เป็นไร ผูกด้วยเชือกอยู่ แต่ไม่เป็นไร"],
+  "line.brimble.start.1": ["Sixty coins. Take your time. Not too much.", "Altmış para. Acele etme. Çok da etme.", "หกสิบเหรียญ ค่อยๆ ทำ แต่อย่าช้านัก"], "line.brimble.start.2": ["Sign here. No, the small print is for me.", "Buraya imzala. Hayır, dipnot benim.", "เซ็นตรงนี้ ไม่ใช่ ตัวเล็กๆ นั่นของฉัน"],
+  "line.brimble.stoke.1": ["More Heat. I like a customer with ambition.", "Daha çok Ateş. Hırslı müşteriyi severim.", "ไฟแรงขึ้นอีก ฉันชอบลูกค้ามีความทะเยอทะยาน"], "line.brimble.stoke.2": ["Warm in here, isn't it?", "Buralar ısındı, değil mi?", "ในนี้ร้อนขึ้นนะ จริงไหม"],
+  "line.brimble.heatHigh.1": ["You're pushing the Heat. I admire that in a customer I am about to lose.", "Ateşi zorluyorsun. Kaybetmek üzere olduğum müşteride bunu takdir ederim.", "เธอเร่งไฟแรงนะ ฉันชื่นชมลูกค้าที่กำลังจะหลุดมือ"], "line.brimble.heatHigh.2": ["That is a lot of Heat. The machine is fine. Probably.", "Bu çok Ateş. Makine iyi. Muhtemelen.", "ไฟแรงมากเลย เครื่องไม่เป็นไร คงงั้น"],
+  "line.brimble.scorch.1": ["The machine is fine. Your purse is lighter. Everyone learns.", "Makine iyi. Kesen hafifledi. Herkes öğrenir.", "เครื่องไม่เป็นไร ถุงเงินเธอเบาลง ทุกคนต้องเรียนรู้"], "line.brimble.scorch.2": ["Ash. Such a shame. I will keep the ash.", "Kül. Çok yazık. Külü ben alırım.", "เถ้า น่าเสียดาย เถ้านั่นฉันเก็บเอง"],
+  "line.brimble.dud.1": ["Nothing. It happens. Ask the candle.", "Hiçbir şey. Olur. Muma sor.", "ไม่ได้อะไรเลย เกิดขึ้นได้ ไปถามเทียนดู"], "line.brimble.dud.2": ["That was luck. Luck is not in the contract.", "Bu şanstı. Şans sözleşmede yok.", "นั่นคือโชค โชคไม่อยู่ในสัญญา"],
+  "line.brimble.big.1": ["Hm. Do that again and I will have to read the contract.", "Hm. Bir daha yaparsan sözleşmeyi okumam gerekecek.", "อืม ทำแบบนั้นอีกฉันต้องไปอ่านสัญญาแล้ว"], "line.brimble.big.2": ["Lovely. Officially I did not see it.", "Güzel. Resmen görmedim.", "สวยมาก ทางการแล้วฉันไม่เห็น"],
+  "line.brimble.paid.1": ["Paid. I will pretend I am pleased.", "Ödendi. Memnunmuş gibi yapacağım.", "จ่ายแล้ว ฉันจะทำเป็นดีใจ"], "line.brimble.paid.2": ["Stamped. On to the next page.", "Mühürlendi. Sıradaki sayfaya.", "ประทับตราแล้ว ไปหน้าถัดไป"], "line.brimble.paid.3": ["Early? You are making me look bad.", "Erken mi? Beni kötü gösteriyorsun.", "เร็วขนาดนี้เหรอ เธอทำให้ฉันดูแย่นะ"],
+  "line.brimble.deal.1": ["A deal. Good for you now. Good for me later. That is what a deal is.", "Bir anlaşma. Şimdi sana iyi. Sonra bana iyi. Anlaşma dediğin bu.", "ข้อตกลง ตอนนี้ดีกับเธอ ทีหลังดีกับฉัน ข้อตกลงก็แบบนี้"], "line.brimble.deal.2": ["Read it. Or don't. Most don't.", "Oku. Ya da okuma. Çoğu okumaz.", "อ่านก็ได้ ไม่อ่านก็ได้ ส่วนใหญ่ไม่อ่านกัน"], "line.brimble.deal.3": ["I wrote this clause in a smaller pen on purpose.", "Bu maddeyi bilerek daha küçük kalemle yazdım.", "ข้อนี้ฉันจงใจเขียนด้วยปากกาเล็กกว่า"],
+  "line.brimble.signed.1": ["Pleasure. I mean it, for once.", "Memnuniyetle. Bu sefer gerçekten.", "ยินดี ครั้งนี้พูดจริง"], "line.brimble.signed.2": ["Signed. No take-backs. Company policy.", "İmzalandı. Geri dönüş yok. Şirket politikası.", "เซ็นแล้ว คืนไม่ได้ นโยบายบริษัท"],
+  "line.brimble.refuse.1": ["Clean hands. How dull.", "Temiz eller. Ne sıkıcı.", "มือสะอาด น่าเบื่อจริง"], "line.brimble.refuse.2": ["Refused. I will keep the pen warm.", "Reddedildi. Kalemi sıcak tutarım.", "ปฏิเสธเหรอ ฉันจะเก็บปากกาไว้ให้อุ่น"],
+  "line.brimble.pawn.1": ["One more night, for one small fee. You will barely notice.", "Bir gece daha, küçük bir ücretle. Fark bile etmezsin.", "อีกหนึ่งคืน แลกค่าธรรมเนียมนิดเดียว เธอแทบไม่รู้สึก"], "line.brimble.pawn.2": ["Burn something you love. It is the only currency I trust.", "Sevdiğin bir şeyi yak. Güvendiğim tek para birimi bu.", "เผาของที่เธอรัก มันเป็นเงินตราเดียวที่ฉันเชื่อใจ"],
+  "line.brimble.lose.1": ["Three nights. Sixty coins. Or I take the candle. I did say.", "Üç gece. Altmış para. Yoksa mumu alırım. Söylemiştim.", "สามคืน หกสิบเหรียญ ไม่งั้นเอาเทียน ฉันบอกแล้ว"], "line.brimble.lose.2": ["Do not look at me like that. I will relight it. You are a paying customer.", "Bana öyle bakma. Yeniden yakacağım. Ödeme yapan müşterisin.", "อย่ามองฉันแบบนั้น ฉันจะจุดให้ใหม่ เธอเป็นลูกค้าที่จ่ายเงิน"], "line.brimble.lose.3": ["The snuffer is not personal. It is stationery.", "Söndürücü kişisel değil. Kırtasiye.", "ที่ดับเทียนไม่ใช่เรื่องส่วนตัว มันคือเครื่องเขียน"],
+  "line.brimble.win.1": ["Paid in full. I have never seen that. Do not tell Head Office.", "Tamamen ödendi. Hiç görmemiştim. Genel Merkez'e söyleme.", "จ่ายครบ ไม่เคยเห็นมาก่อน อย่าบอกสำนักงานใหญ่"], "line.brimble.win.2": ["You won. I will deny it.", "Kazandın. Reddedeceğim.", "เธอชนะ ฉันจะปฏิเสธ"],
+  "line.pip.shop.1": ["Everything is half-price, if the price is doubled first.", "Her şey yarı fiyat, fiyatı önce ikiye katlarsan.", "ของทุกอย่างลดครึ่งราคา ถ้าขึ้นราคาเป็นสองเท่าก่อน"], "line.pip.shop.2": ["Buy two. Brimble does not count the wagon.", "İki tane al. Brimble arabayı saymıyor.", "ซื้อสองชิ้นเลย บริมเบิลไม่นับรถเข็น"], "line.pip.shop.3": ["That one hums. It is either good or haunted.", "Şu mırıldanıyor. Ya iyi ya da perili.", "อันนั้นฮัมเพลงได้ ไม่ดีก็ผีสิง"],
+  "line.nim.start.1": ["Sixty coins. I've paid more for worse.", "Altmış para. Daha kötüsüne daha fazlasını ödedim.", "หกสิบเหรียญ ฉันเคยจ่ายแพงกว่านี้กับของแย่กว่า"], "line.nim.start.2": ["I am not lucky. I am organised.", "Şanslı değilim. Düzenliyim.", "ฉันไม่ได้โชคดี ฉันแค่จัดการเป็น"],
+  "line.nim.paid.1": ["One down. I am counting.", "Biri bitti. Sayıyorum.", "ไปหนึ่งก้อน ฉันนับอยู่"], "line.nim.paid.2": ["You wrote this clause in a smaller pen.", "Bu maddeyi daha küçük kalemle yazmışsın.", "ข้อนี้คุณเขียนด้วยปากกาเล็กกว่า"],
+  "line.nim.scorch.1": ["That was my money.", "O benim paramdı.", "นั่นเงินของฉัน"], "line.nim.scorch.2": ["Noted. Never again. Probably.", "Not aldım. Bir daha asla. Herhalde.", "จดไว้แล้ว ไม่ทำอีก คงงั้น"],
+  "line.nim.lose.1": ["Fine. Light it again. I'll do it better.", "Peki. Yeniden yak. Daha iyisini yapacağım.", "ก็ได้ จุดใหม่เถอะ รอบหน้าฉันทำดีกว่านี้"], "line.nim.lose.2": ["I read everything this time. It did not help.", "Bu sefer hepsini okudum. Yardımı olmadı.", "รอบนี้ฉันอ่านทุกบรรทัด ก็ไม่ช่วยอะไร"],
 };
-for (const [id, en, tr] of SYMS) add({ ['sym.' + id]: en, ['sym.' + id + '.rule']: SYM_RULE[id][0] }, { ['sym.' + id]: tr, ['sym.' + id + '.rule']: SYM_RULE[id][1] });
 
-// ---- Trinkets (35 in lite): id, EN name, TR name, EN short, TR short, EN full effect, TR full effect -----------
-const TRINKETS = [
-  // Catch
-  ['salt_barrel', 'Salt Barrel', 'Tuz Fıçısı', 'Sardine lines pay +5', 'Sardalya dizileri +5', 'Sardine lines pay +5.', 'Sardalya dizileri +5 öder.'],
-  ['fish_cart', 'Fish Cart', 'Balık Arabası', '4+ Sardines land: +20', '4+ sardalya gelirse +20', 'If 4 or more Sardines land, +20.', '4 ya da daha çok sardalya gelirse +20.'],
-  ['net_mender', 'Net Mender', 'Ağ Tamircisi', 'Nets pay 12 per Sardine', 'Ağ, sardalya başına 12', 'Each Net pays 12 per adjacent Sardine instead of 2.', 'Her ağ, yanındaki sardalya başına 2 yerine 12 öder.'],
-  ['fish_hook', 'Fish Hook', 'Olta İğnesi', 'Sardine lines pay x2', 'Sardalya dizileri x2', 'Sardine lines pay x2.', 'Sardalya dizileri x2 öder.'],
-  ['ice_crate', 'Ice Crate', 'Buz Kasası', 'Held Sardines in a line: +12 each', 'Mandallı sardalya başına +12', 'A Sardine line completed with held Sardines pays +12 per held Sardine.', 'Mandallı sardalyalarla tamamlanan sardalya dizisi, mandallı sardalya başına +12 öder.'],
-  ['pier_cat', 'Pier Cat', 'İskele Kedisi', 'Sardine lines +5, Cats x2', 'Sardalya dizisi +5, kedi x2', 'Each Sardine line pays +5. Each Cat pays x2.', 'Her sardalya dizisi +5 öder. Her kedi x2 öder.'],
-  ['fish_scale', "Fishmonger's Scale", 'Balıkçı Terazisi', 'Paying Sardine lines raise Sardine pay', 'Sardalya dizisi, sardalya ödemesini büyütür', 'Each Sardine line that pays (counted per line, not per spin) adds +6 to Sardine line pay for the rest of the run, max +30.', 'Ödeme yapan her sardalya dizisi (çevirme başına değil, dizi başına) sefer boyunca sardalya dizisi ödemesine +6 ekler, en çok +30.'],
-  ['full_net', 'Full Net', 'Dolu Ağ', '5+ Sardines land: +40', '5+ sardalya gelirse +40', 'If 5 or more Sardines land, +40.', '5 ya da daha çok sardalya gelirse +40.'],
-  // Peg
-  ['spare_peg', 'Spare Peg', 'Yedek Mandal', '+1 peg per tide', 'Gelgit başına +1 mandal', '+1 peg per tide.', 'Gelgit başına +1 mandal.'],
-  ['steady_hand', 'Steady Hand', 'Sabit El', 'Line with 2 pegged squares: +3', '2 mandallı kareyle dizi: +3', 'A line completed with 2 pegged cells pays +3.', 'İki mandallı kareyle tamamlanan dizi +3 öder.'],
-  ['brass_peg', 'Brass Peg', 'Pirinç Mandal', 'Pegged squares in paying lines +4', 'Ödeyen dizideki mandallı kare +4', 'Each pegged cell that is part of a paying line pays +4.', 'Ödeme yapan bir dizinin parçası olan her mandallı kare +4 öder.'],
-  // Tide
-  ['first_light', 'First Light', 'İlk Işık', 'Spin 1 of each tide pays x3', 'Her gelgitin 1. çevirmesi x3', 'Spin 1 of each tide pays x3.', 'Her gelgitin 1. çevirmesi x3 öder.'],
-  ['tide_table', 'Tide Table', 'Gelgit Cetveli', 'Every 3rd spin pays +4', 'Her 3. çevirme +4', 'Every 3rd spin of a tide pays +4.', 'Gelgitin her 3. çevirmesi +4 öder.'],
-  ['dry_spell', 'Dry Spell', 'Kurak Gün', 'After a 0 spin, next pays x1.75', 'Boş çevirmeden sonra x1,75', 'After a spin that pays 0, the next spin pays x1.75.', '0 ödeyen çevirmeden sonraki çevirme x1,75 öder.'],
-  ['night_tide', 'Night Tide', 'Gece Suyu', 'Last spin of each tide pays x2', 'Gelgitin son çevirmesi x2', 'The last spin of each tide pays x2.', 'Her gelgitin son çevirmesi x2 öder.'],
-  ['lucky_sandal', 'Lucky Sandal', 'Uğurlu Terlik', 'Three empty spins charge a +30', 'Üç boş çevirme +30 yükler', 'Each spin that pays 0 adds 1 charge. At 3 charges the next spin pays +30 and charges reset. The reel odds do not change.', 'Her boş çevirme 1 yük ekler. 3 yükte sonraki çevirme +30 öder ve yükler sıfırlanır. Çarkın olasılıkları değişmez.'],
-  ['slack_water', 'Slack Water', 'Durgun Su', 'Quota -8%', 'Kota -%8', 'Quota -8%.', 'Kota -%8.'],
-  ['orhans_watch', "Orhan's Watch", "Orhan'ın Saati", '+1 spin and +1 peg per tide', 'Gelgitte +1 çevirme, +1 mandal', '+1 spin and +1 peg per tide.', 'Her gelgitte +1 çevirme ve +1 mandal.'],
-  ['second_wind', 'Second Wind', 'İkinci Nefes', "Orhan's mercy reaches 20, twice", 'Orhan 20 eksiği, iki kez yuvarlar', "Orhan's mercy covers a gap of up to 20 instead of 5, and can fire twice per run.", "Orhan'ın yuvarlaması 5 yerine 20'ye kadar olan eksiği kapatır ve seferde iki kez çalışabilir."],
-  // Ledger
-  ['tin_cup', 'Tin Cup', 'Teneke Kupa', '+14 coins at each tide start', 'Her gelgit başında +14 para', '+14 coins at the start of each tide.', 'Her gelgitin başında +14 para.'],
-  ['lucky_ledger', 'Lucky Ledger', 'Uğurlu Defter', 'First three rerolls each shop free', 'Her dükkanda ilk üç yenileme bedava', 'The first three rerolls in each shop are free.', 'Her dükkanda ilk üç yenileme bedava.'],
-  ['pebble_jar', 'Pebble Jar', 'Çakıl Kavanozu', 'Pebble lines pay +4', 'Çakıl dizileri +4', 'Pebble lines pay +4.', 'Çakıl dizileri +4 öder.'],
-  ['skipping_stone', 'Skipping Stone', 'Sektirme Taşı', '+3 per 2 Pebbles landed, max 9', 'Her 2 çakıl için +3, en çok 9', '+3 for every 2 Pebbles that land, max 9 per spin.', 'Gelen her 2 çakıl için +3, çevirme başına en çok 9.'],
-  ['hagglers_cap', "Haggler's Cap", 'Pazarlıkçı Kasketi', 'Shop prices -30%', 'Dükkan fiyatları -%30', 'Shop prices -30%.', 'Dükkan fiyatları -%30.'],
-  ['junk_cart', 'Junk Cart', 'Eskici Arabası', 'First removal each shop is free', 'Dükkanda ilk çıkarma bedava', 'The first token removal in each shop is free. It still uses one of your 3 removals this run.', 'Her dükkanda ilk parça çıkarma bedava. Bu koşuda 3 çıkarma hakkından birini yine harcar.'],
-  ['kelp_pot', 'Kelp Pot', 'Yosun Saksısı', 'Kelp counter grows +5, max 20', 'Yosun sayacı +5 artar, en çok 20', 'The Kelp counter grows +5 instead of +1, max 20.', 'Yosun sayacı +1 yerine +5 artar, en çok 20.'],
-  ['sea_chest', 'Sea Chest', 'Sandık', '+7 coins per shelf trinket at tide end', 'Gelgit sonu raftaki biblo başına +7', '+7 coins per held trinket at tide end.', 'Gelgit sonunda elindeki her biblo için +7 para.'],
-  // Hearth
-  ['samovar_tap', 'Samovar Tap', 'Semaver Musluğu', 'Tea glass lines pay +6', 'Çay dizileri +6', 'Tea glass lines pay +6.', 'Çay bardağı dizileri +6 öder.'],
-  ['lantern_oil', 'Lantern Oil', 'Fener Yağı', 'Lantern lines pay +8', 'Fener dizileri +8', 'Lantern lines pay +8.', 'Fener dizileri +8 öder.'],
-  ['sugar_cube', 'Sugar Cube', 'Kesme Şeker', 'Tea next to a Lantern: +3', 'Fenerin yanındaki çay +3', 'Each Tea glass adjacent to a Lantern pays +3.', 'Fenerin yanındaki her çay bardağı +3 öder.'],
-  ['warm_rug', 'Warm Rug', 'Sıcak Kilim', 'No peg clipped: +6 (spins 2-6)', 'Mandalsız çevirme +6 (2-6)', 'A spin with no peg clipped pays +6 (spins 2-6).', 'Hiç mandal takılı olmayan çevirme +6 öder (2-6. çevirmeler).'],
-  ['grandmas_cup', "Grandma's Cup", 'Babaanne Fincanı', 'Tea glass lines pay x2', 'Çay dizileri x2', 'Tea glass lines pay x2.', 'Çay bardağı dizileri x2 öder.'],
-  ['hearth_stone', 'Hearth Stone', 'Ocak Taşı', 'After quota: +20% of jar, max 20', "Kotadan sonra kavanozun %20'si, en çok 20", 'After the quota is paid, +20% of the jar, max 20.', 'Kota ödendikten sonra kavanozun %20 kadarı ek gelir, en çok 20.'],
-  ['wick_trimmer', 'Wick Trimmer', 'Fitil Makası', 'Middle-line Lantern lines pay x3', 'Ortadaki fener dizileri x3', 'Lantern lines in the middle row or middle column pay x3.', 'Orta satırdaki ya da orta sütundaki fener dizileri x3 öder.'],
-  ['tea_garden', 'Tea Garden', 'Çay Bahçesi', 'Tea line plus Lantern line: x3', 'Çay ve fener dizisi birlikte: x3', 'A spin with a Tea glass line and a Lantern line pays x3 in total.', 'Aynı çevirmede hem çay bardağı hem fener dizisi varsa toplam x3 öder.'],
-];
-for (const [id, en, tr, es, ts, ed, td] of TRINKETS) {
-  const k = 'trinket.' + id;
-  add({ [k + '.name']: en, [k + '.short']: es, [k + '.desc']: ed }, { [k + '.name']: tr, [k + '.short']: ts, [k + '.desc']: td });
-}
+const EN = {}, TR = {}, TH = {};
+for (const [k, [e, r, h]] of Object.entries(T)) { EN[k] = e; TR[k] = r; TH[k] = h; }
 
-// ---- Tide Charts (6 in lite) ------------------------------------------------------------------
-const CHARTS = [
-  ['spring_tide', 'Spring Tide', 'Bahar Suyu', 'Quota +20%. All line pay +25%.', 'Kota +%20. Tüm dizi ödemeleri +%25.'],
-  ['neap_tide', 'Neap Tide', 'Ölü Su', 'Quota -20%. 5 spins per tide.', 'Kota -%20. Gelgitte 5 çevirme.'],
-  ['bare_line', 'Bare Line', 'Boş İp', '1 peg per tide. Start with 30 coins. Lines pay +30%.', 'Gelgitte 1 mandal. 30 parayla başla. Diziler +%30 öder.'],
-  ['market_day', 'Market Day', 'Pazar Günü', 'Shops show 4 offers. Prices +25%.', 'Dükkanda 4 teklif var. Fiyatlar +%25.'],
-  ['tight_shelf', 'Tight Shelf', 'Dar Raf', '3 trinket places. Trinkets cost half. Quota -15%.', 'Rafta 3 yer var. Biblolar yarı fiyat. Kota -%15.'],
-  ['long_evening', 'Long Evening', 'Uzun Akşam', '7 spins per tide. Quota +15%.', 'Gelgitte 7 çevirme. Kota +%15.'],
-];
-for (const [id, en, tr, ed, td] of CHARTS) add({ ['chart.' + id + '.name']: en, ['chart.' + id + '.desc']: ed }, { ['chart.' + id + '.name']: tr, ['chart.' + id + '.desc']: td });
-
-// ---- Creditor events (4 in lite) ---------------------------------------------------------------
-const EVENTS = [
-  ['auditor', 'The Auditor', 'Müfettiş', 'Nermin Hanım from the district office', 'İlçeden Nermin Hanım', '2 pegs this tide instead of 3.', 'Bu gelgit 3 yerine 2 mandal.'],
-  ['fog_bank', 'Fog Bank', 'Sis', 'The weather', 'Hava', 'The right column cannot be pegged.', 'Sağ sütun mandallanamaz.'],
-  ['short_day', 'Short Day', 'Kısa Gün', 'The ferry timetable', 'Vapur tarifesi', '1 spin less. Quota -10%.', '1 çevirme eksik. Kota -%10.'],
-  ['low_water', 'Low Water', 'Çekilme', 'The sea', 'Deniz', 'Lines in the bottom row do not pay.', 'Alt satırdaki diziler ödemez.'],
-];
-for (const [id, en, tr, ew, tw, ed, td] of EVENTS) {
-  const k = 'event.' + id;
-  add({ [k + '.name']: en, [k + '.who']: ew, [k + '.desc']: ed }, { [k + '.name']: tr, [k + '.who']: tw, [k + '.desc']: td });
-}
-
-// ---- Boathouse builds (6 in lite) --------------------------------------------------------------
-const BUILDS = [
-  ['roof', 'Patch the Roof', 'Çatıyı Onar'], ['stove', 'Stove', 'Soba'], ['cat_basket', 'Cat Basket', 'Kedi Sepeti'],
-  ['radio', 'Radio', 'Radyo'], ['tea_corner', 'Tea Corner', 'Çay Köşesi'], ['lamp_post', 'Lamp Post', 'Sokak Lambası'],
-];
-for (const [id, en, tr] of BUILDS) add({ ['build.' + id + '.name']: en }, { ['build.' + id + '.name']: tr });
-
-// ---- Character lines: key line.<who>.<trigger>.<n>. Lines that need content outside lite are left out. -----
-// Each entry: trigger, [EN lines], [TR lines].
-const LINES = {
-  deni: [
-    ['run_start', ["Come on, you old box. Grandpa trusted you with the boiler money. I'm only asking for tea money.", 'Six turns. Be a good goat.', "Orhan's window is open. He's listening. Behave."],
-      ['Hadi ama kutucuk. Dedem sana kazan parasını emanet etti. Ben sadece çay parası istiyorum.', 'Altı çevirme. Uslu bir keçi ol.', "Orhan'ın penceresi açık. Dinliyor. Uslu dur."]],
-    ['tutorial_peg', ["Two the same. Peg them. Grandpa's rule."], ['İkisi aynı. Mandalla. Dedemin kuralı.']],
-    ['pair_miss', ['Two lanterns and a gull. The gull knows what it did.', 'Two out of three. I can work with two.', "Fine. I'll peg it and we try again like adults."],
-      ['İki fener, bir martı. Martı ne yaptığını biliyor.', 'Üçte iki. İkiyle iş yaparım.', 'Tamam. Mandallıyorum, yetişkinler gibi bir daha deniyoruz.']],
-    ['peg_hit', ['Told you.', "That's what the pegs are for.", 'Grandpa carved his initials on these. Now I see why.'],
-      ['Dedim sana.', 'Mandal bunun için var.', 'Dedem bunlara adını kazımış. Şimdi anladım nedenini.']],
-    ['zero', ['Nothing. A fine collection of nothing.', "Pebbles. You shouldn't have.", "I'm not angry. I'm counting."],
-      ['Hiç. Güzel bir hiç koleksiyonu.', 'Çakıl. Hiç gerek yoktu.', 'Kızmadım. Sayıyorum.']],
-    ['zero_streak', ['Three empty turns. Even the cat looked away.'], ['Üç boş çevirme. Kedi bile başını çevirdi.']],
-    ['small_win', ["Tea money. I'll take it.", 'Sardines pay the small bills.'], ['Çay parası. Alırım.', 'Küçük faturaları sardalya öder.']],
-    ['big_win', ["Look at that! Don't get smug, box.", 'Grandpa, are you seeing this?'], ['Şuna bak! Şımarma kutucuk.', 'Dede, görüyor musun?']],
-    ['clutch', ["Last turn. Of course it was the last turn.", 'Paid. With one whole second to spare.'], ['Son çevirme. Tabii ki son çevirmeydi.', 'Ödendi. Tam bir saniye kala.']],
-    ['tide_paid', ["Told you. Don't get smug, {n} tides to go.", "One more page for Orhan's ledger."], ['Bak, dedim sana. Ama sevinme, daha {n} gelgit var.', "Orhan'ın defterine bir sayfa daha."]],
-    ['mercy', ['He rounded up. Nobody say a word.'], ['Yuvarladı. Kimse bir şey demesin.']],
-    ['shop_enter', ["Grandpa's crate. Hands in pockets, Deni.", 'What do we need, and what do I just want?', "Sevgi's stall. Hands in pockets, Deni."],
-      ['Dedemin sandığı. Eller cepte Deni.', 'Ne lazım, ne sadece canım istiyor?', "Sevgi'nin tezgahı. Eller cepte Deni."]],
-    ['shop_buy', ["It'll pay for itself. Probably.", 'Welcome to the shelf. Make yourself useful.'], ['Kendini amorti eder. Herhalde.', 'Rafa hoş geldin. Bir işe yara.']],
-    ['shop_broke', ['The jar says no.'], ['Kavanoz hayır diyor.']],
-    ['remove_token', ['Goodbye, pebble. It was never personal.'], ['Güle güle çakıl. Kişisel değildi.']],
-    ['event_intro', ['Company. Stand up straight, box.'], ['Misafir var. Dik dur kutucuk.']],
-    ['loss', ["Not today. The pier's still standing, and so am I.", "Short. I'll be back at first light.", 'The box and I need to have a talk.'],
-      ['Bugün olmadı. İskele ayakta, ben de.', 'Yetmedi. İlk ışıkta yine buradayım.', 'Kutucukla bir konuşmamız lazım.']],
-    ['win', ['Stamp it, Kaptan.', 'One less. Grandpa, one less.'], ['Bas damgayı Kaptan.', 'Bir tane eksildi. Dede, bir tane eksildi.']],
-    // home0: nothing built yet. home: 1 to 5 builds. home6: the boathouse is finished.
-    ['home0', ['The roof does not hold. Yet.', 'Planks first. Curtains later.', 'Grandpa called this a boathouse. It is a pile with a door.'],
-      ['Çatı tutmuyor. Henüz.', 'Önce tahta. Perde sonra.', 'Dedem buna kayıkhane derdi. Kapısı olan bir yığın.']],
-    ['home', ['The roof holds. Mostly.', 'One job at a time. That is the whole plan.', 'It leaks less than last week. I call that progress.'],
-      ['Çatı tutuyor. Çoğunlukla.', 'Sırayla, tek tek. Bütün plan bu.', 'Geçen haftadan az akıtıyor. Bence ilerleme.']],
-    ['home6', ['Roof, stove, lamp. Grandpa would not know the place.', 'Nothing left to hammer. I checked twice.', 'It looks like somebody lives here. Somebody does.'],
-      ['Çatı, soba, lamba. Dedem burayı tanıyamazdı.', 'Çakacak bir şey kalmadı. İki kere baktım.', 'Burada biri yaşıyor gibi. Yaşıyor da.']],
-    ['build_done', ['Hammer down. It looks like a place now.'], ['Çekici bıraktım. Artık bir yere benziyor.']],
-    ['daily_start', ['Same tide for the whole harbor today. No excuses.'], ['Bugün bütün limana aynı gelgit. Bahane yok.']],
-    ['streak', ['Every day this week. Even the gulls noticed.'], ['Bu hafta her gün. Martılar bile fark etti.']],
-    ['lamplight', ["Paid, and still cranking. Don't tell Orhan I like this."], ["Ödedim, hâlâ çeviriyorum. Orhan'a sevdiğimi söylemeyin."]],
-  ],
-  orhan: [
-    ['tide_paid', ['Hm.', 'On time. Your grandfather never was.', 'Paid. Next.'], ['Hm.', 'Vaktinde. Deden hiç olmazdı.', 'Ödendi. Sıradaki.']],
-    ['mercy', ["Rounding. Don't tell the co-op."], ['Yuvarlıyorum. Kooperatife söyleme.']],
-    ['event_auditor', ['The district sent an auditor. Count your pegs.'], ['İlçeden müfettiş geldi. Mandallarını say.']],
-    ['event_fog', ["Fog on the right side. Can't see a thing over there."], ['Sağ taraf sis. Orada bir şey görünmüyor.']],
-    ['event_short', ['Ferry leaves early. So do you.'], ['Vapur erken kalkıyor. Sen de.']],
-    ['event_low', ["Tide's out. The bottom row is mud."], ['Su çekildi. Alt sıra çamur.']],
-    ['loss', ['Close the ledger. Come back tomorrow.', 'The deed stays in the drawer. For now.'], ['Defteri kapat. Yarın gel.', 'Tapu çekmecede kalıyor. Şimdilik.']],
-    ['win', ['Installment received. Sit. Drink your tea.'], ['Taksit alındı. Otur. Çayını iç.']],
-  ],
-  // Home-screen neighbors, only those whose build is in lite.
-  sevgi: [['home', ["Take a simit. You can't crank on an empty stomach."], ['Al bir simit. Aç karnına kol çevrilmez.']]],
-  tekir: [['home', ['Mrrp.'], ['Mırr.']]],
-};
-for (const [who, rows] of Object.entries(LINES)) {
-  for (const [trig, en, tr] of rows) {
-    en.forEach((s, i) => { EN[`line.${who}.${trig}.${i + 1}`] = s; });
-    tr.forEach((s, i) => { TR[`line.${who}.${trig}.${i + 1}`] = s; });
-  }
-}
-
-// ---- Interface ---------------------------------------------------------------------------------
-add({
-  // names
-  'ui.title': 'Small Luck Pier', 'ui.reel': "Hasan's Reel", 'ui.deni': 'Deni', 'ui.orhan': 'Kaptan Orhan', 'ui.loading': 'Loading',
-  'ui.ok': 'OK', 'ui.close': 'Close', 'ui.back': 'Back', 'ui.next': 'Next', 'ui.yes': 'Yes', 'ui.no': 'No', 'ui.on': 'On', 'ui.off': 'Off', 'ui.new': 'New',
-  // pier HUD
-  'ui.spin': 'SPIN', 'ui.spinsLeft': '{n} spins left', 'ui.spinsLeft.one': '1 spin left', 'ui.spinOf': 'Spin {n} of {m}',
-  'ui.tide': 'Tide {n}', 'ui.tideOf': 'Tide {n} of {m}', 'ui.lamplightTide': 'Lamplight, tide {n}',
-  'ui.jar': 'Jar', 'ui.quota': 'Quota', 'ui.jarQuota': '{a} / {b}', 'ui.pegsLeft': '{n} pegs left', 'ui.pegsLeft.one': '1 peg left',
-  'ui.pegHint': 'Tap a square to peg it. Tap again to take the peg off.', 'ui.coinsPlus': '+{n}', 'ui.bag': 'Bag', 'ui.shelf': 'Shelf',
-  'ui.lines': '{n} lines', 'ui.lines.one': '1 line', 'ui.pegHit': 'Peg hit!', 'ui.bigWin': 'Big spin!', 'ui.paid': 'PAID', 'ui.pause': 'Pause',
-  'ui.turbo': 'Turbo', 'ui.skipHint': 'Tap to skip', 'ui.mercyShown': 'Orhan rounded up: +{n}', 'ui.coachSpin': 'Tap SPIN.', 'ui.coachBag': 'This is what the reel can draw.',
-  'ui.coachSalt': 'Sardine lines pay +4 now.',
-  // trinkets and grades
-  'ui.trinket': 'Trinket', 'ui.grade': 'Grade {n}', 'ui.gradeStamps': 'Grade {n} of 4', 'ui.inspect': 'Inspect', 'ui.example': 'Example', 'ui.sell': 'Sell for {n}',
-  'ui.shelfFull': 'Your shelf is full. Sell a trinket first.', 'ui.emptyPlace': 'Empty place',
-  // shop
-  'ui.shop': 'Shop', 'ui.shopHost.crate': "Hasan's dock crate", 'ui.shopHost.sevgi': "Madam Sevgi's stall", 'ui.buy': 'Buy', 'ui.price': '{n} coins',
-  'ui.token': 'Token', 'ui.tokenOffer': 'Token for the bag', 'ui.reroll': 'Reroll {n}', 'ui.rerollFree': 'Reroll, free', 'ui.removeToken': 'Remove {n}',
-  'ui.removeFree': 'Remove, free', 'ui.removePick': 'Pick a token to remove.', 'ui.lock': 'Keep', 'ui.unlock': 'Let go',
-  'ui.locked': 'Kept', 'ui.continue': 'Back to the pier', 'ui.notEnough': 'The jar says no.', 'ui.atCap': 'Bag is full of these', 'ui.bagMin': 'No removals left this run.',
-  'ui.shopOdds': 'Shop odds for this pool', 'ui.shopOddsNote': 'These are the real odds for the cards you can see here, worked out from what is unlocked right now.',
-  'ui.oddsGrade': 'Grade {n}: {p}%', 'ui.oddsTrinket': 'A card is a trinket 70% of the time, a token 30%.', 'ui.tutorialShop': 'One offer only, this time.',
-  'ui.jarCarries': 'Coins left in the jar carry to the next tide.', 'ui.noRealMoney': 'Nothing in the shop is bought with real money.',
-  // bag and odds
-  'ui.bagTitle': 'Bag and odds', 'ui.bagSize': '{n} tokens in the bag', 'ui.bagSize.one': '1 token in the bag', 'ui.bagChance': 'Chance per square', 'ui.linePay': 'Line pay',
-  'ui.pays': 'Pays {n}', 'ui.noLine': 'No line', 'ui.mercyRule': 'Once per run, if the jar is 1 to 5 coins short, Orhan rounds up.',
-  'ui.fairNote': 'Each square draws one token from the bag, on its own. A pegged square keeps its symbol.',
-  'ui.stopNote': 'Every spin stops at the same times, whatever the result. The reel never slows down or teases.',
-  'ui.tutorialNote': 'The first tide of your first run is a fixed tutorial. Every spin after it is drawn from the bag.',
-  'ui.oddsNote': 'The odds shown here and in the shop are the real ones. Nothing is hidden or nudged.',
-  // run start, charts, events
-  'ui.runStart': 'New run', 'ui.pickTrinket': 'Pick a free trinket', 'ui.pickChart': 'Pick a tide chart', 'ui.chart': 'Tide chart', 'ui.chartNone': 'No chart',
-  'ui.start': 'Start', 'ui.event': 'Creditor event', 'ui.eventAt': 'Today the {name} calls.', 'ui.installment': 'Installment {n}', 'ui.installmentOf': 'Installment {n} of {m}',
-  'ui.tier': 'Tier x{n}',
-  // ledger, run end
-  'ui.tidePaid': 'Tide paid', 'ui.runPaid': 'Installment paid', 'ui.runLost': 'The jar was short', 'ui.jarShort': 'Tide {t}: the jar had {a} of {b}', 'ui.reached': 'Tide reached: {n}',
-  'ui.bestSpin': 'Best spin: {n}', 'ui.planks': 'Planks', 'ui.planksGain': 'Planks +{n}', 'ui.planksNote': 'Planks stay with you. They build the boathouse.',
-  'ui.firstDay': 'First day on the pier: +10', 'ui.perTide': 'Tides cleared: +{n}', 'ui.perWin': 'Paid run: +{n}', 'ui.perClutch': 'Clutch tides: +{n}',
-  'ui.marginNote': "Margin note from Orhan's ledger", 'ui.storyBeat': 'Ledger page {n}', 'ui.doublePlanks': 'Double Planks', 'ui.again': 'Another run', 'ui.home': 'Home',
-  // lamplight
-  'ui.lamplightTitle': 'Lamplight', 'ui.lamplightAsk': 'Paid. Keep going?', 'ui.lamplightNext': 'Next quota: {n}', 'ui.lamplightKeep': 'Keep cranking', 'ui.lamplightStop': 'Stop here',
-  'ui.lamplightNote': 'Play after tide 5 counts for score only.',
-  // home, boathouse, album, daily
-  'ui.play': 'Play', 'ui.nextBuild': 'Next: {name}', 'ui.buildCost': '{n} Planks', 'ui.build': 'Build', 'ui.built': 'Built', 'ui.needPlanks': 'Need {n} more Planks',
-  'ui.album': 'Album', 'ui.albumDone': 'Album {n}%', 'ui.albumTrinkets': 'Trinkets', 'ui.albumSymbols': 'Symbols', 'ui.albumNotes': 'Margin notes', 'ui.albumStamps': 'Creditor stamps',
-  'ui.seen': 'Seen', 'ui.wonWith': 'Won with', 'ui.locked2': 'Locked',
-  'ui.daily': 'Daily Tide', 'ui.dailyDone': 'Done for today', 'ui.dailyScore': 'Score {n}', 'ui.dailyBest': 'Best {n}', 'ui.streak': '{n}-day streak', 'ui.streak.one': '1-day streak',
-  'ui.dailyRetry': 'Try once more', 'ui.dailyNote': 'One seeded run a day. Everyone on the harbor gets the same draws.', 'ui.dailyLocal': 'The date comes from this phone, so scores are personal.',
-  // pause and rules
-  'ui.paused': 'Paused', 'ui.resume': 'Resume', 'ui.rules': 'Rules', 'ui.quit': 'Quit run', 'ui.quitAsk': 'Quit this run?', 'ui.quitText': 'The jar and the bag are lost. Planks for tides cleared are kept.',
-  'ui.quitGo': 'Quit', 'ui.quitKeep': 'Keep playing',
-  'ui.rulesTitle': 'How the pier works',
-  'ui.rules1': 'Tap SPIN. Each square draws a token from the bag.', 'ui.rules2': 'Tap squares to peg them. Pegged squares keep their symbol for the next spin. Move the pegs as you like.',
-  'ui.rules3': 'Three of a kind in a row, column or diagonal pays. A Knot counts as any symbol.', 'ui.rules4': 'A pegged square never pays by itself. A line pays only if one of its squares landed this spin.',
-  'ui.rules5': 'A tide is 6 spins and 3 pegs. After the last spin the quota is taken from the jar. Short jar, run over.', 'ui.rules6': 'A spin costs nothing. Coins are tips, used only for the quota and the shop.',
-  'ui.rules7': 'Spins, pegs and odds are never for sale.', 'ui.rulesMercy': 'Mercy: once per run, if the jar is 1 to 5 coins short, Orhan rounds up.',
-  'ui.rulesOdds': 'The odds are the bag. The bag screen shows every percentage, and the shop prints the real odds for what it can offer.',
-  // event intro
-  'ui.eventStamp': 'CREDITOR', 'ui.eventWho': 'From: {name}', 'ui.eventRule': 'This tide: {rule}',
-  // settings
-  'ui.settings': 'Settings', 'ui.language': 'Language', 'ui.sound': 'Sound', 'ui.music': 'Music', 'ui.haptics': 'Vibration', 'ui.turboSetting': 'Turbo (faster spins)',
-  'ui.reduceMotion': 'Reduced motion', 'ui.exportSave': 'Save code', 'ui.importSave': 'Load code', 'ui.exportHint': 'Copy this code to keep your progress.', 'ui.importHint': 'Paste a save code here.',
-  'ui.importBad': 'That code does not work.', 'ui.copied': 'Copied', 'ui.privacy': 'Privacy', 'ui.privacyText': 'No account. Your progress is saved only on this phone.',
-  'ui.credits': 'Credits', 'ui.creditsText': 'Made by one developer on a small pier.',
-  // first boot
-  'ui.firstBoot': 'Pick a language', 'ui.langEn': 'English', 'ui.langTr': 'Türkçe',
-}, {
-  'ui.title': 'Küçük İskele', 'ui.reel': "Hasan'ın Çarkı", 'ui.deni': 'Deni', 'ui.orhan': 'Kaptan Orhan', 'ui.loading': 'Yükleniyor',
-  'ui.ok': 'Tamam', 'ui.close': 'Kapat', 'ui.back': 'Geri', 'ui.next': 'Sonraki', 'ui.yes': 'Evet', 'ui.no': 'Hayır', 'ui.on': 'Açık', 'ui.off': 'Kapalı', 'ui.new': 'Yeni',
-  'ui.spin': 'ÇEVİR', 'ui.spinsLeft': '{n} çevirme kaldı', 'ui.spinsLeft.one': '1 çevirme kaldı', 'ui.spinOf': 'Çevirme {n}/{m}',
-  'ui.tide': 'Gelgit {n}', 'ui.tideOf': 'Gelgit {n}/{m}', 'ui.lamplightTide': 'Lamba ışığı, gelgit {n}',
-  'ui.jar': 'Kavanoz', 'ui.quota': 'Kota', 'ui.jarQuota': '{a} / {b}', 'ui.pegsLeft': '{n} mandal kaldı', 'ui.pegsLeft.one': '1 mandal kaldı',
-  'ui.pegHint': 'Mandallamak için bir kareye dokun. Çıkarmak için bir daha dokun.', 'ui.coinsPlus': '+{n}', 'ui.bag': 'Torba', 'ui.shelf': 'Raf',
-  'ui.lines': '{n} dizi', 'ui.lines.one': '1 dizi', 'ui.pegHit': 'Mandal tuttu!', 'ui.bigWin': 'Büyük çevirme!', 'ui.paid': 'ÖDENDİ', 'ui.pause': 'Duraklat',
-  'ui.turbo': 'Turbo', 'ui.skipHint': 'Geçmek için dokun', 'ui.mercyShown': 'Orhan yuvarladı: +{n}', 'ui.coachSpin': "ÇEVİR'e dokun.", 'ui.coachBag': 'Çark bunları çekebilir.',
-  'ui.coachSalt': 'Sardalya dizileri artık +4 öder.',
-  'ui.trinket': 'Biblo', 'ui.grade': '{n}. derece', 'ui.gradeStamps': 'Derece {n}/4', 'ui.inspect': 'İncele', 'ui.example': 'Örnek', 'ui.sell': '{n} paraya sat',
-  'ui.shelfFull': 'Raf dolu. Önce bir biblo sat.', 'ui.emptyPlace': 'Boş yer',
-  'ui.shop': 'Dükkan', 'ui.shopHost.crate': "Hasan'ın iskele sandığı", 'ui.shopHost.sevgi': "Sevgi Hanım'ın tezgahı", 'ui.buy': 'Al', 'ui.price': '{n} para',
-  'ui.token': 'Parça', 'ui.tokenOffer': 'Torbaya parça', 'ui.reroll': 'Yenile {n}', 'ui.rerollFree': 'Yenile, bedava', 'ui.removeToken': 'Parça çıkar {n}',
-  'ui.removeFree': 'Parça çıkar, bedava', 'ui.removePick': 'Çıkarılacak parçayı seç.', 'ui.lock': 'Sakla', 'ui.unlock': 'Bırak',
-  'ui.locked': 'Saklandı', 'ui.continue': 'İskeleye dön', 'ui.notEnough': 'Kavanoz hayır diyor.', 'ui.atCap': 'Torbada bundan yeterince var', 'ui.bagMin': 'Bu koşuda çıkarma hakkı kalmadı.',
-  'ui.shopOdds': 'Bu havuzun dükkan olasılıkları', 'ui.shopOddsNote': 'Burada gördüğün kartların gerçek olasılıkları bunlar. Şu an açık olan şeylere göre hesaplanır.',
-  'ui.oddsGrade': '{n}. derece: %{p}', 'ui.oddsTrinket': 'Kart %70 biblo, %30 parça çıkar.', 'ui.tutorialShop': 'Bu sefer tek teklif var.',
-  'ui.jarCarries': 'Kavanozda kalan para sonraki gelgite geçer.', 'ui.noRealMoney': 'Dükkandaki hiçbir şey gerçek parayla alınmaz.',
-  'ui.bagTitle': 'Torba ve olasılıklar', 'ui.bagSize': 'Torbada {n} parça var', 'ui.bagSize.one': 'Torbada 1 parça var', 'ui.bagChance': 'Kare başına ihtimal', 'ui.linePay': 'Dizi ödemesi',
-  'ui.pays': '{n} öder', 'ui.noLine': 'Dizi yapmaz', 'ui.mercyRule': 'Seferde bir kez, kavanoz 1 ile 5 para eksikse Orhan yuvarlar.',
-  'ui.fairNote': 'Her kare torbadan kendi başına bir parça çeker. Mandallı kare sembolünü korur.',
-  'ui.stopNote': 'Her çevirme, sonuç ne olursa olsun aynı anlarda durur. Çark ne yavaşlar ne oyalar.',
-  'ui.tutorialNote': 'İlk seferin ilk gelgiti sabit bir öğreticidir. Ondan sonraki her çevirme torbadan çekilir.',
-  'ui.oddsNote': 'Burada ve dükkanda gösterilen olasılıklar gerçektir. Gizli bir şey, bir itiş yok.',
-  'ui.runStart': 'Yeni sefer', 'ui.pickTrinket': 'Bedava bir biblo seç', 'ui.pickChart': 'Bir gelgit çizelgesi seç', 'ui.chart': 'Gelgit çizelgesi', 'ui.chartNone': 'Çizelge yok',
-  'ui.start': 'Başla', 'ui.event': 'Alacaklı ziyareti', 'ui.eventAt': 'Bugün {name} geldi.', 'ui.installment': '{n}. taksit', 'ui.installmentOf': 'Taksit {n}/{m}',
-  'ui.tier': 'Kademe x{n}',
-  'ui.tidePaid': 'Gelgit ödendi', 'ui.runPaid': 'Taksit ödendi', 'ui.runLost': 'Kavanoz yetmedi', 'ui.jarShort': '{t}. gelgit: kavanoz {a} / {b}', 'ui.reached': 'Ulaşılan gelgit: {n}',
-  'ui.bestSpin': 'En iyi çevirme: {n}', 'ui.planks': 'Tahta', 'ui.planksGain': 'Tahta +{n}', 'ui.planksNote': 'Tahtalar sende kalır. Kayıkhaneyi onlarla yaparsın.',
-  'ui.firstDay': 'İskeledeki ilk gün: +10', 'ui.perTide': 'Geçilen gelgitler: +{n}', 'ui.perWin': 'Ödenen sefer: +{n}', 'ui.perClutch': 'Son çevirmede geçilenler: +{n}',
-  'ui.marginNote': 'Orhan defterinin kenar notu', 'ui.storyBeat': 'Defter sayfası {n}', 'ui.doublePlanks': 'Tahtayı ikiye katla', 'ui.again': 'Bir sefer daha', 'ui.home': 'Ev',
-  'ui.lamplightTitle': 'Lamba Işığı', 'ui.lamplightAsk': 'Ödendi. Devam mı?', 'ui.lamplightNext': 'Sıradaki kota: {n}', 'ui.lamplightKeep': 'Çevirmeye devam', 'ui.lamplightStop': 'Burada bırak',
-  'ui.lamplightNote': '5. gelgitten sonrası yalnızca puan içindir.',
-  'ui.play': 'Oyna', 'ui.nextBuild': 'Sıradaki: {name}', 'ui.buildCost': '{n} Tahta', 'ui.build': 'Yap', 'ui.built': 'Yapıldı', 'ui.needPlanks': '{n} Tahta daha lazım',
-  'ui.album': 'Albüm', 'ui.albumDone': 'Albüm %{n}', 'ui.albumTrinkets': 'Biblolar', 'ui.albumSymbols': 'Semboller', 'ui.albumNotes': 'Kenar notları', 'ui.albumStamps': 'Alacaklı damgaları',
-  'ui.seen': 'Görüldü', 'ui.wonWith': 'Kazanılan', 'ui.locked2': 'Kilitli',
-  'ui.daily': 'Günün Gelgiti', 'ui.dailyDone': 'Bugünlük tamam', 'ui.dailyScore': 'Puan {n}', 'ui.dailyBest': 'En iyi {n}', 'ui.streak': '{n} günlük seri', 'ui.streak.one': '1 günlük seri',
-  'ui.dailyRetry': 'Bir kez daha dene', 'ui.dailyNote': 'Günde bir ortak sefer. Limandaki herkes aynı çekilişleri alır.', 'ui.dailyLocal': 'Tarih bu telefondan alınır, o yüzden puanlar kişiseldir.',
-  'ui.paused': 'Duraklatıldı', 'ui.resume': 'Devam', 'ui.rules': 'Kurallar', 'ui.quit': 'Seferi bırak', 'ui.quitAsk': 'Bu sefer bırakılsın mı?', 'ui.quitText': 'Kavanoz ve torba gider. Geçtiğin gelgitlerin tahtaları kalır.',
-  'ui.quitGo': 'Bırak', 'ui.quitKeep': 'Devam et',
-  'ui.rulesTitle': 'İskele nasıl işler',
-  'ui.rules1': 'ÇEVİR düğmesine dokun. Her kare torbadan bir parça çeker.', 'ui.rules2': 'Kareleri mandallamak için dokun. Mandallı kareler bir sonraki çevirmede sembolünü korur. Mandalları istediğin gibi taşı.',
-  'ui.rules3': 'Bir satırda, sütunda ya da çaprazda üç aynı sembol öder. Düğüm her sembolün yerine geçer.', 'ui.rules4': 'Mandallı kare tek başına ödemez. Bir dizi, karelerinden biri bu çevirmede geldiyse öder.',
-  'ui.rules5': 'Bir gelgit 6 çevirme ve 3 mandaldır. Son çevirmeden sonra kota kavanozdan alınır. Kavanoz yetmezse sefer biter.', 'ui.rules6': 'Çevirmek bedava. Paralar bahşiştir, yalnızca kota ve dükkan içindir.',
-  'ui.rules7': 'Çevirme, mandal ve olasılık hiçbir zaman satılmaz.', 'ui.rulesMercy': 'Yuvarlama: seferde bir kez, kavanoz 1 ile 5 para eksikse Orhan yuvarlar.',
-  'ui.rulesOdds': 'Olasılık, torbanın içidir. Torba ekranı her yüzdeyi gösterir, dükkan da sunabileceği şeylerin gerçek olasılığını yazar.',
-  'ui.eventStamp': 'ALACAKLI', 'ui.eventWho': 'Gelen: {name}', 'ui.eventRule': 'Bu gelgit: {rule}',
-  'ui.settings': 'Ayarlar', 'ui.language': 'Dil', 'ui.sound': 'Ses', 'ui.music': 'Müzik', 'ui.haptics': 'Titreşim', 'ui.turboSetting': 'Turbo (hızlı çevirme)',
-  'ui.reduceMotion': 'Az hareket', 'ui.exportSave': 'Kayıt kodu', 'ui.importSave': 'Kod yükle', 'ui.exportHint': 'İlerlemeni saklamak için bu kodu kopyala.', 'ui.importHint': 'Kayıt kodunu buraya yapıştır.',
-  'ui.importBad': 'Bu kod çalışmıyor.', 'ui.copied': 'Kopyalandı', 'ui.privacy': 'Gizlilik', 'ui.privacyText': 'Hesap yok. İlerlemen yalnızca bu telefonda saklanır.',
-  'ui.credits': 'Emeği geçenler', 'ui.creditsText': 'Küçük bir iskelede tek geliştirici tarafından yapıldı.',
-  'ui.firstBoot': 'Dil seç', 'ui.langEn': 'English', 'ui.langTr': 'Türkçe',
-});
-
-
-// ---- Interface, added by the UI lane (src/ui) ---------------------------------------------------
-add({
-  'ui.jarGoal': 'Fill the jar: {a} / {b}', 'ui.coachPeg': 'Peg the pair.',
-  'ui.sold': 'Sold', 'ui.percent': '{p}%', 'ui.oddsKind': 'A card is a trinket {a}% of the time, a token {b}%.',
-  'ui.bagMinN': 'The bag needs at least {n} tokens.', 'ui.statTides': 'Tides cleared: {n}', 'ui.statCoins': 'Coins earned: {n}',
-}, {
-  'ui.jarGoal': 'Kavanozu doldur: {a} / {b}', 'ui.coachPeg': 'Çifti mandalla.',
-  'ui.sold': 'Satıldı', 'ui.percent': '%{p}', 'ui.oddsKind': 'Kart %{a} ihtimalle biblo, %{b} ihtimalle parça çıkar.',
-  'ui.bagMinN': 'Torbada en az {n} parça olmalı.', 'ui.statTides': 'Geçilen gelgit: {n}', 'ui.statCoins': 'Kazanılan para: {n}',
-});
-
-// ---- Meta: build descriptions, installment beats, margin notes (added by the meta lane) -----------------------------------
-// Beats: the 2-sentence ledger page after installment n is paid (GDD.md section 3). Notes: one sentence each, in Deni's voice, read in order
-// (one per finished run). No note and no beat names a neighbor, so none needs a build.
-const META = {
-  'build.roof.desc': ['Keeps the rain off the reel case and opens the Album.', 'Çark kutusunu yağmurdan korur, Albüm\'ü açar.'],
-  'build.stove.desc': ['At the start of a run you pick from 4 trinkets instead of 3.', 'Sefer başında 3 yerine 4 biblo arasından seçersin.'],
-  'build.cat_basket.desc': ['The Cat symbol and the Pier Cat trinket join the shops. Tekir moves in.', 'Dükkanlara Kedi sembolü ve İskele Kedisi biblosu gelir. Tekir taşınır.'],
-  'build.radio.desc': ['Four Tide trinkets join the shops, and the radio plays at home.', 'Dört Gelgit biblosu dükkanlara girer, radyo evde çalar.'],
-  'build.tea_corner.desc': ['Eight Hearth trinkets and the Samovar join the shops. Madam Sevgi opens her stall.', 'Sekiz Ocak biblosu ve Semaver dükkanlara girer. Madam Sevgi tezgahını açar.'],
-  'build.lamp_post.desc': ['The harbor is lit at night on the home screen and on the reel. Only the look changes.', 'Liman ana ekranda ve çarkın başında geceleri aydınlanır. Yalnızca görünüş değişir.'],
-  'beat.1': ['Orhan stamps the first page. "Your grandfather was late with every one of these."', 'Orhan ilk sayfaya damgayı vuruyor. "Deden bunların hepsine geç kalırdı."'],
-  'beat.2': ['Deni finds Hasan\'s pegs in the reel case, his initials carved on each. She counts them twice.', 'Deni, Hasan\'ın mandallarını çark kutusunda buluyor, hepsinde baş harfleri oyulu. İki kere sayıyor.'],
-  'beat.3': ['Someone leaves a paper bag of warm simit on the reel case. There is no note.', 'Biri çark kutusunun üstüne bir kese sıcak simit bırakmış. Not yok.'],
-  'beat.4': ['Orhan returns Hasan\'s tea glass without a word. Deni fills it anyway.', 'Orhan, Hasan\'ın çay bardağını tek kelime etmeden geri getiriyor. Deni yine de dolduruyor.'],
-  'beat.5': ['A fishing boat ties up at the pier for one night. In the morning the rope is coiled and the pier still stands.', 'Bir balıkçı teknesi iskeleye bir gecelik bağlanıyor. Sabah halat toplanmış, iskele hâlâ ayakta.'],
-  'beat.6': ['Deni learns that Orhan and Hasan built the reel together in 1974. Neither of them ever mentioned it.', 'Deni, çarkı Orhan ile Hasan\'ın 1974\'te birlikte yaptığını öğreniyor. İkisi de bunu hiç anmamış.'],
-  'note.1': ['Grandpa kept his accounts on fish-wrapping paper, and Orhan has apparently kept every sheet.', 'Dedem hesaplarını balık sarma kâğıdına yazardı, Orhan da görünüşe göre her sayfayı saklamış.'],
-  'note.2': ['The pier creaks in three different keys, and Grandpa swore he knew which board meant rain.', 'İskele üç ayrı perdeden gıcırdıyor; dedem hangi tahtanın yağmur demek olduğunu bildiğine yemin ederdi.'],
-  'note.3': ['Orhan irons his shirt for co-op meetings, and the co-op is four people and a kettle.', 'Orhan kooperatif toplantıları için gömleğini ütülüyor, kooperatif de dört kişi ile bir çaydanlıktan ibaret.'],
-  'note.4': ['I asked Orhan why he and Grandpa never spoke; he said they spoke constantly, mostly to disagree.', 'Orhan\'a dedemle neden hiç konuşmadıklarını sordum; sürekli konuştuklarını, çoğunlukla da tartıştıklarını söyledi.'],
-  'note.5': ['Grandpa bought a ferry boiler on credit and called it an investment; Orhan uses a different word.', 'Dedem vapur kazanını veresiye aldı ve buna yatırım dedi; Orhan başka bir kelime kullanıyor.'],
-  'note.6': ['The boathouse smells of tar, old rope and a decision nobody wants to make.', 'Kayıkhane katran, eski halat ve kimsenin vermek istemediği bir karar kokuyor.'],
-  'note.7': ['Grandpa named every gull on this pier, and not one of them answers to it.', 'Dedem iskelenin her martısına bir isim koymuş, hiçbiri o isme dönüp bakmıyor.'],
-  'note.8': ['Orhan counts the coins twice and says it is for the co-op, not for me, and I have decided to believe him.', 'Orhan parayı iki kere sayıyor, bunu benim için değil kooperatif için yaptığını söylüyor; ben inanmaya karar verdim.'],
-  'note.9': ['Grandpa\'s tea was dark enough to stand a spoon in, and he stood the spoon in it out of pride.', 'Dedemin çayı kaşık dikecek kadar koyuydu, o da gururla kaşığı dikerdi.'],
-  'note.10': ['The margins of Orhan\'s ledger hold a few of Grandpa\'s lines, mostly complaints about Orhan\'s handwriting.', 'Orhan\'ın defterinin kenarlarında dedemin birkaç satırı var, çoğu Orhan\'ın el yazısından şikayet.'],
-  'note.11': ['The pier leans a little to the left and has outlasted three boats, two storms and one auditor.', 'İskele biraz sola yatık; üç tekneyi, iki fırtınayı ve bir müfettişi atlattı.'],
-  'note.12': ['Orhan says he is not sentimental, then winds his watch twice a day to be sure.', 'Orhan duygusal olmadığını söylüyor, sonra emin olmak için saatini günde iki kere kuruyor.'],
-  'note.13': ['Grandpa taught me to count fast and to stop on time, and only one of those lessons took.', 'Dedem bana hızlı saymayı ve zamanında durmayı öğretti; ikisinden yalnız biri tuttu.'],
-  'note.14': ['I found Grandpa\'s reading glasses in the biscuit tin, in a house with not one book in it.', 'Dedemin okuma gözlüğünü bisküvi kutusunda buldum, tek bir kitabın olmadığı bir evde.'],
-  'note.15': ['Orhan stamps every page exactly the same way, as if the stamp had other plans.', 'Orhan her sayfaya damgayı tıpatıp aynı şekilde vuruyor, sanki damganın başka planları varmış gibi.'],
-  'note.16': ['The fishermen say the sea owes nobody anything, which is also what the co-op says about me.', 'Balıkçılar denizin kimseye borcu olmadığını söylüyor; kooperatif de benim için aynısını söylüyor.'],
-  'note.17': ['Some evenings the pier is quiet enough that I can hear Grandpa and Orhan arguing about the same nail.', 'Bazı akşamlar iskele o kadar sessiz ki dedemle Orhan\'ın aynı çivi için tartıştığını duyuyorum.'],
-  'note.18': ['Eighteen pages in, Orhan\'s ink gets softer toward the margins, and I am not going to mention it.', 'On sekiz sayfa sonra Orhan\'ın mürekkebi kenarlara doğru yumuşuyor, bunu ona söylemeyeceğim.'],
-};
-for (const [k, [en, tr]] of Object.entries(META)) add({ [k]: en }, { [k]: tr });
-
-// ---- Ads, purchases, consent (src/services) --------------------------------------------------
-add({
-  'ads.watch.double_planks': "Watch an ad: double this run's Planks", 'ads.watch.skin_day': 'Watch an ad: wear a paid reel skin or hat until midnight',
-  'ads.watch.daily_retry': "Watch an ad: one more try at today's tide", 'ads.watch.postcard_hint': 'Watch an ad: see the goal of one locked postcard',
-  'ads.left': '{n} left today', 'ads.unavailable': 'No ad is available right now. Try again later.', 'ads.noReward': 'The ad closed early, so there is no reward.',
-  'ads.testLabel': 'Test ad', 'ads.testTitle': 'This is a test ad', 'ads.testBody': 'A real ad would play here. Reward in {n} s.', 'ads.close': 'Close',
-  'iap.testLabel': 'Test purchase', 'iap.testBody': 'No money is taken. Store price: {price}.', 'iap.testBuy': 'Buy (test)', 'iap.cancel': 'Cancel',
-  'iap.buy': 'Buy', 'iap.owned': 'Owned', 'iap.restore': 'Restore purchases', 'iap.restored': 'Restored: {n}', 'iap.restoreNone': 'Nothing to restore.',
-  'iap.restoreNote': 'Restoring brings back purchases only. Your progress stays on this phone; use the save code to move it.',
-  'iap.failed': 'The purchase did not go through.', 'iap.needsRemoveAds': 'The upgrade needs Remove ads first.', 'iap.useUpgrade': 'You own Remove ads, so buy the upgrade instead.',
-  'iap.fixedNote': 'Purchases are ad removal and one starter pack. Nothing here changes spins, pegs or odds. No random items, no spins sold.',
-  'store.remove_ads.name': 'Remove ads', 'store.remove_ads.desc': 'No ads between runs, for good. Reward ads stay optional.',
-  'store.starter_pack.name': 'Starter pack', 'store.starter_pack.desc': '60 Planks, once.',
-  'store.pier_keeper.name': 'Pier Keeper', 'store.pier_keeper.desc': 'Removes ads, daily skin and postcard hint without an ad, 3 reel skins and a pier flag.',
-  'store.pier_keeper_upgrade.name': 'Pier Keeper upgrade', 'store.pier_keeper_upgrade.desc': 'Pier Keeper at a lower price for owners of Remove ads.',
-  'store.cos_reels.name': 'Reel skins', 'store.cos_reels.desc': '4 skins for the reel case.',
-  'store.cos_deni.name': "Deni's hats", 'store.cos_deni.desc': 'A straw hat, a beanie and a headscarf for Deni.',
-  'store.cos_harbor.name': 'Boathouse decor', 'store.cos_harbor.desc': 'An awning, flower pots, string lights and a cat bed.',
-  'consent.ageTitle': 'Are you 18 or older?', 'consent.ageText': 'Rated 18+ because of its spinning paper reel. There is no real money in it, ever.',
-  'consent.ageYes': 'I am 18 or older', 'consent.ageNo': 'I am younger', 'consent.minorText': 'Sorry, this game is for adults only.',
-  'consent.adChoices': 'Ad choices', 'consent.adsNote': 'Ads are optional rewards and short breaks between runs. Choose here what data they may use.',
-}, {
-  'ads.watch.double_planks': 'Reklam izle: bu seferin tahtalarını ikiye katla', 'ads.watch.skin_day': 'Reklam izle: ücretli bir çark kılıfını ya da şapkayı gece yarısına kadar tak',
-  'ads.watch.daily_retry': 'Reklam izle: bugünün gelgitini bir kez daha dene', 'ads.watch.postcard_hint': 'Reklam izle: kilitli bir kartpostalın hedefini gör',
-  'ads.left': 'Bugün {n} tane kaldı', 'ads.unavailable': 'Şu an gösterilecek reklam yok. Sonra tekrar dene.', 'ads.noReward': 'Reklam erken kapandı, o yüzden ödül yok.',
-  'ads.testLabel': 'Deneme reklamı', 'ads.testTitle': 'Bu bir deneme reklamı', 'ads.testBody': 'Burada gerçek bir reklam oynardı. Ödül {n} sn sonra.', 'ads.close': 'Kapat',
-  'iap.testLabel': 'Deneme satın alımı', 'iap.testBody': 'Para çekilmez. Mağaza fiyatı: {price}.', 'iap.testBuy': 'Satın al (deneme)', 'iap.cancel': 'Vazgeç',
-  'iap.buy': 'Satın al', 'iap.owned': 'Alındı', 'iap.restore': 'Satın alımları geri yükle', 'iap.restored': 'Geri yüklendi: {n}', 'iap.restoreNone': 'Geri yüklenecek bir şey yok.',
-  'iap.restoreNote': 'Geri yükleme yalnızca satın alımları getirir. İlerlemen bu telefonda kalır; taşımak için kayıt kodunu kullan.',
-  'iap.failed': 'Satın alma tamamlanmadı.', 'iap.needsRemoveAds': 'Yükseltme için önce Reklamları kaldır gerekir.', 'iap.useUpgrade': 'Reklamları kaldır sende var, o yüzden yükseltmeyi al.',
-  'iap.fixedNote': 'Satın alınabilenler: reklam kaldırma ve tek bir başlangıç paketi. Hiçbiri çevirmeyi, mandalı ya da olasılığı değiştirmez. Rastgele ürün yok, çevirme satılmaz.',
-  'store.remove_ads.name': 'Reklamları kaldır', 'store.remove_ads.desc': 'Seferler arasında reklam çıkmaz, kalıcı olarak. Ödüllü reklamlar isteğe bağlı kalır.',
-  'store.starter_pack.name': 'Başlangıç paketi', 'store.starter_pack.desc': '60 Tahta, tek seferlik.',
-  'store.pier_keeper.name': 'İskele Bekçisi', 'store.pier_keeper.desc': 'Reklamları kaldırır, günlük kılıf ve kartpostal ipucu reklamsız gelir, 3 çark kılıfı ve bir iskele bayrağı.',
-  'store.pier_keeper_upgrade.name': 'İskele Bekçisi yükseltmesi', 'store.pier_keeper_upgrade.desc': 'Reklamları kaldır sahipleri için daha düşük fiyatlı İskele Bekçisi.',
-  'store.cos_reels.name': 'Çark kılıfları', 'store.cos_reels.desc': 'Çark kutusu için 4 kılıf.',
-  'store.cos_deni.name': "Deni'nin şapkaları", 'store.cos_deni.desc': "Deni için hasır şapka, bere ve başörtüsü.",
-  'store.cos_harbor.name': 'Kayıkhane süsleri', 'store.cos_harbor.desc': 'Tente, çiçek saksıları, ışık dizisi ve kedi yatağı.',
-  'consent.ageTitle': '18 yaşında ya da daha büyük müsün?', 'consent.ageText': 'Dönen kâğıt çarkı yüzünden 18+ olarak derecelendirildi. İçinde gerçek para yok, hiç olmayacak.',
-  'consent.ageYes': '18 yaşında ya da büyüğüm', 'consent.ageNo': 'Daha küçüğüm', 'consent.minorText': 'Üzgünüm, bu oyun yalnızca yetişkinler içindir.',
-  'consent.adChoices': 'Reklam tercihleri', 'consent.adsNote': 'Reklamlar isteğe bağlı ödüller ve seferler arasında kısa aralardır. Hangi verileri kullanabileceklerini buradan seç.',
-});
-
-// ---- Home, ledger, album, Daily result, store (added with the M3 integration) ------------------------------------
-add({
-  'ui.ledger': 'Ledger', 'ui.ledgerNow': 'Due now', 'ui.ledgerDone': 'All six installments are paid.', 'ui.store': 'Store',
-  'ui.homeAllBuilt': 'The boathouse is finished.', 'ui.boathouseStage': 'Boathouse: {n} of {m} jobs done', 'ui.sevgi': 'Madam Sevgi', 'ui.tekir': 'Tekir',
-  'ui.planksDoubled': 'Doubled by the ad: +{n}', 'ui.streakForgiven': 'One missed day this week was forgiven, so the streak goes on.',
-  'ui.albumCount': '{a} of {b}', 'ui.notesLeft': 'Finish a run to read the next note.',
-  'line.orhan.home.1': 'The ledger is open. So is my window.', 'line.orhan.home.2': 'Planks are not payments. Build anyway.',
-  'line.orhan.ledger.1': 'Six pages. Your grandfather signed every one.', 'line.orhan.ledger.2': 'Read it. Do not smudge it.',
-}, {
-  'ui.ledger': 'Defter', 'ui.ledgerNow': 'Sırada', 'ui.ledgerDone': 'Altı taksidin hepsi ödendi.', 'ui.store': 'Mağaza',
-  'ui.homeAllBuilt': 'Kayıkhane tamamlandı.', 'ui.boathouseStage': 'Kayıkhane: {m} işten {n} tanesi bitti', 'ui.sevgi': 'Sevgi Hanım', 'ui.tekir': 'Tekir',
-  'ui.planksDoubled': 'Reklamla ikiye katlandı: +{n}', 'ui.streakForgiven': 'Bu hafta kaçırdığın bir gün sayılmadı, seri sürüyor.',
-  'ui.albumCount': '{a}/{b}', 'ui.notesLeft': 'Sıradaki notu okumak için bir sefer bitir.',
-  'line.orhan.home.1': 'Defter açık. Pencerem de.', 'line.orhan.home.2': 'Tahta taksit sayılmaz. Sen yine de yap.',
-  'line.orhan.ledger.1': 'Altı sayfa. Deden hepsini imzaladı.', 'line.orhan.ledger.2': 'Oku. Lekeleme.',
-});
-
-// ---- First-session fixes after QA: shop coach, run end, home teasers -------------------------------------------
-add({
-  'ui.coachShelf': 'On your shelf: {name}. {text}.', 'ui.planksEnough': 'Enough to build at home: {name}.', 'ui.planksToGo': '{n} more Planks for {name}.',
-  'ui.dailyLock': 'After run 2', 'ui.albumLock': 'Patch the roof first', 'ui.homeNextPage': 'Next: installment {n} of {m}. Orhan has a page waiting.',
-}, {
-  'ui.coachShelf': 'Rafında: {name}. {text}.', 'ui.planksEnough': 'Evde yapmaya yetiyor: {name}.', 'ui.planksToGo': '{name} için {n} Tahta daha.',
-  'ui.dailyLock': '2. seferden sonra', 'ui.albumLock': 'Önce çatıyı onar', 'ui.homeNextPage': 'Sıradaki: taksit {n}/{m}. Orhan bir sayfa bekletiyor.',
-});
-
-export const STRINGS = { en: EN, tr: TR };
+export const STRINGS = { en: EN, tr: TR, th: TH };
+export const LANGS = ['en', 'tr', 'th'];
 let lang = 'en';
 
-export const detectLang = () => (typeof navigator !== 'undefined' && /^tr/i.test(navigator.language || '') ? 'tr' : 'en');
+export const detectLang = () => {
+  const n = typeof navigator !== 'undefined' ? (navigator.language || '') : '';
+  return /^tr/i.test(n) ? 'tr' : /^th/i.test(n) ? 'th' : 'en';
+};
 export const setLang = (l) => { lang = STRINGS[l] ? l : detectLang(); if (typeof document !== 'undefined') document.documentElement.lang = lang; };
 export const getLang = () => lang;
 export const fmt = (n) => Number(n).toLocaleString(lang); // 1,234 in English, 1.234 in Turkish
 export const t = (key, vars = {}) =>
   (STRINGS[lang][key] ?? EN[key] ?? key).replace(/\{(\w+)\}/g, (_, k) => (typeof vars[k] === 'number' ? fmt(vars[k]) : (vars[k] ?? '')));
+// Content from the data JSON: { en, tr, th } -> the current language, English when a language is missing.
+export const L = (o) => (o == null ? '' : typeof o === 'string' ? o : (o[lang] || o.en || ''));
+// Data texts carry {c:N}: N coins times the price scale S of the current debt.
+export const coinText = (o, S = 1) => L(o).replace(/\{c:([\d.]+)\}/g, (_, n) => fmt(Math.round(Number(n) * S)));
 // Uses `<key>.one` when n is 1 and that key exists, else `<key>`; {n} is filled in.
 export const plural = (n, key, vars = {}) => t(n === 1 && (key + '.one') in EN ? key + '.one' : key, { n, ...vars });
 // How many variants line.<who>.<trigger>.<n> has (0 if none); the picker chooses an index and never repeats it twice in a row.

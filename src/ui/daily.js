@@ -1,28 +1,25 @@
-// Daily Tide result: today's score and best, the streak, Planks, and the one optional retry ad.
-// data: { save, today, reward?, result?: { planks, forgiven } }. reward and result are present right after a Daily run; from the home
-// screen the same screen opens with the saved numbers only. Handlers: home(), adReady(placement), dailyRetry() -> Promise<bool>.
-import { t, plural } from '../i18n.js';
+// Daily run: today's fixed setup (character, contract 2, one forced terms card, one starting curse), your best and streak, and Play.
+// data: { meta, today, result?: { debts, coins } }. Handlers: daily() starts the run, dailyInfo() -> { charId, contractId, termsId, curseId } (the core derives them from the date).
+import { t, L, fmt } from '../i18n.js';
 import { h, btn, put, art } from './dom.js';
-import { planksBlock, noteBlock } from './runend.js';
+import { CHAR, CONTRACT, STAKE, CURSE, CONFIG } from './content.js';
 
-export function render(el, { save, today, reward, result }, ctx) {
-  const d = save.daily ?? {}, live = !!result;
-  if (live && !ctx.state.said) { ctx.state.said = true; if (d.streak >= 7) ctx.say('deni', 'streak'); }
-  const row = (label, n) => h('li', {}, h('span', {}, label), h('b', {}, String(n)));
-  const canRetry = d.played === today && d.retry !== today && ctx.h.adReady?.('daily_retry');
+export function render(el, { meta, today, result }, ctx) {
+  const d = meta.daily ?? {}, info = ctx.h.dailyInfo?.() ?? {}, done = !!today && d.date === today && (d.done | 0) > 0;
+  const row = (label, value) => h('li', {}, h('span', {}, label), h('b', {}, value));
   put(el,
-    h('div', { class: 'head' }, h('h2', {}, t('ui.daily')), art('deni/cheer', 'deni')),
-    h('p', { class: 'sub' }, t('ui.dailyDone')),
+    h('div', { class: 'head' }, h('h2', {}, t('ui.dailyTitle')), art('ui/daily', 'devil')),
+    h('p', { class: 'sub' }, t('ui.dailySub')),
     h('ul', { class: 'ticket' },
-      row(t('ui.dailyScore', { n: '' }).trim(), d.score ?? 0),
-      row(t('ui.dailyBest', { n: '' }).trim(), d.best ?? 0),
-      h('li', {}, h('span', {}, plural(d.streak ?? 0, 'ui.streak')), art('fx/lantern_on', 'ico sm'))),
-    live && result.forgiven && h('p', { class: 'note' }, t('ui.streakForgiven')),
-    live && planksBlock(reward, ctx, result.planks, false, save),
-    live && noteBlock(reward),
-    h('p', { class: 'note' }, t('ui.dailyNote')),
+      info.charId && h('li', {}, t('ui.dailyToday', { char: L(CHAR[info.charId]?.name), contract: L(CONTRACT[info.contractId]?.name) })),
+      info.termsId && h('li', {}, t('ui.dailyForced', { name: L(STAKE[info.termsId]?.name) })),
+      info.curseId && h('li', {}, t('ui.dailyCurse', { name: L(CURSE[info.curseId]?.name) }))),
+    h('ul', { class: 'ticket' },
+      d.best && row(t('ui.dailyBest'), t('ui.dailyScore', { d: d.best.debts ?? 0, c: fmt(d.best.coins ?? 0) })),
+      result && row(t('ui.dailyTitle'), t('ui.dailyScore', { d: result.debts ?? 0, c: fmt(result.coins ?? 0) })),
+      row(t('ui.dailyStreak', { n: d.streak ?? 0 }), art('ui/star', 'ico sm'))),
+    done && h('p', { class: 'note' }, t('ui.dailyDone')),
+    h('p', { class: 'note' }, t('ui.dailyWax', { n: CONFIG.wax.dailyRun })),
     h('p', { class: 'note' }, t('ui.dailyLocal')),
-    canRetry && btn(t('ads.watch.daily_retry'), () => ctx.h.dailyRetry(), 'ad'),
-    ctx.foot(btn(live ? t('ui.home') : t('ui.close'), () => { ctx.close(); if (live) ctx.h.home?.(); }, 'primary')),
-  );
+    ctx.foot(btn(t('ui.close'), ctx.close), !done && btn(t('ui.dailyGo'), () => ctx.call('daily'), 'primary')));
 }

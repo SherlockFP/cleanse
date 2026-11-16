@@ -1,59 +1,54 @@
-// Pointer to actions (TECH.md section 1). The canvas gives cell taps and long-presses; SPIN and the coach mark are DOM, placed from the view layout.
+// Pointer and keys to actions, plus the two bits of DOM that sit on the machine: the coach line and the score line.
+// The canvas gives cell taps (trick targets, skip an animation) and long-presses (read a symbol). Buttons are the DOM HUD's own.
 // Actions go out through callbacks; nothing here knows the run.
-// shortcut: no crank drag (the crank sprite has no job yet); upgrade when the crank art is placed.
 const LONG_MS = 450, MOVE_PX = 10;
+const el = (tag, cls) => Object.assign(document.createElement(tag), { className: cls, hidden: true });
 
-export function initInput({ canvas, host, cellAt, onSpin, onCell, onInspect, onFirstTouch }) {
-  const spin = Object.assign(document.createElement('button'), { type: 'button', className: 'spin-btn', hidden: true });
-  const coach = Object.assign(document.createElement('p'), { className: 'coach', hidden: true });
-  host.append(coach, spin);
-  spin.addEventListener('click', () => { onFirstTouch?.(); onSpin(); });
+export function initInput({ canvas, host, cellAt, onCell, onInspect, onPrimary, onFirstTouch }) {
+  const coach = el('p', 'coach'), score = el('div', 'score-line');
+  coach.setAttribute('role', 'status');
+  host.append(score, coach);
+  window.addEventListener('pointerdown', () => onFirstTouch?.(), { capture: true, passive: true });
 
   let down = null;
+  const at = (e) => { const r = canvas.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
   canvas.addEventListener('pointerdown', (e) => {
-    onFirstTouch?.();
-    const r = canvas.getBoundingClientRect();
-    down = { x: e.clientX - r.left, y: e.clientY - r.top, id: e.pointerId, long: false, timer: 0 };
-    const cell = cellAt(down.x, down.y);
+    const [x, y] = at(e), cell = cellAt(x, y);
+    down = { x, y, id: e.pointerId, long: false, moved: false, timer: 0 };
     if (cell >= 0) down.timer = setTimeout(() => { if (down) { down.long = true; onInspect(cell); } }, LONG_MS);
   });
   canvas.addEventListener('pointermove', (e) => {
     if (!down || e.pointerId !== down.id) return;
-    const r = canvas.getBoundingClientRect();
-    if (Math.hypot(e.clientX - r.left - down.x, e.clientY - r.top - down.y) > MOVE_PX) { clearTimeout(down.timer); down.moved = true; }
+    const [x, y] = at(e);
+    if (Math.hypot(x - down.x, y - down.y) > MOVE_PX) { clearTimeout(down.timer); down.moved = true; }
   });
   const end = (e) => {
     if (!down || e.pointerId !== down.id) return;
     clearTimeout(down.timer);
     const d = down; down = null;
-    if (e.type === 'pointerup' && !d.long && !d.moved) {
-      const cell = cellAt(d.x, d.y);
-      if (cell >= 0) onCell(cell);
-    }
+    if (e.type === 'pointerup' && !d.long && !d.moved) onCell(cellAt(d.x, d.y)); // -1: a tap beside the cells (still skips an animation)
   };
   canvas.addEventListener('pointerup', end);
   canvas.addEventListener('pointercancel', end);
+  canvas.addEventListener('contextmenu', (e) => e.preventDefault());
   window.addEventListener('keydown', (e) => {
-    if ((e.code === 'Space' || e.code === 'Enter') && !e.repeat && !spin.hidden && document.activeElement === document.body) { e.preventDefault(); onSpin(); }
+    if ((e.code === 'Space' || e.code === 'Enter') && !e.repeat && document.activeElement === document.body) { e.preventDefault(); onPrimary(); }
   });
 
-  const px = (n) => Math.round(n) + 'px';
+  let timer = 0;
   return {
-    // L = view layout. The coach sits just above the SPIN button.
-    layout(L) {
-      const r = L.spin;
-      Object.assign(spin.style, { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), fontSize: px(r.h * 0.38) });
-      Object.assign(coach.style, { left: px(L.column.x + L.column.w / 2), bottom: px(L.screen.h - r.y + 12) }); // a tag 12 px above SPIN
-      // DOM bits that follow the canvas: the speech strip above the case, the pegs-left label under the peg line (px inside the column)
-      host.style.setProperty('--speech-b', px(L.screen.h - L.case.y + 4)); // the bubble's bottom edge stays 4 px above the case roof; a long line grows upward
-      host.style.setProperty('--pegs-x', px(L.pegs.x + L.pegs.w / 2 - L.column.x));
-      host.style.setProperty('--pegs-y', px(L.pegs.y + L.pegs.h + 2));
-    },
-    setSpin({ label, sub = '', disabled = false, hidden = false }) {
-      spin.replaceChildren(label, Object.assign(document.createElement('small'), { textContent: sub }));
-      spin.disabled = disabled; spin.hidden = hidden;
-      coach.style.visibility = hidden ? 'hidden' : ''; // the coach tag never shows over an open screen
-    },
     coach(text) { coach.textContent = text ?? ''; coach.hidden = !text; },
+    // The numbers of one spin: "24 x 1.3 = 31" and up to three chips for what added most. Hides itself.
+    score(main, chips = [], ms = 2200) {
+      clearTimeout(timer);
+      score.replaceChildren(Object.assign(document.createElement('b'), { textContent: main }), ...chips.map((c) => Object.assign(document.createElement('span'), { textContent: c })));
+      score.hidden = !main;
+      if (main) timer = setTimeout(() => { score.hidden = true; }, ms);
+    },
+    // Where the machine is, so both lines sit on it whatever the HUD height is (px from the top of the window).
+    layout(L) {
+      host.style.setProperty('--case-top', Math.round(L.case.y) + 'px');
+      host.style.setProperty('--case-bot', Math.round(L.screen.h - L.case.y - L.case.h) + 'px');
+    },
   };
 }

@@ -1,0 +1,14 @@
+{"patterns": [
+  {"id": "h3", "name": {"en": "Line of 3", "tr": "3'lü Sıra", "th": "แถว 3"}, "mult": 1, "size": 3, "cells": [[0, 1, 2], [1, 2, 3], [2, 3, 4], [5, 6, 7], [6, 7, 8], [7, 8, 9], [10, 11, 12], [11, 12, 13], [12, 13, 14]], "beats": []},
+  {"id": "v3", "name": {"en": "Column", "tr": "Sütun", "th": "แนวตั้ง"}, "mult": 1, "size": 3, "cells": [[0, 5, 10], [1, 6, 11], [2, 7, 12], [3, 8, 13], [4, 9, 14]], "beats": []},
+  {"id": "d3", "name": {"en": "Diagonal", "tr": "Çapraz", "th": "แนวทแยง"}, "mult": 1.5, "size": 3, "cells": [[0, 6, 12], [1, 7, 13], [2, 8, 14], [10, 6, 2], [11, 7, 3], [12, 8, 4]], "beats": []},
+  {"id": "h4", "name": {"en": "Line of 4", "tr": "4'lü Sıra", "th": "แถว 4"}, "mult": 2, "size": 4, "cells": [[0, 1, 2, 3], [1, 2, 3, 4], [5, 6, 7, 8], [6, 7, 8, 9], [10, 11, 12, 13], [11, 12, 13, 14]], "beats": ["h3"]},
+  {"id": "halo", "name": {"en": "Halo", "tr": "Hale", "th": "วงแหวน"}, "mult": 3, "size": 4, "cells": [[2, 6, 8, 12]], "beats": []},
+  {"id": "corners", "name": {"en": "Four Corners", "tr": "Dört Köşe", "th": "สี่มุม"}, "mult": 3, "size": 4, "cells": [[0, 4, 10, 14]], "beats": []},
+  {"id": "h5", "name": {"en": "Line of 5", "tr": "5'li Sıra", "th": "แถว 5"}, "mult": 4, "size": 5, "cells": [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9], [10, 11, 12, 13, 14]], "beats": ["h4", "h3"]},
+  {"id": "saw", "name": {"en": "Sawtooth", "tr": "Testere", "th": "ฟันเลื่อย"}, "mult": 4, "size": 5, "cells": [[0, 6, 2, 8, 4], [5, 1, 7, 3, 9], [5, 11, 7, 13, 9], [10, 6, 12, 8, 14]], "beats": []},
+  {"id": "vee", "name": {"en": "Vee", "tr": "V Yolu", "th": "ทางตัววี"}, "mult": 5, "size": 5, "cells": [[0, 6, 12, 8, 4], [10, 6, 2, 8, 14]], "beats": []},
+  {"id": "cross", "name": {"en": "Cross", "tr": "Artı", "th": "กากบาท"}, "mult": 6, "size": 5, "cells": [[2, 6, 7, 8, 12]], "beats": ["halo"]},
+  {"id": "frame", "name": {"en": "Frame", "tr": "Çerçeve", "th": "กรอบ"}, "mult": 10, "size": 12, "cells": [[0, 1, 2, 3, 4, 5, 9, 10, 11, 12, 13, 14]], "beats": []},
+  {"id": "full", "name": {"en": "Full Fair", "tr": "Tam Panayır", "th": "เต็มงาน"}, "mult": 25, "size": 15, "cells": [[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]], "beats": []}
+]}

@@ -1,9 +1,9 @@
 // QA frames via raw CDP (no dependency), adapted from msjelly/scripts/shots.mjs. Run by hand after "npm run build": node scripts/shots.mjs
 // ONE headless Chrome on the GPU, muted, with a throwaway profile (never the user's). It starts its own "vite preview" on a free port,
-// shoots the states below at phone 390x844 and desktop 1440x900, in EN and TR, into qa/frames/, writes qa/console.json, and kills only
+// shoots the states below at phone 390x844 and desktop 1440x900, in EN, TR and TH, into qa/frames/ (emptied first), writes qa/console.json, and kills only
 // the processes it started. Both children run at below-normal priority. Hard limit 12 minutes. Exit 1 on console errors, exceptions or shader errors.
 import { spawn } from 'node:child_process';
-import { existsSync, mkdirSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, writeFileSync, mkdtempSync, rmSync, readdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { tmpdir } from 'node:os';
 import os from 'node:os';
@@ -14,7 +14,7 @@ import net from 'node:net';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const CHROME = process.env.CHROME_PATH || 'C:/Users/Admin/AppData/Local/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-win64/chrome-headless-shell.exe';
 const FRAMES = join(ROOT, 'qa', 'frames');
-const PROFILE = mkdtempSync(join(tmpdir(), 'slp-shots-'));
+const PROFILE = mkdtempSync(join(tmpdir(), 'pact-shots-'));
 const procs = [];
 const E = { errors: [], exceptions: [], shaderErrors: [], network: [], steps: [] };
 let cdp, ORIGIN, T0 = Date.now(), done = false;
@@ -75,86 +75,92 @@ const click = (sel) => ev(`(()=>{const e=document.querySelector(${JSON.stringify
 const PAINT = 'new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(() => r(true))))';
 
 const VIEWPORTS = [['phone', 390, 844, 2, true], ['desk', 1440, 900, 1, false]];
-const LANGS = ['en', 'tr'];
+const LANGS = ['en', 'tr', 'th'];
+const ONLY = process.argv.slice(2); // e.g. "phone-th desk-en": only these combos
 
+// Every state is reached through window.__pact (src/main.js, ?debug=1): act() runs the same handlers the buttons call with the
+// animations skipped; the three animated frames (mid-spin, pattern win, big win) click the real button and shoot on a timer.
 async function combo(vp, w, h, dpr, mobile, lang) {
   const tag = `${vp}-${lang}`;
   const step = async (name, fn) => { try { await fn(); } catch (e) { console.log(`  step "${tag} ${name}" failed: ${e.message}`); E.steps.push(`${tag} ${name}: ${e.message}`); } };
-  const snap = (name, wait = 500) => step(name, async () => { await sleep(wait); await ev(PAINT, true); await shot(`${tag}-${name}`); });
+  const snap = (name, wait = 450) => step(name, async () => { await sleep(wait); await ev(PAINT, true); await shot(`${tag}-${name}`); });
+  const act = (name, arg) => ev(`__pact.act(${JSON.stringify(name)}, ${JSON.stringify(arg ?? null)})`, true);
+  const state = () => ev('__pact.state()');
+  const idle = (label) => waitFor('!__pact.state().busy', 10000, label);
+  const go = '.hud-bot .btn.go';
   await cdp.send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: dpr, mobile });
   await cdp.send('Emulation.setTouchEmulationEnabled', mobile ? { enabled: true, maxTouchPoints: 1 } : { enabled: false });
   await cdp.send('Storage.clearDataForOrigin', { origin: ORIGIN, storageTypes: 'all' });
   await cdp.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] }); // this PC reports "reduce", which would hide every animation from QA
-  // The language is in the settings before the page boots, so the age gate (the first screen, before the debug hook exists) is shot in it too.
-  const pre = await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: `try { localStorage.setItem('slp.settings', '${JSON.stringify({ lang, volume: 1, reduceMotion: false })}'); } catch {}` });
   await cdp.send('Page.navigate', { url: `${ORIGIN}/?debug=1` });
-  await waitFor("!!document.querySelector('.panel.agegate')", 20000, 'age gate'); // first boot: the 18+ question comes before anything else
-  await cdp.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: pre.identifier });
-  await snap('00-agegate', 400);
-  await click('.layer .foot .btn.primary');
-  // cold open: the first run has no run start screen, the pier is the next thing on screen
-  await step('cold open', async () => { await waitFor("!!window.__pier && __pier.state().tide === 1 && __pier.state().screen === 'game'", 20000, 'tide 1 right after the age gate'); });
-  await snap('02-reel-idle', 900);
-  await step('mid-spin', async () => { await ev('setTimeout(() => __pier.spin(), 0); 0'); await sleep(430); await ev(PAINT, true); await shot(`${tag}-03-mid-spin`); await waitFor('!__pier.state().busy && __pier.state().spin === 1', 8000, 'spin 1 done'); });
-  await snap('04-pair-pulse', 150);
-  await step('peg pair', async () => { const s = await ev('__pier.state()'); if (!s.grid) throw new Error('no grid'); await ev('__pier.peg(4); __pier.peg(8); 0'); });
-  await snap('05-pegged-pair', 500);
-  await step('win line', async () => { await ev('__pier.spin(); 0'); await waitFor('!__pier.state().busy && __pier.state().spin === 2', 10000, 'spin 2 done'); await sleep(300); await ev(PAINT, true); await shot(`${tag}-06-win-line`); });
-  await step('to shop', async () => { await ev("__pier.fastForward('shop'); 0"); await waitFor("__pier.state().screen === 'shop'", 5000, 'shop'); });
-  await snap('07-shop', 600);
-  await step('bag', async () => { await ev("__pier.goto('bag'); 0"); });
-  await snap('08-bag', 400);
-  await step('bag bottom', async () => { await ev("document.querySelector('.panel').scrollTop = 1e5; 0"); });
-  await snap('08b-bag-bottom', 200);
-  await step('inspect', async () => { await ev("__pier.goto('shop'); 0"); await sleep(200); await click('.panel.shop .card-main'); });
-  await snap('09-trinket-inspect', 400);
-  await step('event', async () => { await ev("__pier.fastForward('event'); 0"); await waitFor("__pier.state().screen === 'event'", 5000, 'event screen'); });
-  await snap('10-event-intro', 500);
-  await step('lost', async () => { await ev("__pier.fastForward('lost'); 0"); await waitFor("__pier.state().screen === 'runend'", 5000, 'run end'); });
+  // cold open: the first run has no menu, the machine is the first thing on screen
+  await waitFor("!!window.__pact && __pact.state().phase === 'spin' && __pact.state().screen === 'game'", 20000, 'first run on the machine');
+  await ev(`__pact.setLang('${lang}'); 0`);
+  await step('first run', async () => { const s = await state(); if (!s.tut || s.debt !== 60 || s.spinsLeft !== 5) throw new Error('not the guided first run: ' + JSON.stringify(s)); });
+  await snap('01-machine-idle', 900);
+  await step('mid-spin', async () => { await click(go); await sleep(430); await ev(PAINT, true); await shot(`${tag}-02-mid-spin`); await idle('spin 1 done'); if ((await state()).phase !== 'post') throw new Error('spin 1 did not stop on a result'); });
+  await step('pattern win', async () => { await click(go); await sleep(650); await ev(PAINT, true); await shot(`${tag}-03-pattern-win`); await idle('collect 1 done'); if (!((await state()).purse > 0)) throw new Error('spin 1 paid nothing'); });
+  await step('big win', async () => {
+    await act('cheat', { grid: Array(15).fill('crown'), heat: 4 });
+    await click(go); await sleep(2100); await ev(PAINT, true); await shot(`${tag}-04-big-win`); await idle('big win done');
+  });
+  await step('trick target', async () => { await act('spin'); await click('.hud-bot .pocket:not(.empty)'); });
+  await snap('05-trick-target', 400);
+  await step('deadline paid', async () => { await click('.prompt .btn'); await act('collect'); const s = await act('bank'); if (s.screen !== 'paid') throw new Error('bank did not pay the debt: ' + JSON.stringify(s)); });
+  await snap('06-deadline-paid', 500);
+  await step('deal', async () => { const s = await act('paidContinue'); if (s.screen !== 'deal' || !s.dealOffer?.length) throw new Error('no deal: ' + s.screen); });
+  await snap('07-devil-deal', 500);
+  await step('sign', async () => { const d = (await state()).dealOffer[0], s = await act('signDeal', d); if (s.screen !== 'shop' || !s.curses.length || !s.deals.length) throw new Error('deal not signed: ' + JSON.stringify(s)); });
+  await snap('08-shop', 2700); // after the "new curse" toast
+  await step('buy', async () => { const before = await state(), s = await act('buyCharm', 0); if (s.charms.length !== before.charms.length + 1 || s.purse >= before.purse) throw new Error('buy did not go through'); });
+  await snap('09-shop-bought', 300);
+  await step('stakes', async () => { const s = await act('leaveShop'); if (s.screen !== 'terms' || s.terms?.length !== 3) throw new Error('no terms pick: ' + JSON.stringify(s.terms)); });
+  await snap('10-stakes', 500);
+  await step('charm inspect', async () => { const s = await act('pickTerms', (await state()).terms[0]); if (s.screen !== 'game') throw new Error('not on the machine'); await click('.row-charms .slot:not(.empty):not(.util)'); });
+  await snap('11-charm-inspect', 400);
+  await step('curses', async () => { await click('.sheet-back'); await ev("__pact.goto('shelf', { tab: 'curses' }); 0"); });
+  await snap('12-curses', 400);
+  // save and resume: a reload in the middle of a night comes back in the same place with the same rng counts
+  await step('resume', async () => {
+    await ev("__pact.goto('game'); 0"); await act('stoke'); await act('spin');
+    const pick = (s) => JSON.stringify([s.seed, s.phase, s.grid, s.rngState, s.purse, s.heat, s.spinsLeft, s.charms, s.curses, s.lang]), before = pick(await state());
+    await cdp.send('Page.navigate', { url: `${ORIGIN}/?debug=1` });
+    await waitFor("!!window.__pact && __pact.state().screen === 'game'", 20000, 'resumed run');
+    const after = pick(await state());
+    if (after !== before) throw new Error(`resume differs: ${before} vs ${after}`);
+  });
+  await snap('13-resumed', 700);
+  await step('game over', async () => { await act('cheat', { lose: true }); const s = await act('endRound'); if (s.screen !== 'runend' || s.phase !== null) throw new Error('no run end: ' + JSON.stringify(s)); });
   await step('no ad on a first loss', async () => { if (await ev("!!document.querySelector('.panel.runend .btn.ad')")) throw new Error('ad button on the first run end'); });
-  await snap('11-runend-lost', 1200); // after the Planks count-up: first-day Planks, margin note 1, no ad button
-  // Meta loop: run end -> home (stage 0) -> build the roof (hammer) -> next run -> won run end with the ledger page.
-  await step('home', async () => { await click('.layer .foot .btn.primary'); await waitFor("__pier.state().screen === 'home'", 5000, 'home'); });
-  await snap('15-home-stage0', 600);
-  await step('build', async () => {
-    const before = await ev('__pier.state()');
-    await click('.panel.home .card.build .btn');
-    const anim = await ev("(() => { const e = document.querySelector('.bh-hammer'), f = document.querySelector('.bh-paint.fresh'); return [e && getComputedStyle(e).animationName, f && getComputedStyle(f).animationName].join(); })()");
-    if (anim !== 'bh-hammer,bh-in') throw new Error('hammer animation is not running: ' + anim);
-    await sleep(100); await shot(`${tag}-16-home-build-hammer`); // inside the 0.6 s hammer animation when the capture is fast enough
-    const after = await ev('__pier.state()');
-    if (after.builds !== before.builds + 1 || after.planks >= before.planks) throw new Error(`build did not go through: ${JSON.stringify(after)}`);
-  });
-  await step('won', async () => {
-    await click('.layer .foot .btn.big'); await waitFor("__pier.state().screen === 'runstart'", 5000, 'run start from home');
-    await sleep(700); await ev(PAINT, true); await shot(`${tag}-01-runstart`); // the trinket pick, from run 2
-    await ev("__pier.newRun(); __pier.fastForward('won'); 0"); await waitFor("__pier.state().screen === 'runend'", 8000, 'run end won');
-    const s = await ev('__pier.state()');
-    if (s.paid !== 1 || s.notes !== 2 || s.runs !== 2) throw new Error(`rewards not granted: ${JSON.stringify(s)}`);
-  });
-  await snap('12-runend-won', 1200);
-  await step('ledger', async () => { await ev("__pier.goto('ledger'); 0"); });
-  await snap('17-ledger', 400);
-  await step('album', async () => { await ev("__pier.goto('album'); 0"); });
-  await snap('18-album', 400);
-  await step('daily', async () => { await ev("__pier.daily(); __pier.fastForward('lost'); 0"); await waitFor("__pier.state().screen === 'daily'", 8000, 'daily result'); });
-  await snap('19-daily-result', 1200);
-  await step('store', async () => { await ev("__pier.goto('store'); 0"); await waitFor("!!document.querySelector('.panel.store .card')", 5000, 'store products'); });
+  await snap('14-game-over', 600);
+  await step('home', async () => { const s = await act('home'); if (s.screen !== 'home' || !s.tutorialDone || !(s.wax > 0)) throw new Error('home after the first run: ' + JSON.stringify(s)); });
+  await snap('15-home', 500);
+  await step('character select', async () => { await ev("__pact.goto('charselect'); 0"); });
+  await snap('16-character-select', 400);
+  await step('contracts', async () => { await ev("__pact.goto('ladder', { charId: 'nim' }); 0"); });
+  await snap('17-contracts', 400);
+  await step('how to play', async () => { await ev("__pact.goto('howto'); 0"); });
+  await snap('18-how-to-play', 400);
+  await step('patterns', async () => { await click('.panel.howto .seg .opt:last-child'); });
+  await snap('19-patterns', 300);
+  await step('store', async () => { await ev("__pact.goto('store'); 0"); await waitFor("!!document.querySelector('.panel.store .card')", 5000, 'store products'); });
   await snap('20-store', 400);
-  await step('home 3', async () => { await ev('__pier.home(3, 12); 0'); });
-  await snap('21-home-stage3', 600);
-  await step('home 6', async () => { await ev('__pier.home(6, 40); 0'); });
-  await snap('22-home-stage6', 600);
-  await step('settings', async () => { await click('.layer .foot .icon'); await waitFor("__pier.state().screen === 'settings'", 5000, 'settings from home'); });
-  await snap('13-settings', 400);
-  await step('rules', async () => { await click('.panel.settings .btn:not(.primary)'); });
-  await snap('14-rules', 400);
+  await step('daily', async () => { await ev("__pact.goto('daily'); 0"); });
+  await snap('21-daily', 400);
+  await step('collection', async () => { await ev("__pact.goto('collection'); 0"); });
+  await snap('22-collection', 400);
+  await step('settings', async () => { await ev("__pact.goto('settings'); 0"); });
+  await snap('23-settings', 400);
+  // run 2 is a plain run: Play goes straight in (one character, one contract), the terms pick is the first screen
+  await step('run 2', async () => { await ev("__pact.goto('home'); 0"); await click('.layer .foot .btn.big'); const s = await state(); if (s.screen !== 'terms' || s.tut) throw new Error('run 2 did not open on the terms pick: ' + JSON.stringify(s)); });
+  await snap('24-run2-stakes', 500);
 }
 
 async function main() {
   if (!existsSync(CHROME)) { console.error('headless shell not found: ' + CHROME); return finish(2); }
   if (!existsSync(join(ROOT, 'dist', 'index.html'))) { console.error('dist/ missing: run npm run build first'); return finish(2); }
   mkdirSync(FRAMES, { recursive: true });
+  if (!ONLY.length) for (const f of readdirSync(FRAMES)) if (f.endsWith('.png')) rmSync(join(FRAMES, f)); // frames of an older build never mix in
 
   const port = await free();
   const vite = spawn(process.execPath, [join(dirname(createRequire(import.meta.url).resolve('vite/package.json')), 'bin/vite.js'), 'preview', '--port', String(port), '--strictPort', '--host', '127.0.0.1'], { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -191,6 +197,7 @@ async function main() {
   console.log('WebGL renderer: ' + E.renderer);
 
   for (const [vp, w, h, dpr, mobile] of VIEWPORTS) for (const lang of LANGS) {
+    if (ONLY.length && !ONLY.includes(`${vp}-${lang}`)) continue;
     try { await combo(vp, w, h, dpr, mobile, lang); } catch (e) { console.log(`combo ${vp}-${lang} aborted: ${e.message}`); E.steps.push(`${vp}-${lang}: ${e.message}`); }
   }
   finish(E.errors.length || E.exceptions.length || E.shaderErrors.length || E.steps.length ? 1 : 0);

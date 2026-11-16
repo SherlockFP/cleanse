@@ -1,105 +1,108 @@
-// Meta progress (TECH.md section 2): Planks, boathouse, album, installments. Pure: the functions edit the save they are given
-// (fields missing from an old save are filled in) and never read the clock. The caller writes the save afterwards.
-// Save fields used: planks, installment (the one being played, 1-6), paid (installments paid, 0-6), builds[], notes (unlocked), firstRunBonus,
-// album { trinkets{id: 1 seen | 2 won with}, symbols[], stamps[] }, stats { runs, wins, bestTide, bestSpin, clutches }, lastRewarded.
-import { PLANKS } from './econ.js';
-import { BUILDS, ALBUM, INSTALLMENTS_LITE, NOTES_LITE } from './data/unlocks.js';
+// Between runs: Wax, hideout, unlocks, achievements, contract ladder, endings.
+import { CHARMS, CHAR, CONTRACTS, HIDE, HIDEOUT, ACHIEVEMENTS, CHARM, CONFIG } from './data.js';
 
-export { tier } from './econ.js';
+// Stats that keep their best value; every other stat adds up across runs.
+const MAX_STATS = new Set(['contract', 'reachDebt', 'patternsOneSpin', 'spinCoins', 'cursesHeld', 'tricksOneSpin', 'wispsOneSpin', 'luckReached', 'familyFull']);
 
-export function ensureMeta(save) {
-  save.planks ??= 0; save.installment ??= 1; save.paid ??= 0; save.builds ??= []; save.notes ??= 0;
-  save.album ??= {}; save.album.trinkets ??= {}; save.album.symbols ??= []; save.album.stamps ??= [];
-  save.stats ??= {};
-  for (const k of ['runs', 'wins', 'bestTide', 'bestSpin', 'clutches']) save.stats[k] ??= 0;
-  return save;
-}
-
-// Album: kind 'trinkets' (level 1 or 2), 'symbols' or 'stamps'. Unknown ids are ignored.
-export function albumAdd(save, kind, id, level = 1) {
-  ensureMeta(save);
-  if (!ALBUM[kind].includes(id)) return;
-  if (kind === 'trinkets') save.album.trinkets[id] = Math.max(save.album.trinkets[id] ?? 0, level);
-  else if (!save.album[kind].includes(id)) save.album[kind].push(id);
-}
-
-// Story: installment c is paid by winning a run played at c. Lite stops at 6; after that a win pays nothing new and shows no beat.
-// -> { n: installment just paid, done: all 6 paid } or null.
-export function advanceInstallment(save) {
-  ensureMeta(save);
-  if (save.paid >= INSTALLMENTS_LITE) return null;
-  save.paid++;
-  save.installment = Math.min(save.paid + 1, INSTALLMENTS_LITE);
-  return { n: save.paid, done: save.paid === INSTALLMENTS_LITE };
-}
-
-// Call once for every finished run (won, lost, or Lamplight stopped), with runSummary(run). Optional summary fields:
-// bag (symbols in the bag at the end) and stamps (creditor event ids cleared); runSummary does not carry them, the caller adds them.
-// A second call with the same summary does nothing. -> { planks, parts, firstRun, note, beat, done } or null.
-export function grantRunRewards(save, summary) {
-  ensureMeta(save);
-  const id = `${summary.seed}:${summary.hash}`;
-  if (save.lastRewarded === id) return null;
-  save.lastRewarded = id;
-  const first = save.firstRunBonus !== false;
-  const parts = {
-    perTide: PLANKS.perTideCleared * summary.tidesCleared,
-    win: summary.won ? PLANKS.winBonus : 0,
-    clutch: PLANKS.clutch * summary.clutches, // a clutch is a tide whose quota is reached on its last spin
-    first: first ? PLANKS.firstRun : 0,
+export function newMeta() {
+  return {
+    wax: 0, hideout: ['cot'], achievements: [], chars: ['nim'], contracts: ['c1'], seenCharms: [], endings: [], keepsake: null,
+    stats: {}, charWins: [], daily: { date: '', best: null, streak: 0, done: 0 }, iap: { noAds: false, skins: [] },
+    settings: { lang: 'en', sfx: 1, music: 1, haptics: true, fast: false, reduceMotion: false }, tutorialDone: false,
   };
-  const planks = parts.perTide + parts.win + parts.clutch + parts.first;
-  save.planks += planks;
-  save.firstRunBonus = false;
-  const s = save.stats;
-  s.runs++; s.clutches += summary.clutches;
-  s.bestTide = Math.max(s.bestTide, summary.tidesCleared); s.bestSpin = Math.max(s.bestSpin, summary.bestSpin);
-  if (summary.won) s.wins++;
-  const adv = summary.won && summary.installment === save.installment ? advanceInstallment(save) : null;
-  for (const tid of summary.trinkets ?? []) albumAdd(save, 'trinkets', tid, summary.won ? 2 : 1);
-  for (const sym of Object.keys(summary.bag ?? {})) albumAdd(save, 'symbols', sym);
-  for (const ev of summary.stamps ?? []) albumAdd(save, 'stamps', ev);
-  const note = save.notes < NOTES_LITE ? ++save.notes : null; // every finished run reads the next note, in order
-  return { planks, parts, firstRun: first, note, beat: adv?.n ?? null, done: adv?.done ?? false };
 }
 
-const byId = (id) => BUILDS.find((b) => b.id === id);
-export const nextBuild = (save) => BUILDS.find((b) => !(save.builds ?? []).includes(b.id)) ?? null;
+const achOwned = (meta, unlock) => !unlock || (unlock.startsWith('ach:') && meta.achievements.includes(unlock.slice(4)));
 
-// -> { ok, reason: 'built' | 'order' | 'planks' | 'unknown' | null, cost }. Builds go in the fixed order, one at a time.
-export function canBuild(save, id) {
-  ensureMeta(save);
-  const b = byId(id);
-  if (!b) return { ok: false, reason: 'unknown', cost: 0 };
-  if (save.builds.includes(id)) return { ok: false, reason: 'built', cost: b.cost };
-  if (nextBuild(save).id !== id) return { ok: false, reason: 'order', cost: b.cost };
-  if (save.planks < b.cost) return { ok: false, reason: 'planks', cost: b.cost };
-  return { ok: true, reason: null, cost: b.cost };
+export function isUnlocked(meta, kind, id) {
+  switch (kind) {
+    case 'charm': return achOwned(meta, CHARM[id]?.unlock);
+    case 'char': return achOwned(meta, CHAR[id]?.unlock) || meta.chars.includes(id);
+    case 'contract': return meta.contracts.includes(id);
+    case 'hideout': return meta.hideout.includes(id);
+    case 'achievement': return meta.achievements.includes(id);
+  }
+  return false;
 }
 
-export function build(save, id) {
-  const c = canBuild(save, id);
-  if (!c.ok) return c;
-  save.planks -= c.cost;
-  save.builds.push(id);
-  return c;
+export const availableCharms = (meta) => CHARMS.filter((c) => isUnlocked(meta, 'charm', c.id)).map((c) => c.id);
+
+const statValue = (meta, stats, key) => (key === 'hideout' ? meta.hideout.length : key === 'charWins' ? meta.charWins.length : key === 'dailyRuns' ? meta.daily.done : stats[key] || 0);
+
+// Awards every achievement whose condition now holds. Returns the new ones.
+export function checkAchievements(meta, stats = meta.stats) {
+  const out = [];
+  for (const a of ACHIEVEMENTS) {
+    if (meta.achievements.includes(a.id) || statValue(meta, stats, a.cond.stat) < a.cond.gte) continue;
+    meta.achievements.push(a.id);
+    if (a.reward.wax) meta.wax += a.reward.wax;
+    if (a.reward.char && !meta.chars.includes(a.reward.char)) meta.chars.push(a.reward.char);
+    out.push({ id: a.id, reward: a.reward });
+  }
+  return out;
 }
 
-// Ids for newRun({ unlocked }): 'start' plus every built pool build.
-export const unlockedPool = (save) => ['start', ...BUILDS.filter((b) => b.pool && (save.builds ?? []).includes(b.id)).map((b) => b.id)];
-export const hasFeature = (save, f) => BUILDS.some((b) => b.feature === f && (save.builds ?? []).includes(b.id));
-
-// Mode gates (CONTENT.md section 5): Lamplight after a first win, Daily Tide after run 2, Tide Charts after installment 3 is paid.
-export function modes(save) {
-  ensureMeta(save);
-  return { lamplight: save.stats.wins >= 1, daily: save.stats.runs >= 2, charts: save.paid >= 3 };
+// summary comes from run.summary(run). Returns {wax, newAchievements, unlocks}.
+export function applyRunResult(meta, summary) {
+  for (const [k, v] of Object.entries(summary.stats)) {
+    meta.stats[k] = MAX_STATS.has(k) ? Math.max(meta.stats[k] || 0, v) : (meta.stats[k] || 0) + v;
+  }
+  for (const id of summary.seen) if (!meta.seenCharms.includes(id)) meta.seenCharms.push(id);
+  if (summary.won) {
+    const i = CONTRACTS.findIndex((c) => c.id === summary.contract);
+    const next = CONTRACTS[i + 1];
+    if (next && !meta.contracts.includes(next.id)) meta.contracts.push(next.id);
+    if (!meta.charWins.includes(summary.char)) meta.charWins.push(summary.char);
+    if (summary.ending && !meta.endings.includes(summary.ending)) meta.endings.push(summary.ending);
+  }
+  meta.wax += summary.wax;
+  const earned = checkAchievements(meta);
+  const unlocks = [];
+  for (const a of earned) {
+    if (a.reward.char) unlocks.push({ kind: 'char', id: a.reward.char });
+    if (a.reward.charm) unlocks.push({ kind: 'charm', id: a.reward.charm });
+  }
+  const waxGot = summary.wax + earned.reduce((n, a) => n + (a.reward.wax || 0), 0);
+  return { wax: waxGot, newAchievements: earned, unlocks };
 }
 
-// Album completion 0-100 (floor), found of total over trinkets, symbols, creditor stamps and margin notes.
-export function albumProgress(save) {
-  ensureMeta(save);
-  const found = { trinkets: Object.keys(save.album.trinkets).length, symbols: save.album.symbols.length, stamps: save.album.stamps.length, notes: Math.min(save.notes, NOTES_LITE) };
-  let count = 0, total = 0;
-  for (const k of Object.keys(found)) { count += found[k]; total += ALBUM[k].length; }
-  return { found, total, count, percent: Math.floor((100 * count) / total) };
+export function buyHideout(meta, id) {
+  const h = HIDE[id];
+  if (!h || meta.hideout.includes(id) || meta.wax < h.costWax) return false;
+  meta.wax -= h.costWax;
+  meta.hideout.push(id);
+  checkAchievements(meta);
+  return true;
 }
+
+export function hideoutEffects(meta) {
+  const o = {};
+  for (const id of meta.hideout) {
+    const e = HIDE[id]?.effect;
+    if (!e || e.type === 'none') continue;
+    switch (e.type) {
+      case 'startTrick': o.startTrick = e.n; break;
+      case 'startCharmPick': o.startCharmPick = e.n; break;
+      case 'shopOffers': o.shopOffers = e.n; break;
+      case 'benchOffers': o.benchOffers = e.n; break;
+      case 'foresight': o.foresight = true; o.freeRerolls = e.freeRerolls; break;
+      case 'keepCharm': o.keepCharm = true; break;
+      case 'startWick': o.startWick = e.n; break;
+      case 'seededRuns': o.seededRuns = true; break;
+      case 'refuseWick': o.refuseWick = e.n; break;
+    }
+  }
+  return o;
+}
+
+// Keepsake Box: keep one common or uncommon charm you have seen for the next run.
+export function setKeepsake(meta, id) {
+  const c = CHARM[id];
+  if (!meta.hideout.includes('keepsake') || !c || !['common', 'uncommon'].includes(c.rarity) || !meta.seenCharms.includes(id)) return false;
+  meta.keepsake = id;
+  return true;
+}
+
+export const contractUnlocked = (meta, id) => meta.contracts.includes(id);
+export const WAX_PER_DEBT = CONFIG.wax.perDebtPaid;
+export { HIDEOUT };

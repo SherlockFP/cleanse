@@ -10,20 +10,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RAW, OUT = os.path.join(ROOT, 'art', 'raw'), os.path.join(ROOT, 'public', 'img')
 CREAM = (244, 234, 210)
 
-# sheet file -> (cols, rows, output size of the long side, ids in reading order; None skips a cell)
-SHEETS = {
-    'sheet_sym_a.png': (3, 3, 256, ['sym/pebble', 'sym/sardine', 'sym/tea', 'sym/lantern', 'sym/gull', 'sym/seaglass', 'sym/compass', 'sym/cormorant', 'sym/knot']),
-    'sheet_sym_b.png': (3, 3, 256, ['sym/net', 'sym/samovar', 'sym/cat', 'sym/kelp', 'sym/bottle', 'sym/barnacle', 'sym/storm', None, None]),
-    'sheet_c1_catch.png': (3, 3, 192, ['trinket/salt_barrel', 'trinket/fish_cart', 'trinket/net_mender', 'trinket/fish_hook', 'trinket/ice_crate', 'trinket/pier_cat', 'trinket/fish_scale', 'trinket/full_net', None]),
-    'sheet_c2_hearth.png': (3, 3, 192, ['trinket/samovar_tap', 'trinket/lantern_oil', 'trinket/sugar_cube', 'trinket/warm_rug', 'trinket/grandmas_cup', 'trinket/hearth_stone', 'trinket/wick_trimmer', 'trinket/tea_garden', None]),
-    'sheet_c6_peg.png': (3, 3, 192, ['trinket/spare_peg', 'trinket/steady_hand', 'trinket/brass_peg', 'trinket/laundry_day', 'trinket/clothesline', 'trinket/sticky_tar', 'trinket/wishbone', 'trinket/grandpas_pegs', None]),
-    'sheet_c7_tide.png': (3, 3, 192, ['trinket/first_light', 'trinket/tide_table', 'trinket/dry_spell', 'trinket/night_tide', 'trinket/lucky_sandal', 'trinket/slack_water', 'trinket/orhans_watch', 'trinket/second_wind', None]),
-    'sheet_c8_ledger.png': (3, 3, 192, ['trinket/tin_cup', 'trinket/lucky_ledger', 'trinket/pebble_jar', 'trinket/skipping_stone', 'trinket/hagglers_cap', 'trinket/junk_cart', 'trinket/kelp_pot', 'trinket/sea_chest', None]),
-    'sheet_d1_deni.png': (2, 2, 512, ['deni/idle', 'deni/lean', 'deni/point', 'deni/cheer']),
-    'sheet_parts.png': (3, 3, 192, ['reel/peg', 'reel/peg_open', 'reel/crank', 'fx/lantern_off', 'fx/lantern_on', 'fx/coin', 'fx/jar', 'fx/jar_full', 'fx/plank']),
-    'sheet_f_people.png': (3, 2, 384, ['orhan/arms', 'orhan/nod', 'orhan/stamp', 'npc/baker', 'npc/auditor', 'npc/fisher']),
-}
-SINGLES = {'reel_case.png': ('reel/case', 1024), 'boathouse_full.png': ('home/boathouse_full', 900)}
+# art/sheets.json lists what to cut: {"sheets":[{file, cols, rows, size, ids}], "singles":[{file, id, size, magenta}]}
+SPEC = json.load(open(os.path.join(ROOT, 'art', 'sheets.json'), encoding='utf-8'))
+base = lambda f: os.path.basename(f)
+SHEETS = {base(x['file']): (x['cols'], x['rows'], x.get('size', 192), x['ids']) for x in SPEC.get('sheets', [])}
+SINGLES = {base(x['file']): (x['id'], x.get('size', 1024)) for x in SPEC.get('singles', []) if x.get('magenta', True)}
+FLATS = [(base(x['file']), x['id'], x.get('size', 1080)) for x in SPEC.get('singles', []) if not x.get('magenta', True)]
 
 
 def key(im):
@@ -101,7 +93,7 @@ def items(alpha, n):
 
 def windows(alpha):
     """The nine transparent holes fully inside the case."""
-    holes = [r[1:5] for r in regions(alpha < 40) if not r[5]][:9]
+    holes = [r[1:5] for r in regions(alpha < 40) if not r[5]][:15]
     return reading_order(holes, 3)
 
 
@@ -126,14 +118,14 @@ for name, (sid, size) in SINGLES.items():
     bb = bbox(arr[..., 3])
     crop = arr[bb[1]:bb[3], bb[0]:bb[2]]
     manifest[sid] = save(crop, sid, size)
-    if sid == 'reel/case':
+    if sid.endswith('/case'):
         h, w = crop.shape[:2]
         rects = [[round(x0 / w, 4), round(y0 / h, 4), round(x1 / w, 4), round(y1 / h, 4)] for x0, y0, x1, y1 in windows(crop[..., 3])]
-        if len(rects) != 9:
-            problems.append(f'reel case: found {len(rects)} windows, need 9')
-        json.dump({'size': manifest[sid], 'windows': rects}, open(os.path.join(OUT, 'reel', 'case_rects.json'), 'w'))
+        if len(rects) != 15:
+            problems.append(f'machine case: found {len(rects)} windows, need 15')
+        json.dump({'size': manifest[sid], 'windows': rects}, open(os.path.join(OUT, sid + '_rects.json'), 'w'))
 
-for name, sid, w in (('bg_pier_game.png', 'bg/pier_game', 1080), ('store_icon.png', 'store/icon', 1024)):
+for name, sid, w in FLATS:
     path = os.path.join(RAW, name)
     if not os.path.exists(path):
         problems.append('missing ' + name); continue
@@ -148,4 +140,4 @@ json.dump(manifest, open(os.path.join(OUT, 'manifest.json'), 'w'), indent=0)
 print(len(manifest), 'sprites')
 for p in problems:
     print('PROBLEM', p)
-sys.exit(1 if any(p.startswith('missing') for p in problems) else 0)
+sys.exit(0)

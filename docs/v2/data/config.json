@@ -1,0 +1,422 @@
+{
+ "grid": {
+  "cols": 5,
+  "rows": 3
+ },
+ "luck": {
+  "base": 4,
+  "cap": 12,
+  "favouredWeightMul": "1 + luck",
+  "dudPity": 1
+ },
+ "heat": {
+  "max": 10,
+  "payoutPerLevel": 0.2,
+  "ashWeightPerLevel": 2.0,
+  "coolAtRoundStart": 2,
+  "scorchAsh": 3,
+  "scorchBurnPct": 10,
+  "scorchHeatDrop": 3
+ },
+ "interest": {
+  "basePct": 8,
+  "capPctOfDebt": 25
+ },
+ "earlyPay": {
+  "wickPerUnusedRound": 2,
+  "trickPerDebt": 1
+ },
+ "priceScale": [
+  1,
+  2,
+  4,
+  8,
+  18,
+  40,
+  100,
+  250,
+  600
+ ],
+ "start": {
+  "coins": 0,
+  "wick": 3,
+  "charmSlots": 5,
+  "charmSlotsMax": 8,
+  "trickPockets": 3,
+  "removedSymbolsMax": 3
+ },
+ "shop": {
+  "charmOffers": 4,
+  "trickOffers": 2,
+  "benchOffers": 2,
+  "rerollBase": 2,
+  "rerollStep": 1,
+  "locks": 1,
+  "sellPct": 50,
+  "familyBias": 2.5,
+  "rarityOdds": [
+   {
+    "fromDebt": 1,
+    "common": 62,
+    "uncommon": 30,
+    "rare": 8,
+    "legendary": 0
+   },
+   {
+    "fromDebt": 3,
+    "common": 50,
+    "uncommon": 32,
+    "rare": 15,
+    "legendary": 3
+   },
+   {
+    "fromDebt": 6,
+    "common": 38,
+    "uncommon": 34,
+    "rare": 21,
+    "legendary": 7
+   }
+  ],
+  "slotPriceWick": 10
+ },
+ "bench": [
+  {
+   "id": "polish",
+   "effect": {
+    "type": "symValue",
+    "n": 1
+   },
+   "price": {
+    "coins": 6
+   },
+   "name": {
+    "en": "Polish",
+    "tr": "Cila",
+    "th": "ขัดเงา"
+   },
+   "text": {
+    "en": "One symbol: value +1.",
+    "tr": "Bir sembol: değer +1.",
+    "th": "สัญลักษณ์หนึ่งชนิด: ค่า +1"
+   }
+  },
+  {
+   "id": "weigh",
+   "effect": {
+    "type": "weight",
+    "n": 1.3
+   },
+   "price": {
+    "coins": 5
+   },
+   "name": {
+    "en": "Load",
+    "tr": "Ağırlık",
+    "th": "ถ่วงน้ำหนัก"
+   },
+   "text": {
+    "en": "One symbol: weight +30%.",
+    "tr": "Bir sembol: ağırlık +%30.",
+    "th": "สัญลักษณ์หนึ่งชนิด: น้ำหนัก +30%"
+   }
+  },
+  {
+   "id": "gild",
+   "effect": {
+    "type": "symMult",
+    "n": 0.25
+   },
+   "price": {
+    "wick": 4
+   },
+   "name": {
+    "en": "Gild",
+    "tr": "Yaldız",
+    "th": "ปิดทอง"
+   },
+   "text": {
+    "en": "One symbol: mult +0.25.",
+    "tr": "Bir sembol: çarpan +0.25.",
+    "th": "สัญลักษณ์หนึ่งชนิด: ตัวคูณ +0.25"
+   }
+  },
+  {
+   "id": "purge",
+   "effect": {
+    "type": "removeSymbol",
+    "n": 1
+   },
+   "price": {
+    "wick": 6
+   },
+   "name": {
+    "en": "Pull Out",
+    "tr": "Sök",
+    "th": "ถอดออก"
+   },
+   "text": {
+    "en": "Remove one symbol from the machine for this run.",
+    "tr": "Bir sembolü bu oyun için makineden çıkar.",
+    "th": "ถอดสัญลักษณ์หนึ่งชนิดออกจากเครื่องตลอดเกมนี้"
+   }
+  },
+  {
+   "id": "lift",
+   "effect": {
+    "type": "removeCurse",
+    "n": 1
+   },
+   "price": {
+    "wick": 8
+   },
+   "name": {
+    "en": "Lift a Curse",
+    "tr": "Lanet Kaldır",
+    "th": "ถอนคำสาป"
+   },
+   "text": {
+    "en": "Remove one curse of your choice.",
+    "tr": "Seçtiğin bir laneti kaldır.",
+    "th": "ถอนคำสาปที่เลือกหนึ่งอย่าง"
+   }
+  }
+ ],
+ "deals": {
+  "offers": 2,
+  "refuseWick": 3
+ },
+ "bosses": [
+  {
+   "id": "auditor",
+   "name": {
+    "en": "The Auditor",
+    "tr": "Müfettiş",
+    "th": "ผู้ตรวจบัญชี"
+   },
+   "effects": [
+    {
+     "type": "flag",
+     "flag": "smallHalf"
+    }
+   ],
+   "text": {
+    "en": "3-cell patterns pay half.",
+    "tr": "3 hücreli desenler yarım öder.",
+    "th": "ลาย 3 ช่องจ่ายครึ่งเดียว"
+   }
+  },
+  {
+   "id": "collector",
+   "name": {
+    "en": "The Collector",
+    "tr": "Tahsildar",
+    "th": "คนทวงหนี้"
+   },
+   "effects": [
+    {
+     "type": "flag",
+     "flag": "ashBase",
+     "v": 3
+    }
+   ],
+   "text": {
+    "en": "Ash always has +3 weight.",
+    "tr": "Kül her zaman +3 ağırlıkla gelir.",
+    "th": "เถ้ามีน้ำหนัก +3 เสมอ"
+   }
+  },
+  {
+   "id": "veiled_clerk",
+   "name": {
+    "en": "The Veiled Clerk",
+    "tr": "Peçeli Kâtip",
+    "th": "เสมียนคลุมหน้า"
+   },
+   "effects": [
+    {
+     "type": "flag",
+     "flag": "hideFav"
+    }
+   ],
+   "text": {
+    "en": "You cannot see the Favourite.",
+    "tr": "Gözdeyi göremezsin.",
+    "th": "มองไม่เห็นตัวโปรด"
+   }
+  },
+  {
+   "id": "miser",
+   "name": {
+    "en": "The Miser",
+    "tr": "Cimri",
+    "th": "ตาเฒ่าขี้เหนียว"
+   },
+   "effects": [
+    {
+     "type": "flag",
+     "flag": "noInterest"
+    }
+   ],
+   "text": {
+    "en": "You earn no interest.",
+    "tr": "Faiz alamazsın.",
+    "th": "ไม่ได้ดอกเบี้ย"
+   }
+  },
+  {
+   "id": "timekeeper",
+   "name": {
+    "en": "The Timekeeper",
+    "tr": "Saat Bekçisi",
+    "th": "คนคุมเวลา"
+   },
+   "effects": [
+    {
+     "type": "flag",
+     "flag": "spinsLess",
+     "v": 1
+    }
+   ],
+   "text": {
+    "en": "−1 spin on every terms card.",
+    "tr": "Her şart kartında −1 çeviriş.",
+    "th": "การ์ดเงื่อนไขทุกใบ −1 ตา"
+   }
+  },
+  {
+   "id": "head_inspector",
+   "name": {
+    "en": "The Head Inspector",
+    "tr": "Baş Müfettiş",
+    "th": "หัวหน้าผู้ตรวจ"
+   },
+   "effects": [
+    {
+     "type": "flag",
+     "flag": "smallDead"
+    }
+   ],
+   "text": {
+    "en": "3-cell patterns pay nothing.",
+    "tr": "3 hücreli desenler ödemez.",
+    "th": "ลาย 3 ช่องไม่จ่าย"
+   }
+  }
+ ],
+ "symValueUpAtDebt": [
+  3,
+  6
+ ],
+ "wax": {
+  "perDebtPaid": 3,
+  "dailyRun": 10
+ },
+ "ads": {
+  "interstitialMinSeconds": 180,
+  "interstitialOnlyAfterRun": true,
+  "rewardedPerDay": 6,
+  "rewardedGrants": [
+   "shop_reroll",
+   "double_wax"
+  ]
+ },
+ "endings": [
+  {
+   "id": "paid_in_full",
+   "contract": "c3",
+   "cond": null
+  },
+  {
+   "id": "bought_the_machine",
+   "contract": "c7",
+   "cond": "dealsSigned == 0"
+  },
+  {
+   "id": "new_management",
+   "contract": "c10",
+   "cond": "curses >= 5"
+  }
+ ],
+ "families": [
+  {
+   "id": "swarm",
+   "name": {
+    "en": "Swarm",
+    "tr": "Sürü",
+    "th": "ฝูง"
+   }
+  },
+  {
+   "id": "ember",
+   "name": {
+    "en": "Ember",
+    "tr": "Köz",
+    "th": "ถ่านไฟ"
+   }
+  },
+  {
+   "id": "hex",
+   "name": {
+    "en": "Hex",
+    "tr": "Büyü",
+    "th": "อาถรรพ์"
+   }
+  },
+  {
+   "id": "ledger",
+   "name": {
+    "en": "Ledger",
+    "tr": "Defter",
+    "th": "สมุดบัญชี"
+   }
+  },
+  {
+   "id": "pact",
+   "name": {
+    "en": "Pact",
+    "tr": "Ahit",
+    "th": "พันธสัญญา"
+   }
+  },
+  {
+   "id": "omen",
+   "name": {
+    "en": "Omen",
+    "tr": "Alamet",
+    "th": "ลางบอกเหตุ"
+   }
+  },
+  {
+   "id": "stitch",
+   "name": {
+    "en": "Stitch",
+    "tr": "Dikiş",
+    "th": "ฝีเข็ม"
+   }
+  },
+  {
+   "id": "wisp",
+   "name": {
+    "en": "Wisp",
+    "tr": "Cin Ateşi",
+    "th": "ผีโขมด"
+   }
+  },
+  {
+   "id": "tinker",
+   "name": {
+    "en": "Tinker",
+    "tr": "Tamirci",
+    "th": "ช่างซ่อม"
+   }
+  },
+  {
+   "id": "crown",
+   "name": {
+    "en": "Crown",
+    "tr": "Taç",
+    "th": "มงกุฎ"
+   }
+  }
+ ]
+}
