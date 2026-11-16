@@ -1,7 +1,7 @@
 // QA frames via raw CDP (no dependency), adapted from msjelly/scripts/shots.mjs. Run by hand after "npm run build": node scripts/shots.mjs
 // ONE headless Chrome on the GPU, muted, with a throwaway profile (never the user's). It starts its own "vite preview" on a free port,
 // shoots the states below at phone 390x844 and desktop 1440x900, in EN and TR, into qa/frames/, writes qa/console.json, and kills only
-// the processes it started. Both children run at below-normal priority. Hard limit 9 minutes. Exit 1 on console errors, exceptions or shader errors.
+// the processes it started. Both children run at below-normal priority. Hard limit 12 minutes. Exit 1 on console errors, exceptions or shader errors.
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -29,7 +29,7 @@ function finish(code) {
   killAll();
   setTimeout(() => { try { rmSync(PROFILE, { recursive: true, force: true, maxRetries: 3 }); } catch { /* locked temp dir */ } process.exit(code); }, 1500);
 }
-setTimeout(() => { console.log('hard timeout (9 min)'); finish(2); }, 9 * 60 * 1000).unref();
+setTimeout(() => { console.log('hard timeout (12 min)'); finish(2); }, 12 * 60 * 1000).unref();
 
 class CDP {
   constructor(url) { this.url = url; this.id = 0; this.cb = new Map(); this.h = new Map(); }
@@ -84,11 +84,16 @@ async function combo(vp, w, h, dpr, mobile, lang) {
   await cdp.send('Emulation.setDeviceMetricsOverride', { width: w, height: h, deviceScaleFactor: dpr, mobile });
   await cdp.send('Emulation.setTouchEmulationEnabled', mobile ? { enabled: true, maxTouchPoints: 1 } : { enabled: false });
   await cdp.send('Storage.clearDataForOrigin', { origin: ORIGIN, storageTypes: 'all' });
+  await cdp.send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'no-preference' }] }); // this PC reports "reduce", which would hide every animation from QA
+  // The language is in the settings before the page boots, so the age gate (the first screen, before the debug hook exists) is shot in it too.
+  const pre = await cdp.send('Page.addScriptToEvaluateOnNewDocument', { source: `try { localStorage.setItem('slp.settings', '${JSON.stringify({ lang, volume: 1, reduceMotion: false })}'); } catch {}` });
   await cdp.send('Page.navigate', { url: `${ORIGIN}/?debug=1` });
-  await waitFor("!!window.__pier && !!document.querySelector('.panel.runstart')", 20000, 'run start screen');
-  await ev(`__pier.setLang('${lang}')`);
-  await snap('01-runstart', 700);
-  await step('start run', async () => { await click('.panel.runstart .opts .opt'); await click('.layer .foot .btn.primary'); await waitFor("__pier.state().tide === 1 && __pier.state().screen === 'game'", 8000, 'tide 1'); });
+  await waitFor("!!document.querySelector('.panel.agegate')", 20000, 'age gate'); // first boot: the 18+ question comes before anything else
+  await cdp.send('Page.removeScriptToEvaluateOnNewDocument', { identifier: pre.identifier });
+  await snap('00-agegate', 400);
+  await click('.layer .foot .btn.primary');
+  // cold open: the first run has no run start screen, the pier is the next thing on screen
+  await step('cold open', async () => { await waitFor("!!window.__pier && __pier.state().tide === 1 && __pier.state().screen === 'game'", 20000, 'tide 1 right after the age gate'); });
   await snap('02-reel-idle', 900);
   await step('mid-spin', async () => { await ev('setTimeout(() => __pier.spin(), 0); 0'); await sleep(430); await ev(PAINT, true); await shot(`${tag}-03-mid-spin`); await waitFor('!__pier.state().busy && __pier.state().spin === 1', 8000, 'spin 1 done'); });
   await snap('04-pair-pulse', 150);
@@ -106,10 +111,41 @@ async function combo(vp, w, h, dpr, mobile, lang) {
   await step('event', async () => { await ev("__pier.fastForward('event'); 0"); await waitFor("__pier.state().screen === 'event'", 5000, 'event screen'); });
   await snap('10-event-intro', 500);
   await step('lost', async () => { await ev("__pier.fastForward('lost'); 0"); await waitFor("__pier.state().screen === 'runend'", 5000, 'run end'); });
-  await snap('11-runend-lost', 500);
-  await step('won', async () => { await ev("__pier.goto('runstart'); 0"); await sleep(200); await ev("__pier.newRun(); __pier.fastForward('won'); 0"); await waitFor("__pier.state().screen === 'runend'", 8000, 'run end won'); });
-  await snap('12-runend-won', 500);
-  await step('settings', async () => { await ev("__pier.goto('settings'); 0"); });
+  await step('no ad on a first loss', async () => { if (await ev("!!document.querySelector('.panel.runend .btn.ad')")) throw new Error('ad button on the first run end'); });
+  await snap('11-runend-lost', 1200); // after the Planks count-up: first-day Planks, margin note 1, no ad button
+  // Meta loop: run end -> home (stage 0) -> build the roof (hammer) -> next run -> won run end with the ledger page.
+  await step('home', async () => { await click('.layer .foot .btn.primary'); await waitFor("__pier.state().screen === 'home'", 5000, 'home'); });
+  await snap('15-home-stage0', 600);
+  await step('build', async () => {
+    const before = await ev('__pier.state()');
+    await click('.panel.home .card.build .btn');
+    const anim = await ev("(() => { const e = document.querySelector('.bh-hammer'), f = document.querySelector('.bh-paint.fresh'); return [e && getComputedStyle(e).animationName, f && getComputedStyle(f).animationName].join(); })()");
+    if (anim !== 'bh-hammer,bh-in') throw new Error('hammer animation is not running: ' + anim);
+    await sleep(100); await shot(`${tag}-16-home-build-hammer`); // inside the 0.6 s hammer animation when the capture is fast enough
+    const after = await ev('__pier.state()');
+    if (after.builds !== before.builds + 1 || after.planks >= before.planks) throw new Error(`build did not go through: ${JSON.stringify(after)}`);
+  });
+  await step('won', async () => {
+    await click('.layer .foot .btn.big'); await waitFor("__pier.state().screen === 'runstart'", 5000, 'run start from home');
+    await sleep(700); await ev(PAINT, true); await shot(`${tag}-01-runstart`); // the trinket pick, from run 2
+    await ev("__pier.newRun(); __pier.fastForward('won'); 0"); await waitFor("__pier.state().screen === 'runend'", 8000, 'run end won');
+    const s = await ev('__pier.state()');
+    if (s.paid !== 1 || s.notes !== 2 || s.runs !== 2) throw new Error(`rewards not granted: ${JSON.stringify(s)}`);
+  });
+  await snap('12-runend-won', 1200);
+  await step('ledger', async () => { await ev("__pier.goto('ledger'); 0"); });
+  await snap('17-ledger', 400);
+  await step('album', async () => { await ev("__pier.goto('album'); 0"); });
+  await snap('18-album', 400);
+  await step('daily', async () => { await ev("__pier.daily(); __pier.fastForward('lost'); 0"); await waitFor("__pier.state().screen === 'daily'", 8000, 'daily result'); });
+  await snap('19-daily-result', 1200);
+  await step('store', async () => { await ev("__pier.goto('store'); 0"); await waitFor("!!document.querySelector('.panel.store .card')", 5000, 'store products'); });
+  await snap('20-store', 400);
+  await step('home 3', async () => { await ev('__pier.home(3, 12); 0'); });
+  await snap('21-home-stage3', 600);
+  await step('home 6', async () => { await ev('__pier.home(6, 40); 0'); });
+  await snap('22-home-stage6', 600);
+  await step('settings', async () => { await click('.layer .foot .icon'); await waitFor("__pier.state().screen === 'settings'", 5000, 'settings from home'); });
   await snap('13-settings', 400);
   await step('rules', async () => { await click('.panel.settings .btn:not(.primary)'); });
   await snap('14-rules', 400);

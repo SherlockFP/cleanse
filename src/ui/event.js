@@ -9,12 +9,15 @@ export function render(el, { run }, ctx) {
   const e = EVENTS.find((x) => x.id === run.event);
   if (!e) { ctx.close(); return; }
   if (!ctx.state.said) { ctx.state.said = true; ctx.say('orhan', ORHAN[e.id]); }
-  put(el, 
+  const auditor = e.id === 'auditor';
+  put(el,
     h('div', { class: 'stamp' }, t('ui.eventStamp')),
     h('h2', {}, t(e.nameKey)),
     h('p', { class: 'sub' }, t(`event.${e.id}.who`)),
+    art(auditor ? 'npc/auditor' : 'orhan/stamp', 'orhan'), // Nermin Hanım has her own portrait; the other three letters come through Orhan
     h('p', { class: 'letter' }, t(e.descKey)),
-    art('orhan/stamp', 'orhan'), // bottom left, right above his speech bubble
+    // the auditor's rule as a picture: the pegs of this tide, and the one she took crossed out
+    auditor && h('div', { class: 'pegrow', 'aria-hidden': 'true' }, Array.from({ length: run.pegsMax + 1 }, (_, i) => h('span', { class: 'peg' + (i >= run.pegsMax ? ' off' : '') }, art('reel/peg', 'ico')))),
     ctx.foot(btn(t('ui.ok'), () => { ctx.close(); ctx.h.eventContinue?.(); }, 'primary')),
   );
 }

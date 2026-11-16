@@ -10,7 +10,7 @@ export const MERCY_GAP = 5; // once per run, if 1 <= quota - jar <= 5
 export const QUOTA_BASE = 15;
 export const QUOTA_GROWTH = 2;
 export const QUOTA_LAMPLIGHT_BASE = 240; // Q(5)
-export const QUOTA_LAMPLIGHT_GROWTH = 1.45;
+export const QUOTA_LAMPLIGHT_GROWTH = 1.15;
 export const TIER_SLOPE = 0.015;
 export const INSTALLMENTS = 12;
 
@@ -39,8 +39,8 @@ export const PRICES = Object.freeze({
   trinket: Object.freeze([5, 9, 14, 22]), // grade 1..4, no growth
   tokenMin: 4, tokenMax: 20, tokenGrowthPerCopy: 2,
   tokenCopyCap: 3, tokenCopyCapCormorant: 2,
-  removal: 20, // flat; at most REMOVALS_PER_RUN per run
-  rerollBase: 2, rerollStep: 1,
+  removal: 26, // flat; at most REMOVALS_PER_RUN per run
+  rerollBase: 2, rerollStep: 3,
   sellDiv: 2, // sell = floor(price / 2)
 });
 

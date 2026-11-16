@@ -36,7 +36,7 @@ export function computeLayout(w, h, caseRects = CASE_RECTS) {
   // The case takes what is left above the lower band (Deni, clothesline, jar).
   const [cw0, ch0] = caseRects.size, aspect = ch0 / cw0;
   const lowerMin = Math.round(H * 0.185);
-  const speechPad = Math.round(H * 0.015); // the case sits a little lower: Deni's speech strip is under the lanterns
+  const speechPad = 58 + gap; // a two-line speech strip (ui.css .bubble: 40 px text, 12 px padding, 6 px line) sits between the lanterns and the case roof
   const caseMaxH = spin.y - gap - (top.h + gap + speechPad) - lowerMin - gap;
   const cw = Math.min(W * 0.94, caseMaxH / aspect), chh = cw * aspect;
   const spare = Math.max(0, caseMaxH - chh);

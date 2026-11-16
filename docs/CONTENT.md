@@ -34,7 +34,7 @@ Terms:
 Bag rules for every symbol:
 - **Copy cap:** every special symbol (Net, Kelp, Samovar, Cat, Bottle) has a maximum of 3 tokens in a bag. Golden Cormorant has a maximum of 2. The shop does not offer a token that is at its cap.
 - **Token price:** the listed price, +2 for each copy of that symbol bought earlier in the run.
-- **Token removal:** 3 per run, flat 20 coins each (econ.js). There is no bag minimum. Junk Cart makes the first removal of a shop free; it still uses one of the 3.
+- **Token removal:** 3 per run, flat 26 coins each (econ.js). There is no bag minimum. Junk Cart makes the first removal of a shop free; it still uses one of the 3.
 
 ## 2. Trinkets (64)
 
@@ -50,7 +50,7 @@ Pay order never depends on shelf position (GDD.md section 6): "line pays +N" is 
 |---|---|---|---|---|---|---|
 | salt_barrel | Salt Barrel | Tuz Fıçısı | 1 | 5 | Sardine lines pay +5. | start |
 | fish_cart | Fish Cart | Balık Arabası | 1 | 5 | If 4 or more Sardines land, +20. | start |
-| net_mender | Net Mender | Ağ Tamircisi | 1 | 5 | Each Net pays 4 per adjacent Sardine instead of 2. | start |
+| net_mender | Net Mender | Ağ Tamircisi | 1 | 5 | Each Net pays 12 per adjacent Sardine instead of 2. | start |
 | fish_hook | Fish Hook | Olta İğnesi | 2 | 9 | Sardine lines pay x2. | start |
 | ice_crate | Ice Crate | Buz Kasası | 2 | 9 | A Sardine line completed with held Sardines pays +12 per held Sardine. | start |
 | pier_cat | Pier Cat | İskele Kedisi | 2 | 9 | Each Sardine line pays +5. Each Cat pays x2. | cat_basket |
@@ -64,7 +64,7 @@ Pay order never depends on shelf position (GDD.md section 6): "line pays +N" is 
 | samovar_tap | Samovar Tap | Semaver Musluğu | 1 | 5 | Tea glass lines pay +6. | tea_corner |
 | lantern_oil | Lantern Oil | Fener Yağı | 1 | 5 | Lantern lines pay +8. | tea_corner |
 | sugar_cube | Sugar Cube | Kesme Şeker | 1 | 5 | Each Tea glass adjacent to a Lantern pays +3. | tea_corner |
-| warm_rug | Warm Rug | Sıcak Kilim | 1 | 5 | A spin with no peg clipped pays +2 (spins 2-6). | tea_corner |
+| warm_rug | Warm Rug | Sıcak Kilim | 1 | 5 | A spin with no peg clipped pays +6 (spins 2-6). | tea_corner |
 | grandmas_cup | Grandma's Cup | Babaanne Fincanı | 2 | 9 | Tea glass lines pay x2. | tea_corner |
 | hearth_stone | Hearth Stone | Ocak Taşı | 2 | 9 | After the quota is paid, +20% of the jar, max 20. | tea_corner |
 | wick_trimmer | Wick Trimmer | Fitil Makası | 2 | 9 | Lantern lines in the middle row or middle column pay x3. | tea_corner |
@@ -115,7 +115,7 @@ Pay order never depends on shelf position (GDD.md section 6): "line pays +N" is 
 |---|---|---|---|---|---|---|
 | spare_peg | Spare Peg | Yedek Mandal | 1 | 5 | +1 peg per tide. | start |
 | steady_hand | Steady Hand | Sabit El | 1 | 5 | A line completed with 2 pegged cells pays +3. | start |
-| brass_peg | Brass Peg | Pirinç Mandal | 2 | 9 | Each pegged cell that is part of a paying line pays +2. | start |
+| brass_peg | Brass Peg | Pirinç Mandal | 2 | 9 | Each pegged cell that is part of a paying line pays +4. | start |
 | laundry_day | Laundry Day | Çamaşır Günü | 2 | 9 | +2 pegs per tide. | peg_rack |
 | clothesline | Clothesline | Çamaşır İpi | 2 | 9 | Holding a full row needs 2 pegs instead of 3. | peg_rack |
 | sticky_tar | Sticky Tar | Yapışkan Zift | 3 | 14 | The first line completed with a held cell each tide pays x2. | peg_rack |
@@ -139,14 +139,14 @@ Pay order never depends on shelf position (GDD.md section 6): "line pays +N" is 
 
 | id | EN | TR | Grade | Price | Effect | Unlock |
 |---|---|---|---|---|---|---|
-| tin_cup | Tin Cup | Teneke Kupa | 1 | 5 | +8 coins at the start of each tide. | start |
+| tin_cup | Tin Cup | Teneke Kupa | 1 | 5 | +14 coins at the start of each tide. | start |
 | lucky_ledger | Lucky Ledger | Uğurlu Defter | 1 | 5 | The first two rerolls in each shop are free. | start |
 | pebble_jar | Pebble Jar | Çakıl Kavanozu | 1 | 5 | Pebble lines pay +4. | start |
-| skipping_stone | Skipping Stone | Sektirme Taşı | 2 | 9 | +2 for every 2 Pebbles that land, max 6 per spin. | start |
-| hagglers_cap | Haggler's Cap | Pazarlıkçı Kasketi | 2 | 9 | Shop prices -20%. | start |
+| skipping_stone | Skipping Stone | Sektirme Taşı | 2 | 9 | +3 for every 2 Pebbles that land, max 9 per spin. | start |
+| hagglers_cap | Haggler's Cap | Pazarlıkçı Kasketi | 2 | 9 | Shop prices -30%. | start |
 | junk_cart | Junk Cart | Eskici Arabası | 2 | 9 | The first token removal in each shop is free. It still uses one of your 3 removals this run. | start |
-| kelp_pot | Kelp Pot | Yosun Saksısı | 2 | 9 | The Kelp counter grows +2 instead of +1, max 7. | start |
-| sea_chest | Sea Chest | Sandık | 3 | 14 | +3 coins per held trinket at tide end. | start |
+| kelp_pot | Kelp Pot | Yosun Saksısı | 2 | 9 | The Kelp counter grows +5 instead of +1, max 20. | start |
+| sea_chest | Sea Chest | Sandık | 3 | 14 | +7 coins per held trinket at tide end. | start |
 
 Start pool: 22 trinkets (Catch 7, Peg 3, Tide 4, Ledger 8). Full pool: 64. The start pool has 12 / 7 / 3 / 0 trinkets in the four grades, so the shop prints 60.6 / 30.3 / 9.1 / 0 at the start, not 60 / 30 / 9 / 1 (GDD.md section 8).
 
@@ -168,16 +168,16 @@ One is picked from 2 at run start from installment 4. Daily Tide and Sunday Mark
 | id | EN | TR | Effect |
 |---|---|---|---|
 | spring_tide | Spring Tide | Bahar Suyu | Quota +20%. All line pay +25%. |
-| neap_tide | Neap Tide | Ölü Su | Quota -15%. 5 spins per tide. |
+| neap_tide | Neap Tide | Ölü Su | Quota -20%. 5 spins per tide. |
 | gull_season | Gull Season | Martı Mevsimi | +3 Gull tokens in the start bag. Quota +15%. |
 | washing_day | Washing Day | Çamaşır Günü | 5 pegs per tide. Line pay -8%. |
-| bare_line | Bare Line | Boş İp | 1 peg per tide. Start with 20 coins. |
+| bare_line | Bare Line | Boş İp | 1 peg per tide. Start with 30 coins. Line pay +30%. |
 | market_day | Market Day | Pazar Günü | Shops show 4 offers. Prices +25%. |
 | lean_bag | Lean Bag | Hafif Torba | Start bag has 3 Pebbles instead of 5. Quota +20%. |
 | pebble_beach | Pebble Beach | Çakıllı Koy | +2 Pebble tokens. Pebble line pay is 5. |
 | lantern_festival | Lantern Festival | Fener Şenliği | +2 Lantern tokens. No Tea glass tokens in shops. Quota +10%. |
 | long_evening | Long Evening | Uzun Akşam | 7 spins per tide. Quota +15%. |
-| tight_shelf | Tight Shelf | Dar Raf | 3 trinket slots. Trinkets cost half. |
+| tight_shelf | Tight Shelf | Dar Raf | 3 trinket slots. Trinkets cost half. Quota -15%. |
 | knotwork | Knotwork | Düğüm İşi | +1 Knot token. Diagonal lines do not pay. |
 
 ## 4. Creditor events (8)

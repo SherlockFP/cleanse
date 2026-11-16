@@ -7,9 +7,9 @@ const C = (id, en, tr, mods) => ({ id, en, tr, mods, nameKey: `chart.${id}.name`
 
 export const CHARTS = deepFreeze([
   C('spring_tide', 'Spring Tide', 'Bahar Suyu', { quotaMul: 1.2, linePayMul: 1.25 }),
-  C('neap_tide', 'Neap Tide', 'Ölü Su', { quotaMul: 0.85, spins: 5 }),
-  C('bare_line', 'Bare Line', 'Boş İp', { pegs: 1, startCoins: 20 }),
+  C('neap_tide', 'Neap Tide', 'Ölü Su', { quotaMul: 0.8, spins: 5 }),
+  C('bare_line', 'Bare Line', 'Boş İp', { pegs: 1, startCoins: 30, linePayMul: 1.3 }),
   C('market_day', 'Market Day', 'Pazar Günü', { offers: 4, priceMul: 1.25 }),
-  C('tight_shelf', 'Tight Shelf', 'Dar Raf', { slots: 3, trinketPriceMul: 0.5 }),
+  C('tight_shelf', 'Tight Shelf', 'Dar Raf', { slots: 3, trinketPriceMul: 0.5, quotaMul: 0.85 }),
   C('long_evening', 'Long Evening', 'Uzun Akşam', { spins: 7, quotaMul: 1.15 }),
 ]);

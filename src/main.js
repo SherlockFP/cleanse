@@ -1,10 +1,18 @@
-// Boot, screen router and the one game loop (TECH.md section 1, ROADMAP.md M2). Glue only: rules live in core, drawing in view, text in ui.
+// Boot, screen router and the one game loop (TECH.md section 1, ROADMAP.md M2-M3). Glue only: rules live in core, drawing in view, text in ui.
+// Meta loop: home -> run start -> run -> run end (Planks, margin note, ledger page through core/meta.js) -> home. Ads and purchases go through src/services.
 // Order of a spin: core spin first (outcome fixed), save, then the view plays it back, then the pay beats with sounds and Deni lines.
 import './ui/ui.css';
 import { newRun, spin, togglePeg, endTide, nextTide, runSummary } from './core/run.js';
 import { rollShop } from './core/shop.js';
-import { TIDES_PER_RUN } from './core/econ.js';
+import { TIDES_PER_RUN, PLANKS } from './core/econ.js';
 import { SYMBOLS } from './core/data/symbols.js';
+import { TRINKETS } from './core/data/trinkets.js';
+import { BUILDS } from './core/data/unlocks.js';
+import { ensureMeta, grantRunRewards, build, unlockedPool, hasFeature, modes } from './core/meta.js';
+import { dailySetup, streakUpdate } from './core/daily.js';
+import { initAds, noteRunFinished, rewardedReady, showRewarded, maybeShowInterstitial } from './services/ads.js';
+import { initIap } from './services/iap.js';
+import { getConsent, setAgeGate, ensureConsent } from './services/consent.js';
 import { preloadArt } from './view/sprites.js';
 import { initView, resize, tick, setScreen, setHud, getLayout, cellAt, setHandlers, setGrid, playSpin, showPegs, pulseCells, markCells, pulsePegs, playLines, skip, flyCoins, setDeni } from './view/view.js';
 import { initUi, showScreen, hideScreen, updateHud, toast, toastText, say, setLanguage, settings } from './ui/ui.js';
@@ -16,12 +24,14 @@ import { t } from './i18n.js';
 
 const DEBUG = new URLSearchParams(location.search).get('debug') === '1';
 const TUTORIAL_SEED = 162; // spin 1 is a sardine pair; pegging it and spinning again pays a line (checked in scripts/smoke.mjs)
-const UNLOCKED = ['start', 'cat_basket', 'radio', 'tea_corner']; // shortcut: no meta unlocks yet (M3), so the lite pool is fixed
+const STARTER_PLANKS = 60; // the one fixed Planks grant of starter_pack (MONETIZATION.md section 2)
 const DECOR = ['sardine', 'pebble', 'tea', 'pebble', 'lantern', 'pebble', 'tea', 'pebble', 'sardine']; // reel face before the first spin; not a draw
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const SYM = new Map(SYMBOLS.map((s) => [s.id, s]));
 
-let save = loadSave(), run = null, busy = false, input = null, forcedSeed = null, zeros = 0, tutorial = false, lastKey = null;
+let save = loadSave(), run = null, busy = false, input = null, forcedSeed = null, zeros = 0, tutorial = false, lastKey = null, ageDone = null;
+// The local day as YYYY-MM-DD: Daily Tide, the streak and the ad caps all use this phone's date.
+const today = () => { const d = new Date(), p = (n) => String(n).padStart(2, '0'); return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`; };
 const layerOpen = () => !!document.querySelector('.layer:not([hidden])');
 
 function persist() { save.run = run; writeSave(save); }
@@ -47,20 +57,47 @@ function syncSpinButton() {
 }
 
 // ---------- flow ----------
-function showRunStart() {
-  run = null; busy = false; setScreen('menu'); // no reel sprites behind the menu (they showed beside the column on desktop)
+function showHome() {
+  run = null; busy = false; setScreen('menu'); // no reel sprites behind a menu (they showed beside the column on desktop)
   updateHud(null);
-  showScreen('runstart', { firstBoot: !save.played, charts: save.runs > 0 ? undefined : [] });
+  showScreen('home', { save, today: today() });
+}
+
+// The free start trinkets come from the unlocked pool; the stove build shows 4 instead of 3. Tide charts open after installment 3 is paid.
+function showRunStart() {
+  run = null; busy = false; setScreen('menu');
+  updateHud(null);
+  const pool = unlockedPool(save);
+  const trinkets = TRINKETS.filter((x) => x.grade === 1 && pool.includes(x.unlock)).slice(0, hasFeature(save, 'pick4') ? 4 : 3).map((x) => x.id);
+  // Cold open: the first run has no menu. It starts on the pier with the first free trinket; the pick appears from run 2.
+  if (save.stats.runs === 0) { startRun({ trinket: trinkets[0], chart: null }); say('deni', 'run_start'); return; }
+  showScreen('runstart', { trinkets, charts: modes(save).charts ? undefined : [] });
+}
+
+function begin(kind, setup) {
+  run = newRun(setup);
+  save.runKind = kind; save.runDate = kind === 'daily' ? today() : null; save.runAt = Date.now();
+  save.eventSeen = 0; zeros = 0;
+  persist();
+  enterTide();
 }
 
 function startRun({ trinket, chart }) {
   tutorial = !save.tutorialDone && forcedSeed == null;
   const seed = forcedSeed ?? (tutorial ? TUTORIAL_SEED : (Date.now() ^ Math.floor(Math.random() * 2 ** 31)) >>> 0);
   forcedSeed = null;
-  run = newRun({ seed, installment: 1, chartId: tutorial ? null : chart, startTrinket: trinket, unlocked: UNLOCKED });
-  save.eventSeen = 0; zeros = 0;
-  persist();
-  enterTide();
+  begin('story', { seed, installment: save.installment, chartId: tutorial ? null : chart, startTrinket: trinket, unlocked: unlockedPool(save) });
+}
+
+// Daily Tide: one run a day on the date's seed (core/daily.js), plus one more after the retry ad. A second tap the same day does nothing here;
+// the home screen opens the result instead.
+function startDaily() {
+  const d = save.daily, day = today();
+  if (d.played === day && d.retry !== day) return;
+  if (d.retry === day) d.retry = 'used:' + day; // the retry is spent when the run starts
+  tutorial = false;
+  begin('daily', dailySetup(day));
+  say('deni', 'daily_start');
 }
 
 function enterTide() {
@@ -78,7 +115,7 @@ function enterTide() {
 function resume() {
   run = save.run;
   tutorial = !save.tutorialDone;
-  if (run.phase === 'shop') { rollShop(run); syncView(); showScreen('shop', { run }); return; }
+  if (run.phase === 'shop') { rollShop(run); syncView(); showScreen('shop', { run, coach: save.stats.runs === 0 }); return; }
   if (run.phase === 'over' || run.phase === 'lamplight') { syncView(); endRun(); return; }
   syncView();
   if (run.spin >= run.spinsMax) { finishTide(); return; }
@@ -145,15 +182,30 @@ async function finishTide() {
     setHud({ jar: run.jar }); updateHud(run);
     await sleep(900);
   }
-  if (run.phase === 'shop') { rollShop(run); persist(); play('shop_open'); showScreen('shop', { run }); }
-  else endRun(); // over, or the first win (Lamplight is not built yet)
+  if (run.phase === 'shop') { rollShop(run); persist(); play('shop_open'); showScreen('shop', { run, coach: save.stats.runs === 0 }); }
+  else endRun(); // over, or the first win (shortcut: no Lamplight choice screen yet, a won run stops at tide 5)
 }
 
+// Every finished run is paid out once through core/meta.js (Planks, margin note, album, the ledger page of a won installment), then the
+// run leaves the save. A Daily Tide never pays an installment; it also counts the day for the streak.
 function endRun() {
-  save.run = null; save.runs++; save.played = true; save.tutorialDone = true;
+  const s = runSummary(run), isDaily = save.runKind === 'daily';
+  const reward = grantRunRewards(save, { ...s, bag: run.bag, stamps: s.won && run.event ? [run.event] : [], installment: isDaily ? 0 : s.installment });
+  let result = null;
+  if (isDaily) {
+    const d = save.daily, day = save.runDate ?? today(), st = streakUpdate(save, day);
+    d.best = d.played === day ? Math.max(d.best ?? 0, s.coins) : s.coins; // after a retry the better score stays
+    d.score = s.coins; d.played = day;
+    result = { planks: st.planks, forgiven: st.forgiven };
+    if (st.counted) play('streak');
+  }
+  noteRunFinished(Math.max(0, (Date.now() - (save.runAt || Date.now())) / 1000));
+  save.run = null; save.runKind = null; save.played = true; save.tutorialDone = true;
   writeSave(save);
   play(run.won ? 'run_win' : 'quota_fail');
-  showScreen('runend', { run });
+  if (reward?.planks) setTimeout(() => play('plank_gain'), 350);
+  if (isDaily) showScreen('daily', { save, today: today(), reward, result });
+  else showScreen('runend', { run, reward, save });
 }
 
 function onCell(i) {
@@ -186,8 +238,35 @@ const ui = {
   },
   leaveShop() { nextTide(run); persist(); enterTide(); },
   eventContinue() { save.eventSeen = run.tide; persist(); if (tutorial && run.tide === 1) input.coach(t('ui.coachSpin')); },
-  again: showRunStart,
-  home: showRunStart,
+  // Run end closed: an interstitial only here, between runs, and only when every rule in services/ads.js allows it.
+  async home() { await maybeShowInterstitial({ slot: 'after_run_end' }); showHome(); },
+  play: showRunStart,
+  daily: startDaily,
+  build(id) {
+    const r = build(save, id);
+    if (r.ok) { writeSave(save); play('build_hammer'); setTimeout(() => play('build_done'), 650); }
+    else play('deny');
+    return r;
+  },
+  // Reward ads are optional buttons; the reward is fixed and never a spin, a peg, a coin or odds.
+  // No ad button before the 3rd finished run: a first loss is never followed by an ad offer (GDD.md section 10).
+  adReady: (placement) => save.stats.runs >= 3 && rewardedReady(placement, { inRun: !!save.run }),
+  async doublePlanks(reward) {
+    if (!reward || reward.doubled) return false;
+    const r = await showRewarded('double_planks');
+    if (!r.rewarded) { toast(r.reason === 'closed' || r.reason === 'dismissed' ? 'ads.noReward' : 'ads.unavailable'); return false; }
+    reward.doubled = true; save.planks += reward.planks * (PLANKS.doubleMult - 1);
+    writeSave(save); play('plank_gain');
+    return true;
+  },
+  async dailyRetry() {
+    const r = await showRewarded('daily_retry');
+    if (!r.rewarded) { toast(r.reason === 'closed' || r.reason === 'dismissed' ? 'ads.noReward' : 'ads.unavailable'); return false; }
+    save.daily.retry = today(); writeSave(save);
+    startDaily();
+    return true;
+  },
+  age(isAdult) { setAgeGate(isAdult); if (isAdult) { hideScreen(); ageDone?.(); } },
   settingsChanged(s) { setVolumes({ master: s.volume }); },
 };
 
@@ -203,6 +282,7 @@ function installDebug() {
     phase: run?.phase ?? null, tide: run?.tide ?? 0, spin: run?.spin ?? 0, spinsMax: run?.spinsMax ?? 0, jar: run?.jar ?? 0, quota: run?.quota ?? 0,
     grid: run?.grid ?? null, held: run?.held ?? [], pegsMax: run?.pegsMax ?? 0, event: run?.event ?? null, hash: run ? runSummary(run).hash : null,
     won: run?.won ?? false, seed: run?.seed ?? null,
+    planks: save.planks, builds: save.builds.length, paid: save.paid, notes: save.notes, runs: save.stats.runs,
   });
   window.__pier = {
     state,
@@ -210,12 +290,19 @@ function installDebug() {
     peg: (i) => { onCell(i); return run?.held ?? []; },
     goto(screen) {
       if (screen === 'runstart') return showRunStart();
+      if (screen === 'home') return showHome();
+      if (['ledger', 'album', 'store'].includes(screen)) return showScreen(screen, { save });
+      if (screen === 'daily') return showScreen('daily', { save, today: today() });
       if (screen === 'game') { hideScreen(); return syncView(); }
-      if (screen === 'shop') { rollShop(run); return showScreen('shop', { run }); }
+      if (screen === 'shop') { rollShop(run); return showScreen('shop', { run, coach: save.stats.runs === 0 }); }
       showScreen(screen, { run });
     },
     setLang: (l) => setLanguage(l),
     seed(n) { forcedSeed = n; },
+    // QA: put the save at a boathouse stage (0-6 builds) with some Planks, or patch any save field, then show home.
+    home(stage, planks = 25) { save.builds = BUILDS.slice(0, stage).map((b) => b.id); save.planks = planks; writeSave(save); showHome(); return state(); },
+    patch(fields) { Object.assign(save, fields); ensureMeta(save); writeSave(save); return state(); },
+    daily() { hideScreen(); save.daily.played = null; startDaily(); return state(); },
     newRun(trinket = 'first_light', chart = null) { hideScreen(); startRun({ trinket, chart }); return state(); },
     // to: 'shop' | 'event' | 'lost' | 'won' | 'tide:N'. Cheats the jar so a tide is always paid (except 'lost').
     fastForward(to) {
@@ -227,7 +314,7 @@ function installDebug() {
         if (run.phase === 'shop' && run.tide < target) nextTide(run); else break;
       }
       persist();
-      if (to === 'won') { hideScreen(); endRun(); } else if (run.phase === 'shop') { syncView(); rollShop(run); showScreen('shop', { run }); } else enterTide();
+      if (to === 'won') { hideScreen(); endRun(); } else if (run.phase === 'shop') { syncView(); rollShop(run); showScreen('shop', { run, coach: save.stats.runs === 0 }); } else enterTide();
       return state();
     },
   };
@@ -247,8 +334,7 @@ async function boot() {
   const relayout = () => { resize(); input.layout(getLayout()); };
   window.addEventListener('resize', relayout);
   relayout();
-  if (DEBUG) installDebug();
-  if (save.run) resume(); else showRunStart();
+  setScreen('menu');
 
   let last = performance.now();
   const frame = (now) => {
@@ -257,5 +343,21 @@ async function boot() {
     requestAnimationFrame(frame);
   };
   requestAnimationFrame(frame);
+
+  // Age gate first (the reel is rated 18+, STORE.md section 2). A "younger" answer is kept and the game stays closed.
+  if (getConsent().age !== 'adult') await new Promise((go) => { ageDone = go; showScreen('agegate', { minor: getConsent().age === 'minor' }); });
+  // Services: consent before any ad request, then purchases, then ads. A failure here never stops the game.
+  try {
+    await ensureConsent();
+    await initIap({ cache: save.iap, onChange: (owned) => {
+      if (owned.starter_pack && !save.starterGranted) { save.starterGranted = true; save.planks += STARTER_PLANKS; }
+      writeSave(save);
+    } });
+    await initAds({ state: save.ads, onChange: () => writeSave(save), today });
+  } catch (e) { console.warn('services', e); }
+
+  if (DEBUG) installDebug();
+  // The first run starts at once (its first tide is the tutorial); home is the first screen from then on.
+  if (save.run) resume(); else if (save.stats.runs === 0) showRunStart(); else showHome();
 }
 boot();

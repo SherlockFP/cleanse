@@ -1,4 +1,4 @@
-| 10 | 1,538 | 20 | 63,202 || 9 | 1,061 | 19 | 43,588 || 8 | 732 | 18 | 30,060 || 7 | 505 | 17 | 20,731 || 6 | 348 | 16 | 14,297 || 5 | 240 | 15 | 9,860 || 4 | 120 | 14 | 6,800 || 3 | 60 | 13 | 4,690 || 2 | 30 | 12 | 3,234 || 1 | 15 | 11 | 2,231 |# SMALL LUCK PIER / Küçük Şans İskelesi — Game Design Document
+# SMALL LUCK PIER / Küçük Şans İskelesi — Game Design Document
 
 Working title. Not searched in the stores or in USPTO / TürkPatent / EUIPO. Search before locking. Fallbacks: "Peg & Pier", "Deni's Pier". The Turkish title carries "Şans", which is close to the legal term for games of chance ("şans oyunları"). A Turkish title without it is prepared ("Küçük İskele"), and the lawyer is asked about the title and the listing wording, not only the mechanic (STORE.md section 3).
 
@@ -141,20 +141,20 @@ Measured on the real core (start bag, no trinkets, greedy pegs): 4.71 coins per 
 
 ## 7. Quota curve
 
-`Q(t) = round(15 x 2^(t-1))` for tides 1-5. Lamplight: `Q(t) = round(240 x 1.45^(t-5))` for t >= 6. The installment tier multiplies the quota of tides 2 and later: `S(c) = 1 + 0.015 x (c-1)` (1.000 to 1.165), rounded up. Tide 1 is always 15. The numbers live in `src/core/econ.js`.
+`Q(t) = round(15 x 2^(t-1))` for tides 1-5. Lamplight: `Q(t) = round(240 x 1.15^(t-5))` for t >= 6. The installment tier multiplies the quota of tides 2 and later: `S(c) = 1 + 0.015 x (c-1)` (1.000 to 1.165), rounded up. Tide 1 is always 15. The numbers live in `src/core/econ.js`.
 
 | Tide | Quota | Tide | Quota |
 |---|---|---|---|
-| 1 | 15 | 11 | 2,231 |
-| 2 | 30 | 12 | 3,234 |
-| 3 | 60 | 13 | 4,690 |
-| 4 | 120 | 14 | 6,800 |
-| 5 | 240 | 15 | 9,860 |
-| 6 | 348 | 16 | 14,297 |
-| 7 | 505 | 17 | 20,731 |
-| 8 | 732 | 18 | 30,060 |
-| 9 | 1,061 | 19 | 43,588 |
-| 10 | 1,538 | 20 | 63,202 |
+| 1 | 15 | 11 | 555 |
+| 2 | 30 | 12 | 638 |
+| 3 | 60 | 13 | 734 |
+| 4 | 120 | 14 | 844 |
+| 5 | 240 | 15 | 971 |
+| 6 | 276 | 16 | 1,117 |
+| 7 | 317 | 17 | 1,284 |
+| 8 | 365 | 18 | 1,477 |
+| 9 | 420 | 19 | 1,698 |
+| 10 | 483 | 20 | 1,953 |
 
 The lantern string shows jar / quota: 5 lanterns, one per 20%.
 
@@ -168,8 +168,8 @@ Shown after tides 1-4. Three offers and two services.
 - **Printed odds are the real odds.** Each time the shop opens, the game computes the effective grade odds for the current eligible pool and prints those, not the nominal 60 / 30 / 9 / 1. With the start pool (no grade 4 trinket) the screen shows 60.6 / 30.3 / 9.1 / 0. The sim checks the printed numbers against observed draws for the start pool and the full pool (ECONOMY.md assert 14).
 - **Prices (coins):** trinket 5 / 9 / 14 / 22 by grade. Symbol tokens 4-20 (CONTENT.md; the shop caps the price at 20), +2 for each copy of that symbol bought earlier in the run. No price growth per tide.
 - **Trinket slots:** 5. Sell a trinket for half price, rounded down.
-- **Remove a token:** 20 coins flat, at most 3 removals per run (all shops together, Lamplight included). There is no bag minimum. Junk Cart makes the first removal of a shop free; it still uses one of the 3.
-- **Reroll:** 2 coins, +1 per use in the same visit.
+- **Remove a token:** 26 coins flat, at most 3 removals per run (all shops together, Lamplight included). There is no bag minimum. Junk Cart makes the first removal of a shop free; it still uses one of the 3.
+- **Reroll:** 2 coins, +3 per use in the same visit (2, 5, 8, 11 ...).
 - **Lock:** tap the pin icon to keep one offer for the next shop.
 - The jar is also next tide's head start, so every purchase is a risk.
 - Nothing in the shop is bought with real money or ads.

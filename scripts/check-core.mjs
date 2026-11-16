@@ -32,7 +32,7 @@ assert.notDeepEqual(a1, seq(makeRng(8).fork('reel:1:1:0'), 10));
 const row = (c, n) => Array.from({ length: n }, (_, i) => QUOTA(i + 1, c));
 assert.deepEqual(row(1, 5), [15, 30, 60, 120, 240]);
 assert.deepEqual(row(12, 5), [15, 35, 70, 140, 280]);
-assert.deepEqual([6, 8, 10].map((t) => QUOTA(t, 1)), [348, 732, 1538]);
+assert.deepEqual([6, 8, 10].map((t) => QUOTA(t, 1)), [276, 365, 483]);
 for (let c = 1; c <= 12; c++) assert.equal(QUOTA(1, c), 15);
 assert.equal(tier(1), 1);
 assert.ok(Math.abs(tier(12) - 1.165) < 1e-12);
@@ -258,9 +258,9 @@ assert.deepEqual([newRun({ seed: 1 }).spinsMax, newRun({ seed: 1 }).pegsMax, new
 {
   const q = (o, t = 1) => toTide(newRun({ seed: 1, ...o }), t);
   const bare = newRun({ seed: 1, chartId: 'bare_line' });
-  assert.deepEqual([bare.pegsMax, bare.jar], [1, 20]);
+  assert.deepEqual([bare.pegsMax, bare.jar], [1, 30]);
   const neap = newRun({ seed: 1, chartId: 'neap_tide' });
-  assert.deepEqual([neap.spinsMax, neap.quota], [5, 13]);
+  assert.deepEqual([neap.spinsMax, neap.quota], [5, 12]);
   const long = newRun({ seed: 1, chartId: 'long_evening' });
   assert.deepEqual([long.spinsMax, long.quota], [7, 18]);
   assert.equal(newRun({ seed: 1, chartId: 'spring_tide' }).quota, 18);
@@ -358,7 +358,7 @@ function play(opts, keep) {
   assert.equal(P({ kind: 'token', sym: 'sardine' }), 4);
   r.bought.sardine = 2; assert.equal(P({ kind: 'token', sym: 'sardine' }), 8);
   r.bought.sardine = 20; assert.equal(P({ kind: 'token', sym: 'sardine' }), 20); // capped at 20
-  assert.deepEqual([P({ kind: 'removal' }), P({ kind: 'reroll' })], [20, 2]);
+  assert.deepEqual([P({ kind: 'removal' }), P({ kind: 'reroll' })], [26, 2]);
   // buy a token and a trinket; cap, shelf and coins
   const j0 = r.jar;
   s.offers[0] = { kind: 'token', sym: 'net', sold: false };
@@ -374,17 +374,17 @@ function play(opts, keep) {
   r.trinkets = ['fish_hook', 'fish_hook', 'fish_hook', 'fish_hook', 'fish_hook'].map((id) => ({ id })); r.jar = 99;
   s.offers[2] = { kind: 'trinket', id: 'full_net', grade: 3, sold: false };
   assert.deepEqual(buyOffer(r, 2), { ok: false, reason: 'shelf full' });
-  // removal: flat 20 coins, 3 per run, no bag minimum
-  r.jar = 99; r.bag = { pebble: 9, sardine: 4, tea: 3, lantern: 2, gull: 1, knot: 1 };
-  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 20 }); assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 20 }); assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 20 });
-  assert.equal(r.removals, 3); assert.equal(r.bag.pebble, 6); assert.equal(r.jar, 99 - 60);
+  // removal: flat 26 coins, 3 per run, no bag minimum
+  r.jar = 120; r.bag = { pebble: 9, sardine: 4, tea: 3, lantern: 2, gull: 1, knot: 1 };
+  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 26 }); assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 26 }); assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 26 });
+  assert.equal(r.removals, 3); assert.equal(r.bag.pebble, 6); assert.equal(r.jar, 120 - 78);
   assert.deepEqual(removeToken(r, 'pebble'), { ok: false, reason: 'no removals left' });
   r.removals = 2; assert.deepEqual(removeToken(r, 'net'), { ok: false, reason: 'not in bag' });
-  r.bag = { gull: 1 }; assert.deepEqual(removeToken(r, 'gull'), { ok: true, price: 20 }); assert.deepEqual(r.bag, {}); // no bag floor
-  // reroll ramp 2, 3, 4 and the offers change; sold slots refill
+  r.bag = { gull: 1 }; assert.deepEqual(removeToken(r, 'gull'), { ok: true, price: 26 }); assert.deepEqual(r.bag, {}); // no bag floor
+  // reroll ramp 2, 5, 8 and the offers change; sold slots refill
   r.jar = 50; r.shop.reroll = 0;
   const before = JSON.stringify(r.shop.offers);
-  assert.deepEqual([reroll(r).price, reroll(r).price, reroll(r).price], [2, 3, 4]); assert.equal(r.jar, 41);
+  assert.deepEqual([reroll(r).price, reroll(r).price, reroll(r).price], [2, 5, 8]); assert.equal(r.jar, 35);
   assert.notEqual(JSON.stringify(r.shop.offers), before); assert.ok(r.shop.offers.every((o) => o && !o.sold));
   r.jar = 1; assert.deepEqual(reroll(r), { ok: false, reason: 'coins' });
   // lock: the locked offer survives a reroll and is carried into the next shop

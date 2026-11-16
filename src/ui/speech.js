@@ -11,6 +11,7 @@ export function mountSpeech(parent) {
   return box;
 }
 export const hush = () => { clearTimeout(timer); box?.replaceChildren(); };
+export const stay = () => clearTimeout(timer); // on a screen the line is part of the page: it stays until the next line or the next screen
 
 // Index in 1..count that differs from `prev` when count > 1. rnd is injectable for the check.
 export function pickIndex(count, prev, rnd = Math.random) {
@@ -21,13 +22,19 @@ export function pickIndex(count, prev, rnd = Math.random) {
   return i;
 }
 
-// Returns the text shown, or null when that who/trigger has no lines.
-export function say(who, trigger, vars = {}) {
+// One line for who/trigger, never the same twice in a row; null when there is none. Shows nothing (the home screen prints its lines itself).
+export function pickLine(who, trigger, vars = {}) {
   const n = lineCount(who, trigger);
   if (!n) return null;
   const key = `${who}.${trigger}`, i = pickIndex(n, last.get(key));
   last.set(key, i);
-  const text = t(`line.${who}.${trigger}.${i}`, vars);
+  return t(`line.${who}.${trigger}.${i}`, vars);
+}
+
+// Returns the text shown, or null when that who/trigger has no lines.
+export function say(who, trigger, vars = {}) {
+  const text = pickLine(who, trigger, vars);
+  if (text == null) return null;
   if (box) {
     const name = who === 'deni' ? t('ui.deni') : who === 'orhan' ? t('ui.orhan') : '';
     const b = h('p', { class: `bubble ${who}` }, name && h('b', {}, name), text);

@@ -5,22 +5,32 @@
 //   changed(run, action, res)      after a shop call went through: action = buy | sell | reroll | lock | remove (save, sound)
 //   leaveShop()                    Continue pressed in the shop (caller runs nextTide and shows the next tide)
 //   eventContinue()                creditor letter dismissed
-//   again(), home()                run end buttons
+//   home()                         run end and Daily result closed (caller shows the home screen)
+//   play(), daily(), build(id) -> { ok, reason, cost }   home screen buttons
+//   adReady(placement) -> bool, doublePlanks(reward) -> Promise<bool>, dailyRetry() -> Promise<bool>   optional reward ads
+//   age(isAdult)                   age gate answer
 //   settingsChanged(settings)      { lang, volume, reduceMotion }; also called once at init with the saved values
-// showScreen(name, data): 'runstart' | 'shop' | 'bag' | 'runend' | 'event' | 'settings'; data.run is the live core run.
+// showScreen(name, data): 'runstart' | 'shop' | 'bag' | 'runend' | 'event' | 'settings' | 'home' | 'ledger' | 'album' | 'daily' | 'store' | 'agegate'.
+// data.run is the live core run, data.save the save. A screen opened with ctx.open() goes back to the screen under it when it closes.
 // updateHud(run), toast(key, vars), hideScreen(), say(who, trigger, vars).
 import { t, setLang, getLang, detectLang } from '../i18n.js';
 import { h, clear, art, put } from './dom.js';
-import { mountSpeech, say, hush } from './speech.js';
+import { mountSpeech, say, hush, stay } from './speech.js';
 import * as runstart from './runstart.js';
 import * as shop from './shop.js';
 import * as bag from './bag.js';
 import * as runend from './runend.js';
 import * as event from './event.js';
 import * as settingsScreen from './settings.js';
+import * as home from './home.js';
+import * as ledger from './ledger.js';
+import * as album from './album.js';
+import * as daily from './daily.js';
+import * as store from './store.js';
+import * as agegate from './agegate.js';
 import { TIDES_PER_RUN } from '../core/econ.js';
 
-const SCREENS = { runstart, shop, bag, runend, event, settings: settingsScreen };
+const SCREENS = { runstart, shop, bag, runend, event, settings: settingsScreen, home, ledger, album, daily, store, agegate };
 const KEY = 'slp.settings';
 export const settings = { lang: null, volume: 1, reduceMotion: false };
 
@@ -57,7 +67,9 @@ export function initUi(h0 = {}) {
   hudEl = h('header', { class: 'hud', hidden: true });
   layer = h('div', { class: 'layer', hidden: true });
   toasts = h('div', { class: 'toasts', 'aria-live': 'polite' });
-  col.append(hudEl, layer, toasts);
+  // desktop: the faded pier painting fills the page beside the column (off screen on a phone)
+  const flank = (side) => h('i', { class: 'flank ' + side, style: 'background-image:url(./img/bg/pier_game.jpg)' });
+  col.append(flank('l'), flank('r'), hudEl, layer, toasts);
   host.append(col);
   speech = mountSpeech(col);
   load();
@@ -93,29 +105,49 @@ export function updateHud(run) {
 // ---- screens ----
 function mountScreen() {
   const keep = layer.querySelector('.panel')?.scrollTop ?? 0;
-  const { name, data, state } = cur;
-  const panel = h('section', { class: `panel ${name}`, role: 'dialog', 'aria-modal': 'true' });
+  const me = cur, { name, data, state } = cur;
+  const panel = h('section', { class: `panel ${name}`, role: 'dialog', 'aria-modal': 'true', 'data-still': me.mounted }); // a repaint of the same screen does not slide in again
+  me.mounted = true;
   const foot = h('footer', { class: 'foot' }), over = [];
   const ctx = {
-    h: handlers, state, settings, say, toast, setSettings, lang: getLang,
-    close: hideScreen, rerender: mountScreen,
+    h: handlers, state, settings, say, toast, toastText, setSettings, lang: getLang,
+    close: closeScreen, rerender: () => { if (cur === me) mountScreen(); }, // a late async result never repaints another screen
+    open: (n, d = {}) => showScreen(n, d, me),
     foot: (...kids) => { put(foot, ...kids); return null; }, // main buttons: a footer under the scroll area
     over: (node) => { if (node) over.push(node); return null; }, // a sheet above the whole screen
   };
   SCREENS[name].render(panel, data, ctx);
   if (cur?.name !== name) return; // the screen closed itself (event with no event)
-  layer.replaceChildren(panel, speech, foot, ...over); // the bubble sits in the flow, so it never covers content or buttons
+  // The spoken line sits in the page under the title, so the footer is only the main button and the page keeps its height.
+  const head = panel.querySelector(':scope > h2, :scope > .head, :scope > .home-head');
+  if (head) head.after(speech); else panel.prepend(speech);
+  stay();
+  layer.replaceChildren(panel, foot, ...over);
   layer.hidden = false;
   panel.scrollTop = keep;
+  // Scroll cue: a small tab on the footer line while there is more page below.
+  const cue = () => foot.classList.toggle('more', panel.scrollHeight - panel.scrollTop - panel.clientHeight > 12);
+  panel.addEventListener('scroll', cue, { passive: true });
+  panel.addEventListener('load', cue, true); // art that loads late changes the height
+  cue();
 }
 
-export function showScreen(name, data = {}) {
+export function showScreen(name, data = {}, back = null) {
   if (!name) return hideScreen();
   if (!SCREENS[name]) throw new Error('unknown screen ' + name);
-  cur = { name, data, state: {} };
+  hush(); // a bubble from the screen before never stays on the new one
+  cur = { name, data, state: {}, back };
   mountScreen();
 }
 
+// Close button: back to the screen this one was opened from (ctx.open), or no screen at all.
+function closeScreen() {
+  const back = cur?.back;
+  if (!back) return hideScreen();
+  hush(); cur = back; mountScreen();
+}
+
+// No screen at all (the reel shows). main.js calls this; it drops any screen underneath as well.
 export function hideScreen() {
   cur = null;
   hush(); col.append(speech);

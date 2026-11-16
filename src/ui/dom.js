@@ -30,5 +30,16 @@ export function pct(values) {
 // A 44 px button. `dim` keeps it tappable so the tap can say why it did nothing.
 export const btn = (label, onclick, cls = '') => h('button', { type: 'button', class: 'btn ' + cls, onclick }, label);
 
+// Long-press (450 ms) on a button calls fn and swallows the click that follows, so a press never also taps.
+export function hold(el, fn) {
+  let timer = 0, fired = false;
+  const stop = () => clearTimeout(timer);
+  el.addEventListener('pointerdown', () => { fired = false; stop(); timer = setTimeout(() => { fired = true; fn(); }, 450); });
+  for (const ev of ['pointerup', 'pointerleave', 'pointercancel']) el.addEventListener(ev, stop);
+  el.addEventListener('click', (e) => { if (fired) { fired = false; e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+  el.addEventListener('contextmenu', (e) => e.preventDefault()); // Android long-press menu
+  return el;
+}
+
 // append() that skips null / false (a bare `cond && node` would print "false" as text) and flattens arrays.
 export const put = (e, ...kids) => { const add = (c) => { if (Array.isArray(c)) c.forEach(add); else if (c != null && c !== false) e.append(c); }; kids.forEach(add); return e; };

@@ -5,6 +5,8 @@ import { newRun, spin, togglePeg, canPeg, endTide, nextTide, runSummary, runHash
 import { rollShop, buyOffer, priceOf } from '../src/core/shop.js';
 import { findPairs } from '../src/core/reel.js';
 import { loadSave, writeSave, migrate, resetSave, fresh } from '../src/save.js';
+import { grantRunRewards, build, nextBuild, unlockedPool } from '../src/core/meta.js';
+import { dailySetup, streakUpdate } from '../src/core/daily.js';
 
 const UNLOCKED = ['start', 'cat_basket', 'radio', 'tea_corner'];
 const TUTORIAL_SEED = 162; // must match src/main.js
@@ -73,6 +75,47 @@ console.log(`resume determinism ok (9 seeds; ${phases.lamplight} won, ${phases.o
   const twin = JSON.parse(JSON.stringify(again));
   assert.deepEqual(spin(twin).grid, spin(run).grid);
   console.log('save at SPIN ok');
+}
+
+// The meta loop main.js runs: finish a run, pay it out once, build once, start the next run from the save. All through save.js.
+{
+  resetSave();
+  const first = playRun(7, { reloadEvery: false }); // playRun resets the save, so load after it
+  let save = loadSave();
+  assert.equal(save.planks, 0); assert.equal(save.stats.runs, 0); assert.deepEqual(save.builds, []);
+  const summary = { ...first.summary, bag: { pebble: 1 }, stamps: [] };
+  const reward = grantRunRewards(save, summary);
+  assert.ok(reward && reward.firstRun && reward.planks >= 10, 'the first finished run pays at least the first-day 10 Planks');
+  assert.equal(reward.note, 1, 'a finished run unlocks margin note 1');
+  assert.equal(grantRunRewards(save, summary), null, 'the same run is never paid twice');
+  writeSave(save); save = loadSave(); // what a restart on the run end screen sees
+  assert.equal(save.planks, reward.planks); assert.equal(save.stats.runs, 1); assert.equal(save.notes, 1);
+  assert.equal(grantRunRewards(save, summary), null, 'still paid once after a reload');
+  const roof = nextBuild(save);
+  assert.equal(roof.id, 'roof');
+  assert.ok(build(save, roof.id).ok, 'the first-day Planks cover the first build');
+  assert.equal(build(save, roof.id).ok, false);
+  writeSave(save); save = loadSave();
+  assert.deepEqual(save.builds, ['roof']); assert.equal(save.planks, reward.planks - roof.cost);
+  const next = newRun({ seed: 99, installment: save.installment, startTrinket: 'first_light', unlocked: unlockedPool(save) });
+  assert.equal(next.installment, save.paid + 1);
+  assert.ok(spin(next).grid.length === 9, 'the next run spins');
+  // a won run at the current installment pays it and shows its ledger page once
+  const won = grantRunRewards(save, { ...summary, seed: 100, hash: 'x', won: true, tidesCleared: 5, installment: save.installment });
+  assert.equal(won.beat, 1); assert.equal(save.paid, 1); assert.equal(save.installment, 2);
+  // Daily Tide: a run from the date's setup; finishing it counts the day once and never pays an installment
+  const d = newRun(dailySetup('2026-11-16'));
+  assert.equal(d.seed, newRun(dailySetup('2026-11-16')).seed);
+  const dr = grantRunRewards(save, { ...runSummary(d), won: true, installment: 0 });
+  assert.equal(dr.beat, null); assert.equal(save.paid, 1);
+  const st = streakUpdate(save, '2026-11-16');
+  assert.ok(st.counted && st.streak === 1 && st.planks > 0);
+  assert.equal(streakUpdate(save, '2026-11-16').counted, false, 'a retry the same day adds no streak and no Planks');
+  writeSave(save);
+  assert.equal(loadSave().daily.streak, 1);
+  assert.equal(migrate({ runs: 3 }).stats.runs, 3, 'the old top-level run count moves into stats');
+  resetSave();
+  console.log(`meta loop ok (first run +${reward.planks} Planks, roof built, installment 1 paid, daily counted)`);
 }
 
 // Save format: junk and old shapes come back as a usable save.

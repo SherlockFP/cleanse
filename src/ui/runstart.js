@@ -1,7 +1,7 @@
-// New run: (first boot: language) -> free start trinket -> tide chart -> Start.
-// data: { firstBoot?, trinkets?: ids, charts?: ids, seed? }. Handler: startRun({ trinket, chart }) with chart null for no chart.
+// New run (from run 2; run 1 starts on the pier): free start trinket -> tide chart, once charts are open -> Start. A long press on a trinket opens its full rule.
+// data: { trinkets?: ids, charts?: ids, seed? }. Handler: startRun({ trinket, chart }) with chart null for no chart.
 import { t } from '../i18n.js';
-import { h, btn, put, art } from './dom.js';
+import { h, btn, put, art, hold } from './dom.js';
 import { TRINKETS } from '../core/data/trinkets.js';
 import { CHARTS } from '../core/data/charts.js';
 
@@ -19,16 +19,20 @@ export function render(el, data, ctx) {
   const opt = (on, onclick, title, text, icon) => h('button', { type: 'button', class: 'opt' + (on ? ' on' : ''), role: 'radio', 'aria-checked': String(on), onclick },
     icon && art(icon, 'ico'), h('strong', {}, title), text && h('span', {}, text));
   if (!st.said) { st.said = true; ctx.say('deni', 'run_start'); }
+  const shut = () => { st.sheet = null; ctx.rerender(); };
+  const x = TR.get(st.sheet);
+  const sheet = x && h('div', { class: 'scrim', onclick: (e) => { if (e.target === e.currentTarget) shut(); } },
+    h('div', { class: 'sheet', role: 'dialog', 'aria-label': t(x.nameKey) },
+      h('button', { type: 'button', class: 'btn x', 'aria-label': t('ui.close'), onclick: shut }, '\u00d7'),
+      art(`trinket/${x.id}`, 'ico big'), h('span', { class: 'tag' }, t('ui.grade', { n: x.grade })), h('h3', {}, t(x.nameKey)), h('p', {}, t(x.descKey))));
   put(el, 
     h('div', { class: 'head' },
       h('h2', {}, t('ui.runStart')),
-      art('deni/idle', 'deni'),
-      data.firstBoot && h('div', { class: 'seg', role: 'radiogroup', 'aria-label': t('ui.firstBoot') },
-        ['en', 'tr'].map((l) => h('button', { type: 'button', class: 'opt' + (l === ctx.lang() ? ' on' : ''), role: 'radio', 'aria-checked': String(l === ctx.lang()), 'aria-label': l === 'en' ? t('ui.langEn') : t('ui.langTr'), onclick: () => ctx.setSettings({ lang: l }) }, l.toUpperCase())))),
+      art('deni/idle', 'deni')),
     h('section', {},
       h('h3', {}, t('ui.pickTrinket')),
-      h('div', { class: 'opts', role: 'radiogroup' }, trinkets.map((x) => opt(st.trinket === x.id, pick('trinket', x.id), t(x.nameKey), t(x.shortKey), `trinket/${x.id}`)))),
-    h('section', {},
+      h('div', { class: 'opts', role: 'radiogroup' }, trinkets.map((x) => hold(opt(st.trinket === x.id, pick('trinket', x.id), t(x.nameKey), t(x.shortKey), `trinket/${x.id}`), () => { st.sheet = x.id; ctx.rerender(); })))),
+    charts.length > 0 && h('section', {}, // no charts open yet: no empty choice
       h('h3', {}, t('ui.pickChart')),
       h('div', { class: 'opts', role: 'radiogroup' },
         opt(st.chart === null, pick('chart', null), t('ui.chartNone')),
@@ -38,5 +42,6 @@ export function render(el, data, ctx) {
       ctx.close();
       ctx.h.startRun({ trinket: st.trinket, chart: st.chart });
     }, 'primary big' + (st.trinket ? '' : ' dim'))),
+    ctx.over(sheet),
   );
 }

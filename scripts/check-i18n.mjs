@@ -53,6 +53,14 @@ const lineKeys = Object.keys(en).filter((k) => k.startsWith('line.'));
 const groups = {};
 for (const k of lineKeys) { const m = k.match(/^line\.(\w+\.\w+)\.(\d+)$/); if (!m) fail(`bad line key: ${k}`); else (groups[m[1]] ??= []).push(+m[2]); }
 for (const [g, ns] of Object.entries(groups)) if (ns.sort((a, b) => a - b).some((n, i) => n !== i + 1)) fail(`line numbers have a gap: ${g}`);
+// meta families: every build has a one-line desc, installment beats 1-6 and margin notes 1-18 are complete, notes are one sentence
+for (const id of builds) if (!en[`build.${id}.desc`]) fail(`build ${id} lacks desc`);
+for (const [fam, n] of [['beat', 6], ['note', 18]]) {
+  const got = Object.keys(en).filter((k) => k.startsWith(fam + '.')).map((k) => +k.slice(fam.length + 1));
+  if (got.length !== n || got.some((v, i) => v !== i + 1)) fail(`${fam}.1 to ${fam}.${n} expected, found ${got.join(',')}`);
+}
+for (const k of Object.keys(en)) if (/^note\.\d+$/.test(k) && (en[k].match(/[.!?](\s|$)/g) ?? []).length !== 1) fail(`margin note is not one sentence: ${k}`);
+
 // rules screen must carry the tutorial disclosure and the printed-odds note
 for (const k of ['ui.tutorialNote', 'ui.oddsNote', 'ui.stopNote', 'ui.mercyRule', 'ui.rulesOdds']) if (!en[k] || !tr[k]) fail(`rules text missing: ${k}`);
 if (!/fixed tutorial\. Every spin after it is drawn from the bag\./.test(en['ui.tutorialNote'])) fail('tutorial note must match GDD.md section 10');

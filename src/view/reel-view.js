@@ -91,8 +91,8 @@ export function layoutReel(layout) {
 const cellCenter = (i) => ({ x: L.cells[i].x + L.cells[i].w / 2, y: L.cells[i].y + L.cells[i].h / 2 });
 
 function placePeg(p, i) {
-  const r = L.cells[i], H = L.screen.h, [sw, sh] = spriteSize('reel/peg'), pw = r.w * 0.8, ph = pw * (sh / sw);
-  p.mesh.position.set(r.x + r.w * 0.5, H - (r.y + ph * 0.1), 0); // clipped on the top edge of the cell
+  const r = L.cells[i], H = L.screen.h, [sw, sh] = spriteSize('reel/peg'), pw = r.w * 0.62, ph = pw * (sh / sw);
+  p.mesh.position.set(r.x + r.w * 0.5, H - r.y, 0); // clipped on the frame bar above the cell, so the symbol under it stays readable
   p.mesh.rotation.z = -0.06;
   p.base = [pw, ph];
 }

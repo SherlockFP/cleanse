@@ -101,7 +101,7 @@ unit('fish_cart', (t) => {
 });
 unit('net_mender', (t) => {
   const netG = g({ 1: 'sardine', 3: 'sardine', 4: 'net' });
-  assert.equal(pay([], netG), 4); assert.equal(pay([t], netG), 8); assert.equal(pay([t], netG, [1, 3, 4]), 0);
+  assert.equal(pay([], netG), 4); assert.equal(pay([t], netG), 24); assert.equal(pay([t], netG, [1, 3, 4]), 0);
 });
 unit('fish_hook', (t) => assert.equal(pay([t], sardineRow), 12));
 unit('ice_crate', (t) => {
@@ -133,9 +133,9 @@ unit('sugar_cube', (t) => {
   assert.equal(pay([t], g({ 0: 'tea', 2: 'lantern' })), 0); // not adjacent
 });
 unit('warm_rug', (t) => {
-  assert.equal(pay([t], g({}), [], { spin: 2 }), 2); assert.equal(pay([t], g({}), [], { spin: 1 }), 0);
+  assert.equal(pay([t], g({}), [], { spin: 2 }), 6); assert.equal(pay([t], g({}), [], { spin: 1 }), 0);
   assert.equal(pay([t], g({}), [4], { spin: 2 }), 0);
-  assert.equal(pay([t], g({}), [], { spin: 6, spins: 7 }), 2); assert.equal(pay([t], g({}), [], { spin: 7, spins: 7 }), 0); // spins 2-6 only
+  assert.equal(pay([t], g({}), [], { spin: 6, spins: 7 }), 6); assert.equal(pay([t], g({}), [], { spin: 7, spins: 7 }), 0); // spins 2-6 only
 });
 unit('grandmas_cup', (t) => assert.equal(pay([t], g(at([0, 1, 2], 'tea'))), 14));
 unit('hearth_stone', (t) => {
@@ -153,9 +153,9 @@ unit('tea_garden', (t) => {
 unit('spare_peg', (t) => { assert.equal(applyTrinkets('onPegSupply', { trinkets: [t] }), 1); assert.equal(newRun({ seed: 1, startTrinket: t }).pegsMax, 4); });
 unit('steady_hand', (t) => { assert.equal(pay([t], sardineRow, [0, 1]), 9); assert.equal(pay([t], sardineRow, [0]), 6); assert.equal(pay([t], sardineRow), 6); });
 unit('brass_peg', (t) => {
-  assert.equal(pay([t], sardineRow, [0, 1]), 10);
+  assert.equal(pay([t], sardineRow, [0, 1]), 14);
   const cross = g(at([0, 1, 2, 3, 6], 'sardine')); // a row and a column share held cell 0: paid once
-  assert.equal(pay([t], cross, [0]), 14);
+  assert.equal(pay([t], cross, [0]), 16);
 });
 unit('first_light', (t) => { assert.equal(pay([t], sardineRow, [], { spin: 1 }), 18); assert.equal(pay([t], sardineRow, [], { spin: 2 }), 6); });
 unit('tide_table', (t) => { assert.equal(pay([t], g({}), [], { spin: 3 }), 4); assert.equal(pay([t], g({}), [], { spin: 6 }), 4); assert.equal(pay([t], g({}), [], { spin: 2 }), 0); });
@@ -189,48 +189,48 @@ unit('second_wind', (t) => {
   assert.equal(again(12).mercy, true); assert.equal(again(12).mercy, true); // twice per run
   assert.equal(again(12).paid, false); // a third time: no
 });
-unit('tin_cup', (t) => { assert.equal(applyTrinkets('onTideStart', { trinkets: [t] }).coins, 8); assert.equal(newRun({ seed: 1, startTrinket: t }).jar, 8); });
+unit('tin_cup', (t) => { assert.equal(applyTrinkets('onTideStart', { trinkets: [t] }).coins, 14); assert.equal(newRun({ seed: 1, startTrinket: t }).jar, 14); });
 unit('lucky_ledger', (t) => {
   const r = shop({ startTrinket: t });
   const costs = [];
   for (let i = 0; i < 4; i++) { costs.push(priceOf(r, { kind: 'reroll' })); r.shop.reroll++; }
-  assert.deepEqual(costs, [0, 0, 4, 5]);
+  assert.deepEqual(costs, [0, 0, 8, 11]);
   assert.equal(priceOf(shop({}), { kind: 'reroll' }), 2);
 });
 unit('pebble_jar', (t) => assert.equal(pay([t], g(at([0, 1, 2], 'pebble'))), 8));
 unit('skipping_stone', (t) => {
-  assert.equal(pay([t], g(at([0, 1, 5, 7], 'pebble'))), 4); assert.equal(pay([t], g(at([0, 1, 3, 5, 7, 8], 'pebble'))), 6);
-  assert.equal(pay([t], g(at([0, 1, 5], 'pebble'))), 2); assert.equal(pay([t], g(at([0, 1, 5, 7], 'pebble')), [0, 1]), 2);
+  assert.equal(pay([t], g(at([0, 1, 5, 7], 'pebble'))), 6); assert.equal(pay([t], g(at([0, 1, 3, 5, 7, 8], 'pebble'))), 9);
+  assert.equal(pay([t], g(at([0, 1, 5], 'pebble'))), 3); assert.equal(pay([t], g(at([0, 1, 5, 7], 'pebble')), [0, 1]), 3);
 });
 unit('hagglers_cap', (t) => {
   const r = shop({ startTrinket: t }), plain = shop({});
   assert.equal(priceOf(plain, { kind: 'trinket', id: 'salt_barrel' }), 5); assert.equal(priceOf(r, { kind: 'trinket', id: 'salt_barrel' }), 4);
-  assert.equal(priceOf(r, { kind: 'trinket', id: 'fish_hook' }), 7); assert.equal(priceOf(r, { kind: 'trinket', id: 'full_net' }), 11);
-  assert.equal(priceOf(r, { kind: 'token', sym: 'lantern' }), 5); assert.equal(priceOf(r, { kind: 'reroll' }), 2);
+  assert.equal(priceOf(r, { kind: 'trinket', id: 'fish_hook' }), 6); assert.equal(priceOf(r, { kind: 'trinket', id: 'full_net' }), 10);
+  assert.equal(priceOf(r, { kind: 'token', sym: 'lantern' }), 4); assert.equal(priceOf(r, { kind: 'reroll' }), 2);
 });
 unit('junk_cart', (t) => {
   const r = shop({ startTrinket: t });
-  r.jar = 50;
-  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 0 }); assert.equal(r.jar, 50);
-  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 20 }); // flat price; the free one still used one of the 3 removals
-  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 20 });
+  r.jar = 100;
+  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 0 }); assert.equal(r.jar, 100);
+  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 26 }); // flat price; the free one still used one of the 3 removals
+  assert.deepEqual(removeToken(r, 'pebble'), { ok: true, price: 26 });
   assert.deepEqual(removeToken(r, 'pebble'), { ok: false, reason: 'no removals left' });
   const plain = shop({});
-  plain.jar = 50;
-  assert.deepEqual(removeToken(plain, 'pebble'), { ok: true, price: 20 });
+  plain.jar = 100;
+  assert.deepEqual(removeToken(plain, 'pebble'), { ok: true, price: 26 });
 });
 unit('kelp_pot', (t) => {
   const k = g({ 0: 'kelp' });
   const r1 = scoreSpin(k, [], scoringState({ trinkets: [t], kelp: 1 }));
-  assert.equal(r1.total, 1); assert.equal(r1.kelp, 3);
-  assert.equal(scoreSpin(k, [], scoringState({ trinkets: [t], kelp: 6 })).kelp, 7); // max 7
+  assert.equal(r1.total, 1); assert.equal(r1.kelp, 6);
+  assert.equal(scoreSpin(k, [], scoringState({ trinkets: [t], kelp: 18 })).kelp, 20); // max 20
   assert.equal(scoreSpin(k, [], scoringState({ trinkets: [], kelp: 3 })).kelp, 4);
-  const sold = scoreSpin(k, [], scoringState({ trinkets: [], kelp: 7 })); // Kelp Pot sold with the counter at 7: back to the plain max
+  const sold = scoreSpin(k, [], scoringState({ trinkets: [], kelp: 20 })); // Kelp Pot sold with the counter at 20: back to the plain max
   assert.equal(sold.total, 5); assert.equal(sold.kelp, 5);
 });
 unit('sea_chest', (t) => {
-  assert.equal(applyTrinkets('onTideEnd', { trinkets: [t, 'tin_cup', 'salt_barrel'] }, { jar: 0 }).coins, 9);
-  assert.equal(applyTrinkets('onTideEnd', { trinkets: [t] }, { jar: 0 }).coins, 3);
+  assert.equal(applyTrinkets('onTideEnd', { trinkets: [t, 'tin_cup', 'salt_barrel'] }, { jar: 0 }).coins, 21);
+  assert.equal(applyTrinkets('onTideEnd', { trinkets: [t] }, { jar: 0 }).coins, 7);
 });
 assert.deepEqual([...tested].sort(), TRINKETS.map((t) => t.id).sort(), 'every lite trinket has a unit test');
 

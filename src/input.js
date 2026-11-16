@@ -44,8 +44,8 @@ export function initInput({ canvas, host, cellAt, onSpin, onCell, onInspect, onF
       const r = L.spin;
       Object.assign(spin.style, { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h), fontSize: px(r.h * 0.38) });
       Object.assign(coach.style, { left: px(L.column.x + L.column.w / 2), bottom: px(L.screen.h - r.y + 12) }); // a tag 12 px above SPIN
-      // DOM bits that follow the canvas: the speech strip under the lanterns, the pegs-left label under the peg line (px inside the column)
-      host.style.setProperty('--speech-y', px(L.lantern.y + L.lantern.h));
+      // DOM bits that follow the canvas: the speech strip above the case, the pegs-left label under the peg line (px inside the column)
+      host.style.setProperty('--speech-b', px(L.screen.h - L.case.y + 4)); // the bubble's bottom edge stays 4 px above the case roof; a long line grows upward
       host.style.setProperty('--pegs-x', px(L.pegs.x + L.pegs.w / 2 - L.column.x));
       host.style.setProperty('--pegs-y', px(L.pegs.y + L.pegs.h + 2));
     },
