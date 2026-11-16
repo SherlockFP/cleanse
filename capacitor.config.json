@@ -1,0 +1,22 @@
+{
+  "appId": "com.kuroka.smallluckpier",
+  "appName": "Small Luck Pier",
+  "webDir": "dist",
+  "backgroundColor": "#F2E8D0",
+  "android": {
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": false
+    },
+    "SystemBars": {
+      "hidden": true,
+      "style": "LIGHT",
+      "insetsHandling": "css",
+      "initialViewportFitValueHint": "cover",
+      "animation": "NONE"
+    }
+  },
+  "zoomEnabled": false
+}

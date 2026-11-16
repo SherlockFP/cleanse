@@ -1,0 +1,26 @@
+{
+  "name": "small-luck-pier",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "check": "node scripts/check-core.mjs && node scripts/check-content.mjs && node scripts/check-i18n.mjs && node scripts/check-audio.mjs",
+    "sim": "node scripts/sim-balance.mjs 2000 --quiet",
+    "cap:sync": "npm run build && npx cap sync",
+    "cap:android": "npm run build && npx cap sync android && npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/haptics": "^8.0.2",
+    "three": "^0.186.1"
+  },
+  "devDependencies": {
+    "@capacitor/android": "^8.5.2",
+    "@capacitor/cli": "^8.5.2",
+    "vite": "^8.3.2"
+  }
+}
