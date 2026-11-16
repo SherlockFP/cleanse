@@ -63,7 +63,7 @@ function rulesOK(rules, what) {
 }
 
 // ---------- static checks ----------
-const counts = { charms: 107, deals: 24, curses: 16, tricks: 20, stakes: 12, contracts: 10, chars: 6, hideout: 10, achievements: 43 };
+const counts = { charms: 124, deals: 24, curses: 16, tricks: 20, stakes: 12, contracts: 10, chars: 6, hideout: 10, achievements: 43 };
 t(CHARMS.length === counts.charms && DEALS.length === counts.deals && CURSES.length === counts.curses && TRICKS.length === counts.tricks, 'content counts');
 t(STAKES.length === counts.stakes && CONTRACTS.length === counts.contracts && CHARS.length === counts.chars && HIDEOUT.length === counts.hideout && ACHIEVEMENTS.length === counts.achievements, 'content counts (2)');
 for (const list of [CHARMS, DEALS, CURSES, TRICKS, STAKES, CONTRACTS, CHARS, HIDEOUT, ACHIEVEMENTS, BENCH]) t(new Set(list.map((x) => x.id)).size === list.length, 'unique ids');
@@ -110,7 +110,6 @@ for (const c of CONTRACTS) {
   const w = 'contract ' + c.id;
   text(c.name, w + ' name'); text(c.text, w);
   t(c.debts.every((d, i) => i === 0 || d > c.debts[i - 1]), w + ' debts rise');
-  t(c.debts.length <= CONFIG.priceScale.length, w + ' price scale long enough');
   t(c.unlockAfter === null || CONTRACTS.some((o) => o.id === c.unlockAfter), w + ' unlockAfter');
   for (const e of c.rules) effectOK(e, w);
   t(!c.ending || CONFIG.endings.some((e) => e.id === c.ending && e.contract === c.id), w + ' ending');

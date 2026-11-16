@@ -23,7 +23,7 @@ export function render(el, { run, summary = {}, result = {}, won, ending }, ctx)
     !won && m.left > 0 && h('p', { class: 'note' }, t('ui.lostShort', { n: fmt(m.left) })),
     ending && h('section', { class: 'ending-box' }, h('h3', {}, t('ui.endingUnlocked', { name: t('ui.ending.' + ending) })), h('p', {}, t('ui.endingText.' + ending))),
     h('ul', { class: 'ticket' },
-      row(t('ui.statDebts'), summary.debtsPaid), row(t('ui.statBest'), st.bestSpin), row(t('ui.statScorch'), st.scorches),
+      row(t('ui.statDebts'), summary.debtsPaid), summary.endless != null && row(t('ui.statEndless'), summary.endless), row(t('ui.statBest'), st.bestSpin), row(t('ui.statScorch'), st.scorches),
       row(t('ui.statDeals'), st.dealsSigned), row(t('ui.statCurses'), st.curses)),
     best && h('p', { class: 'sub' }, t('ui.bestPattern', { name: L(best.name), n: fmt(st.bestPattern.pay ?? 0) })),
     h('div', { class: 'wax-line' }, art('ui/wax', 'ico lg'), h('b', {}, t('ui.waxEarned', { n: fmt(wax) }))),

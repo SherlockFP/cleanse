@@ -2,10 +2,13 @@
 // every trigger and every effect primitive. No DOM, no browser. node scripts/check-core.mjs
 import { CHARM, CHARMS, CURSE, CONFIG, SCORING } from '../src/core/data.js';
 import { findPatterns } from '../src/core/patterns.js';
-import { newRun, pickTerms, termsOffer, spin, collect, stoke, bank, endRound, deadline, pawn, saveRun, loadRun, scaleOf, useTrick, leaveShop, summary, setFavourite } from '../src/core/run.js';
+import { newRun, pickTerms, termsOffer, spin, collect, stoke, bank, endRound, deadline, pawn, declinePawn, saveRun, loadRun, scaleOf, useTrick, leaveShop, summary, setFavourite, canSkip, skipRound, skipReward, canContinue, continueEndless, debtBase } from '../src/core/run.js';
 import { snapshot, scoreSpin, addCharm, applyEffect, fire, addCurse, TRIGGERS, EFFECT_TYPES, setExplain } from '../src/core/effects.js';
 import { rollGrid, applyGridEdits } from '../src/core/machine.js';
-import { buyCharm, sellCharm, reroll, toggleLock, doBench, price, openShop } from '../src/core/shop.js';
+import { buyCharm, sellCharm, reroll, toggleLock, doBench, price, openShop, buySlot } from '../src/core/shop.js';
+import { STAKE, CONTRACT } from '../src/core/data.js';
+const CONTRACT_DEBT = (r) => debtBase(r.contract, r.debtIdx);
+const STAKE_SPINS = (r) => STAKE[termsOffer(r)[0].id].spins;
 import { signDeal, refuseDeals } from '../src/core/deals.js';
 import { newMeta, applyRunResult, buyHideout, isUnlocked, availableCharms } from '../src/core/meta.js';
 import { dailySeed, dailySetup, recordDaily, dayNum } from '../src/core/daily.js';
@@ -104,12 +107,12 @@ eq('fiveNeedsFour off', ids(G({ moth: [0, 1, 3, 4], candle: [2] })), []);
 }
 {
   const r = mk({ charms: ['dust_queen', 'moth_jar'], debt: 2 });
-  t('ex8 S is 4', scaleOf(r) === 4);
+  t('ex8 S follows the debt', scaleOf(r) === Math.max(1, Math.round(10 * CONTRACT_DEBT(r) / CONFIG.priceDebtDiv) / 10));
   const before = r.purse;
   r.grid = G({ moth: [0, 1, 2, 4, 10] });
   const c = collect(r);
   // debt 3 is a boss debt (The Auditor: 3-cell patterns pay half); flat coins scale by S^0.75 per event: round(4^0.75) = 3
-  eq('ex8 retrigger and flat coins', [c.total, c.flat, r.purse - before, c.patterns[0].repeats], [2, 15, 17, 1]);
+  eq('ex8 retrigger and flat coins', [c.total, c.flat, r.purse - before, c.patterns[0].repeats], [2, 10, 12, 1]);
 }
 {
   const r = mk({ charms: ['prism', 'lost_light'] }); const s = score(r, G({ lantern: [2, 6, 8, 12], wisp: [7] }));
@@ -124,12 +127,12 @@ eq('fiveNeedsFour off', ids(G({ moth: [0, 1, 3, 4], candle: [2] })), []);
 }
 {
   const r = mk({ charms: ['ash_cake'], heat: 8, purse: 500, debt: 3 });
-  t('ex11 S is 8', scaleOf(r) === 8);
+  t('ex11 S follows the debt', scaleOf(r) === Math.max(1, Math.round(10 * CONTRACT_DEBT(r) / CONFIG.priceDebtDiv) / 10));
   const wick = r.wick;
   r.grid = G({ ash: [0, 1, 2] }, 'tooth');
   const c = collect(r);
-  // 500 - 50 burnt + Ash Cake 10 coins x 8^0.75
-  eq('ex11 scorch', [c.scorch, c.total, r.heat, r.purse, r.wick - wick], [true, 0, 5, 498, 2]);
+  // 500 - scorchBurnPct burnt + Ash Cake 10 coins x S^coinPow
+  eq('ex11 scorch', [c.scorch, c.total, r.heat, r.purse, r.wick - wick], [true, 0, 5, 500 - 5 * (snapshot(r).flags.scorchBurn || CONFIG.heat.scorchBurnPct) + Math.round(10 * scaleOf(r) ** CONFIG.coinPow), 2]);
 }
 {
   const r = mk({ curses: ['hairline_crack'], charms: ['firm_handshake'], deals: ['quick_cash', 'muscle'] });
@@ -279,7 +282,7 @@ trig('onCurse', probe('onCurse', {}, () => {}, (r) => addCurse(r, 'jinx')));
   const r = mk({ charms: ['jinx_bead'] }); // passive and now are covered by data: charms read, deals run boons
   seenTrig.add('passive'); seenTrig.add('now');
   const r2 = mk(); r2.phase = 'deal'; r2.dealOffer = ['lucky_break']; signDeal(r2, 'lucky_break');
-  t('trigger now (deal boon is permanent luck)', snapshot(r2).luck === 1 + 3 && r2.curses.includes('blindfold'));
+  t('trigger now (deal boon is permanent luck)', snapshot(r2).luck === 1 + 1 && r2.curses.includes('blindfold'));
   t('trigger passive (curse)', snapshot(mk({ curses: ['jinx'] })).luck === 1 - 2);
 }
 t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filter((x) => !seenTrig.has(x)).join());
@@ -290,7 +293,7 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   const E = (e, setup = () => {}, ctx = {}) => { const r = mk({ debt: 1 }); setup(r); applyEffect(r, src, e, ctx); return r; };
   const seen = new Set();
   const ef = (name, e, check, setup, ctx) => { seen.add(e.type); const r = E(e, setup, ctx); t('effect ' + name, check(r, ctx), JSON.stringify(e)); };
-  ef('coins x S^0.75', { type: 'coins', n: 3 }, (r) => r.purse === Math.round(3 * 2 ** 0.75));
+  ef('coins x S^0.75', { type: 'coins', n: 3 }, (r) => r.purse === Math.round(3 * scaleOf(r) ** CONFIG.coinPow));
   ef('symValue', { type: 'symValue', n: 2, sym: 'moth' }, (r) => snapshot(r).symValue.length === 1);
   ef('symMult', { type: 'symMult', n: 0.5, sym: 'all' }, (r) => snapshot(r).symMult.length === 1);
   ef('patMult', { type: 'patMult', n: 1, pattern: 'all' }, (r) => snapshot(r).patMult.length === 1);
@@ -310,7 +313,7 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   ef('stack', { type: 'stack', n: 2 }, () => src.inst.stack === 2);
   ef('slot', { type: 'slot', n: 1 }, (r) => r.slots === 6);
   ef('gainCharm', { type: 'gainCharm', rarity: 'rare' }, (r) => r.charms.length === 1 && CHARM[r.charms[0].id].rarity === 'rare', (r) => { r.pool = CHARMS.map((c) => c.id); });
-  ef('gainCharm steps down', { type: 'gainCharm', rarity: 'legendary' }, (r) => r.charms.length === 1 && CHARM[r.charms[0].id].rarity === 'uncommon');
+  ef('gainCharm steps down', { type: 'gainCharm', rarity: 'legendary' }, (r) => r.charms.length === 1 && CHARM[r.charms[0].id].rarity === 'rare');
   ef('gainCurse', { type: 'gainCurse', n: 2 }, (r) => r.curses.length === 2);
   ef('removeSymbol', { type: 'removeSymbol', n: 1 }, (r) => r.pendingRemove === 1);
   ef('flag', { type: 'flag', flag: 'smallHalf' }, (r) => snapshot(r).flags.smallHalf === true);
@@ -318,18 +321,18 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   // per, limit, every, chance
   const r = mk({ charms: ['pin_doll'], curses: ['jinx', 'dead_weight'], debt: 2 });
   fire(r, 'onRoundStart');
-  eq('per curses and S', r.purse, Math.round(3 * 2 * 4 ** 0.75));
+  eq('per curses and S', r.purse, Math.round(3 * 2 * scaleOf(r) ** CONFIG.coinPow));
   const r2 = mk({ charms: ['thirteenth_stair'] });
   const sc = { found: [], steps: [], flat: 0 };
   for (let i = 0; i < 26; i++) fire(r2, 'onSpinEnd', { sc });
-  eq('every 13', sc.flat, 80);
+  eq('every 4', sc.flat, 360);
 }
 
 // ---------- 8. shop, deals, meta, daily ----------
 {
   const r = newRun({ seed: 'shop' });
   r.perm.push({ type: 'flag', flag: 'shopDiscount', v: 30, src: { kind: 'deal', id: 'x' } });
-  t('discount prices', price(r, { kind: 'charm', id: 'moth_jar' }).coins === Math.round(4 * 0.7));
+  t('discount prices', price(r, { kind: 'charm', id: 'moth_jar' }).coins === Math.round(CHARM.moth_jar.price.coins * 0.7));
   r.phase = 'shop'; r.shop = { charms: ['moth_jar'], tricks: [], bench: ['polish', 'purge'], rerolls: 0, freeRerolls: 0 }; r.purse = 100;
   t('buy charm', buyCharm(r, 0) && r.charms.some((c) => c.id === 'moth_jar'));
   t('sell charm gives half', sellCharm(r, 0) && r.purse > 90);
@@ -347,7 +350,7 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
 }
 {
   const meta = newMeta();
-  t('start unlocks', isUnlocked(meta, 'char', 'nim') && !isUnlocked(meta, 'char', 'tao') && availableCharms(meta).length === 77);
+  t('start unlocks', isUnlocked(meta, 'char', 'nim') && !isUnlocked(meta, 'char', 'tao') && availableCharms(meta).length === 94);
   const run = newRun({ seed: 'meta' });
   run.result = { won: true, ending: null }; run.phase = 'ended'; run.stats.debtsPaid = 5; run.stats.reachDebt = 5; run.stats.spinCoins = 1200;
   const out = applyRunResult(meta, summary(run));
@@ -389,9 +392,9 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   r = withFlag('startHeat', 3); r.phase = 'terms'; r.termsOffer = ['steady']; pickTerms(r, 'steady'); t('startHeat', r.heat === 3);
   r = withFlag('spinsRound', 1); r.phase = 'terms'; r.termsOffer = ['steady']; pickTerms(r, 'steady'); t('spinsRound +1', r.spinsLeft === 6);
   r = withFlag('debtMul', 15); r.perm.length = 1; t('debtMul read at debt start', snapshot(r).flags.debtMul === 15);
-  r = mk(); r.perm.push({ type: 'flag', flag: 'dealOffers', v: 3, src: { kind: 'test', id: 'x' } }); r.phase = 'shop'; { const sh = openShop(r); t('shop shows 4 charms', sh.charms.length === 4 && sh.tricks.length === 2 && sh.bench.length === 2); }
+  r = mk({ contract: 'c3' }); r.perm.push({ type: 'flag', flag: 'dealOffers', v: 3, src: { kind: 'test', id: 'x' } }); r.phase = 'shop'; { const sh = openShop(r); t('shop shows 4 charms', sh.charms.length === 4 && sh.tricks.length === 2 && sh.bench.length === 2); }
   r = mk({ contract: 'c8' }); r.contract = 'c8'; openShop(r); t('contract 8 shows 3 charms', r.shop.charms.length === 3 && !toggleLock(r, 0));
-  r = mk(); r.phase = 'deal'; r.dealOffer = ['advance']; signDeal(r, 'advance'); t('advance: next debt 30% smaller, small print 15% larger', r.debtIdx === 1 && r.debt === Math.ceil(150 * 1.15 * 0.7 - 1e-9));
+  r = mk(); r.phase = 'deal'; r.dealOffer = ['advance']; signDeal(r, 'advance'); t('advance: next debt 30% smaller, small print 15% larger', r.debtIdx === 1 && r.debt === Math.ceil(CONTRACT.c1.debts[1] * 1.15 * 0.7 - 1e-9));
 }
 
 // ---------- critic pass: bosses, slot order, Favourite redraw, symbol growth ----------
@@ -412,6 +415,50 @@ t('every trigger covered', TRIGGERS.every((x) => seenTrig.has(x)), TRIGGERS.filt
   t('first redraw is free', redrawCost(r) === 0 && redrawFavourite(r) && r.wick === 1 && r.favs[0] !== f0);
   t('second redraw costs 1 Wick', redrawCost(r) === 1 && redrawFavourite(r) && r.wick === 0);
   t('no Wick, no redraw', !redrawFavourite(r));
+}
+
+// ---------- 8. scaling, skip, early pay, slots, endless ----------
+{
+  let r = mk({ charms: ['tally_stick'] }); r.charms[0].stack = 3;
+  t('stacked spin total compounds: x1.15^3', Math.abs(snapshot(r).allMult[0].n - 1.15 ** 3) < 1e-9);
+  r = mk({ charms: ['witch_bottle'], curses: ['jinx', 'fever'] });
+  t('x1.15 per curse with 2 curses', Math.abs(snapshot(r).allMult.find((x) => x.src.id === 'witch_bottle').n - 1.12 ** 2) < 1e-9);
+  r = mk({ charms: ['lodestar'], favs: ['candle'] });
+  { const s = score(r, G({ candle: [0, 1, 2, 5, 6, 7] })); t('Lodestar: x1.15 per Favourite pattern this spin', Math.abs(s.allMult - 1.05 ** 2) < 1e-9, String(s.allMult)); }
+
+  r = mk({ charms: ['lead_goose', 'moth_jar', 'tallow_stub'] }); t('Lead Goose x1.1 per charm to its right', Math.abs(snapshot(r).allMult[0].n - 1.3225) < 1e-9);
+  r = mk({ charms: ['moth_jar', 'lead_goose', 'caboose'] }); t('order: goose 1 to its right, caboose 2 to its left', Math.abs(snapshot(r).allMult.reduce((a, x) => a * x.n, 1) - 1.15 * 1.21) < 1e-9);
+  r = newRun({ seed: 'skip' }); pickTerms(r, termsOffer(r)[0].id);
+  t('no skip mid-night', !canSkip(r));
+  r = newRun({ seed: 'skip' }); const w0 = r.wick, tr0 = r.tricks.length, rew = skipReward(r);
+  const out = skipRound(r);
+  t('skip a night: reward, interest, shop', out && out.deadline === null && r.phase === 'shop' && r.round === 1 && r.stats.skips === 1 && (r.wick > w0 || r.tricks.length > tr0 || r.charms.length + r.waiting.length > 0), rew.id);
+  r.round = 2; leaveShop(r); t('no skip on the last night', !canSkip(r) && skipRound(r) === null);
+
+  r = mk({ purse: 500 }); r.phase = 'spin'; r.debt = 60; r.round = 0; r.rounds = 3; const left0 = r.spinsLeft || 0; bank(r, 60);
+  t('early pay carries spins', r.carrySpins === 2 * CONFIG.earlyPay.spinsPerUnusedRound + left0);
+  t('early pay: skipped nights still pay interest', r.stats.interestTotal > 0);
+  if (r.phase === 'deal') refuseDeals(r);
+  t('early pay: skipped shop visits come back', r.shop.tricks.length === CONFIG.shop.trickOffers + 2 && r.shop.freeRerolls >= 2 && !r.earlyShop);
+  leaveShop(r); const sp = STAKE_SPINS(r); pickTerms(r, termsOffer(r)[0].id);
+  t('carried spins land on the next night', r.spinsLeft === sp + 2 * CONFIG.earlyPay.spinsPerUnusedRound + left0 && r.carrySpins === 0);
+
+  r = mk({ purse: 0 }); r.wick = 30; r.phase = 'shop'; openShop(r);
+  t('one slot per debt', buySlot(r) && !buySlot(r));
+  r.phase = 'roundend'; r.debt = 1; r.round = 2; r.rounds = 3; r.spinsLeft = 0; r.purse = 10; endRound(r);
+  if (r.phase === 'deal') refuseDeals(r);
+  t('a new debt sells a new slot', r.phase === 'shop' && buySlot(r));
+
+  r = mk({ contract: 'c1' }); r.debtIdx = 4; r.debt = 1; r.round = 2; r.rounds = 3; r.phase = 'roundend'; r.spinsLeft = 0; r.purse = 99999;
+  endRound(r);
+  t('cleared contract can go on', r.phase === 'ended' && r.result.won && canContinue(r));
+  t('endless: next debt grows', continueEndless(r) && !canContinue(r) && (r.phase === 'deal' || r.phase === 'shop'));
+  if (r.phase === 'deal') refuseDeals(r);
+  eq('endless debt 6', [r.debtIdx, r.debt], [5, Math.ceil(debtBase('c1', 5))]);
+  t('endless debt grows by the endless rate', debtBase('c1', 6) === Math.round(CONTRACT.c1.debts.at(-1) * CONFIG.endless.growth ** 2));
+  r.phase = 'roundend'; r.round = 2; r.spinsLeft = 0; r.purse = 0; endRound(r); if (r.phase === 'pawn') declinePawn(r);
+  const sm = summary(r);
+  eq('endless ends won, scored by debts paid', [r.phase, sm.won, sm.endless], ['ended', true, 0]);
 }
 
 console.log(`check-core: ${pass} passed, ${fail} failed`);

@@ -7,7 +7,7 @@ export const TRIGGERS = ['passive', 'now', 'onRunStart', 'onDebtStart', 'onRound
 export const COND_KEYS = ['sym', 'group', 'zone', 'pattern', 'minCells', 'hasWisp', 'favoured', 'minPatterns', 'distinctMin', 'heatMin', 'heatMax', 'cursesMin', 'spinIs', 'countMin', 'roundsLeftMin', 'purseMaxPct', 'slotIs', 'firstRound', 'every', 'chance', 'limit'];
 export const EFFECT_TYPES = ['coins', 'symValue', 'symMult', 'patMult', 'allMult', 'luck', 'spins', 'interest', 'wick', 'heat', 'weight', 'transform', 'place', 'retrigger', 'trick', 'stack', 'slot', 'gainCharm', 'gainCurse', 'removeSymbol', 'flag'];
 export const FLAGS = ['heatStep', 'heatNoCool', 'heatFloor', 'startHeat', 'noStoke', 'scorchNeeds', 'scorchBurn', 'ashBase', 'deadCentre', 'ashIsFav', 'seeNextFav', 'pickFirstFav', 'twoFavs', 'favPerRound', 'pickFav', 'hideFav', 'fiveNeedsFour', 'maskWild', 'smallHalf', 'smallDead', 'bigX', 'firstSpinDead', 'lastTwice', 'noInterest', 'noInterestRound', 'interestHalf', 'interestCapX', 'bankX', 'shopDiscount', 'shopMarkup', 'shopOffers', 'shopExtra', 'rerollDouble', 'benchDiscount', 'sellFull', 'trickPockets', 'firstTrickFree', 'dealOffers', 'mustSign', 'refuseWick', 'cancelCurse', 'saveDeadline', 'extraLife', 'roundsAdd', 'rounds', 'debtCut', 'debtMul', 'spinsRound', 'spinsLess', 'startCurses', 'ghostHire', 'copyRight', 'freeRedraw', 'freeReroll'];
-export const PER_KEYS = ['curses', 'heat', 'emptySlots', 'tricks', 'deals', 'stack', 'removed', 'purse100'];
+export const PER_KEYS = ['curses', 'heat', 'emptySlots', 'tricks', 'deals', 'stack', 'removed', 'purse100', 'rightOf', 'leftOf'];
 export const SYM_TARGETS = ['all', 'low', 'mid', 'high', 'favoured', 'that', 'random'];
 
 const MOD_TYPES = new Set(['luck', 'interest', 'symValue', 'symMult', 'patMult', 'allMult', 'weight', 'flag', 'slot']);
@@ -18,11 +18,20 @@ const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 let EXPLAIN = true;
 export const setExplain = (on) => { EXPLAIN = !!on; };
 export const isModType = (t) => MOD_TYPES.has(t);
-export const scaleOf = (run) => CONFIG.priceScale[Math.min(run.debtIdx, CONFIG.priceScale.length - 1)];
-// Flat coin effects grow slower than prices (S^0.75), so late debts are not won by a pile of flat-coin charms.
-export const coinScaleOf = (run) => scaleOf(run) ** 0.75;
+// The debt at index idx of a contract; past its last debt (endless) each one grows by CONFIG.endless.growth.
+export function debtBase(contractId, idx) {
+  const d = CONTRACT[contractId].debts;
+  return idx < d.length ? d[idx] : Math.round(d[d.length - 1] * CONFIG.endless.growth ** (idx - d.length + 1));
+}
+// S, the price scale: prices follow the size of the debt (curses that grow a debt do not raise prices).
+export const scaleOf = (run) => Math.max(1, Math.round((10 * debtBase(run.contract, run.debtIdx)) / CONFIG.priceDebtDiv) / 10);
+// Flat coin effects grow slower than prices (S^coinPow), so late debts are not won by a pile of flat-coin charms.
+export const coinScaleOf = (run) => scaleOf(run) ** (CONFIG.coinPow ?? 0.75);
 // The named boss rule of the current debt (contracts.json bosses -> config.json bosses), or null.
+// Endless debts (past the contract's last) take the bosses in turn, every other debt.
 export const bossOf = (run) => {
+  const k = run.debtIdx - CONTRACT[run.contract].debts.length;
+  if (k >= 0) return k % 2 ? CONFIG.bosses[((k - 1) / 2) % CONFIG.bosses.length] : null;
   const b = CONTRACT[run.contract].bosses?.find((x) => x.debt === run.debtIdx);
   return b ? CONFIG.bosses.find((x) => x.id === b.boss) : null;
 };
@@ -80,11 +89,16 @@ function perCount(run, per, ctx, src) {
     case 'deals': return run.deals.length;
     case 'stack': return src?.inst?.stack || 0;
     case 'removed': return run.removed.length;
+    case 'rightOf': case 'leftOf': { // charms on that side of this one in the row
+      const i = src?.inst ? run.charms.indexOf(src.inst) : -1;
+      return i < 0 ? 0 : per === 'rightOf' ? run.charms.length - 1 - i : i;
+    }
     case 'purse100': return Math.min(10, Math.floor(run.purse / (100 * coinScaleOf(run))));
   }
   return 1;
 }
-const amountOf = (run, e, ctx, src) => (e.n ?? 1) * perCount(run, e.per, ctx, src);
+// A spin-total multiplier compounds: x1.1 per charge with 5 charges is x1.1^5.
+const amountOf = (run, e, ctx, src) => (e.type === 'allMult' ? (e.n ?? 1) ** (e.per ? perCount(run, e.per, ctx, src) : 1) : (e.n ?? 1) * perCount(run, e.per, ctx, src));
 
 export function snapshot(run, grid = null, favs = run.favs) {
   const mods = { luck: 0, interest: 0, slotMod: 0, flags: {}, symValue: [], symMult: [], patMult: [], weight: [], allMult: [], favs: favs || [], grid };
@@ -274,7 +288,7 @@ function addMod(run, src, e, ctx, k) {
     if (e.flag === 'cancelCurse') { ctx.cancel = true; return; }
     if (e.flag === 'debtCut') { run.debtAdj -= e.v; return; }
   }
-  const rec = { type: t, n: t === 'allMult' ? e.n : k, src: srcRef(src) };
+  const rec = { type: t, n: k, src: srcRef(src) };
   for (const f of ['sym', 'pattern', 'flag', 'v', 'zone']) if (e[f] !== undefined) rec[f] = e[f];
   if (e.sym === 'random') rec.sym = pickScoring(run);
   else if (e.sym === 'that') rec.sym = ctx.sym ?? ctx.pattern?.sym ?? 'all';
@@ -469,6 +483,7 @@ export function scoreSpin(run, grid, favs, ctx = {}) {
   const heatMult = 1 + (step / 100) * run.heat;
   let allMult = 1;
   for (const r of mods.allMult) allMult *= r.n;
+  if (allMult > 6) allMult = 6 * (allMult / 6) ** 0.5; // soft cap: stacked engines still grow, but one spin cannot run away
   let total = Math.floor(sum * heatMult * allMult + 1e-9);
   if (mods.flags.firstSpinDead && run.spinInRound === 0) total = 0;
   if (EXPLAIN) {

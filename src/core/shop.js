@@ -19,9 +19,12 @@ function rollCharms(run, count, taken) {
   const skip = new Set([...taken, ...run.charms.map((c) => c.id), ...run.waiting]);
   const o = odds(run.debtIdx + 1);
   for (let i = 0; i < count; i++) {
-    const rar = rng.weighted(RARITIES, o);
-    let list = CHARMS.filter((c) => c.rarity === rar && run.pool.includes(c.id) && !skip.has(c.id));
-    if (!list.length) list = CHARMS.filter((c) => run.pool.includes(c.id) && !skip.has(c.id));
+    // a rarity with nothing left in the pool steps down (locked legendaries offer a rare), then up
+    let r = RARITIES.indexOf(rng.weighted(RARITIES, o)), list = [];
+    for (const k of [...RARITIES.slice(0, r + 1).reverse(), ...RARITIES.slice(r + 1)]) {
+      list = CHARMS.filter((c) => c.rarity === k && run.pool.includes(c.id) && !skip.has(c.id));
+      if (list.length) break;
+    }
     if (!list.length) break;
     const id = rng.weighted(list, list.map((c) => (c.tags.some((t) => held.has(t)) ? SHOP.familyBias : 1))).id;
     out.push(id);
@@ -58,19 +61,21 @@ export function openShop(run) {
   const hide = run.hide || {};
   let n = f.shopOffers ?? hide.shopOffers ?? SHOP.charmOffers;
   if (run.shopExtra) n += 1;
+  n += run.earlyShop || 0;
   const lockId = run.lock && !run.charms.some((c) => c.id === run.lock) ? run.lock : null;
   const charms = lockId ? [lockId] : [];
   run.lock = lockId;
   charms.push(...rollCharms(run, n - charms.length, charms));
   run.shop = {
     charms,
-    tricks: rollTricks(run, SHOP.trickOffers),
-    bench: rollBench(run, hide.benchOffers || SHOP.benchOffers),
+    tricks: rollTricks(run, SHOP.trickOffers + (run.earlyShop || 0)),
+    bench: rollBench(run, (hide.benchOffers || SHOP.benchOffers) + (run.earlyShop || 0)),
     rerolls: 0,
-    freeRerolls: (run.shopExtra ? 1 : 0) + (hide.freeRerolls || 0) + (run.adReroll || 0) + (f.freeReroll || 0),
+    freeRerolls: (run.earlyShop || 0) + (run.shopExtra ? 1 : 0) + (hide.freeRerolls || 0) + (run.adReroll || 0) + (f.freeReroll || 0),
   };
   run.adReroll = 0;
   run.shopExtra = false;
+  run.earlyShop = 0;
   run.phase = 'shop';
   return run.shop;
 }

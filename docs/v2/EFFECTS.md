@@ -127,7 +127,7 @@ Common fields: `n` (amount), `scope`, `per`.
 10. Find patterns. For each pattern type in `patterns.json` order and each placement in listed order: all cells show the same scoring symbol, Wisps allowed, at least one non-Wisp. Then drop any pattern beaten by a found pattern of the same symbol whose cells contain it.
 11. For each remaining pattern, in that order: fire `onPattern`, then `pay = floor(value x symMult x patMult)`. Halve it if `smallHalf` applies (3 cells), set it to 0 if `smallDead` applies, multiply by `bigX` if 4 or more cells. Repeat for retriggers.
 12. `onSpinEnd`. If no pattern paid: `onDud`, pity Luck +1.
-13. `total = floor(sum of pays x (1 + heatStep x Heat) x product of allMult)`. `heatStep` is 0.15 by default.
+13. `total = floor(sum of pays x (1 + heatStep x Heat) x product of allMult)`. A product of allMult above 6 is soft-capped to `6 x sqrt(product / 6)`. `heatStep` is 0.15 by default.
 14. purse += total + flat coins. Pity Luck resets if a pattern paid. Round and spin scopes are cleaned up. If `lastTwice` and this was the last spin, steps 8 to 14 run once more on the same grid.
 
 **Round end.** `onRoundEnd`, then interest = min(floor(purse x rate%), floor(debt x cap%)), then `onInterest`, then the shop.

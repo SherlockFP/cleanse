@@ -96,7 +96,7 @@ async function combo(vp, w, h, dpr, mobile, lang) {
   // cold open: the first run has no menu, the machine is the first thing on screen
   await waitFor("!!window.__pact && __pact.state().phase === 'spin' && __pact.state().screen === 'game'", 20000, 'first run on the machine');
   await ev(`__pact.setLang('${lang}'); 0`);
-  await step('first run', async () => { const s = await state(); if (!s.tut || s.debt !== 60 || s.spinsLeft !== 5) throw new Error('not the guided first run: ' + JSON.stringify(s)); });
+  await step('first run', async () => { const s = await state(); if (!s.tut || s.debtIdx !== 0 || s.spinsLeft !== 5) throw new Error('not the guided first run: ' + JSON.stringify(s)); });
   await snap('01-machine-idle', 900);
   await step('mid-spin', async () => { await click(go); await sleep(430); await ev(PAINT, true); await shot(`${tag}-02-mid-spin`); await idle('spin 1 done'); if ((await state()).phase !== 'post') throw new Error('spin 1 did not stop on a result'); });
   await step('pattern win', async () => { await click(go); await sleep(650); await ev(PAINT, true); await shot(`${tag}-03-pattern-win`); await idle('collect 1 done'); if (!((await state()).purse > 0)) throw new Error('spin 1 paid nothing'); });

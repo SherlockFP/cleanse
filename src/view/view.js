@@ -188,7 +188,7 @@ export function initView(canvas, opts = {}) {
 
   bg = new THREE.Mesh(PLANE, new THREE.MeshBasicMaterial({ map: getTex('bg/fair'), depthTest: false })); bg.renderOrder = 0; root.add(bg);
   for (let i = 0; i < 2; i++) edges.push(solid('#000000', 1));
-  devil = plain('devil/idle', 8);
+  devil = plain('devil/idle', 25); // above the case art, which may run up behind the stage
   charmRow = new Row(8, { order: 12 }); pocketRow = new Row(5, { order: 12 }); curseRow = new Row(8, { frame: false, order: 12, gap: 0.08 });
   buildBars();
   coinInst = new THREE.InstancedMesh(PLANE, new THREE.MeshBasicMaterial({ map: getTex('ui/coin'), transparent: true, depthTest: false }), 48);

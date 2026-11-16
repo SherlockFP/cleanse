@@ -132,7 +132,11 @@ A **contract** is a list of debts. Each debt has **3 rounds** ("nights"). Each r
 
 **Debt paid.** Stamp. Then Brimble offers two deals (section 10). Purse and Heat carry over.
 
-**Early pay.** Paying a debt with rounds left skips them: +2 Wick per unused round and one random trick. The cost is the spins and interest you did not take.
+**Early pay.** Paying a debt with rounds left skips them: +2 Wick per unused round, 6 spins per unused round plus any spins left tonight carried to the first night of the next debt, one random trick, the skipped round-end interest paid at once, and the next wagon gets +1 charm, +1 trick, +1 bench job and 1 free reroll per unused round. The cost is the terms cards and wagon choices you did not get.
+
+**Skip a night.** On the terms screen (never on a debt's last night) you may skip the night for the reward shown: +4 Wick, a random rare charm, or 2 tricks. No spins; interest and the wagon still come.
+
+**Endless.** After a contract's last debt you may stop and collect, or keep the same run going. Each further debt is 2.5x the one before, every other one has a boss rule, and the score is the debts paid. The run counts as a clear either way.
 
 **Interest.** At round end: 5% of the purse, capped at 25% of the current debt. Coins in the purse earn; coins in the debt are safe from a Scorch. That is the keep-or-bank choice.
 
@@ -174,7 +178,7 @@ Each contract unlocks the next. This is the ascension ladder.
 
 Expected length (not measured): contract 1 about 65 spins, 6 to 8 minutes. Contract 3 about 110 spins, 12 to 15 minutes.
 
-## 7. Charms (`charms.json`, 107)
+## 7. Charms (`charms.json`, 124)
 
 - Passive items in **5 slots** (max 8: shop slot for 10 Wick, deals, Pip). Slot order is left to right and is the evaluation order. The player can reorder.
 - Rarity: common 36, uncommon 38, rare 20, legendary 10.
@@ -198,6 +202,8 @@ Ten synergy families (tag = family, some charms carry a second tag):
 | crown | high symbols, big lines | 9 |
 
 Cross-family builds the data is meant to allow:
+- **Engines** (rare, in the starting pool, Wick-priced): one per family, each a spin-total multiplier that compounds on its family's thing: Hive Mind (low patterns), Smith's Forge (Heat), Witch Bottle (curses), Gilt Ledger (purse), Devil's Due (deals), Lodestar (Favourite patterns), Pattern Book (Stitch charms), Will-o'-Lamp (Wisp patterns), Tool Belt (tricks used), Crown Jewels (Crowns landed). Uncommon chargers grow over the run: Tally Stick (debts paid), Slow Burn (hot nights), Moth Mother. Lead Goose and Caboose Lamp pay per charm on one side of them, so the row order matters.
+- **Cross-family combos named on the cards**: Witch Bottle (per curse) + Devil's Due (per deal) + any deal (each brings a curse); Cinder Vow (charges on a Scorch) + Ash Cake / Martyr's Splinter (also on a Scorch) + Heat; Crown Bond (Crown mult per coins in the purse) + Crown Jewels / Short Scepter; Lodestar (Favourite patterns) + Changeling (moths become the Favourite) + Will-o'-Lamp (patterns holding a Wisp).
 - **Burning ledger**: ember + hex + ledger. Sit at Heat 8, eat Scorches for Wick and mult (Ash Cake, Martyr's Splinter), bank early.
 - **Moth flood**: swarm + omen + wisp. Changeling turns Moths into the Favourite, Dust Queen retriggers, Night Swarm scales with head-count.
 - **Paper court**: crown + tinker + stitch. Pull low symbols out at the bench, Scrap Heap pays for each removal, Paper King and Long Hem on big lines.
@@ -346,3 +352,19 @@ Not used in v2: Married Corners and Toll Bridge (two-symbol patterns need a seco
 - **Favourite redraw.** Before a spin, tap the Favourite chip: the first redraw each round is free, then 1 Wick each. Cloudy Ball adds one free redraw.
 - **Slot order.** Understudy (copies the charm to its right), Opening Act (x1.5 in the leftmost slot), The Closer (x1.5 in the rightmost filled slot).
 - **Economy.** Flat coin effects scale by S^0.75 (prices still use S). All symbols gain +1 value from debt 4 and again from debt 7. Interest 8%. Contract 1 debts are 60/150/400/650/1300 (on-ramp).
+
+## Balance (sim-quick, 2026-11-16)
+
+300 runs per cell, Nim, `node scripts/sim-quick.mjs --n 300 --contract <c> --bots random,greedy,smart`. Each contract runs in under 45 s. Clear rate:
+
+| bot | c1 | c2 | c3 | c6 | c10 |
+|---|---|---|---|---|---|
+| random | 12.7% | 0% | 0% | 0% | 0% |
+| greedy | 20.3% | 0% | 0% | 0% | 0% |
+| smart | 85.0% | 78.7% | 40.7% | 17.7% | 5.7% |
+
+Targets: c1 random 15-30 / smart 70-85, c3 random <5 / smart 40-60, c6 smart 20-35, c10 smart 5-15. Misses: c1 random (12.7) and c6 smart (17.7) are just under range; c10 charm/deal share is noisy (17 wins). c1 is structurally hard: smart builds engines that grow about 50x faster than random's flat income, so any debt curve that lets random clear 15% lets smart clear 90%+. Contract 1 therefore has 2 nights per debt and a 2-charm shop to slow the snowball. Greedy c1/c2 figures are from the earlier 300-run pass (c2 greedy 0%).
+
+Charm share in smart wins (c3): Smith's Forge 53%, Hive Mind 50%, Lodestar 48%; no charm or deal passes 60% on c1/c3/c6. On c10 Lucky Break is 65% of 17 wins.
+
+Never picked by smart (c1/c3/c6/c10 union): thirteenth_stair, exact_change, penny_wise, early_payer, fine_print, red_ribbon, loophole, summons, paid_witness, wrench, oil_can, pliers, hammer, polish_rag, understudy, lead_goose, cold_ember, clay_jar, gear, spare_parts. Reason: the bot scores a charm by coins made in practice nights, so Wick, trick, bench and long-horizon charms score near zero. They are kept as player-side utility, not tuned further.

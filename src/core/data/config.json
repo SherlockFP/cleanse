@@ -4,7 +4,7 @@
   "rows": 3
  },
  "luck": {
-  "base": 4,
+  "base": 3,
   "cap": 12,
   "favouredWeightMul": "1 + luck",
   "dudPity": 1
@@ -12,10 +12,10 @@
  "heat": {
   "max": 10,
   "payoutPerLevel": 0.2,
-  "ashWeightPerLevel": 2.0,
+  "ashWeightPerLevel": 2.25,
   "coolAtRoundStart": 2,
   "scorchAsh": 3,
-  "scorchBurnPct": 10,
+  "scorchBurnPct": 20,
   "scorchHeatDrop": 3
  },
  "interest": {
@@ -24,19 +24,61 @@
  },
  "earlyPay": {
   "wickPerUnusedRound": 2,
-  "trickPerDebt": 1
+  "trickPerDebt": 1,
+  "spinsPerUnusedRound": 6,
+  "shopPerUnusedRound": 1
  },
- "priceScale": [
-  1,
-  2,
-  4,
-  8,
-  18,
-  40,
-  100,
-  250,
-  600
- ],
+ "priceDebtDiv": 70,
+ "coinPow": 0.6,
+ "endless": {
+  "growth": 4
+ },
+ "skip": {
+  "rewards": [
+   {
+    "id": "skip_wick",
+    "effects": [
+     {
+      "type": "wick",
+      "n": 6
+     }
+    ],
+    "text": {
+     "en": "+6 Wick",
+     "tr": "+6 Fitil",
+     "th": "+6 ไส้เทียน"
+    }
+   },
+   {
+    "id": "skip_rare",
+    "effects": [
+     {
+      "type": "gainCharm",
+      "rarity": "rare"
+     }
+    ],
+    "text": {
+     "en": "gain a random rare charm",
+     "tr": "rastgele bir ender tılsım kazan",
+     "th": "ได้เครื่องรางหายากมากสุ่มหนึ่งชิ้น"
+    }
+   },
+   {
+    "id": "skip_tricks",
+    "effects": [
+     {
+      "type": "trick",
+      "n": 3
+     }
+    ],
+    "text": {
+     "en": "gain 3 random tricks",
+     "tr": "3 rastgele numara kazan",
+     "th": "ได้กลเม็ดสุ่ม 3 ชิ้น"
+    }
+   }
+  ]
+ },
  "start": {
   "coins": 0,
   "wick": 3,

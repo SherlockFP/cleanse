@@ -65,15 +65,21 @@ export function computeLayout(w, h, caseRects = DEFAULT_CASE, ins = null) {
   // The case takes what is left.
   const [cw0, ch0] = caseRects.size, aspect = ch0 / cw0;
   const top = stage.y + stage.h + g, avail = Math.max(60, floor - g - top);
-  const cw = Math.min(W * 0.98, avail / aspect), chh = cw * aspect;
-  const kase = r(X + (W - cw) / 2, top + (avail - chh) / 2, cw, chh);
-  const cells = caseRects.windows.map(([a, b, c, d]) => r(kase.x + a * kase.w, kase.y + b * kase.h, (c - a) * kase.w, (d - b) * kase.h));
+  // Size the case by its 5x3 window, not its outline: the window fills the width and the painted cabinet may run off the
+  // sides and behind the HUD and charm bar. `case` is the part of it that stays on screen; `caseArt` is where the art is drawn.
+  const ws = caseRects.windows, wx0 = Math.min(...ws.map((q) => q[0])), wx1 = Math.max(...ws.map((q) => q[2]));
+  const wy0 = Math.min(...ws.map((q) => q[1])), wy1 = Math.max(...ws.map((q) => q[3]));
+  const cw = Math.min(W * 0.96 / (wx1 - wx0), avail * 0.94 / ((wy1 - wy0) * aspect), Math.max(W * 0.98, avail / aspect) * 4), chh = cw * aspect;
+  const caseArt = r(X + W / 2 - ((wx0 + wx1) / 2) * cw, top + avail / 2 - ((wy0 + wy1) / 2) * chh, cw, chh);
+  const vx0 = Math.max(caseArt.x, X), vy0 = Math.max(caseArt.y, top), vx1 = Math.min(caseArt.x + cw, X + W), vy1 = Math.min(caseArt.y + chh, top + avail);
+  const kase = r(vx0, vy0, vx1 - vx0, vy1 - vy0);
+  const cells = ws.map(([a, b, c, d]) => r(caseArt.x + a * cw, caseArt.y + b * chh, (c - a) * cw, (d - b) * chh));
   const cell = cells[0].w, gap = cells[1].x - cells[0].x - cell;
   const grid = { x: cells[0].x, y: cells[0].y, cell, gap };
 
   return {
     screen: r(0, 0, w, h), column: col, scale: W / 390,
-    machine: kase, case: kase, cells, grid, hud, bar, curses, stage, meter, speech, devil, charms, pockets,
+    machine: kase, case: kase, caseArt, cells, grid, hud, bar, curses, stage, meter, speech, devil, charms, pockets,
     buttons: { spin, collect: spin, stoke, bank }, spin, stoke, bank,
   };
 }

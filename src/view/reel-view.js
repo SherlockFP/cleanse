@@ -106,7 +106,7 @@ const heldList = [], targetList = [];
 export function layoutReel(layout) {
   L = layout;
   const H = layout.screen.h;
-  place(caseMesh, layout.case, H);
+  place(caseMesh, layout.caseArt ?? layout.case, H);
   cells.forEach((c, i) => place(c.mesh, layout.cells[i], H, 1 / c.sq.x, c.sq.x));
   rings.forEach((m, i) => place(m, layout.cells[i], H, 1.06, 1.06));
   targets.forEach((m, i) => place(m, layout.cells[i], H, 1.1, 1.1));

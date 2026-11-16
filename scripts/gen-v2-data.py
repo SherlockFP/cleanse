@@ -141,6 +141,8 @@ def per(p, l):
         'sym': T(' per %s on the grid' % SN.get(a, {}).get('en'), ' (ızgaradaki %s başına)' % SN.get(a, {}).get('tr'), ' ต่อ%sบนกระดาน' % SN.get(a, {}).get('th')),
         'emptySlots': T(' per empty charm slot', ' (boş yuva başına)', ' ต่อช่องเครื่องรางว่าง'), 'tricks': T(' per trick held', ' (eldeki numara başına)', ' ต่อกลเม็ดที่ถือ'),
         'deals': T(' per deal signed', ' (imzalı anlaşma başına)', ' ต่อข้อตกลงที่เซ็น'), 'stack': T(' per charge', ' (birikim başına)', ' ต่อแต้มสะสม'),
+        'rightOf': T(' per charm to its right', ' (sağındaki her tılsım için)', ' ต่อเครื่องรางที่อยู่ทางขวา'),
+        'leftOf': T(' per charm to its left', ' (solundaki her tılsım için)', ' ต่อเครื่องรางที่อยู่ทางซ้าย'),
         'removed': T(' per removed symbol', ' (çıkarılan sembol başına)', ' ต่อสัญลักษณ์ที่ถอดออก'),
         'purse100': T(' per {c:100} coins in your purse (max 10)', ' (kesedeki her {c:100} para için, en çok 10)', ' ต่อทุก {c:100} เหรียญในถุงเงิน (สูงสุด 10)'),
     }[k][l]
@@ -164,7 +166,7 @@ def eff(e, l):
     elif t == 'transform': r = T('turn up to {n} {a} into {b}', 'en çok {n} {a}, {b} olur', 'เปลี่ยน{a}สูงสุด {n} ตัวเป็น{b}')[l].format(n=num(n), a=SN[e['from']][l], b=SN[e['to']][l])
     elif t == 'place': r = T('place {n} {a}', '{n} {a} yerleşir', 'วาง{a} {n} ตัว')[l].format(n=num(n), a=s) + (' ' + ZONE[e['zone']][l] if e.get('zone') else '')
     elif t == 'retrigger': r = T('it pays again', 'bir kez daha öder', 'จ่ายซ้ำอีกครั้ง')[l]
-    elif t == 'trick': r = T('gain %s random trick', '%s rastgele numara kazan', 'ได้กลเม็ดสุ่ม %s ชิ้น')[l] % num(n or 1)
+    elif t == 'trick': r = T('gain %s random trick' + ('s' if (n or 1) > 1 else ''), '%s rastgele numara kazan', 'ได้กลเม็ดสุ่ม %s ชิ้น')[l] % num(n or 1)
     elif t == 'stack': r = T('%s charge', '%s birikim', '%s แต้มสะสม')[l] % sgn(n)
     elif t == 'slot': r = T('%s charm slot', '%s tılsım yuvası', '%s ช่องเครื่องราง')[l] % sgn(n)
     elif t == 'gainCharm': r = T('gain a random %s charm', 'rastgele bir %s tılsım kazan', 'ได้เครื่องราง%sสุ่มหนึ่งชิ้น')[l] % RAR[e['rarity']][l]
@@ -172,7 +174,7 @@ def eff(e, l):
     elif t == 'removeSymbol': r = T('remove %s symbols of your choice from the machine', 'makineden seçtiğin %s sembolü çıkar', 'ถอดสัญลักษณ์ที่เลือก %s ชนิดออกจากเครื่อง')[l] % num(n)
     elif t == 'flag': r = FLAGS[e['flag']][l].replace('{v}', num(e.get('v', 0)))
     else: raise KeyError(t)
-    if e.get('scope') in SCOPE: r += SCOPE[e['scope']][l]
+    if e.get('scope') in SCOPE and not (t == 'allMult' and e['scope'] == 'spin'): r += SCOPE[e['scope']][l]  # "spin total" already says it
     if e.get('per'): r += per(e['per'], l)
     return r
 
@@ -223,12 +225,15 @@ def E(t, n=None, **k):
     d.update(k); return d
 def F(flag, v=None): return dict(type='flag', flag=flag, **({'v': v} if v is not None else {}))
 P = 'passive'
-PRICE = {'common': ('coins', 4), 'uncommon': ('coins', 7), 'rare': ('wick', 5), 'legendary': ('wick', 9)}
+PRICE = {'common': ('coins', 6), 'uncommon': ('coins', 10), 'rare': ('wick', 5), 'legendary': ('wick', 9)}
+# a price that differs from its rarity's follows measured power (sim-quick smart bot): strong flat earners cost more, weak ones less
+POWER_PRICE = {'patient_cocoon': 14, 'corner_tacks': 14, 'paper_fortune': 9, 'abacus': 4, 'coin_purse': 4, 'cushion': 4, 'matchbox': 4, 'paid_witness': 4, 'polish_rag': 4}
 RK = {'c': 'common', 'u': 'uncommon', 'r': 'rare', 'l': 'legendary'}
 charms = []
-def C(i, fam, rar, icon, en, tr, th, *rules, tags=()):
+def C(i, fam, rar, icon, en, tr, th, *rules, tags=(), price=None):
     assert 'charm/' + icon in ICONS, icon
     cur, pr = PRICE[RK[rar]]
+    pr = price if price is not None else POWER_PRICE.get(i, pr)
     charms.append(dict(id=i, name=T(en, tr, th), family=fam, tags=[fam] + list(tags), rarity=RK[rar], icon='charm/' + icon,
                        price={cur: pr}, unlock=None, rules=list(rules), text=text(rules)))
 
@@ -236,7 +241,7 @@ def C(i, fam, rar, icon, en, tr, th, *rules, tags=()):
 C('moth_jar', 'swarm', 'c', 'moth_jar', 'Moth Jar', 'Güve Kavanozu', 'โหลแมลงเม่า', R('onSymbolLand', {'sym': 'moth'}, E('coins', 1)))
 C('dusty_wing', 'swarm', 'c', 'moth_wing', 'Dusty Wing', 'Tozlu Kanat', 'ปีกเปื้อนฝุ่น', R(P, None, E('weight', 1.5, sym='moth')))
 C('tallow_stub', 'swarm', 'c', 'moth_wing', 'Tallow Stub', 'İçyağı Mumu', 'เทียนไขก้นสั้น', R(P, None, E('symValue', 2, sym='candle')))
-C('patient_cocoon', 'swarm', 'u', 'cocoon', 'Patient Cocoon', 'Sabırlı Koza', 'ดักแด้ใจเย็น', R('onPattern', {'group': 'low', 'every': 4}, E('symValue', 1, sym='low')))
+C('patient_cocoon', 'swarm', 'u', 'cocoon', 'Patient Cocoon', 'Sabırlı Koza', 'ดักแด้ใจเย็น', R('onPattern', {'group': 'low', 'every': 8}, E('symValue', 1, sym='low')))
 C('moth_net', 'swarm', 'c', 'moth_net', 'Moth Net', 'Güve Ağı', 'สวิงจับแมลงเม่า', R('onSpinEnd', {'countMin': ['moth', 3]}, E('coins', 4)))
 C('night_swarm', 'swarm', 'u', 'moth_jar', 'Night Swarm', 'Gece Sürüsü', 'ฝูงกลางคืน', R('onPattern', {'sym': 'moth'}, E('patMult', 0.25, pattern='this', per='sym:moth')))
 C('milk_tooth', 'swarm', 'c', 'cocoon', 'Milk Tooth', 'Süt Dişi', 'ฟันน้ำนม', R(P, None, E('symValue', 2, sym='tooth')))
@@ -247,11 +252,11 @@ C('paupers_parade', 'swarm', 'r', 'cocoon', "Pauper's Parade", 'Garibanlar Alay�
 # ---- ember: Heat ----
 C('matchbox', 'ember', 'c', 'matchbox', 'Matchbox', 'Kibrit Kutusu', 'กล่องไม้ขีด', R('onStoke', None, E('coins', 1)))
 C('hot_coal', 'ember', 'c', 'coal', 'Hot Coal', 'Kor Parçası', 'ถ่านแดง', R(P, {'heatMin': 4}, E('patMult', 0.5, pattern='all')))
-C('bellows', 'ember', 'u', 'bellows', 'Bellows', 'Körük', 'เครื่องสูบลม', R('onRoundStart', None, E('heat', 2)), R(P, None, F('heatStep', 20)))
+C('bellows', 'ember', 'u', 'bellows', 'Bellows', 'Körük', 'เครื่องสูบลม', R('onRoundStart', None, E('heat', 2)), R(P, None, F('heatStep', 35)))
 C('torch', 'ember', 'c', 'torch', 'Torch', 'Meşale', 'คบเพลิง', R('onSpinEnd', {'heatMin': 6}, E('coins', 4)))
 C('brazier', 'ember', 'u', 'brazier', 'Brazier', 'Mangal', 'เตาอั้งโล่', R(P, None, F('heatNoCool'), E('luck', 1)), tags=['omen'])
 C('fire_eater', 'ember', 'r', 'torch', "Fire Eater's Glove", 'Ateşbaz Eldiveni', 'ถุงมือนักกลืนไฟ', R(P, None, F('scorchNeeds', 4)), tags=['hex'])
-C('cold_ember', 'ember', 'u', 'coal', 'Cold Ember', 'Soğuk Köz', 'ถ่านเย็น', R('onSpinEnd', {'heatMax': 0}, E('luck', 1, scope='round')), tags=['omen'])
+C('cold_ember', 'ember', 'u', 'coal', 'Cold Ember', 'Soğuk Köz', 'ถ่านเย็น', R('onSpinEnd', {'heatMax': 0}, E('luck', 2, scope='round')), tags=['omen'])
 C('kindling', 'ember', 'c', 'matchbox', 'Kindling', 'Çıra', 'เชื้อไฟ', R('onDud', None, E('heat', 1), E('coins', 2)))
 C('furnace_heart', 'ember', 'l', 'brazier', 'Furnace Heart', 'Ocak Yüreği', 'หัวใจเตาหลอม', R(P, {'heatMin': 10}, E('allMult', 2)))
 C('powder_trail', 'ember', 'r', 'bellows', 'Powder Trail', 'Barut İzi', 'ทางดินปืน', R('onPattern', {'minCells': 4, 'heatMin': 5}, E('retrigger', 1)), tags=['stitch'])
@@ -265,8 +270,8 @@ C('crow_feather', 'hex', 'c', 'crow_feather', 'Crow Feather', 'Karga Tüyü', '�
 C('ash_cake', 'hex', 'u', 'rib_cage', 'Ash Cake', 'Kül Çöreği', 'ขนมเถ้า', R('onScorch', None, E('wick', 2), E('coins', 10)), tags=['ember'])
 C('scapegoat_bell', 'hex', 'l', 'black_cat', 'Scapegoat Bell', 'Günah Keçisi Çanı', 'กระดิ่งแพะรับบาป', R(P, None, F('ashIsFav')), tags=['ember'])
 C('grave_dirt', 'hex', 'u', 'rag_doll', 'Grave Dirt', 'Mezar Toprağı', 'ดินป่าช้า', R(P, {'cursesMin': 3}, E('patMult', 1, pattern='all')))
-C('jinx_bead', 'hex', 'c', 'cracked_mirror', 'Jinx Bead', 'Uğursuz Boncuk', 'ลูกปัดอาถรรพ์', R('onSymbolLand', {'sym': 'eye'}, E('coins', 1), E('coins', 1, per='curses')))
-C('thirteenth_stair', 'hex', 'u', 'crow_feather', 'Thirteenth Stair', 'On Üçüncü Basamak', 'บันไดขั้นที่สิบสาม', R('onSpinEnd', {'every': 13}, E('coins', 40)))
+C('jinx_bead', 'hex', 'c', 'cracked_mirror', 'Jinx Bead', 'Uğursuz Boncuk', 'ลูกปัดอาถรรพ์', R('onSymbolLand', {'sym': 'eye'}, E('coins', 1, per='curses')))
+C('thirteenth_stair', 'hex', 'u', 'crow_feather', 'Thirteenth Stair', 'On Üçüncü Basamak', 'บันไดขั้นที่สิบสาม', R('onSpinEnd', {'every': 4}, E('coins', 60)))
 C('martyr_splinter', 'hex', 'r', 'rib_cage', "Martyr's Splinter", 'Çilekeş Kıymığı', 'เสี้ยนผู้ทนทุกข์', R('onScorch', None, E('symMult', 0.3, sym='all')), tags=['ember'])
 # ---- ledger: purse, interest, banking ----
 C('abacus', 'ledger', 'c', 'abacus', 'Abacus', 'Abaküs', 'ลูกคิด', R(P, None, E('interest', 4)))
@@ -285,11 +290,11 @@ C('quill', 'pact', 'u', 'quill', 'Black Quill', 'Kara Tüy Kalem', 'ปากก
 C('fine_print', 'pact', 'c', 'scroll', 'Fine Print', 'İnce Yazı', 'ตัวอักษรจิ๋ว', R(P, None, F('dealOffers', 3)))
 C('ink_bottle', 'pact', 'c', 'ink_bottle', 'Ink Bottle', 'Mürekkep Şişesi', 'ขวดหมึก', R(P, None, E('weight', 2, sym='sigil')))
 C('firm_handshake', 'pact', 'r', 'claw_shake', 'Firm Handshake', 'Sıkı Tokalaşma', 'จับมือแน่น', R(P, None, E('patMult', 0.5, pattern='all', per='deals')))
-C('red_ribbon', 'pact', 'u', 'red_ribbon', 'Red Ribbon', 'Kırmızı Kurdele', 'ริบบิ้นแดง', R('onRefuse', None, E('wick', 3)))
+C('red_ribbon', 'pact', 'u', 'red_ribbon', 'Red Ribbon', 'Kırmızı Kurdele', 'ริบบิ้นแดง', R('onRefuse', None, E('wick', 5)))
 C('loophole', 'pact', 'u', 'scroll', 'Loophole', 'Kaçamak Madde', 'ช่องโหว่', R('onCurse', {'chance': 50}, F('cancelCurse')), tags=['hex'])
 C('summons', 'pact', 'u', 'stamp', 'Summons', 'Celpname', 'หมายเรียก', R('onSpinEnd', {'countMin': ['sigil', 3]}, E('trick', 1)), tags=['tinker'])
 C('blood_ink', 'pact', 'l', 'ink_bottle', 'Blood Ink', 'Kan Mürekkebi', 'หมึกเลือด', R('onSymbolLand', {'sym': 'sigil'}, E('allMult', 1.5)))
-C('paid_witness', 'pact', 'c', 'quill', 'Paid Witness', 'Paralı Şahit', 'พยานรับจ้าง', R('onDebtPaid', None, E('wick', 1)))
+C('paid_witness', 'pact', 'c', 'quill', 'Paid Witness', 'Paralı Şahit', 'พยานรับจ้าง', R('onDebtPaid', None, E('wick', 2)))
 C('cosigner', 'pact', 'r', 'claw_shake', 'Co-signer', 'Kefil', 'ผู้ค้ำประกัน', R(P, None, F('saveDeadline')))
 # ---- omen: Luck and the Favourite ----
 C('tea_leaves', 'omen', 'c', 'tea_cup', 'Tea Leaves', 'Çay Telvesi', 'ใบชาก้นถ้วย', R(P, None, E('luck', 1)))
@@ -326,14 +331,14 @@ C('ghost_parade', 'wisp', 'r', 'glow_jar', 'Ghost Parade', 'Hayalet Alayı', '�
 C('twin_flame', 'wisp', 'u', 'wisp_bottle', 'Twin Flame', 'İkiz Alev', 'เปลวแฝด', R('onSymbolLand', {'sym': 'wisp', 'every': 5}, E('wick', 1)), tags=['pact'])
 C('green_dawn', 'wisp', 'l', 'glow_jar', 'Green Dawn', 'Yeşil Şafak', 'รุ่งอรุณสีเขียว', R('onSpinStart', {'spinIs': 'first'}, E('place', 5, sym='wisp', zone='midrow')))
 # ---- tinker: tricks and the bench ----
-C('wrench', 'tinker', 'c', 'wrench', 'Brass Wrench', 'Pirinç Anahtar', 'ประแจทองเหลือง', R('onTrick', None, E('coins', 5)))
+C('wrench', 'tinker', 'c', 'wrench', 'Brass Wrench', 'Pirinç Anahtar', 'ประแจทองเหลือง', R('onTrick', None, E('patMult', 1, pattern='all', scope='spin')))
 C('oil_can', 'tinker', 'c', 'oil_can', 'Oil Can', 'Yağdanlık', 'กาหยอดน้ำมัน', R(P, None, F('trickPockets', 1)), R('onDebtStart', None, E('trick', 1)))
-C('gear', 'tinker', 'u', 'gear', 'Eighth Tooth', 'Sekizinci Diş', 'ฟันเฟืองซี่ที่แปด', R('onTrick', {'every': 3}, E('spins', 1)))
-C('hammer', 'tinker', 'u', 'hammer', 'Tack Hammer', 'Çivi Çekici', 'ค้อนตอกหมุด', R('onBuy', None, E('symValue', 1, sym='random')))
+C('gear', 'tinker', 'u', 'gear', 'Eighth Tooth', 'Sekizinci Diş', 'ฟันเฟืองซี่ที่แปด', R('onTrick', {'every': 2}, E('spins', 1)))
+C('hammer', 'tinker', 'u', 'hammer', 'Tack Hammer', 'Çivi Çekici', 'ค้อนตอกหมุด', R('onBuy', None, E('symValue', 2, sym='random')))
 C('pliers', 'tinker', 'c', 'pliers', 'Pliers', 'Pense', 'คีม', R(P, None, F('benchDiscount', 50)))
-C('spare_parts', 'tinker', 'u', 'gear', 'Spare Parts', 'Yedek Parça', 'อะไหล่', R('onSpinEnd', None, E('coins', 1, per='tricks')))
+C('spare_parts', 'tinker', 'u', 'gear', 'Spare Parts', 'Yedek Parça', 'อะไหล่', R(P, None, E('allMult', 1.04, per='tricks')))
 C('tuned_gears', 'tinker', 'r', 'gear', 'Tuned Gears', 'Ayarlı Dişliler', 'เฟืองจูนแล้ว', R(P, None, F('firstTrickFree')))
-C('polish_rag', 'tinker', 'c', 'oil_can', 'Polish Rag', 'Cila Bezi', 'ผ้าขัดเงา', R('onDebtPaid', None, E('symValue', 1, sym='random')))
+C('polish_rag', 'tinker', 'c', 'oil_can', 'Polish Rag', 'Cila Bezi', 'ผ้าขัดเงา', R('onDebtPaid', None, E('symValue', 2, sym='random')))
 C('scrap_heap', 'tinker', 'r', 'hammer', 'Scrap Heap', 'Hurda Yığını', 'กองเศษเหล็ก', R(P, None, E('symMult', 0.3, sym='all', per='removed')))
 C('clockwork_thumb', 'tinker', 'l', 'wrench', 'Clockwork Thumb', 'Kurmalı Başparmak', 'นิ้วโป้งไขลาน', R('onTrick', None, E('allMult', 2, scope='spin')))
 # ---- crown: high symbols ----
@@ -351,6 +356,26 @@ C('paper_king', 'crown', 'l', 'throne', 'Paper King', 'Kâğıt Kral', 'รา�
 C('understudy', 'tinker', 'u', 'prism', 'Understudy', 'Yedek Oyuncu', 'ตัวสำรอง', R(P, None, F('copyRight')))
 C('opening_act', 'tinker', 'u', 'red_ribbon', 'Opening Act', 'Açılış Numarası', 'การแสดงเปิด', R(P, {'slotIs': 'first'}, E('allMult', 1.5)))
 C('closer', 'tinker', 'u', 'knot', 'The Closer', 'Kapanış', 'ปิดม่าน', R(P, {'slotIs': 'last'}, E('allMult', 1.5)))
+
+# ---- engines: multipliers that compound. Each feeds on its own family; the cross-family ones name the other family's thing ----
+C('hive_mind', 'swarm', 'r', 'moth_jar', 'Hive Mind', 'Kovan Aklı', 'จิตรวมรัง', R('onPattern', {'group': 'low'}, E('allMult', 1.05, scope='spin')))
+C('moth_mother', 'swarm', 'u', 'cocoon', 'Moth Mother', 'Güve Anası', 'แม่แมลงเม่า', R('onSpinEnd', {'countMin': ['moth', 4]}, E('stack', 1)), R(P, None, E('symMult', 0.1, sym='low', per='stack')), price=12)
+C('smiths_forge', 'ember', 'r', 'brazier', "Smith's Forge", 'Demirci Ocağı', 'เตาตีเหล็ก', R(P, None, E('allMult', 1.08, per='heat')))
+C('slow_burn', 'ember', 'u', 'coal', 'Slow Burn', 'Ağır Ateş', 'ไฟสุมขอน', R('onRoundEnd', {'heatMin': 5}, E('stack', 1)), R(P, None, E('allMult', 1.05, per='stack')), price=12)
+C('cinder_vow', 'ember', 'r', 'torch', 'Cinder Vow', 'Kül Yemini', 'คำสาบานเถ้าถ่าน', R('onScorch', None, E('stack', 1)), R(P, None, E('allMult', 1.1, per='stack')), tags=['hex'])
+C('witch_bottle', 'hex', 'r', 'black_cat', 'Witch Bottle', 'Cadı Şişesi', 'ขวดแม่มด', R(P, None, E('allMult', 1.12, per='curses')), tags=['pact'])
+C('gilt_ledger', 'ledger', 'r', 'ledger_book', 'Gilt Ledger', 'Yaldızlı Defter', 'บัญชีปิดทอง', R(P, None, E('allMult', 1.05, per='purse100')))
+C('tally_stick', 'ledger', 'u', 'abacus', 'Tally Stick', 'Çetele', 'ไม้นับหนี้', R('onDebtPaid', None, E('stack', 1)), R(P, None, E('allMult', 1.15, per='stack')), price=12)
+C('crown_bond', 'ledger', 'r', 'coin_purse', 'Crown Bond', 'Taç Tahvili', 'พันธบัตรมงกุฎ', R(P, None, E('symMult', 0.4, sym='crown', per='purse100')), tags=['crown'])
+C('devils_due', 'pact', 'r', 'claw_shake', "Devil's Due", 'Şeytanın Hakkı', 'ส่วนของปีศาจ', R(P, None, E('allMult', 1.12, per='deals')), tags=['hex'])
+C('lodestar', 'omen', 'r', 'star_card', 'Lodestar', 'Kutup Yıldızı', 'ดาวเหนือ', R('onPattern', {'favoured': True}, E('allMult', 1.05, scope='spin')))
+C('pattern_book', 'stitch', 'r', 'knot', 'Pattern Book', 'Desen Defteri', 'สมุดลายปัก', R(P, None, E('patMult', 0.5, pattern='all', per='family:stitch')))
+C('will_o_lamp', 'wisp', 'r', 'glow_jar', "Will-o'-Lamp", 'Cin Feneri', 'ตะเกียงผี', R('onPattern', {'hasWisp': True}, E('allMult', 1.25, scope='spin')), tags=['omen'])
+C('tool_belt', 'tinker', 'r', 'wrench', 'Tool Belt', 'Alet Kemeri', 'เข็มขัดเครื่องมือ', R('onTrick', None, E('stack', 1)), R(P, None, E('allMult', 1.05, per='stack')))
+# order engines: where they sit in the row is the whole point
+C('lead_goose', 'tinker', 'u', 'gear', 'Lead Goose', 'Önden Giden Kaz', 'ห่านนำฝูง', R(P, None, E('allMult', 1.15, per='rightOf')), price=12)
+C('caboose', 'tinker', 'u', 'hammer', 'Caboose Lamp', 'Son Vagon Feneri', 'ตะเกียงท้ายขบวน', R(P, None, E('allMult', 1.1, per='leftOf')), price=12)
+C('crown_jewels', 'crown', 'r', 'throne', 'Crown Jewels', 'Taç Mücevherleri', 'มงกุฎเพชร', R('onSymbolLand', {'sym': 'crown'}, E('allMult', 1.15, scope='spin')))
 
 # ---------- curses ----------
 curses = []
@@ -382,7 +407,7 @@ def D(i, icon, en, tr, th, curse, *effects, n=1):
     boon = [R('now', None, *effects)]
     tx = text(boon)
     for l in L:
-        cn = CUN[curse][l] if curse != 'random' else T('%d random', '%d rastgele', 'สุ่ม %d อย่าง')[l] % n
+        cn = (CUN[curse][l] + (' x%d' % n if n > 1 else '')) if curse != 'random' else T('%d random', '%d rastgele', 'สุ่ม %d อย่าง')[l] % n
         tx[l] = tx[l].split(': ', 1)[1]
         tx[l] = tx[l][0].upper() + tx[l][1:] + ' ' + T('Curse: %s.', 'Lanet: %s.', 'คำสาป: %s')[l] % cn
     deals.append(dict(id=i, name=T(en, tr, th), icon='deal/' + icon, boon=list(effects), curse=curse, curseCount=n, text=tx))
@@ -390,18 +415,18 @@ D('quick_cash', 'coins', 'Quick Cash', 'Sıcak Para', 'เงินด่วน'
 D('fat_purse', 'coins', 'Fat Purse', 'Şişkin Kese', 'ถุงเงินอ้วน', 'dear_prices', E('interest', 5))
 D('advance', 'coins', 'A Small Advance', 'Küçük Bir Avans', 'เบิกล่วงหน้านิดหน่อย', 'small_print', F('debtCut', 30))
 D('muscle', 'power', 'Borrowed Muscle', 'Ödünç Kas', 'กล้ามยืมมา', 'short_candle', E('patMult', 0.5, pattern='all'))
-D('overdrive', 'power', 'Overdrive', 'Tam Gaz', 'เร่งเครื่อง', 'ash_rain', E('symMult', 0.5, sym='all'))
+D('overdrive', 'power', 'Overdrive', 'Tam Gaz', 'เร่งเครื่อง', 'ash_rain', E('symMult', 0.3, sym='all'))
 D('big_lines', 'power', 'Grand Designs', 'Büyük Planlar', 'แผนการใหญ่', 'hairline_crack', E('patMult', 3, pattern='big'))
-D('lucky_break', 'luck', 'Lucky Break', 'Şans Kapısı', 'โชคหล่นทับ', 'blindfold', E('luck', 3))
-D('loaded', 'luck', 'A Thumb on the Scale', 'Teraziye Parmak', 'นิ้วโป้งบนตาชั่ง', 'cold_feet', E('luck', 4))
+D('lucky_break', 'luck', 'Lucky Break', 'Şans Kapısı', 'โชคหล่นทับ', 'blindfold', E('luck', 1))
+D('loaded', 'luck', 'A Thumb on the Scale', 'Teraziye Parmak', 'นิ้วโป้งบนตาชั่ง', 'cold_feet', E('luck', 2))
 D('star_sign', 'luck', 'Star Sign', 'Burç', 'ดาวประจำราศี', 'moth_eaten', F('pickFav'))
-D('extra_slot', 'slot', 'Room for One More', 'Bir Kişilik Yer', 'ที่ว่างอีกหนึ่ง', 'fever', E('slot', 1))
+D('extra_slot', 'slot', 'Room for One More', 'Bir Kişilik Yer', 'ที่ว่างอีกหนึ่ง', 'small_print', E('slot', 1))
 D('big_pockets', 'slot', 'Deep Pockets', 'Derin Cepler', 'กระเป๋าลึก', 'brittle_nerves', F('trickPockets', 2), E('trick', 2))
 D('wide_shelf', 'slot', 'Wide Shelf', 'Geniş Raf', 'ชั้นกว้าง', 'random', E('slot', 1))
 D('green_night', 'wild', 'Green Night', 'Yeşil Gece', 'คืนสีเขียว', 'smoke_hole', E('weight', 3, sym='wisp'))
 D('false_face', 'wild', 'False Face', 'Sahte Yüz', 'หน้าปลอม', 'jinx', F('maskWild'))
 D('ghost_hire', 'wild', 'Hired Ghosts', 'Kiralık Hayaletler', 'ผีรับจ้าง', 'the_tithe', F('ghostHire'))
-D('borrowed_time', 'time', 'Borrowed Time', 'Ödünç Zaman', 'เวลายืมมา', 'small_print', F('roundsAdd', 1))
+D('borrowed_time', 'time', 'Borrowed Time', 'Ödünç Zaman', 'เวลายืมมา', 'small_print', F('roundsAdd', 1), n=2)
 D('long_wick', 'time', 'Long Wick', 'Uzun Fitil', 'ไส้เทียนยาว', 'dead_weight', F('spinsRound', 1))
 D('snooze', 'time', 'Snooze', 'Erteleme', 'ขอเลื่อน', 'random', F('extraLife'))
 D('free_market', 'shop', 'Friends and Family Rate', 'Eş Dost Fiyatı', 'ราคากันเอง', 'sticky_fingers', F('shopDiscount', 30))
@@ -451,35 +476,36 @@ ST('short_fuse', 'stake/short', 3, 8, 1, 'Short Fuse', 'Kısa Fitil', 'ชนว
 ST('wick_run', 'stake/wick', 3, 8, 1, 'Wick Run', 'Fitil Seferi', 'เก็บไส้เทียน', E('wick', 6))
 ST('long_night', 'stake/long', 6, 8, 1, 'Long Night', 'Uzun Gece', 'คืนยาว', F('ashBase', 3))
 ST('lucky_draw', 'stake/luck', 4, 8, 1, 'Wishbone Night', 'Lades Gecesi', 'คืนกระดูกอธิษฐาน', E('luck', 3, scope='round'))
-ST('two_faces', 'stake/double', 5, 6, 2, 'Two Faces', 'İki Yüz', 'สองหน้า', F('smallDead'), F('bigX', 3))
+ST('two_faces', 'stake/double', 5, 6, 2, 'Two Faces', 'İki Yüz', 'สองหน้า', F('smallDead'), F('bigX', 2))
 ST('market_night', 'stake/shop', 4, 6, 1, 'Market Night', 'Pazar Gecesi', 'คืนตลาดนัด', F('shopExtra'))
 ST('cold_iron', 'stake/cold', 5, 6, 2, 'Cold Iron', 'Soğuk Demir', 'เหล็กเย็น', F('noStoke'), E('interest', 5, scope='round'))
 ST('wild_night', 'stake/wild', 4, 6, 2, 'Ghost Night', 'Hayalet Gecesi', 'คืนผีออก', E('weight', 4, sym='wisp', scope='round'))
 ST('hot_coals', 'ui/heat', 5, 6, 2, 'Hot Coals', 'Kor Yatağı', 'ลุยถ่านแดง', E('heat', 4), F('heatNoCool'))
-ST('bank_holiday', 'ui/btn_bank', 4, 5, 3, "Collector's Day Off", 'Tahsildarın İzin Günü', 'วันหยุดคนทวงหนี้', F('bankX', 1.25))
+ST('bank_holiday', 'ui/btn_bank', 4, 5, 3, "Collector's Day Off", 'Tahsildarın İzin Günü', 'วันหยุดคนทวงหนี้', F('bankX', 1.6))
 ST('mirror_night', 'trick/hand_mirror', 4, 5, 3, 'Mirror Night', 'Ayna Gecesi', 'คืนกระจก', F('lastTwice'))
 
 # ---------- contracts ----------
-BASE = [60, 150, 400, 1000, 2600, 7000, 20000, 60000, 200000]
-SCALE = [1, 2, 4, 8, 18, 40, 100, 250, 600]
+BASE = [80, 280, 1000, 3500, 12000, 40000, 145000, 550000, 2100000]
 contracts = []
 def CT(n, en, tr, th, debts, mul, wax, *effects, ending=None):
     tx = {l: ('; '.join(eff(e, l) for e in effects) or T('No extra rules', 'Ek kural yok', 'ไม่มีกฎเพิ่ม')[l]) for l in L}
     tx = {l: v[0].upper() + v[1:] + ('' if l == 'th' else '.') for l, v in tx.items()}
     contracts.append(dict(id='c%d' % n, tier=n, name=T(en, tr, th), debts=[round(BASE[i] * mul) for i in range(debts)], rounds=3, debtMul=mul, rewardWax=wax,
                           unlockAfter=('c%d' % (n - 1)) if n > 1 else None, rules=list(effects), ending=ending, text=tx))
-CT(1, 'The Starter Pact', 'Başlangıç Ahdi', 'สัญญาแรกเข้า', 5, 1, 20)
-CT(2, 'Standard Terms', 'Standart Şartlar', 'เงื่อนไขมาตรฐาน', 6, 1, 30)
-CT(3, 'The Full Ledger', 'Tam Defter', 'บัญชีเต็มเล่ม', 8, 1, 50, ending='paid_in_full')
+CT(1, 'The Starter Pact', 'Başlangıç Ahdi', 'สัญญาแรกเข้า', 5, 1, 20, F('shopOffers', 3), F('scorchBurn', 10))
+CT(2, 'Standard Terms', 'Standart Şartlar', 'เงื่อนไขมาตรฐาน', 6, 0.5, 30)
+CT(3, 'The Full Ledger', 'Tam Defter', 'บัญชีเต็มเล่ม', 8, 0.85, 50, ending='paid_in_full')
 CT(4, 'Short Wick', 'Kısa Fitil Ahdi', 'สัญญาไส้สั้น', 8, 1, 60, F('spinsLess', 1))
 CT(5, 'Dry Season', 'Kurak Mevsim', 'หน้าแล้ง', 8, 1.25, 70, F('interestHalf'))
-CT(6, 'Cinder Week', 'Kül Haftası', 'สัปดาห์ขี้เถ้า', 8, 1.25, 80, F('ashBase', 2), F('scorchBurn', 20))
+CT(6, 'Cinder Week', 'Kül Haftası', 'สัปดาห์ขี้เถ้า', 8, 1.1, 80, F('ashBase', 2), F('scorchBurn', 30))
 CT(7, 'Head Office Audit', 'Merkez Denetimi', 'สำนักงานใหญ่มาตรวจ', 8, 1.5, 100, F('startCurses', 1), ending='bought_the_machine')
 CT(8, 'Thin Shelves', 'Boş Raflar', 'ชั้นวางโล่ง', 8, 1.5, 120, F('shopOffers', 3), F('rerollDouble'))
 CT(9, 'Two Nights Only', 'Yalnızca İki Gece', 'สองคืนเท่านั้น', 8, 1.5, 150, F('rounds', 2))
-CT(10, 'New Management', 'Yeni Yönetim', 'ผู้บริหารชุดใหม่', 9, 2, 250, F('startCurses', 2), F('mustSign'), ending='new_management')
+CT(10, 'New Management', 'Yeni Yönetim', 'ผู้บริหารชุดใหม่', 9, 1.2, 250, F('startCurses', 2), F('mustSign'), ending='new_management')
 contracts[8]['rounds'] = 2
-contracts[0]['debts'][3:5] = [650, 1300]  # the starter contract is an on-ramp: sim-quick greedy clears about 60% (was 25% at 1000/2600)
+contracts[0]['rounds'] = 2
+contracts[0]['debts'] = [46, 106, 258, 505, 980]  # the starter contract is an on-ramp; measured numbers live in docs/v2, not here
+contracts[2]['debts'] = [68, 238, 800, 2500, 7500, 22000, 70000, 220000]  # flattens the debt 5-6 wall of the 0.85 curve
 BOSSES = [
     ('auditor', 'The Auditor', 'Müfettiş', 'ผู้ตรวจบัญชี', F('smallHalf')),
     ('collector', 'The Collector', 'Tahsildar', 'คนทวงหนี้', F('ashBase', 3)),
@@ -619,14 +645,21 @@ A('daily_7', 'dailyRuns', 7, 'Seven Nights', 'Yedi Gece', 'เจ็ดคืน
 A('char_wins_6', 'charWins', 6, 'Everyone Pays', 'Herkes Öder', 'ทุกคนต้องจ่าย', wax=300)
 A('hideout_10', 'hideout', 10, 'Home at Last', 'Nihayet Yuva', 'บ้านเสียที', wax=100)
 
+# ---------- skip a night: the reward the terms screen offers instead of spinning ----------
+SKIP = []
+for i, *effects in [('skip_wick', E('wick', 6)), ('skip_rare', E('gainCharm', rarity='rare')), ('skip_tricks', E('trick', 3))]:
+    SKIP.append(dict(id=i, effects=list(effects), text={l: ', '.join(eff(e, l) for e in effects) for l in L}))
+
 # ---------- config ----------
 config = dict(
     grid=dict(cols=5, rows=3),
-    luck=dict(base=4, cap=12, favouredWeightMul='1 + luck', dudPity=1),
-    heat=dict(max=10, payoutPerLevel=0.20, ashWeightPerLevel=2.0, coolAtRoundStart=2, scorchAsh=3, scorchBurnPct=10, scorchHeatDrop=3),
+    luck=dict(base=3, cap=12, favouredWeightMul='1 + luck', dudPity=1),
+    heat=dict(max=10, payoutPerLevel=0.20, ashWeightPerLevel=2.25, coolAtRoundStart=2, scorchAsh=3, scorchBurnPct=20, scorchHeatDrop=3),
     interest=dict(basePct=8, capPctOfDebt=25),
-    earlyPay=dict(wickPerUnusedRound=2, trickPerDebt=1),
-    priceScale=SCALE,
+    earlyPay=dict(wickPerUnusedRound=2, trickPerDebt=1, spinsPerUnusedRound=6, shopPerUnusedRound=1),
+    priceDebtDiv=70, coinPow=0.6,
+    endless=dict(growth=4),
+    skip=dict(rewards=SKIP),
     start=dict(coins=0, wick=3, charmSlots=5, charmSlotsMax=8, trickPockets=3, removedSymbolsMax=3),
     shop=dict(charmOffers=4, trickOffers=2, benchOffers=2, rerollBase=2, rerollStep=1, locks=1, sellPct=50, familyBias=2.5,
               rarityOdds=[dict(fromDebt=1, common=62, uncommon=30, rare=8, legendary=0), dict(fromDebt=3, common=50, uncommon=32, rare=15, legendary=3),
@@ -647,7 +680,7 @@ config = dict(
 )
 
 # ---------- checks and write ----------
-assert len(charms) >= 100 and len(bosses) == 6 and len(deals) == 24 and len(curses) == 16 and len(tricks) == 20 and len(stakes) == 12
+assert len(charms) >= 115 and len(bosses) == 6 and len(deals) == 24 and len(curses) == 16 and len(tricks) == 20 and len(stakes) == 12
 assert len(contracts) == 10 and len(chars) == 6 and len(hide) == 10 and len(ach) >= 40
 assert len({c['id'] for c in charms}) == len(charms)
 for p in PAT:

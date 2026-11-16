@@ -35,7 +35,7 @@ export const LISTS = { charm: CHARM, trick: TRICK, curse: CURSE, deal: DEAL, sta
 
 // Price scale S of debt index i (0-based): flat coin prices and {c:N} texts are multiplied by it.
 // Text coins use S^0.75 like the core's coins effect (src/core/effects.js coinScaleOf).
-export const scaleAt = (i) => config.priceScale[Math.min(Math.max(i | 0, 0), config.priceScale.length - 1)] ** 0.75;
+export const scaleAt = () => 1; // fallback only: the glue's derive(run).scale is the real coin scale
 
 // "1 coin" tags for a price object { coins?, wick? } already multiplied by the core (shop price()).
 export const hasPrice = (p) => !!p && (p.coins != null || p.wick != null);

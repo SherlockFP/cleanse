@@ -4,14 +4,14 @@
 import { CONFIG, RARITIES, CHARM, CHARMS, CHAR, CONTRACT, STAKE, STAKES, TRICK, SYM, SCORING } from './data.js';
 import { stream } from './streams.js';
 import {
-  snapshot, fire, runEffects, endSpan, scaleOf, slotsOf, pocketsOf, scoreSpin, setHeat, addTrick, addCharm, burnCharm, addCurse, luckOf,
+  snapshot, fire, runEffects, endSpan, scaleOf, debtBase, slotsOf, pocketsOf, scoreSpin, setHeat, addTrick, addCharm, burnCharm, addCurse, luckOf,
 } from './effects.js';
 import { pickFavourites, rollGrid, rollRow, rollCells, applySpinEdits, applyGridEdits, COLS } from './machine.js';
 import { openShop } from './shop.js';
 import { offerDeals } from './deals.js';
 import { hideoutEffects, availableCharms } from './meta.js';
 
-export { scaleOf };
+export { scaleOf, debtBase };
 export const phase = (run) => run.phase;
 export const saveRun = (run) => JSON.stringify(run);
 export const loadRun = (s) => JSON.parse(s);
@@ -57,12 +57,14 @@ export function pickStartCharm(run, id) {
   return true;
 }
 
+
 function startDebt(run) {
   const mods = snapshot(run);
-  const base = CONTRACT[run.contract].debts[run.debtIdx];
+  const base = debtBase(run.contract, run.debtIdx);
   run.debt = Math.max(1, Math.ceil(base * (1 + (mods.flags.debtMul || 0) / 100) * (1 + run.debtAdj / 100) - 1e-9));
   run.debtAdj = 0;
   run.banked = 0;
+  run.slotBought = false; // one slot can be bought per debt
   run.round = 0;
   run.rounds = (mods.flags.rounds ?? CONTRACT[run.contract].rounds) + (mods.flags.roundsAdd || 0);
   run.stats.reachDebt = Math.max(run.stats.reachDebt || 0, run.debtIdx + 1);
@@ -136,7 +138,8 @@ export function pickTerms(run, id) {
   if (!mods.flags.heatNoCool) setHeat(run, run.heat - CONFIG.heat.coolAtRoundStart, mods);
   if (mods.flags.startHeat) setHeat(run, Math.max(run.heat, mods.flags.startHeat), mods);
   if (mods.flags.noStoke) run.heat = mods.flags.heatFloor || 0;
-  run.spinsLeft = Math.max(1, st.spins - (mods.flags.spinsLess || 0) + (mods.flags.spinsRound || 0));
+  run.spinsLeft = Math.max(1, st.spins - (mods.flags.spinsLess || 0) + (mods.flags.spinsRound || 0)) + (run.carrySpins || 0);
+  run.carrySpins = 0;
   const events = runEffects(run, { kind: 'terms', id }, st.effects, {}, true);
   events.push(...fire(run, 'onRoundStart', {}));
   run.spinsLeft = Math.max(1, run.spinsLeft);
@@ -144,6 +147,26 @@ export function pickTerms(run, id) {
   run.phase = 'spin';
   prepareSpin(run);
   return events;
+}
+
+// Skip a night (never the last one of a debt): no spins, the terms screen's reward instead, then the night ends as usual.
+export const canSkip = (run) => run.phase === 'terms' && run.round + 1 < run.rounds && !run.tut && !(run.forcedTerms && run.roundSerial === 0);
+export function skipReward(run) {
+  const list = CONFIG.skip.rewards;
+  return list[(run.roundSerial + hashCode(run.seed)) % list.length];
+}
+const hashCode = (s) => { let h = 0; for (const ch of String(s)) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; };
+export function skipRound(run) {
+  if (!canSkip(run)) return null;
+  autoResolve(run);
+  const r = skipReward(run);
+  run.termsOffer = null;
+  run.roundSerial++;
+  runEffects(run, { kind: 'skip', id: r.id }, r.effects, {});
+  run.stats.skips = (run.stats.skips || 0) + 1;
+  run.spinsLeft = 0;
+  run.phase = 'roundend';
+  return endRound(run);
 }
 
 function prepareSpin(run) {
@@ -320,7 +343,7 @@ export function spin(run) {
 
 function settle(run) {
   const sc = scoreSpin(run, run.grid, run.favs);
-  const gain = sc.total + sc.flat;
+  const gain = Math.floor(sc.total + sc.flat + 1e-9); // flat coin effects are fractional; the purse holds whole coins
   run.purse += gain;
   const st = run.stats;
   st.coinsEarned = (st.coinsEarned || 0) + gain;
@@ -358,6 +381,14 @@ export function collect(run) {
 
 // ---------- banking, interest, deadline ----------
 
+function interestOf(run, mods = snapshot(run)) {
+  let rate = CONFIG.interest.basePct + mods.interest;
+  if (mods.flags.interestHalf) rate /= 2;
+  if (mods.flags.noInterest || mods.flags.noInterestRound) return 0;
+  const cap = CONFIG.interest.capPctOfDebt * (typeof mods.flags.interestCapX === 'number' ? mods.flags.interestCapX : 1);
+  return Math.max(0, Math.min(Math.floor((run.purse * rate) / 100 + 1e-9), Math.floor((run.debt * cap) / 100)));
+}
+
 function doBank(run, amount) {
   const mods = snapshot(run);
   const x = typeof mods.flags.bankX === 'number' ? mods.flags.bankX : 1;
@@ -379,14 +410,7 @@ export function bank(run, amount = Infinity) {
 export function endRound(run) {
   if (run.phase !== 'roundend') throw new Error('round is not over');
   fire(run, 'onRoundEnd', {});
-  const mods = snapshot(run);
-  let rate = CONFIG.interest.basePct + mods.interest;
-  if (mods.flags.interestHalf) rate /= 2;
-  let interest = 0;
-  if (!mods.flags.noInterest && !mods.flags.noInterestRound) {
-    const cap = CONFIG.interest.capPctOfDebt * (typeof mods.flags.interestCapX === 'number' ? mods.flags.interestCapX : 1);
-    interest = Math.max(0, Math.min(Math.floor((run.purse * rate) / 100 + 1e-9), Math.floor((run.debt * cap) / 100)));
-  }
+  const interest = interestOf(run);
   run.purse += interest;
   run.stats.interestTotal = (run.stats.interestTotal || 0) + interest;
   if (interest >= 1) fire(run, 'onInterest', { amount: interest });
@@ -451,18 +475,38 @@ function payDebt(run) {
   if (run.purse * 100 <= 10 * run.debt) st.exactChange = (st.exactChange || 0) + 1;
   if (unused > 0) {
     run.wick += unused * CONFIG.earlyPay.wickPerUnusedRound;
+    run.carrySpins = (run.carrySpins || 0) + unused * CONFIG.earlyPay.spinsPerUnusedRound;
     for (let i = 0; i < CONFIG.earlyPay.trickPerDebt; i++) addTrick(run);
+    const interest = unused * interestOf(run); // the round ends paying early skips still pay their interest
+    run.purse += interest;
+    st.interestTotal = (st.interestTotal || 0) + interest;
+    run.earlyShop = unused * (CONFIG.earlyPay.shopPerUnusedRound || 0); // the shop visits paying early skips come back as offers and rerolls
     st.earlyPays = (st.earlyPays || 0) + 1;
   }
+  run.carrySpins = (run.carrySpins || 0) + Math.max(0, run.spinsLeft || 0); // spins left in tonight's round carry too
   fire(run, 'onDebtPaid', { roundsLeft: unused, purse: run.purse });
   endSpan(run, 'debt');
   run.terms = null;
   run.spinsLeft = 0;
   run.favs = [];
   run.nextFavs = null;
-  if (run.debtIdx >= CONTRACT[run.contract].debts.length - 1) return finish(run, true);
+  if (!run.endless && run.debtIdx >= CONTRACT[run.contract].debts.length - 1) return finish(run, true);
+  toDeal(run);
+}
+
+function toDeal(run) {
   if (!offerDeals(run).length) return nextDebt(run);
   run.phase = 'deal';
+}
+
+// After the contract is cleared: keep the same run going. Debts keep growing; the score is debts paid.
+export const canContinue = (run) => run.phase === 'ended' && !!run.result?.won && !run.endless && !run.daily && !run.tut;
+export function continueEndless(run) {
+  if (!canContinue(run)) return false;
+  run.endless = true;
+  run.result = null;
+  toDeal(run);
+  return true;
 }
 
 function endingOf(run) {
@@ -475,6 +519,7 @@ function endingOf(run) {
 }
 
 function finish(run, won) {
+  won = won || !!run.endless; // an endless run has already cleared its contract
   run.phase = 'ended';
   run.result = { won, ending: won ? endingOf(run) : null };
 }
@@ -500,6 +545,7 @@ export function summary(run) {
   delete stats.cursesAtPay;
   return {
     won, ending: run.result?.ending || null, contract: run.contract, char: run.char, daily: run.daily, debtsPaid,
+    endless: run.endless ? Math.max(0, debtsPaid - CONTRACT[run.contract].debts.length) : null,
     coins: run.stats.coinsEarned || 0, wax: debtsPaid * CONFIG.wax.perDebtPaid + (won ? CONTRACT[run.contract].rewardWax : 0),
     stats, seen: run.seen, deals: run.deals.length, curses: run.curses.length, debtReached: run.debtIdx + 1,
   };

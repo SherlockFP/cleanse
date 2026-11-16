@@ -6,6 +6,7 @@
 //   Run flow     startRun({ charId, contractId, daily, tutorial })   new run confirmed (home Play, ladder, Daily)
 //                pickTerms(id)  stoke()  spin()  collect()  bank(amount)  useTrick(pocketIndex)  (the glue runs the tap-a-cell targeting and calls showPrompt)
 //                signDeal(id)  refuseDeals()  pawn(charmIndex)  declinePawn()  leaveShop()  paidContinue()  runEndContinue()  home()  again()
+//                skipNight()  collectWin()  goEndless()
 //   Shop         buyCharm(i)  sellCharm(slot)  moveCharm(from, to)  buyTrick(i)  bench(i, target)  buySlot()  reroll()  lock(i)
 //                price(item, kind) -> { coins?, wick? }   (kind: charm | trick | bench | slot | reroll; the core knows discounts and S)
 //   Meta         buyHideout(id) -> { ok, reason }   daily() -> start the daily run   dailyInfo() -> { charId, contractId, termsId, curseId }
@@ -13,9 +14,9 @@
 //   Ads          adReady(placement) -> bool   watchAd(placement) -> Promise<bool>   (shop_reroll, double_wax)
 //   Settings     settingsChanged(settings) { lang, sfx, music, haptics, fast, reduceMotion }; also called once at init
 //
-// showScreen(name, data): home | charselect | ladder | terms | shop | deal | pawn | paid | runend | ending | shelf | howto | collection | daily | store | settings
+// showScreen(name, data): home | charselect | ladder | terms | shop | deal | pawn | paid | endless | runend | ending | shelf | howto | collection | daily | store | settings
 //   data.run is the live core run, data.meta the save meta. A screen opened with ctx.open() returns to the screen under it on close.
-//   terms { run, offers }  shop { run, offers }  deal { run, offers: deal[] }  pawn { run }  paid { run, outcome: 'paid'|'saved', info }
+//   terms { run, offers }  shop { run, offers }  deal { run, offers: deal[] }  pawn { run }  paid { run, outcome: 'paid'|'saved', info }  endless { run, next }
 //   runend { run, summary, result: { wax, newAchievements, unlocks }, won, ending }  ending { ending }  shelf { run, tab }
 // Also exported: updateHud(run), setBusy(bool), showPrompt(key, onCancel), toast, say(who, trigger), openSheet(node), closeSheet(), hideScreen(), insets().
 import { t, setLang, getLang, detectLang } from '../i18n.js';
@@ -31,6 +32,7 @@ import * as shop from './shop.js';
 import * as deal from './deal.js';
 import * as pawn from './pawn.js';
 import * as paid from './paid.js';
+import * as endless from './endless.js';
 import * as runend from './runend.js';
 import * as ending from './ending.js';
 import * as shelf from './shelf.js';
@@ -40,7 +42,7 @@ import * as daily from './daily.js';
 import * as store from './store.js';
 import * as settingsScreen from './settings.js';
 
-const SCREENS = { home, charselect, ladder, terms, shop, deal, pawn, paid, runend, ending, shelf, howto, collection, daily, store, settings: settingsScreen };
+const SCREENS = { home, charselect, ladder, terms, shop, deal, pawn, paid, endless, runend, ending, shelf, howto, collection, daily, store, settings: settingsScreen };
 const IN_RUN = new Set(['terms', 'shop', 'deal', 'pawn', 'paid', 'shelf']); // these get the goal strip on top: the goal is on screen everywhere
 export const settings = { lang: null, sfx: 1, music: 1, haptics: true, fast: false, reduceMotion: false };
 

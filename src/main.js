@@ -5,7 +5,7 @@
 // curse = orhan_cough); new ids need a licence row in docs/licenses/INDEX.csv first.
 import './ui/ui.css';
 import { CONFIG, SYMBOLS, SYM, SCORING, CHARM, TRICK, CURSE, CONTRACT, DEAL } from './core/data.js';
-import { newRun, termsOffer, pickTerms, stoke, redrawFavourite, spin, collect, bank, endRound, leaveShop, pawn, declinePawn, useTrick, trickTarget, pickStartCharm, info, summary, scaleOf } from './core/run.js';
+import { newRun, termsOffer, pickTerms, stoke, redrawFavourite, spin, collect, bank, endRound, leaveShop, pawn, declinePawn, useTrick, trickTarget, pickStartCharm, info, summary, scaleOf, canSkip, skipReward, skipRound, canContinue, continueEndless, debtBase } from './core/run.js';
 import { price, buyCharm, sellCharm, moveCharm, buyTrick, doBench, buySlot, reroll, toggleLock, takeWaiting, sellValue } from './core/shop.js';
 import { signDeal, refuseDeals } from './core/deals.js';
 import { snapshot, slotsOf, pocketsOf, addCharm, addTrick, addCurse, bossOf, coinScaleOf } from './core/effects.js';
@@ -175,13 +175,15 @@ function route() {
     case 'terms': {
       const offers = termsOffer(run);
       if (run.tut && run.roundSerial === 0) { pickTerms(run, offers[0].id); persist(); return route(); } // night 1 of the first run: no pick
-      showScreen('terms', { ...data, offers }); break;
+      showScreen('terms', { ...data, offers, skip: canSkip(run) ? skipReward(run) : null }); break;
     }
     // offers is read on every repaint, so a buy or a lock shows at once
     case 'shop': showScreen('shop', { ...data, get offers() { const s = run?.shop ?? {}; return { charms: (s.charms ?? []).map((id) => ({ id, locked: run.lock === id })), tricks: s.tricks, bench: s.bench }; } }); break;
     case 'deal': showScreen('deal', { ...data, offers: run.dealOffer }); break;
     case 'pawn': showScreen('pawn', data); break;
-    case 'ended': return endRun();
+    case 'ended': // a cleared contract may go on: endless debts, scored by debts paid
+      if (canContinue(run)) { showScreen('endless', { ...data, next: debtBase(run.contract, run.debtIdx + 1) }); break; }
+      return endRun();
     default:
       hideScreen(); syncMachine();
       if (run.startPick?.length) pickSheet(t('ui.pickCharm'), run.startPick.map((id) => CHARM[id]), (id) => { pickStartCharm(run, id); persist(); updateHud(run); });
@@ -214,14 +216,14 @@ function startRun({ charId = 'nim', contractId = 'c1', tutorial = false } = {}) 
 
 // Debt paid (or the deadline saved by a pact item): the stamp screen, then the deal, the wagon or the run end.
 function paid(outcome, pre, extra = {}) {
-  const next = run.phase === 'deal' ? CONTRACT[run.contract].debts[run.debtIdx + 1] : run.phase === 'shop' && outcome === 'paid' ? run.debt : 0;
+  const next = run.phase === 'deal' ? debtBase(run.contract, run.debtIdx + 1) : run.phase === 'shop' && outcome === 'paid' ? run.debt : 0;
   if (outcome === 'paid') {
     meta.tutorialDone = true; // the first debt is the lesson; a quit after it does not replay it
     if (run.tut && run.phase === 'deal' && run.debtIdx === 0 && DEAL.lucky_break) run.dealOffer = ['lucky_break']; // the first deal is one plain offer, and a good one: signing can win
   }
   persist();
   play('stamp_paid'); haptics.success(); setDevil(outcome === 'paid' ? 'grin' : 'shock', 2);
-  showScreen('paid', { run, meta, outcome, info: { earlyRounds: outcome === 'paid' ? pre.unused : 0, wick: pre.unused * CONFIG.earlyPay.wickPerUnusedRound, kept: run.purse, next, ...extra } });
+  showScreen('paid', { run, meta, outcome, info: { earlyRounds: outcome === 'paid' ? pre.unused : 0, wick: pre.unused * CONFIG.earlyPay.wickPerUnusedRound, spins: pre.unused * CONFIG.earlyPay.spinsPerUnusedRound, kept: run.purse, next, ...extra } });
   updateHud(run); refreshCoach();
 }
 const preOf = () => ({ unused: Math.max(0, run.rounds - run.round - 1), items: [...run.tricks, ...run.charms.map((c) => c.id)] });
@@ -280,6 +282,15 @@ const ui = {
     if (r.deadline === null) play('shop_open');
     route(); return undefined;
   },
+  skipNight() {
+    if (busy || !canSkip(run)) return no();
+    const r = skipRound(run);
+    persist();
+    if (r.interest > 0) toast('ui.paidInterest', { n: r.interest });
+    play('ui_page'); route(); return undefined;
+  },
+  collectWin() { endRun(); },
+  goEndless() { if (!continueEndless(run)) return no(); play('event_stamp'); persist(); route(); return undefined; },
   useTrick(pocket) {
     if (busy) return undefined;
     const kind = trickTarget(run.tricks[pocket]);
@@ -327,7 +338,7 @@ const ui = {
   derive(r) {
     const i = info(r), f = snapshot(r).flags;
     return {
-      target: r.debt, scale: coinScaleOf(r), debt: r.debtIdx + 1, debts: CONTRACT[r.contract].debts.length, round: Math.min(r.round + 1, r.rounds), rounds: r.rounds,
+      target: r.debt, scale: coinScaleOf(r), debt: r.debtIdx + 1, debts: r.endless ? r.debtIdx + 1 : CONTRACT[r.contract].debts.length, round: Math.min(r.round + 1, r.rounds), rounds: r.rounds,
       spins: r.spinsLeft, luck: i.luck, canStoke: i.canStoke, stokeWhy: f.noStoke ? 'ui.stokeNo' : 'ui.stokeMax', favHidden: i.favHidden,
       noLock: !!f.rerollDouble, mustSign: !!f.mustSign, redrawCost: i.redrawCost, boss: bossOf(r), refuseWick: Math.max(CONFIG.deals.refuseWick, r.hide?.refuseWick || 0, f.refuseWick || 0),
     };

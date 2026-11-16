@@ -1,1 +1,646 @@
-{}
+{
+"sym/moth": [
+192,
+134
+],
+"sym/candle": [
+122,
+192
+],
+"sym/tooth": [
+169,
+192
+],
+"sym/key": [
+113,
+192
+],
+"sym/eye": [
+192,
+192
+],
+"sym/mask": [
+192,
+120
+],
+"sym/crow": [
+192,
+160
+],
+"sym/lantern": [
+148,
+192
+],
+"sym/crown": [
+192,
+150
+],
+"sym/wisp": [
+143,
+192
+],
+"sym/sigil": [
+188,
+192
+],
+"sym/ash": [
+192,
+117
+],
+"ui/coin": [
+192,
+192
+],
+"ui/wick": [
+173,
+192
+],
+"ui/wax": [
+192,
+188
+],
+"ui/heat": [
+123,
+192
+],
+"ui/luck": [
+168,
+192
+],
+"ui/lock": [
+154,
+192
+],
+"charm/moth_jar": [
+145,
+192
+],
+"charm/moth_wing": [
+192,
+164
+],
+"charm/cocoon": [
+174,
+192
+],
+"charm/moth_net": [
+152,
+192
+],
+"charm/matchbox": [
+192,
+149
+],
+"charm/coal": [
+192,
+159
+],
+"charm/bellows": [
+192,
+186
+],
+"charm/torch": [
+91,
+192
+],
+"charm/brazier": [
+158,
+192
+],
+"charm/rag_doll": [
+155,
+192
+],
+"charm/black_cat": [
+157,
+192
+],
+"charm/cracked_mirror": [
+158,
+192
+],
+"charm/rib_cage": [
+192,
+186
+],
+"charm/crow_feather": [
+184,
+192
+],
+"charm/abacus": [
+192,
+162
+],
+"charm/coin_purse": [
+178,
+192
+],
+"charm/ledger_book": [
+192,
+188
+],
+"charm/clay_jar": [
+184,
+192
+],
+"charm/stamp": [
+159,
+192
+],
+"charm/quill": [
+182,
+192
+],
+"charm/scroll": [
+192,
+178
+],
+"charm/ink_bottle": [
+179,
+192
+],
+"charm/claw_shake": [
+192,
+142
+],
+"charm/red_ribbon": [
+192,
+168
+],
+"charm/tea_cup": [
+192,
+153
+],
+"charm/crystal_ball": [
+167,
+192
+],
+"charm/star_card": [
+165,
+192
+],
+"charm/comet": [
+192,
+162
+],
+"charm/horseshoe_nail": [
+141,
+192
+],
+"charm/spider_web": [
+192,
+192
+],
+"charm/needle": [
+174,
+192
+],
+"charm/shuttle": [
+192,
+188
+],
+"charm/knot": [
+192,
+144
+],
+"charm/wisp_bottle": [
+136,
+192
+],
+"charm/glow_jar": [
+157,
+192
+],
+"charm/prism": [
+192,
+146
+],
+"charm/firefly": [
+192,
+192
+],
+"charm/wrench": [
+159,
+192
+],
+"charm/oil_can": [
+192,
+172
+],
+"charm/gear": [
+192,
+192
+],
+"charm/hammer": [
+165,
+192
+],
+"charm/pliers": [
+172,
+192
+],
+"charm/scepter": [
+136,
+192
+],
+"charm/throne": [
+164,
+192
+],
+"charm/cushion": [
+192,
+152
+],
+"trick/pin": [
+151,
+192
+],
+"trick/row_arrow": [
+192,
+131
+],
+"trick/nudge": [
+192,
+140
+],
+"trick/double_stamp": [
+190,
+192
+],
+"trick/swap": [
+192,
+182
+],
+"trick/brush": [
+169,
+192
+],
+"trick/broom": [
+147,
+192
+],
+"trick/hourglass": [
+129,
+192
+],
+"trick/ice": [
+192,
+154
+],
+"trick/chili": [
+161,
+192
+],
+"trick/pocket": [
+192,
+187
+],
+"trick/stencil": [
+192,
+181
+],
+"trick/wish_coin": [
+187,
+192
+],
+"trick/kit": [
+192,
+161
+],
+"trick/token": [
+192,
+190
+],
+"trick/horn": [
+192,
+166
+],
+"trick/hand_mirror": [
+121,
+192
+],
+"trick/loan_note": [
+192,
+179
+],
+"deal/coins": [
+173,
+192
+],
+"deal/power": [
+154,
+192
+],
+"deal/luck": [
+155,
+192
+],
+"deal/slot": [
+161,
+192
+],
+"deal/wild": [
+141,
+192
+],
+"deal/time": [
+158,
+192
+],
+"deal/shop": [
+167,
+192
+],
+"deal/symbol": [
+173,
+192
+],
+"deal/mystery": [
+192,
+192
+],
+"curse/weight": [
+170,
+192
+],
+"curse/candle": [
+168,
+192
+],
+"curse/ash": [
+192,
+182
+],
+"curse/tax": [
+192,
+192
+],
+"curse/price": [
+178,
+192
+],
+"curse/blind": [
+192,
+141
+],
+"curse/chain": [
+162,
+192
+],
+"curse/crack": [
+192,
+186
+],
+"curse/fever": [
+135,
+192
+],
+"ui/btn_spin": [
+256,
+231
+],
+"ui/btn_bank": [
+256,
+256
+],
+"ui/btn_shop": [
+235,
+256
+],
+"ui/btn_reroll": [
+244,
+256
+],
+"ui/btn_sell": [
+243,
+256
+],
+"ui/btn_settings": [
+256,
+253
+],
+"ui/btn_ad": [
+256,
+193
+],
+"ui/btn_close": [
+250,
+256
+],
+"ui/btn_stoke": [
+248,
+256
+],
+"stake/steady": [
+192,
+175
+],
+"stake/short": [
+159,
+192
+],
+"stake/wick": [
+192,
+192
+],
+"stake/long": [
+192,
+184
+],
+"stake/luck": [
+192,
+186
+],
+"stake/double": [
+192,
+173
+],
+"stake/shop": [
+192,
+190
+],
+"stake/cold": [
+176,
+192
+],
+"stake/wild": [
+192,
+157
+],
+"hide/cot": [
+256,
+186
+],
+"hide/stove": [
+181,
+256
+],
+"hide/shelf": [
+256,
+199
+],
+"hide/lights": [
+256,
+197
+],
+"hide/workbench": [
+256,
+191
+],
+"hide/desk": [
+256,
+251
+],
+"hide/keepsake": [
+256,
+208
+],
+"hide/moth_house": [
+222,
+256
+],
+"hide/mirror": [
+186,
+256
+],
+"ui/rarity_common": [
+143,
+192
+],
+"ui/rarity_uncommon": [
+145,
+192
+],
+"ui/rarity_rare": [
+141,
+192
+],
+"ui/rarity_legendary": [
+137,
+192
+],
+"hide/chair": [
+173,
+192
+],
+"ui/medal": [
+125,
+192
+],
+"ui/daily": [
+182,
+192
+],
+"trick/salt": [
+178,
+192
+],
+"trick/spare_candle": [
+108,
+192
+],
+"ui/contract": [
+175,
+192
+],
+"ui/seal": [
+192,
+192
+],
+"ui/slot_empty": [
+192,
+190
+],
+"ui/favour": [
+146,
+192
+],
+"ui/curse_badge": [
+175,
+192
+],
+"ui/trick_bag": [
+192,
+190
+],
+"ui/interest": [
+176,
+192
+],
+"ui/collect": [
+159,
+192
+],
+"ui/star": [
+192,
+186
+],
+"char/nim": [
+488,
+512
+],
+"char/tao": [
+472,
+512
+],
+"char/bua": [
+512,
+509
+],
+"char/rattle": [
+445,
+512
+],
+"char/sok": [
+461,
+512
+],
+"char/pip": [
+457,
+512
+],
+"devil/idle": [
+343,
+512
+],
+"devil/grin": [
+375,
+512
+],
+"devil/angry": [
+445,
+512
+],
+"devil/deal": [
+479,
+512
+],
+"devil/collect": [
+420,
+512
+],
+"devil/shock": [
+387,
+512
+],
+"machine/case": [
+677,
+1024
+],
+"bg/fair": [
+1024,
+1819
+],
+"bg/hideout": [
+1024,
+1819
+],
+"bg/wagon": [
+1024,
+1819
+],
+"bg/title": [
+1024,
+1819
+]
+}
