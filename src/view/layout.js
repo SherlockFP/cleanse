@@ -24,30 +24,33 @@ export function computeLayout(w, h, caseRects = CASE_RECTS) {
   const col = columnOf(w, h), X = col.x, W = col.w, H = h;
   const gap = Math.round(H * 0.01);
 
-  const top = r(X, 0, W, Math.round(H * 0.095)); // lantern string and spins
-  const lantern = r(X + W * 0.04, top.h * 0.1, W * 0.92, top.h * 0.85);
+  const hudH = Math.round(Math.min(48, H * 0.055)); // DOM row: tide and jar text (ui.css .hud)
+  const lanternH = Math.round(H * 0.07);
+  const top = r(X, 0, W, hudH + lanternH); // text row, then the lantern string
+  const lantern = r(X + W * 0.04, hudH, W * 0.92, lanternH * 0.95);
 
   const spinH = Math.min(96, Math.max(56, Math.round(H * 0.1)));
-  const spinW = Math.round(Math.min(W * 0.72, spinH * 3.6));
+  const spinW = Math.round(Math.min(W * 0.62, spinH * 3.4)); // Bag and Settings sit beside it
   const spin = r(Math.round(X + (W - spinW) / 2), H - spinH - Math.round(H * 0.035), spinW, spinH);
 
   // The case takes what is left above the lower band (Deni, clothesline, jar).
   const [cw0, ch0] = caseRects.size, aspect = ch0 / cw0;
-  const lowerMin = Math.round(H * 0.2);
-  const caseMaxH = spin.y - gap - (top.h + gap) - lowerMin - gap;
+  const lowerMin = Math.round(H * 0.185);
+  const speechPad = Math.round(H * 0.015); // the case sits a little lower: Deni's speech strip is under the lanterns
+  const caseMaxH = spin.y - gap - (top.h + gap + speechPad) - lowerMin - gap;
   const cw = Math.min(W * 0.94, caseMaxH / aspect), chh = cw * aspect;
   const spare = Math.max(0, caseMaxH - chh);
-  const kase = r(X + (W - cw) / 2, top.h + gap + spare * 0.3, cw, chh);
+  const kase = r(X + (W - cw) / 2, top.h + gap + speechPad + spare * 0.3, cw, chh);
   const s = cw / cw0;
   const cells = caseRects.cells.map((c) => r(kase.x + c.x * s, kase.y + c.y * s, c.w * s, c.h * s));
 
   const bandTop = kase.y + chh + gap, bandBot = spin.y - gap, bandH = bandBot - bandTop;
-  const dW = Math.min(W * 0.3, bandH * (2 / 3)), dH = dW * 1.5; // Deni sprite is 2:3
+  const dH = Math.min(bandH, W * 0.5), dW = Math.min(W * 0.3, dH * 0.7); // slot a little wider than her idle pose (about 0.43 wide per tall)
   const deni = r(X + W * 0.03, bandBot - dH, dW, dH);
   const jW = Math.min(W * 0.3, bandH * 0.64), jH = jW / 0.8; // jar sprite is 256x320
   const jar = r(X + W * 0.97 - jW, bandBot - jH, jW, jH);
   const px0 = deni.x + deni.w + W * 0.02, px1 = jar.x - W * 0.02;
-  const pegs = r(px0, bandTop + bandH * 0.08, px1 - px0, Math.min(H * 0.055, bandH * 0.3)); // clothesline peg counter
+  const pegs = r(px0, bandTop + bandH * 0.06, px1 - px0, Math.min(H * 0.085, bandH * 0.42)); // clothesline peg counter: the spare pegs hang down from the line
 
   return { screen: r(0, 0, w, h), column: col, scale: W / 390, top, lantern, case: kase, cells, deni, pegs, jar, spin };
 }

@@ -12,6 +12,9 @@ export function h(tag, props, ...kids) {
   return e;
 }
 
+// Cut art as an <img> (trinket icons, Orhan). A missing file removes itself, so a gap in the art never shows a broken image.
+export const art = (id, cls = 'ico') => h('img', { src: `./img/${id}.png`, alt: '', class: cls, draggable: 'false', onerror: (e) => e.target.remove() });
+
 export const clear = (e) => { while (e.firstChild) e.removeChild(e.firstChild); return e; };
 
 // Whole percentages that always add up to 100 (largest remainder). All zeros stay zeros.

@@ -1,6 +1,6 @@
 // Creditor event intro: a stamped letter. data: { run }. Continue calls handlers.eventContinue().
 import { t } from '../i18n.js';
-import { h, btn, put } from './dom.js';
+import { h, btn, put, art } from './dom.js';
 import { EVENTS } from '../core/data/events.js';
 
 const ORHAN = { auditor: 'event_auditor', fog_bank: 'event_fog', short_day: 'event_short', low_water: 'event_low' };
@@ -14,6 +14,7 @@ export function render(el, { run }, ctx) {
     h('h2', {}, t(e.nameKey)),
     h('p', { class: 'sub' }, t(`event.${e.id}.who`)),
     h('p', { class: 'letter' }, t(e.descKey)),
-    btn(t('ui.ok'), () => { ctx.close(); ctx.h.eventContinue?.(); }, 'primary'),
+    art('orhan/stamp', 'orhan'), // bottom left, right above his speech bubble
+    ctx.foot(btn(t('ui.ok'), () => { ctx.close(); ctx.h.eventContinue?.(); }, 'primary')),
   );
 }

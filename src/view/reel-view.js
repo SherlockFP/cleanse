@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { getTex, getAtlas, symbolIndex, spriteSize } from './sprites.js';
 import { strip as stripMaterial, riso, inkLine } from './shaders.js';
 import { Spring } from './springs.js';
+import { PAL } from './palette.js';
 
 export const STOP_TIMES = Object.freeze([0.50, 0.75, 1.00]); // seconds after SPIN, per column
 export const TURBO = 0.5;
@@ -34,6 +35,7 @@ export function buildTimeline(result, opts = {}) {
 const cells = [];          // 9 strip cells
 const pegMeshes = [];
 const lineMeshes = [];
+const rings = [];          // dashed coral frames around an open pair
 let group = null, caseMesh = null, L = null, grid = null;
 let play = null;           // { tl, t, resolve, onStop, stopped:[bool x3] }
 let lineAnim = [];         // { mesh, mat, t, delay, resolve }
@@ -58,6 +60,11 @@ export function initReel(parent) {
     m.renderOrder = 40; m.visible = false; group.add(m);
     pegMeshes.push({ mesh: m, sp: new Spring(1, 360, 14), on: false });
   }
+  // one dashed frame texture, drawn once: a UI mark, not a sprite id
+  const cv = Object.assign(document.createElement('canvas'), { width: 128, height: 128 }), g = cv.getContext('2d');
+  g.strokeStyle = PAL.coral; g.lineWidth = 7; g.setLineDash([16, 10]); g.strokeRect(6, 6, 116, 116);
+  const ringMat = new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthTest: false });
+  for (let i = 0; i < 9; i++) { const m = new THREE.Mesh(plane, ringMat); m.renderOrder = 35; m.visible = false; group.add(m); rings.push(m); }
   for (let i = 0; i < 8; i++) {
     const mat = inkLine(i * 7 + 1), m = new THREE.Mesh(plane, mat);
     m.renderOrder = 30; m.visible = false; group.add(m);
@@ -78,14 +85,15 @@ export function layoutReel(layout) {
   place(caseMesh, layout.case, H);
   cells.forEach((c, i) => place(c.mesh, layout.cells[i], H, 1 / c.sq.x, c.sq.x));
   pegMeshes.forEach((p, i) => { if (p.on) placePeg(p, i); });
+  rings.forEach((m, i) => place(m, layout.cells[i], H, 1.1, 1.1));
   if (grid) setGrid(grid);
 }
 const cellCenter = (i) => ({ x: L.cells[i].x + L.cells[i].w / 2, y: L.cells[i].y + L.cells[i].h / 2 });
 
 function placePeg(p, i) {
-  const r = L.cells[i], H = L.screen.h, ph = r.h * 0.44, pw = ph * (96 / 160);
-  p.mesh.position.set(r.x + r.w * 0.8, H - (r.y + ph * 0.1), 0);
-  p.mesh.rotation.z = -0.18;
+  const r = L.cells[i], H = L.screen.h, [sw, sh] = spriteSize('reel/peg'), pw = r.w * 0.8, ph = pw * (sh / sw);
+  p.mesh.position.set(r.x + r.w * 0.5, H - (r.y + ph * 0.1), 0); // clipped on the top edge of the cell
+  p.mesh.rotation.z = -0.06;
   p.base = [pw, ph];
 }
 
@@ -106,7 +114,7 @@ export function getGrid() { return grid; }
 // opts: { turbo, onStop(col) }. Resolves when the last column has settled.
 export function playSpin(result, opts = {}) {
   if (play) skip();
-  clearLines();
+  clearLines(); markCells();
   const tl = buildTimeline(result, opts);
   const prev = grid;
   grid = result.grid;
@@ -152,12 +160,15 @@ function stepCell(c, p, t, dt) {
 }
 
 export function pulseCells(list) { for (const i of list) cells[i]?.sq.kick(7); }
+// Frames the given cells (the open pair). Cleared by the next spin; a pegged cell loses its frame.
+export function markCells(list = []) { rings.forEach((m, i) => { m.visible = list.includes(i); }); }
 
 export function showPegs(list) {
   const on = new Set(list);
   pegMeshes.forEach((p, i) => {
     const was = p.on; p.on = on.has(i);
     p.mesh.visible = p.on;
+    if (p.on) rings[i].visible = false;
     if (p.on) { placePeg(p, i); if (!was) { p.sp.x = 1.7; p.sp.v = 0; } } // a peg snaps on from a little above
   });
 }
@@ -177,7 +188,7 @@ export function playLines(lines, opts = {}) {
     const len = Math.hypot(b.x - a.x, b.y - a.y), cw = L.cells[ln.cells[0]].w, m = lineMeshes[k];
     m.mesh.position.set((a.x + b.x) / 2, H - (a.y + b.y) / 2, 0);
     m.mesh.rotation.z = Math.atan2(-(b.y - a.y), b.x - a.x);
-    m.mesh.scale.set(len + cw * 0.7, cw * 0.3, 1);
+    m.mesh.scale.set(len + cw * 0.7, cw * 0.24, 1);
     m.mat.uniforms.uReveal.value = 0; m.mesh.visible = false;
     last = new Promise((resolve) => lineAnim.push({ m, t: 0, delay: k * 0.14, resolve, cells: ln.cells, fired: false, onLine: () => opts.onLine?.(k) }));
   });

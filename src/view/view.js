@@ -5,25 +5,39 @@
 import * as THREE from 'three';
 import { computeLayout, columnOf } from './layout.js';
 import { PAL } from './palette.js';
-import { getTex, getPaperTex, getGrainTex, spriteSize, tickSprites } from './sprites.js';
-import { riso, setGrain } from './shaders.js';
+import { getTex, getPaperTex, getGrainTex, spriteSize, tickSprites, hasReal, getCaseRects } from './sprites.js';
+import { riso, setGrain, setPlain } from './shaders.js';
 import { Spring } from './springs.js';
 import { CoinFlight } from './particles.js';
 import * as reel from './reel-view.js';
 
-export { setGrid, playSpin, showPegs, pulseCells, playLines, skip, clearWinLines } from './reel-view.js';
+export { setGrid, playSpin, showPegs, pulseCells, markCells, playLines, skip, clearWinLines } from './reel-view.js';
 
 const LANTERNS = 5;
 let renderer, scene, camera, hudGroup, L, W = 1, H = 1, screen = 'game', time = 0;
 let bg, edges = [], deni, jarMesh, coinsMesh, string = null, line = null, lanterns = [], hudPegs = [], coinInst, flight, jarSp;
-let offMat, onMat, coinMats = {};
+let offMat, onMat, coinMats = {}, deniMats = {}, deniPose = 'deni/idle', deniTimer = 0, jarMats = null, bgTex = null;
 let handlers = {};
-const hud = { jar: 0, jarShown: 0, quota: 0, pegsMax: 3, held: [], litShown: 0, litTimer: 0 };
+const hud = { jar: 0, jarShown: 0, quota: 0, pegsMax: 3, held: [], litShown: 0, litTimer: 0, pegWob: 0 };
+// The spare pegs swing once on the line (tide start, an open pair): the peg is the thing to reach for.
+export const pulsePegs = () => { hud.pegWob = 1; };
 const PLANE = new THREE.PlaneGeometry(1, 1);
 const idSeed = (id) => { let h = 5; for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 9973; return h; };
 
 export function setHandlers(h) { handlers = { ...handlers, ...h }; } // { lantern(n), coinLand(), stop(col) }
 export const getLayout = () => L;
+// Deni changes pose for a beat (idle, point, cheer, lean) and goes back to idle after `secs`.
+export function setDeni(pose = 'idle', secs = 0) {
+  if (!deni) return;
+  const id = 'deni/' + pose;
+  deniMats[id] ??= riso(getTex(id), { seed: idSeed(id), size: 256 });
+  deni.material = deniMats[id]; deniPose = id; deniTimer = secs;
+}
+// Rect of sprite `id` inside r: as large as fits, same aspect, bottom-centred (real cut art is not all one shape).
+function fit(r, id) {
+  const [w, h] = spriteSize(id), k = Math.min(r.w / w, r.h / h);
+  return { x: r.x + (r.w - w * k) / 2, y: r.y + r.h - h * k, w: w * k, h: h * k };
+}
 export const cellAt = (x, y) => (L ? L.cells.findIndex((r) => x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h) : -1);
 
 function sprite(id, order, parent = hudGroup) {
@@ -53,6 +67,7 @@ function ribbon(pts, t, order) {
 const dropMesh = (m) => { if (m) { hudGroup.remove(m); m.geometry.dispose(); m.material.dispose(); } };
 
 export function initView(canvas) {
+  setPlain(hasReal('reel/case'));
   THREE.ColorManagement.enabled = false; // palette and texture values are compared raw in the shaders
   renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace;
@@ -62,7 +77,8 @@ export function initView(canvas) {
   camera.position.z = 5;
   setGrain(getGrainTex(), 1);
 
-  bg = new THREE.Mesh(PLANE, new THREE.MeshBasicMaterial({ map: getPaperTex(), depthTest: false }));
+  bgTex = hasReal('bg/pier_game') ? getTex('bg/pier_game') : null;
+  bg = new THREE.Mesh(PLANE, new THREE.MeshBasicMaterial({ map: bgTex ?? getPaperTex(), depthTest: false }));
   bg.renderOrder = 0; scene.add(bg);
   for (let i = 0; i < 2; i++) {
     const e = new THREE.Mesh(PLANE, new THREE.MeshBasicMaterial({ color: PAL.navy, depthTest: false }));
@@ -70,9 +86,10 @@ export function initView(canvas) {
   }
   hudGroup = new THREE.Group(); scene.add(hudGroup);
 
-  deni = sprite('deni/idle', 8);
+  deni = sprite('deni/idle', 8); deniMats['deni/idle'] = deni.material;
   jarMesh = sprite('fx/jar', 9);
   coinsMesh = sprite('fx/coins_1', 8); coinsMesh.visible = false;
+  if (hasReal('fx/jar_full')) jarMats = [jarMesh.material, riso(getTex('fx/jar_full'), { seed: 5, size: 192 })];
   coinMats = { 1: coinsMesh.material, 2: riso(getTex('fx/coins_2'), { seed: 2, size: 256 }), 3: riso(getTex('fx/coins_3'), { seed: 3, size: 256 }) };
   offMat = riso(getTex('fx/lantern_off'), { seed: 21, size: 128 });
   onMat = riso(getTex('fx/lantern_on'), { seed: 22, size: 128 });
@@ -97,32 +114,37 @@ export function resize() {
   renderer.setPixelRatio(dpr); renderer.setSize(W, H, false);
   camera.left = 0; camera.right = W; camera.top = H; camera.bottom = 0; camera.updateProjectionMatrix();
   setGrain(getGrainTex(), dpr);
-  L = computeLayout(W, H);
+  L = computeLayout(W, H, getCaseRects() ?? undefined);
   layoutAll();
 }
 
 function layoutAll() {
-  const paper = getPaperTex(); paper.repeat.set(W / 256, H / 256);
-  place(bg, L.screen);
   const col = columnOf(W, H), narrow = col.w < W - 1;
+  if (bgTex) { // the pier painting covers the column; the page beside it stays paper
+    const [iw, ih] = spriteSize('bg/pier_game'), ia = iw / ih, ca = col.w / H;
+    bgTex.repeat.set(ca < ia ? ca / ia : 1, ca < ia ? 1 : ia / ca);
+    bgTex.offset.set((1 - bgTex.repeat.x) / 2, (1 - bgTex.repeat.y) / 2);
+    place(bg, col);
+  } else { const paper = getPaperTex(); paper.repeat.set(W / 256, H / 256); place(bg, L.screen); }
   edges.forEach((e, i) => { e.visible = narrow; place(e, { x: i ? col.x + col.w : col.x - 2, y: 0, w: 2, h: H }); });
   reel.layoutReel(L);
 
-  place(deni, L.deni);
-  place(jarMesh, L.jar); place(coinsMesh, L.jar);
+  place(deni, deniRect());
+  place(jarMesh, fit(L.jar, 'fx/jar')); place(coinsMesh, L.jar);
 
   // lantern string: a sagging line across the top strip, five lanterns hanging from it
   const r = L.lantern, sag = r.h * 0.18, y0 = r.y + r.h * 0.06, yAt = (u) => y0 + sag * (1 - (2 * u - 1) ** 2);
   dropMesh(string);
   string = ribbon(Array.from({ length: 25 }, (_, i) => [r.x + (r.w * i) / 24, yAt(i / 24)]), Math.max(2, L.scale * 2.5), 5);
-  const lh = r.h * 0.72, lw = lh * 0.8;
-  lanterns.forEach((l, i) => { const u = (i + 0.5) / LANTERNS; l.cx = r.x + r.w * u; l.cy = yAt(u) + lh / 2 - 2; l.lw = lw; l.lh = lh; });
+  const lh = r.h * 0.72;
+  lanterns.forEach((l, i) => { const u = (i + 0.5) / LANTERNS; l.cx = r.x + r.w * u; l.cy = yAt(u) + lh / 2 - 2; l.lh = lh; });
 
   // clothesline: Deni's peg counter
   const p = L.pegs, ly = p.y + p.h * 0.12;
   dropMesh(line);
   line = ribbon(Array.from({ length: 13 }, (_, i) => [p.x + (p.w * i) / 12, ly + p.h * 0.06 * Math.sin((i / 12) * Math.PI)]), Math.max(2, L.scale * 2), 5);
-  hudPegs.forEach((m) => { m.userData.h = p.h * 0.95; });
+  const [pgw, pgh] = spriteSize('reel/peg');
+  hudPegs.forEach((m) => { m.userData.asp = pgw / pgh; });
   applyHud(0);
   renderer.render(scene, camera);
 }
@@ -146,6 +168,12 @@ export function flyCoins(total, cellList = [4]) {
   flight.launch(srcs, { x: L.jar.x + L.jar.w / 2, y: L.jar.y + L.jar.h * 0.28 }, Math.max(3, Math.min(14, Math.ceil(total / 3))));
 }
 
+// Deni's pose sprite, as tall as her slot and centred in it.
+function deniRect() {
+  const [w, h] = spriteSize(deniPose), r = L.deni, k = r.h / h, dw = w * k;
+  return { x: r.x + (r.w - dw) / 2, y: r.y, w: dw, h: r.h };
+}
+
 function applyHud(dt) {
   // lanterns: the lit count follows the jar one lantern at a time
   const target = hud.quota > 0 ? Math.floor(Math.min(1, hud.jarShown / hud.quota) * LANTERNS + 1e-9) : 0;
@@ -158,25 +186,30 @@ function applyHud(dt) {
     l.sp.step(dt);
     l.mesh.material = i < hud.litShown ? onMat : offMat;
     l.mesh.position.set(l.cx, H - l.cy, 0);
-    l.mesh.scale.set(l.lw * l.sp.x, l.lh * l.sp.x, 1);
+    const [lw0, lh0] = spriteSize(i < hud.litShown ? 'fx/lantern_on' : 'fx/lantern_off');
+    l.mesh.scale.set(l.lh * (lw0 / lh0) * l.sp.x, l.lh * l.sp.x, 1);
   });
   // pegs left on the line (the others are clipped to cells)
   const p = L.pegs, free = Math.max(0, Math.min(hudPegs.length, hud.pegsMax - hud.held.length));
+  hud.pegWob *= Math.exp(-dt * 2.2); if (hud.pegWob < 0.02) hud.pegWob = 0;
   hudPegs.forEach((m, i) => {
     m.visible = i < free;
     if (!m.visible) return;
-    const ph = m.userData.h, pw = ph * 0.6, cx = p.x + (p.w * (i + 0.5)) / Math.max(hud.pegsMax, 1);
-    m.position.set(cx, H - (p.y + p.h * 0.12 + ph * 0.45), 0); m.scale.set(pw, ph, 1);
+    // hanging down from the line (sprite turned a quarter), as long as the slot allows
+    const step = p.w / Math.max(hud.pegsMax, 3), len = Math.min(p.h * 0.92, step * 0.95 * m.userData.asp), cx = p.x + p.w / 2 + (i - (hud.pegsMax - 1) / 2) * step;
+    m.position.set(cx, H - (p.y + p.h * 0.08 + len * 0.42), 0); m.scale.set(len, len / m.userData.asp, 1);
+    m.rotation.z = -Math.PI / 2 + Math.sin(time * 11 + i * 1.7) * 0.22 * hud.pegWob;
   });
   // jar: coin pile by fill level
   const f = hud.quota > 0 ? hud.jarShown / hud.quota : 0, lvl = hud.jarShown <= 0 ? 0 : f < 0.34 ? 1 : f < 0.67 ? 2 : 3;
-  coinsMesh.visible = lvl > 0;
-  if (lvl) coinsMesh.material = coinMats[lvl];
+  if (jarMats) { jarMesh.material = jarMats[lvl === 3 ? 1 : 0]; coinsMesh.visible = false; } // real art: an empty and a full jar
+  else { coinsMesh.visible = lvl > 0; if (lvl) coinsMesh.material = coinMats[lvl]; }
   jarSp.step(dt);
-  place(jarMesh, L.jar, 1, jarSp.x); place(coinsMesh, L.jar, 1, jarSp.x);
+  place(jarMesh, fit(L.jar, 'fx/jar'), 1, jarSp.x); place(coinsMesh, L.jar, 1, jarSp.x);
   // Deni breathes
-  const b = 1 + Math.sin(time * 1.7) * 0.008;
-  place(deni, L.deni, 1, b); deni.position.y -= (L.deni.h * (b - 1)) / 2;
+  if (deniTimer > 0 && (deniTimer -= dt) <= 0 && deniPose !== 'deni/idle') setDeni('idle');
+  const b = 1 + Math.sin(time * 1.7) * 0.008, dr = deniRect();
+  place(deni, dr, 1, b); deni.position.y -= (dr.h * (b - 1)) / 2;
 }
 
 const dummy = new THREE.Object3D(), pt = { x: 0, y: 0, u: 0, s: 1 };

@@ -1,9 +1,11 @@
-/* Small Luck Pier overlay. Paper look from ART.md: cream paper, navy ink, flat two-ink fills.
-   No gradients, no glow, no drop shadows, no emoji. Linocut edge = hard navy border plus a thin second line (outline). */
+/* Small Luck Pier overlay. Gouache look (ART.md note, 2026-11-16): cream paper panels, navy text, tomato / teal / sunflower accents.
+   No gradients, no glow, no drop shadows, no emoji. One hard 3px navy line per box; buttons use the display serif like SPIN. */
 :root {
-  --paper: #F2E8D0; --paper2: #E8DBBC; --ink: #1E2A44; --coral: #E9573F; --teal: #2A9D8F; --mustard: #EBB447; --blush: #F0A9A0;
+  --paper: #F4EAD2; --paper2: #E9DDBF; --ink: #22304F; --coral: #D8452E; --teal: #2F8F8A; --mustard: #EDB13C; --blush: #EFA7A0;
   --display: Rockwell, "Roboto Slab", "Rockwell Nova", Georgia, "Times New Roman", serif;
   --text: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* navy paper grain, about 6% */
+  --grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='3'/><feColorMatrix values='0 0 0 0 .13  0 0 0 0 .19  0 0 0 0 .31  0 0 0 .12 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>");
 }
 html, body { background: var(--paper); }
 
@@ -15,58 +17,84 @@ html, body { background: var(--paper); }
   font: 400 clamp(15px, 4.2cqw, 19px)/1.35 var(--text); color: var(--ink);
   padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); box-sizing: border-box;
 }
+@media (max-aspect-ratio: 3/5) { .ui-col { width: 100vw; } } /* same rule as layout.js columnOf: a phone uses the whole window */
 .ui-col [hidden] { display: none !important; }
 .ui-col button { font: inherit; color: inherit; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
 .ui-col :focus-visible { outline: 3px solid var(--teal); outline-offset: 2px; }
 
-/* HUD */
-.hud { position: absolute; top: env(safe-area-inset-top); left: 0; right: 0; padding: 8px 12px; pointer-events: none; z-index: 6; }
-.hud-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; font: 700 1.1em/1.2 var(--display); }
-.hud-row.sub { font: 600 .85em/1.2 var(--text); align-items: center; margin-top: 4px; gap: 12px; }
-.hud-jar { background: var(--paper); border: 2px solid var(--ink); padding: 2px 10px; }
-.hud-btns { margin-left: auto; display: flex; gap: 6px; pointer-events: auto; }
-.icon { min-width: 44px; min-height: 44px; padding: 0 10px; background: var(--paper); border: 2px solid var(--ink); border-radius: 0; cursor: pointer; }
+/* HUD: tide and the jar goal on top; pegs left under the peg line; Bag and Settings beside SPIN (px come from input.js layout()) */
+.hud { position: absolute; top: env(safe-area-inset-top); left: 0; right: 0; padding: 6px 12px; pointer-events: none; z-index: 6; }
+.hud-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; white-space: nowrap; }
+.hud-jar, .hud-tide, .hud-pegs { background: var(--paper); border: 2px solid var(--ink); border-radius: 8px; padding: 2px 8px; }
+.hud-tide { font: 700 .85em/1.3 var(--text); }
+.hud-jar { font: 700 1em/1.3 var(--display); display: flex; align-items: center; gap: 4px; }
+.hud-pegs { position: fixed; left: var(--pegs-x, 50%); top: var(--pegs-y, 70%); transform: translateX(-50%); white-space: nowrap; font: 700 .85em/1.3 var(--display); }
+.hud-pegs:empty { display: none; }
+.hud-btns { position: fixed; left: 8px; right: 8px; bottom: calc(3.5% + 12px); display: flex; justify-content: space-between; pointer-events: none; }
+.icon { pointer-events: auto; width: 60px; height: 60px; padding: 0; background: none; border: 0; cursor: pointer; display: grid; place-items: center; }
+.icon .ico { width: 56px; height: 56px; align-self: center; }
 
-/* Screen layer and panel */
-.layer { position: absolute; inset: 0; pointer-events: auto; background: var(--paper); overflow-y: auto; overscroll-behavior: contain; z-index: 7; }
-.panel { min-height: 100%; box-sizing: border-box; padding: 56px 16px 24px; display: flex; flex-direction: column; gap: 12px; }
+/* Screen layer: a scrolling panel, then the speech bubble, then a footer that keeps the main button in the thumb zone */
+.layer { position: absolute; inset: 0; pointer-events: auto; background: var(--paper) var(--grain); z-index: 7; display: flex; flex-direction: column; }
+.panel { flex: 1 1 auto; min-height: 0; overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box;
+  padding: calc(24px + env(safe-area-inset-top)) 16px 16px; display: flex; flex-direction: column; gap: 12px; border-bottom: 3px solid var(--ink); }
+.panel > * { flex-shrink: 0; }
+.foot { flex: none; display: flex; gap: 10px; padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); }
+.foot:empty { display: none; }
+.foot .btn { flex: 1; min-height: 56px; margin: 0; }
 h2, h3 { font-family: var(--display); margin: 0; line-height: 1.15; }
 h2 { font-size: 1.6em; border-bottom: 3px solid var(--ink); padding-bottom: 6px; }
-h3 { font-size: 1.05em; }
+h3 { font-size: 1.15em; }
+.panel > section { border-top: 1px dotted var(--ink); padding-top: 14px; margin-top: 6px; }
+.panel > section > h3, .slider h3 { margin-bottom: 10px; }
 .sub { margin: 0; font-weight: 600; }
 .note { margin: 0; font-size: .85em; opacity: .85; }
 .note.tutorial { border-left: 4px solid var(--coral); padding-left: 8px; opacity: 1; }
 .tag { align-self: flex-start; font: 700 .7em/1 var(--text); letter-spacing: .06em; text-transform: uppercase; padding: 3px 6px; background: var(--ink); color: var(--paper); }
 
-/* Buttons: flat, hard-edged, navy line with a second thin line outside */
-.btn, .opt, .card-main, .chip, .row.pick {
+/* Buttons: flat, hard-edged, one navy line */
+.btn, .opt, .chip, .row.pick {
   min-height: 44px; min-width: 44px; box-sizing: border-box; cursor: pointer; text-align: left;
-  background: var(--paper); border: 2px solid var(--ink); outline: 1px solid var(--ink); outline-offset: 2px; border-radius: 0; padding: 8px 12px;
+  background: var(--paper); border: 3px solid var(--ink); border-radius: 0; padding: 8px 12px;
 }
-.btn { text-align: center; font-weight: 700; margin: 2px; }
-.btn.primary { background: var(--coral); }
+.ui-col .btn { text-align: center; font: 700 1.05em/1.15 var(--display); }
+.ui-col .btn.primary { background: var(--coral); color: var(--paper); font-size: 1.25em; }
+.ui-col .btn.big { min-height: 64px; font-size: 30px; }
 .btn.warn { background: var(--mustard); }
-.btn.quiet { background: var(--paper2); }
-.btn.quiet.on { background: var(--teal); }
-.btn.dim { background: var(--paper2); opacity: .6; }
-.btn:active, .opt:active, .card-main:active, .chip:active { background: var(--ink); color: var(--paper); }
-.opt.on { background: var(--teal); }
-.opt strong { display: block; }
-.opt span { display: block; font-size: .85em; }
-.opts, .cards, .chips, .rows, .stats, .grades { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.ui-col .btn.dim { background: var(--paper2); color: var(--ink); opacity: .6; }
+.btn.link { min-height: 40px; border: 0; background: none; text-decoration: underline; text-underline-offset: 3px; padding: 4px 8px; }
+.btn.link.on { color: var(--teal); }
+.btn:active, .opt:active, .chip:active { background: var(--ink); color: var(--paper); }
+.opt { display: grid; grid-template-columns: 1fr auto; column-gap: 10px; align-items: center; }
+.opt:has(.ico) { grid-template-columns: 52px 1fr auto; }
+.opt .ico { grid-row: 1 / span 2; align-self: center; }
+.opt strong, .opt span { grid-column: 1; } .opt:has(.ico) strong, .opt:has(.ico) span { grid-column: 2; }
+.opt span { font-size: .85em; }
+.opt.on { background: var(--teal); color: var(--paper); font-weight: 600; border-width: 4px; }
+/* the tick of a picked option: a cream check drawn with two borders */
+.opt.on::after { content: ''; grid-column: -2 / -1; grid-row: 1 / span 2; width: 9px; height: 18px; margin: 0 8px 4px; border: solid var(--paper); border-width: 0 4px 4px 0; transform: rotate(40deg); }
+.opts, .cards, .chips, .rows, .grades { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .seg { display: flex; gap: 10px; } .seg .opt { flex: 1; text-align: center; }
-.row2 { display: flex; gap: 8px; flex-wrap: wrap; } .row2 .btn { flex: 1 1 40%; }
+.seg .opt.on::after { display: none; }
+.row2 { display: flex; gap: 8px; } .row2 .btn { flex: 1 1 40%; white-space: nowrap; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 8px 4px; font-size: .95em; }
 
-/* Shop: first screen under the HUD strip */
-.panel.shop, .panel.bag { padding-top: 96px; }
-.card { display: grid; grid-template-columns: 1fr auto; gap: 6px; align-items: stretch; padding: 6px; background: var(--paper2); border: 2px solid var(--ink); }
-.card.kept { border: 3px dashed var(--teal); }
+/* Run start: title, small language switch, Deni */
+.head { display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; align-items: end; }
+.head .seg { align-self: start; justify-self: start; gap: 6px; }
+.head .seg .opt { min-height: 44px; padding: 4px 12px; font-weight: 700; }
+.head .deni { grid-column: 2; grid-row: 1 / span 2; height: 140px; width: auto; pointer-events: none; }
+
+/* Shop */
+.card { display: grid; grid-template-columns: 1fr auto; gap: 4px 10px; align-items: center; padding: 8px; background: var(--paper2); border: 3px solid var(--ink); }
+.card.kept { border-style: dashed; border-color: var(--teal); }
 .card.sold { opacity: .55; }
-.card-main { display: flex; flex-direction: column; gap: 4px; }
+.card-main { grid-row: 1 / span 2; display: flex; flex-direction: column; gap: 4px; text-align: left; background: none; border: 0; padding: 4px; cursor: pointer; min-height: 44px; }
 .card .fx { font-size: .85em; }
-.card .btn { margin: 0; grid-column: 2; }
-.card .card-main { grid-row: 1 / span 2; }
-.sold-mark { grid-column: 2; align-self: center; font: 700 1em var(--display); padding: 0 8px; }
+.card .btn { grid-column: 2; }
+.btn.buy { min-height: 64px; min-width: 112px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.ico.coin { width: 28px; height: 28px; align-self: center; margin: 0; }
+.hud-jar .ico.coin, .sub .ico.coin { width: 20px; height: 20px; vertical-align: -4px; }
+.sold-mark { grid-column: 2; grid-row: 1 / span 2; font: 700 1em var(--display); padding: 0 8px; }
 .chip { display: flex; flex-direction: column; width: 100%; } .chip span { font-size: .85em; }
 .odds { border-top: 3px solid var(--ink); padding-top: 8px; display: flex; flex-direction: column; gap: 6px; }
 .odds p { margin: 0; }
@@ -74,30 +102,39 @@ h3 { font-size: 1.05em; }
 
 /* Bag rows */
 .row { display: grid; grid-template-columns: 1fr auto auto; gap: 2px 10px; width: 100%; box-sizing: border-box; padding: 8px 4px; border-bottom: 1px solid var(--ink); }
-.row.pick { border: 2px solid var(--ink); }
-.r-name { font-weight: 700; } .r-pct { font-weight: 700; min-width: 3em; text-align: right; }
+.r-name { font-weight: 700; display: flex; align-items: center; } .r-pct { font-weight: 700; min-width: 3em; text-align: right; }
 .r-fx { grid-column: 1 / -1; font-size: .8em; opacity: .85; }
 
-/* Sheet (trinket inspect): flat paper over the shop with a thick top rule */
-.sheet { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: min(100vw, calc(100vh * 9 / 19.5)); box-sizing: border-box; z-index: 8;
-  background: var(--paper); border-top: 4px solid var(--ink); padding: 18px 16px calc(16px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 8px; }
+/* Sheet (trinket inspect): the shop dims under a navy scrim, the sheet is flat paper with a close button */
+.scrim { position: absolute; inset: 0; z-index: 8; background: rgb(34 48 79 / .35); display: flex; flex-direction: column; justify-content: flex-end; }
+.sheet { position: relative; box-sizing: border-box; max-height: 85%; overflow-y: auto; background: var(--paper) var(--grain); border-top: 4px solid var(--ink);
+  padding: 18px 16px calc(16px + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 8px; }
 .sheet p { margin: 0; }
+.sheet .x { position: absolute; top: 8px; right: 8px; width: 48px; height: 48px; padding: 0; font-size: 28px; line-height: 1; }
 
 /* Event, run end */
-.stamp { align-self: flex-start; font: 800 1.1em var(--display); letter-spacing: .12em; color: var(--coral); border: 3px solid var(--coral); outline: 1px solid var(--coral); outline-offset: 2px; padding: 4px 12px; transform: rotate(-3deg); }
-.stamp.won { color: var(--teal); border-color: var(--teal); outline-color: var(--teal); }
-.letter { margin: 0; padding: 12px; border: 2px solid var(--ink); background: var(--paper2); }
-.stats { gap: 4px; font-weight: 600; }
+.stamp { align-self: flex-start; font: 800 1.1em var(--display); letter-spacing: .12em; color: var(--coral); border: 3px solid var(--coral); padding: 4px 12px; transform: rotate(-3deg); }
+.stamp.won { color: var(--teal); border-color: var(--teal); }
+.letter { margin: 0; padding: 12px; border: 3px solid var(--ink); background: var(--paper2); font: 700 1.3em/1.25 var(--display); }
+img.orhan { width: 180px; max-height: 180px; object-fit: contain; align-self: flex-start; pointer-events: none; }
+.panel.event .orhan { margin-top: auto; }
+.ticket { list-style: none; margin: 0; padding: 4px 12px; border: 3px solid var(--ink); background: var(--paper2); }
+.ticket li { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 6px 0; font-weight: 600; }
+.ticket li + li { border-top: 1px dotted var(--ink); }
+.ticket b { font: 700 32px/1 var(--display); }
 .margin { margin: 0; padding: 8px 12px; border-left: 4px solid var(--mustard); font-style: italic; } .margin small { display: block; font-style: normal; opacity: .7; }
 .rules { margin: 0; padding-left: 1.4em; display: flex; flex-direction: column; gap: 6px; }
-.slider { display: flex; flex-direction: column; gap: 8px; } .slider input { width: 100%; min-height: 44px; accent-color: var(--ink); }
+.slider { display: flex; flex-direction: column; } .slider input { width: 100%; min-height: 44px; accent-color: var(--ink); }
 
-/* Speech and toasts */
-.speech { position: absolute; left: 12px; right: 12px; bottom: calc(150px + env(safe-area-inset-bottom)); pointer-events: none; z-index: 9; }
-.bubble { margin: 0; padding: 8px 12px; background: var(--paper); border: 2px solid var(--ink); outline: 1px solid var(--ink); outline-offset: 2px; }
-.bubble b { display: block; font: 700 .75em var(--display); letter-spacing: .06em; text-transform: uppercase; }
-.bubble.deni b { color: var(--coral); } .bubble.orhan b { color: var(--teal); } .bubble.orhan { margin-left: 24px; }
-.toasts { position: absolute; left: 12px; right: 12px; top: calc(110px + env(safe-area-inset-top)); display: flex; flex-direction: column; gap: 6px; pointer-events: none; z-index: 10; }
+/* Speech and toasts. On the reel the bubble is a fixed two-line strip under the lanterns; on a screen it sits in the flow above the footer. */
+.speech { position: absolute; left: 12px; right: 12px; top: var(--speech-y, 12%); pointer-events: none; z-index: 9; }
+.speech:empty { display: none; }
+.layer .speech { position: static; z-index: auto; flex: none; margin: 10px 16px 0; }
+.bubble { margin: 0; padding: 6px 12px; background: var(--paper); border: 3px solid var(--ink); font-size: 15px; line-height: 20px; }
+.ui-col > .speech .bubble { min-height: 40px; }
+.bubble b { font: 700 .8em var(--display); letter-spacing: .06em; text-transform: uppercase; margin-right: 8px; }
+.bubble.deni b { color: var(--coral); } .bubble.orhan b { color: var(--teal); }
+.toasts { position: absolute; left: 12px; right: 12px; bottom: 15.5%; display: flex; flex-direction: column; gap: 6px; pointer-events: none; z-index: 10; }
 .toast { margin: 0; padding: 8px 12px; background: var(--ink); color: var(--paper); font-weight: 700; text-align: center; }
 
 /* Motion: a short stepped slide-in, off when reduced */
@@ -105,3 +142,21 @@ h3 { font-size: 1.05em; }
 .ui-col[data-motion="full"] .bubble, .ui-col[data-motion="full"] .toast { animation: slp-in .14s steps(3) both; }
 @keyframes slp-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { .ui-col .panel, .ui-col .bubble, .ui-col .toast { animation: none !important; } }
+
+/* Cut art in the DOM */
+.ico { width: 52px; height: 52px; object-fit: contain; align-self: flex-start; pointer-events: none; user-select: none; }
+.ico.sm { width: 30px; height: 30px; vertical-align: middle; margin-right: 6px; align-self: center; }
+.ico.big { width: 96px; height: 96px; align-self: center; }
+.chip .ico { align-self: center; }
+
+/* SPIN and the coach tag: placed in px by input.js from the layout */
+.spin-btn { position: fixed; pointer-events: auto; z-index: 5; cursor: pointer; padding: 0; border: 3px solid var(--ink); outline: 2px solid var(--paper); border-radius: 14px;
+  background: var(--coral); color: var(--paper); font-family: var(--display); font-weight: 800; line-height: 1; letter-spacing: .08em; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+.spin-btn small { display: block; margin-top: 4px; font: 700 14px/1 var(--text); letter-spacing: 0; }
+.spin-btn:active { transform: translateY(2px); }
+.spin-btn:disabled { background: var(--paper2); color: var(--ink); opacity: .75; cursor: default; }
+/* a torn cream tag, no box */
+.coach { position: fixed; z-index: 5; pointer-events: none; margin: 0; padding: 10px 16px 6px; width: max-content; max-width: 300px; box-sizing: border-box;
+  background: var(--paper); color: var(--ink); font: 700 22px/1.15 var(--display); text-align: center; transform: translateX(-50%) rotate(-2deg);
+  clip-path: polygon(0 16%, 5% 4%, 13% 12%, 22% 2%, 34% 10%, 47% 0, 60% 11%, 73% 3%, 86% 12%, 95% 2%, 100% 18%, 99% 100%, 1% 100%); }
+.coach[hidden], .spin-btn[hidden] { display: none; }

@@ -1,6 +1,6 @@
 // Bag screen: every token in the bag with its real chance per square, from core bagOdds.
 import { t, plural } from '../i18n.js';
-import { h, pct, btn, put } from './dom.js';
+import { h, pct, btn, put, art } from './dom.js';
 import { makeBag, bagOdds } from '../core/reel.js';
 import { SYMBOLS } from '../core/data/symbols.js';
 
@@ -19,7 +19,7 @@ export function renderBagList(run, onPick) {
   return h('ul', { class: 'rows' }, rows.map((r, i) => {
     const s = SYM.get(r.id);
     const body = [
-      h('span', { class: 'r-name' }, t(s.nameKey)),
+      h('span', { class: 'r-name' }, art(`sym/${s.id}`, 'ico sm'), t(s.nameKey)),
       h('span', { class: 'r-count' }, `x${r.count}`),
       h('span', { class: 'r-pct' }, t('ui.percent', { p: pc[i] })),
       h('span', { class: 'r-fx' }, symText(s)),
@@ -38,6 +38,6 @@ export function render(el, { run }, ctx) {
     h('p', { class: 'note' }, t('ui.stopNote')),
     h('p', { class: 'note' }, t('ui.oddsNote')),
     h('p', { class: 'note' }, t('ui.mercyRule')),
-    btn(t('ui.close'), ctx.close, 'primary'),
+    ctx.foot(btn(t('ui.close'), ctx.close, 'primary')),
   );
 }

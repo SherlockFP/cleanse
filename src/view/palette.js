@@ -1,6 +1,6 @@
-// ART.md palette. Pure JS (no three). Skins are palette swaps of the same sprites (ART.md section 3).
+// ART.md palette (gouache: cream, navy, tomato, teal, sunflower, pink; key names kept from the riso version). Pure JS (no three). Skins are palette swaps of the same sprites (ART.md section 3).
 export const PAL = Object.freeze({
-  paper: '#F2E8D0', navy: '#1E2A44', coral: '#E9573F', teal: '#2A9D8F', mustard: '#EBB447', blush: '#F0A9A0',
+  paper: '#F4EAD2', navy: '#22304F', coral: '#D8452E', teal: '#2F8F8A', mustard: '#EDB13C', blush: '#EFA7A0',
 });
 // Overprint tones; the shader makes these, they are listed for reference and QA.
 export const OVERPRINT = Object.freeze({ coralTeal: '#6B4A4E', mustardTeal: '#7FA05A', coralMustard: '#E0703A' });

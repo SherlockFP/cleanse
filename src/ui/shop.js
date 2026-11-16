@@ -1,7 +1,7 @@
 // Shop: offers with printed odds, buy / sell / reroll / lock / remove, trinket inspect on tap.
 // data: { run }. All rules and prices come from core/shop.js. Handlers: changed(run, action, res) after each core call, leaveShop() on Continue.
 import { t } from '../i18n.js';
-import { h, pct, btn, put } from './dom.js';
+import { h, pct, btn, put, art } from './dom.js';
 import { rollShop, effectiveOdds, priceOf, buyOffer, sellTrinket, removeToken, reroll, lockOffer } from '../core/shop.js';
 import { chartOf } from '../core/run.js';
 import { TRINKETS } from '../core/data/trinkets.js';
@@ -22,10 +22,10 @@ const sellValue = (run, grade) => Math.floor(Math.max(1, Math.round(PRICES.trink
 function describe(run, o) {
   if (o.kind === 'trinket') {
     const d = TR.get(o.id);
-    return { name: t(d.nameKey), tag: t('ui.grade', { n: o.grade ?? d.grade }), short: t(d.shortKey), full: t(d.descKey), grade: o.grade ?? d.grade };
+    return { icon: `trinket/${o.id}`, name: t(d.nameKey), tag: t('ui.grade', { n: o.grade ?? d.grade }), short: t(d.shortKey), full: t(d.descKey), grade: o.grade ?? d.grade };
   }
   const d = SYM.get(o.sym);
-  return { name: t(d.nameKey), tag: t('ui.token'), short: symText(d), full: symText(d) };
+  return { icon: `sym/${o.sym}`, name: t(d.nameKey), tag: t('ui.token'), short: symText(d), full: symText(d) };
 }
 
 export function render(el, { run }, ctx) {
@@ -37,7 +37,9 @@ export function render(el, { run }, ctx) {
     st.sheet = null; st.picking = false;
     ctx.rerender();
   };
-  const priceTag = (n) => t('ui.price', { n });
+  // Price buttons: label, coin sprite, number. One helper, so the card and the sheet read the same.
+  const coin = () => art('fx/coin', 'ico coin');
+  const buyBtn = (o, i) => { const p = priceOf(run, o); return h('button', { type: 'button', class: 'btn primary buy' + (run.jar < p ? ' dim' : ''), 'aria-label': `${t('ui.buy')} ${t('ui.price', { n: p })}`, onclick: () => act('buy', buyOffer(run, i), 'shop_buy') }, t('ui.buy'), coin(), String(p)); };
 
   // ---- inspect sheet ----
   const sheet = () => {
@@ -48,22 +50,24 @@ export function render(el, { run }, ctx) {
     const d = describe(run, o);
     const acts = own
       ? [btn(t('ui.sell', { n: sellValue(run, d.grade) }), () => act('sell', sellTrinket(run, x.slot)), 'warn')]
-      : o.sold ? [] : [btn(`${t('ui.buy')} - ${priceTag(priceOf(run, o))}`, () => act('buy', buyOffer(run, x.i), 'shop_buy'), 'primary')];
-    return h('div', { class: 'sheet', role: 'dialog', 'aria-label': d.name },
-      h('span', { class: 'tag' }, d.tag), h('h3', {}, d.name), h('p', {}, d.full), acts,
-      btn(t('ui.close'), () => { st.sheet = null; ctx.rerender(); }));
+      : o.sold ? [] : [buyBtn(o, x.i)];
+    const shut = () => { st.sheet = null; ctx.rerender(); };
+    return h('div', { class: 'scrim', onclick: (e) => { if (e.target === e.currentTarget) shut(); } },
+      h('div', { class: 'sheet', role: 'dialog', 'aria-label': d.name },
+        h('button', { type: 'button', class: 'btn x', 'aria-label': t('ui.close'), onclick: shut }, '\u00d7'),
+        art(d.icon, 'ico big'), h('span', { class: 'tag' }, d.tag), h('h3', {}, d.name), h('p', {}, d.full), acts));
   };
 
   // ---- offers ----
   const offer = (o, i) => {
     if (!o) return null;
-    const d = describe(run, o), price = priceOf(run, o), kept = s.lock === i;
+    const d = describe(run, o), kept = s.lock === i;
     return h('article', { class: 'card' + (o.sold ? ' sold' : '') + (kept ? ' kept' : '') },
       h('button', { type: 'button', class: 'card-main', onclick: () => { st.sheet = { i }; ctx.rerender(); } },
-        h('span', { class: 'tag' }, d.tag), h('strong', {}, d.name), h('span', { class: 'fx' }, d.short)),
+        art(d.icon), h('span', { class: 'tag' }, d.tag), h('strong', {}, d.name), h('span', { class: 'fx' }, d.short)),
       o.sold ? h('span', { class: 'sold-mark' }, t('ui.sold')) : [
-        btn(`${t('ui.buy')} ${priceTag(price)}`, () => act('buy', buyOffer(run, i), 'shop_buy'), 'primary' + (run.jar < price ? ' dim' : '')),
-        btn(kept ? t('ui.unlock') : t('ui.lock'), () => act('lock', lockOffer(run, i)), 'quiet' + (kept ? ' on' : '')),
+        buyBtn(o, i),
+        btn(kept ? t('ui.unlock') : t('ui.lock'), () => act('lock', lockOffer(run, i)), 'link' + (kept ? ' on' : '')),
       ]);
   };
 
@@ -78,28 +82,28 @@ export function render(el, { run }, ctx) {
   const rrPrice = priceOf(run, { kind: 'reroll' }), rmPrice = priceOf(run, { kind: 'removal' });
   const shelf = run.trinkets.map((x, slot) => {
     const d = describe(run, { kind: 'trinket', id: x.id });
-    return h('li', {}, h('button', { type: 'button', class: 'chip', onclick: () => { st.sheet = { slot }; ctx.rerender(); } }, h('strong', {}, d.name), h('span', {}, d.short)));
+    return h('li', {}, h('button', { type: 'button', class: 'chip', onclick: () => { st.sheet = { slot }; ctx.rerender(); } }, art(d.icon, 'ico sm'), h('strong', {}, d.name), h('span', {}, d.short)));
   });
 
   if (st.picking) {
-    put(el, h('h2', {}, t('ui.removeToken', { n: '' }).trim()), h('p', { class: 'sub' }, t('ui.removePick')),
+    put(el, h('h2', {}, t('ui.removePick')),
       renderBagList(run, (id) => act('remove', removeToken(run, id), 'remove_token')),
-      btn(t('ui.back'), () => { st.picking = false; ctx.rerender(); }));
+      ctx.foot(btn(t('ui.back'), () => { st.picking = false; ctx.rerender(); })));
     return;
   }
   put(el, 
     h('h2', {}, t('ui.shop')),
-    h('p', { class: 'sub' }, `${t('ui.jar')}: ${run.jar}`),
+    h('p', { class: 'sub' }, `${t('ui.jar')}: ${run.jar} `, coin()),
     h('div', { class: 'cards' }, s.offers.map(offer)),
     h('div', { class: 'row2' },
-      btn(rrPrice ? t('ui.reroll', { n: rrPrice }) : t('ui.rerollFree'), () => act('reroll', reroll(run)), run.jar < rrPrice ? 'dim' : ''),
-      btn(rmPrice ? t('ui.removeToken', { n: rmPrice }) : t('ui.removeFree'), () => { st.picking = true; ctx.rerender(); }, run.jar < rmPrice ? 'dim' : '')),
+      btn([rrPrice ? t('ui.reroll', { n: rrPrice }) : t('ui.rerollFree'), rrPrice ? coin() : null], () => act('reroll', reroll(run)), run.jar < rrPrice ? 'dim' : ''),
+      btn([rmPrice ? t('ui.removeToken', { n: rmPrice }) : t('ui.removeFree'), rmPrice ? coin() : null], () => { st.picking = true; ctx.rerender(); }, run.jar < rmPrice ? 'dim' : '')),
     h('h3', {}, t('ui.shelf')),
     shelf.length ? h('ul', { class: 'chips' }, shelf) : h('p', { class: 'note' }, t('ui.emptyPlace')),
     odds,
     h('p', { class: 'note' }, t('ui.jarCarries')),
     h('p', { class: 'note' }, t('ui.noRealMoney')),
-    btn(t('ui.continue'), () => { ctx.close(); ctx.h.leaveShop?.(); }, 'primary'),
-    sheet(),
+    ctx.foot(btn(t('ui.continue'), () => { ctx.close(); ctx.h.leaveShop?.(); }, 'primary')),
+    ctx.over(sheet()),
   );
 }

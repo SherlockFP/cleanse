@@ -234,12 +234,39 @@ function loadReal(id, tex) {
   img.src = `${ART_BASE}${id}.png`; // a missing file just never fires onload; the placeholder stays
 }
 
+// Real cut art, loaded once before the view starts (preloadArt). An id with a file here never shows its placeholder.
+const REAL = new Map(); // id -> HTMLImageElement
+let caseRectsReal = null;
+export const hasReal = (id) => REAL.has(id);
+export const realCount = () => REAL.size;
+export const getCaseRects = () => caseRectsReal;
+const fileOf = (id) => `${ART_BASE}${id}.${id === 'bg/pier_game' ? 'jpg' : 'png'}`;
+
+export async function preloadArt() {
+  let manifest;
+  try { manifest = await (await fetch(`${ART_BASE}manifest.json`)).json(); } catch { return 0; }
+  await Promise.all(Object.keys(manifest).map((id) => new Promise((done) => {
+    const img = new Image();
+    img.onload = () => { REAL.set(id, img); done(); };
+    img.onerror = () => done(); // a missing file keeps its placeholder
+    img.src = fileOf(id);
+  })));
+  try {
+    const j = await (await fetch(`${ART_BASE}reel/case_rects.json`)).json(); // windows as fractions of the case image, row by row
+    const [cw, ch] = j.size;
+    caseRectsReal = { size: [cw, ch], cells: j.windows.map(([x0, y0, x1, y1]) => ({ x: x0 * cw, y: y0 * ch, w: (x1 - x0) * cw, h: (y1 - y0) * ch })) };
+  } catch { /* placeholder case */ }
+  return REAL.size;
+}
+
 export function getTex(id) {
   let e = cache.get(id);
   if (!e) {
-    const tex = new THREE.CanvasTexture(canvasFor(id));
+    const img = REAL.get(id);
+    const tex = img ? new THREE.Texture(img) : new THREE.CanvasTexture(canvasFor(id));
+    if (img) tex.needsUpdate = true;
     tex.generateMipmaps = false; tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter;
-    e = { tex, w: drawerFor(id).w, h: drawerFor(id).h };
+    e = img ? { tex, w: img.naturalWidth, h: img.naturalHeight } : { tex, w: drawerFor(id).w, h: drawerFor(id).h };
     cache.set(id, e);
     if (realSet === 'all' || (realSet && realSet.has(id))) loadReal(id, tex);
   }
@@ -303,8 +330,9 @@ export function getAtlas() {
     const back = getTex('reel/cell_paper').image;
     SYMBOL_IDS.forEach((id, i) => {
       const x = (i % COLS) * TILE, y = Math.floor(i / COLS) * TILE, pad = TILE * 0.08;
-      c.drawImage(back, x, y, TILE, TILE);
-      c.drawImage(getTex('sym/' + id).image, x + pad, y + pad, TILE - 2 * pad, TILE - 2 * pad);
+      if (REAL.size) { c.fillStyle = '#F4EAD2'; c.fillRect(x, y, TILE, TILE); } else c.drawImage(back, x, y, TILE, TILE);
+      const im = getTex('sym/' + id).image, [sw, sh] = spriteSize('sym/' + id), k = Math.min((TILE - 2 * pad) / sw, (TILE - 2 * pad) / sh);
+      c.drawImage(im, x + (TILE - sw * k) / 2, y + (TILE - sh * k) / 2, sw * k, sh * k);
     });
     atlas.tex.needsUpdate = true; atlasVersion = version;
   }

@@ -8,7 +8,9 @@ let box = null, timer = 0;
 export function mountSpeech(parent) {
   box = h('div', { class: 'speech', 'aria-live': 'polite' });
   parent.append(box);
+  return box;
 }
+export const hush = () => { clearTimeout(timer); box?.replaceChildren(); };
 
 // Index in 1..count that differs from `prev` when count > 1. rnd is injectable for the check.
 export function pickIndex(count, prev, rnd = Math.random) {

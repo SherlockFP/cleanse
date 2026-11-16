@@ -180,8 +180,8 @@ add({
   'ui.shelfFull': 'Your shelf is full. Sell a trinket first.', 'ui.emptyPlace': 'Empty place',
   // shop
   'ui.shop': 'Shop', 'ui.shopHost.crate': "Hasan's dock crate", 'ui.shopHost.sevgi': "Madam Sevgi's stall", 'ui.buy': 'Buy', 'ui.price': '{n} coins',
-  'ui.token': 'Token', 'ui.tokenOffer': 'Token for the bag', 'ui.reroll': 'Reroll {n}', 'ui.rerollFree': 'Reroll, free', 'ui.removeToken': 'Remove a token {n}',
-  'ui.removeFree': 'Remove a token, free', 'ui.removePick': 'Pick a token to remove.', 'ui.lock': 'Keep for the next shop', 'ui.unlock': 'Let go',
+  'ui.token': 'Token', 'ui.tokenOffer': 'Token for the bag', 'ui.reroll': 'Reroll {n}', 'ui.rerollFree': 'Reroll, free', 'ui.removeToken': 'Remove {n}',
+  'ui.removeFree': 'Remove, free', 'ui.removePick': 'Pick a token to remove.', 'ui.lock': 'Hold', 'ui.unlock': 'Let go',
   'ui.locked': 'Kept', 'ui.continue': 'Back to the pier', 'ui.notEnough': 'The jar says no.', 'ui.atCap': 'Bag is full of these', 'ui.bagMin': 'No removals left this run.',
   'ui.shopOdds': 'Shop odds for this pool', 'ui.shopOddsNote': 'These are the real odds for the cards you can see here, worked out from what is unlocked right now.',
   'ui.oddsGrade': 'Grade {n}: {p}%', 'ui.oddsTrinket': 'A card is a trinket 70% of the time, a token 30%.', 'ui.tutorialShop': 'One offer only, this time.',
@@ -237,13 +237,13 @@ add({
   'ui.jar': 'Kavanoz', 'ui.quota': 'Kota', 'ui.jarQuota': '{a} / {b}', 'ui.pegsLeft': '{n} mandal kaldı', 'ui.pegsLeft.one': '1 mandal kaldı',
   'ui.pegHint': 'Mandallamak için bir kareye dokun. Çıkarmak için bir daha dokun.', 'ui.coinsPlus': '+{n}', 'ui.bag': 'Torba', 'ui.shelf': 'Raf',
   'ui.lines': '{n} dizi', 'ui.lines.one': '1 dizi', 'ui.pegHit': 'Mandal tuttu!', 'ui.bigWin': 'Büyük çevirme!', 'ui.paid': 'ÖDENDİ', 'ui.pause': 'Duraklat',
-  'ui.turbo': 'Turbo', 'ui.skipHint': 'Geçmek için dokun', 'ui.mercyShown': 'Orhan yuvarladı: +{n}', 'ui.coachSpin': 'ÇEVİR düğmesine dokun.', 'ui.coachBag': 'Çark bunları çekebilir.',
+  'ui.turbo': 'Turbo', 'ui.skipHint': 'Geçmek için dokun', 'ui.mercyShown': 'Orhan yuvarladı: +{n}', 'ui.coachSpin': "ÇEVİR'e dokun.", 'ui.coachBag': 'Çark bunları çekebilir.',
   'ui.coachSalt': 'Sardalya dizileri artık +4 öder.',
   'ui.trinket': 'Biblo', 'ui.grade': '{n}. derece', 'ui.gradeStamps': 'Derece {n}/4', 'ui.inspect': 'İncele', 'ui.example': 'Örnek', 'ui.sell': '{n} paraya sat',
   'ui.shelfFull': 'Raf dolu. Önce bir biblo sat.', 'ui.emptyPlace': 'Boş yer',
   'ui.shop': 'Dükkan', 'ui.shopHost.crate': "Hasan'ın iskele sandığı", 'ui.shopHost.sevgi': "Sevgi Hanım'ın tezgahı", 'ui.buy': 'Al', 'ui.price': '{n} para',
   'ui.token': 'Parça', 'ui.tokenOffer': 'Torbaya parça', 'ui.reroll': 'Yenile {n}', 'ui.rerollFree': 'Yenile, bedava', 'ui.removeToken': 'Parça çıkar {n}',
-  'ui.removeFree': 'Parça çıkar, bedava', 'ui.removePick': 'Çıkarılacak parçayı seç.', 'ui.lock': 'Sonraki dükkan için sakla', 'ui.unlock': 'Bırak',
+  'ui.removeFree': 'Parça çıkar, bedava', 'ui.removePick': 'Çıkarılacak parçayı seç.', 'ui.lock': 'Sakla', 'ui.unlock': 'Bırak',
   'ui.locked': 'Saklandı', 'ui.continue': 'İskeleye dön', 'ui.notEnough': 'Kavanoz hayır diyor.', 'ui.atCap': 'Torbada bundan yeterince var', 'ui.bagMin': 'Bu koşuda çıkarma hakkı kalmadı.',
   'ui.shopOdds': 'Bu havuzun dükkan olasılıkları', 'ui.shopOddsNote': 'Burada gördüğün kartların gerçek olasılıkları bunlar. Şu an açık olan şeylere göre hesaplanır.',
   'ui.oddsGrade': '{n}. derece: %{p}', 'ui.oddsTrinket': 'Kart %70 biblo, %30 parça çıkar.', 'ui.tutorialShop': 'Bu sefer tek teklif var.',
@@ -287,9 +287,11 @@ add({
 
 // ---- Interface, added by the UI lane (src/ui) ---------------------------------------------------
 add({
+  'ui.jarGoal': 'Fill the jar: {a} / {b}', 'ui.coachPeg': 'Peg the pair.',
   'ui.sold': 'Sold', 'ui.percent': '{p}%', 'ui.oddsKind': 'A card is a trinket {a}% of the time, a token {b}%.',
   'ui.bagMinN': 'The bag needs at least {n} tokens.', 'ui.statTides': 'Tides cleared: {n}', 'ui.statCoins': 'Coins earned: {n}',
 }, {
+  'ui.jarGoal': 'Kavanozu doldur: {a} / {b}', 'ui.coachPeg': 'Çifti mandalla.',
   'ui.sold': 'Satıldı', 'ui.percent': '%{p}', 'ui.oddsKind': 'Kart %{a} ihtimalle biblo, %{b} ihtimalle parça çıkar.',
   'ui.bagMinN': 'Torbada en az {n} parça olmalı.', 'ui.statTides': 'Geçilen gelgit: {n}', 'ui.statCoins': 'Kazanılan para: {n}',
 });

@@ -10,8 +10,8 @@
 // showScreen(name, data): 'runstart' | 'shop' | 'bag' | 'runend' | 'event' | 'settings'; data.run is the live core run.
 // updateHud(run), toast(key, vars), hideScreen(), say(who, trigger, vars).
 import { t, setLang, getLang, detectLang } from '../i18n.js';
-import { h, clear } from './dom.js';
-import { mountSpeech, say } from './speech.js';
+import { h, clear, art, put } from './dom.js';
+import { mountSpeech, say, hush } from './speech.js';
 import * as runstart from './runstart.js';
 import * as shop from './shop.js';
 import * as bag from './bag.js';
@@ -24,7 +24,7 @@ const SCREENS = { runstart, shop, bag, runend, event, settings: settingsScreen }
 const KEY = 'slp.settings';
 export const settings = { lang: null, volume: 1, reduceMotion: false };
 
-let handlers = {}, col, layer, hudEl, toasts, cur = null, lastRun = null;
+let handlers = {}, col, layer, hudEl, toasts, speech, cur = null, lastRun = null;
 const hudRef = {};
 
 function load() {
@@ -45,7 +45,7 @@ function setSettings(patch, rerender = true) {
   Object.assign(settings, patch);
   save();
   applySettings();
-  if (patch.lang) { buildHud(); if (lastRun) updateHud(lastRun); }
+  if (patch.lang) { hush(); buildHud(); if (lastRun) updateHud(lastRun); } // a bubble in the old language goes
   if (rerender && cur) mountScreen();
 }
 
@@ -59,7 +59,7 @@ export function initUi(h0 = {}) {
   toasts = h('div', { class: 'toasts', 'aria-live': 'polite' });
   col.append(hudEl, layer, toasts);
   host.append(col);
-  mountSpeech(col);
+  speech = mountSpeech(col);
   load();
   applySettings();
   buildHud();
@@ -70,11 +70,11 @@ function buildHud() {
   clear(hudEl);
   const cell = (k, cls) => (hudRef[k] = h('span', { class: cls }));
   hudEl.append(
-    h('div', { class: 'hud-row' }, cell('tide', 'hud-tide'), cell('jar', 'hud-jar')),
-    h('div', { class: 'hud-row sub' }, cell('spins', 'hud-spins'), cell('pegs', 'hud-pegs'),
-      h('span', { class: 'hud-btns' },
-        h('button', { type: 'button', class: 'icon', onclick: () => lastRun && showScreen('bag', { run: lastRun }) }, t('ui.bag')),
-        h('button', { type: 'button', class: 'icon', onclick: () => showScreen('settings', {}) }, t('ui.settings')))));
+    h('div', { class: 'hud-row' }, cell('tide', 'hud-tide'), h('span', { class: 'hud-jar' }, cell('jar', ''), art('fx/coin', 'ico coin'))),
+    cell('pegs', 'hud-pegs'),
+    h('span', { class: 'hud-btns' },
+      h('button', { type: 'button', class: 'icon', 'aria-label': t('ui.bag'), title: t('ui.bag'), onclick: () => lastRun && showScreen('bag', { run: lastRun }) }, art('trinket/sea_chest', 'ico')),
+      h('button', { type: 'button', class: 'icon', 'aria-label': t('ui.settings'), title: t('ui.settings'), onclick: () => showScreen('settings', {}) }, art('reel/crank', 'ico'))));
 }
 
 export function updateHud(run) {
@@ -83,26 +83,28 @@ export function updateHud(run) {
   hudEl.hidden = false;
   const tide = run.tide > TIDES_PER_RUN ? t('ui.lamplightTide', { n: run.tide }) : t('ui.tideOf', { n: run.tide, m: TIDES_PER_RUN });
   hudRef.tide.textContent = tide;
-  hudRef.jar.textContent = `${t('ui.jar')} ${t('ui.jarQuota', { a: run.jar, b: run.quota })}`;
+  hudRef.jar.textContent = t('ui.jarGoal', { a: run.jar, b: run.quota });
   const inTide = run.phase === 'tide';
   hudEl.dataset.phase = run.phase;
-  const spins = Math.max(0, run.spinsMax - run.spin), pegs = Math.max(0, run.pegsMax - run.held.length);
-  hudRef.spins.textContent = inTide ? t(spins === 1 ? 'ui.spinsLeft.one' : 'ui.spinsLeft', { n: spins }) : '';
+  const pegs = Math.max(0, run.pegsMax - run.held.length); // spins left is printed on the SPIN button (main.js)
   hudRef.pegs.textContent = inTide ? t(pegs === 1 ? 'ui.pegsLeft.one' : 'ui.pegsLeft', { n: pegs }) : '';
 }
 
 // ---- screens ----
 function mountScreen() {
-  const keep = layer.firstChild?.scrollTop ?? 0;
+  const keep = layer.querySelector('.panel')?.scrollTop ?? 0;
   const { name, data, state } = cur;
   const panel = h('section', { class: `panel ${name}`, role: 'dialog', 'aria-modal': 'true' });
+  const foot = h('footer', { class: 'foot' }), over = [];
   const ctx = {
     h: handlers, state, settings, say, toast, setSettings, lang: getLang,
     close: hideScreen, rerender: mountScreen,
+    foot: (...kids) => { put(foot, ...kids); return null; }, // main buttons: a footer under the scroll area
+    over: (node) => { if (node) over.push(node); return null; }, // a sheet above the whole screen
   };
   SCREENS[name].render(panel, data, ctx);
   if (cur?.name !== name) return; // the screen closed itself (event with no event)
-  layer.replaceChildren(panel);
+  layer.replaceChildren(panel, speech, foot, ...over); // the bubble sits in the flow, so it never covers content or buttons
   layer.hidden = false;
   panel.scrollTop = keep;
 }
@@ -116,15 +118,19 @@ export function showScreen(name, data = {}) {
 
 export function hideScreen() {
   cur = null;
+  hush(); col.append(speech);
   clear(layer);
   layer.hidden = true;
 }
 
-export function toast(key, vars = {}) {
-  const el = h('p', { class: 'toast' }, t(key, vars));
+export const toast = (key, vars = {}) => toastText(t(key, vars));
+
+export function toastText(text) {
+  const el = h('p', { class: 'toast' }, text);
   while (toasts.children.length >= 2) toasts.firstChild.remove();
   toasts.append(el);
   setTimeout(() => el.remove(), 2400);
 }
 
 export { say };
+export const setLanguage = (lang) => setSettings({ lang }); // for the debug hook and the language switch outside the settings screen

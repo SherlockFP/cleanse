@@ -98,6 +98,6 @@ console.log('stop schedule ok');
   for (let i = 0; i < 240; i++) sp.step(1 / 60);
   assert.ok(sp.settled(), 'spring settles');
   assert.equal(INK_ORDER.length, 6);
-  assert.deepEqual(hexToRgb(PAL.navy).map((v) => Math.round(v * 255)), [30, 42, 68]);
+  assert.deepEqual(hexToRgb(PAL.navy).map((v) => Math.round(v * 255)), [34, 48, 79]);
 }
 console.log('check-view ok');

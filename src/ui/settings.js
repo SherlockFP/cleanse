@@ -17,7 +17,7 @@ export function render(el, data, ctx) {
       h('div', { class: 'seg', role: 'radiogroup' }, seg(s.reduceMotion, t('ui.on'), () => ctx.setSettings({ reduceMotion: true })), seg(!s.reduceMotion, t('ui.off'), () => ctx.setSettings({ reduceMotion: false })))),
     btn(t('ui.rules'), () => { ctx.state.rules = true; ctx.rerender(); }),
     h('p', { class: 'note' }, t('ui.privacyText')),
-    btn(t('ui.close'), ctx.close, 'primary'),
+    ctx.foot(btn(t('ui.close'), ctx.close, 'primary')),
   );
 }
 
@@ -32,6 +32,6 @@ function rules(el, ctx) {
     h('p', { class: 'note' }, t('ui.oddsNote')),
     h('p', { class: 'note' }, t('ui.stopNote')),
     h('p', { class: 'note tutorial' }, t('ui.tutorialNote')),
-    btn(t('ui.back'), () => { ctx.state.rules = false; ctx.rerender(); }, 'primary'),
+    ctx.foot(btn(t('ui.back'), () => { ctx.state.rules = false; ctx.rerender(); }, 'primary')),
   );
 }

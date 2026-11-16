@@ -55,7 +55,11 @@ void main() {
 const fixedOffset = (seed) => { const a = (seed * 2.399) % 6.2832; return [Math.cos(a), Math.sin(a)]; };
 
 // Flat-color sprite -> two-ink posterize, misregistration, grain, ink skips. offPx is fixed per sprite (no shimmer).
+// Real gouache sprites are drawn as they are: a plain textured material, no posterize, no misregistration.
+export let PLAIN = false;
+export const setPlain = (on) => { PLAIN = on; };
 export function riso(tex, { seed = 0, size = 256, palette = PAL } = {}) {
+  if (PLAIN) return new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false, depthWrite: false, side: THREE.DoubleSide });
   const [ox, oy] = fixedOffset(seed + 1), px = 1.5 / size;
   return new THREE.ShaderMaterial({
     uniforms: {
@@ -112,27 +116,25 @@ const INK_FRAG = `
 uniform float uReveal;
 uniform float uSeed;
 uniform vec3 uColor;
+uniform vec3 uPaper;
 varying vec2 vUv;
-${HASH}
 void main() {
   float x = vUv.x;
   float d = abs(vUv.y - 0.5) * 2.0;
-  float w = 0.62 + 0.14 * sin(x * 23.0 + uSeed) + 0.08 * sin(x * 57.0);
-  float taper = smoothstep(0.0, 0.06, x) * (1.0 - smoothstep(0.94, 1.0, x));
-  float edge = 1.0 - smoothstep(w * taper - 0.08, w * taper, d);
-  float streak = 0.78 + 0.22 * hash21(vec2(floor(vUv.y * 18.0), uSeed));
+  float taper = smoothstep(0.0, 0.05, x) * (1.0 - smoothstep(0.95, 1.0, x));
+  float w = (0.5 + 0.07 * sin(x * 23.0 + uSeed) + 0.04 * sin(x * 57.0)) * taper;
+  float core = 1.0 - smoothstep(w - 0.05, w, d);
+  float outer = (1.0 - smoothstep(w + 0.2, w + 0.26, d)) * smoothstep(0.0, 0.2, taper);
   float head = 1.0 - smoothstep(uReveal - 0.02, uReveal, x);
-  float cov = edge * streak * head * step(0.001, uReveal);
-  gl_FragColor = vec4(mix(vec3(1.0), uColor, cov * 0.95), 1.0);
+  gl_FragColor = vec4(mix(uPaper, uColor, core), outer * head * step(0.001, uReveal));
 }`;
 
-// Coral brush stroke, revealed left to right by uReveal (0..1). Multiply blend: it overprints what is below, like ink.
+// Coral painted stroke with a thin cream edge, opaque, revealed left to right by uReveal (0..1).
 export function inkLine(seed = 0, color = PAL.coral) {
   const n = parseInt(color.slice(1), 16);
   return new THREE.ShaderMaterial({
-    uniforms: { uReveal: { value: 0 }, uSeed: { value: seed }, uColor: { value: new THREE.Vector3(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255) } },
+    uniforms: { uReveal: { value: 0 }, uSeed: { value: seed }, uColor: { value: new THREE.Vector3(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255) }, uPaper: { value: new THREE.Vector3(...paletteArray()[0]) } },
     vertexShader: VERT, fragmentShader: INK_FRAG, transparent: true, depthTest: false, depthWrite: false, side: THREE.DoubleSide,
-    blending: THREE.CustomBlending, blendEquation: THREE.AddEquation, blendSrc: THREE.DstColorFactor, blendDst: THREE.ZeroFactor,
   });
 }
 export { inkLine as inkLineMaterial };

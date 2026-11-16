@@ -2,3 +2,4 @@ node_modules/
 dist/
 audio-src/
 art/raw/
+qa/
