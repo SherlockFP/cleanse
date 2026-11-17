@@ -31,7 +31,7 @@ function stub(id, label = '') {
   const url = c.toDataURL(); stubs.set(key, url); return url;
 }
 // label: the thing's display name, drawn as an initial on the stand-in when the art is missing.
-export const art = (id, cls = 'ico', label = '') => h('img', { src: real.has(id) ? `./img/${id}.png` : stub(id, label), alt: '', class: cls, draggable: 'false', onerror: (e) => { if (e.target.src !== stub(id, label)) e.target.src = stub(id, label); } });
+export const art = (id, cls = 'ico', label = '') => h('img', { src: real.has(id) ? `./img/${id}.${id.startsWith('bg/') ? 'jpg' : 'png'}` : stub(id, label), alt: '', class: cls, draggable: 'false', onerror: (e) => { if (e.target.src !== stub(id, label)) e.target.src = stub(id, label); } });
 
 export const clear = (e) => { while (e.firstChild) e.removeChild(e.firstChild); return e; };
 

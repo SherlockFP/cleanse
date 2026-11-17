@@ -20,6 +20,8 @@ export function render(el, { meta }, ctx) {
   if (!ctx.state.said) { ctx.state.said = true; ctx.say('brimble', 'home'); }
   const door = (key, screen) => btn(t(key), () => ctx.open(screen, {}));
   put(el,
+    // home grows with rank: hideout, shophouse, condo, penthouse
+    h('div', { class: 'map-banner' }, art(rank >= 9 ? 'bg/home_4' : rank >= 6 ? 'bg/home_3' : rank >= 3 ? 'bg/home_2' : 'bg/hideout', 'mapimg')),
     h('div', { class: 'home-head' }, h('h1', {}, t('ui.title')), h('p', { class: 'sub' }, t('ui.tagline'))),
     h('div', { class: 'row-between rankrow' },
       h('div', {}, h('span', { class: 'lc-label' }, t('ui.rankLabel')), h('b', { class: 'rank' }, t('ui.rank.' + rank))),

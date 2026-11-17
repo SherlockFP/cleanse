@@ -49,6 +49,7 @@ export function render(el, { run }, ctx) {
       h('span', { class: 'cc-go' }, t(color === 'red' ? 'ui.look' : 'ui.take')));
   };
   put(el,
+    h('div', { class: 'map-banner' }, art('bg/phone', 'mapimg')),
     h('div', { class: 'head' }, h('h2', {}, t(white ? 'ui.whiteCall' : 'ui.callTitle')), art(white ? 'ui/white_call' : 'devil/phone', 'devil')),
     h('p', { class: 'sub' }, t(white ? 'ui.whiteSub' : 'ui.callSub')),
     h('div', { class: 'beadrow', 'aria-label': t('ui.beads') }, Array.from({ length: 3 }, (_, i) => art(i < (run.beads | 0) ? 'ui/bead_on' : 'ui/bead_off', 'ico sm')), h('span', { class: 'note' }, t('ui.beadsNote'))),

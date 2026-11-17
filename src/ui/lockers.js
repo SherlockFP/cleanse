@@ -24,6 +24,7 @@ export function render(el, { meta }, ctx) {
       h('div', { class: 'sheet-acts' }, !open && btn(t('ui.lockerOpen'), () => { if (!can) return ctx.toast(keys[l.key] > 0 ? 'ui.lockerDeed' : 'ui.lockerNoKey'); ctx.closeSheet(); const r = ctx.call('openLocker', id); if (r?.ok) ctx.toast('ui.lockerOpened'); }, can ? 'primary' : 'dim'), btn(t('ui.close'), ctx.closeSheet))));
   };
   put(el,
+    h('div', { class: 'map-banner' }, art('bg/locker', 'mapimg')),
     h('h2', {}, t('ui.lockersTitle')),
     h('div', { class: 'chips' }, KEYS.map((k) => h('span', { class: 'chip key-' + k }, art('ui/key_' + k, 'ico xs'), h('b', {}, `${t('ui.key.' + k)} ${keys[k] | 0}`)))),
     h('p', { class: 'note' }, t('ui.lockersNote', { a: opened.size, b: LOCKERS.length })),
